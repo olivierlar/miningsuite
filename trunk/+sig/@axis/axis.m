@@ -1,0 +1,54 @@
+% SIG.AXIS class
+% generates on the fly axis information such as time positions in signal.
+% Internally called by sig.signal
+%
+% Copyright (C) 2014, Olivier Lartillot
+% All rights reserved.
+% License: New BSD License. See full text of the license in LICENSE.txt in
+% the main folder of the MiningSuite distribution.
+classdef axis
+%%
+    properties
+        name
+        start
+        unit = [];
+        subunit = [];
+    end
+%%
+    methods
+        function obj = axis(name,start,varargin)
+            obj.name = name;
+            obj.start = start;
+            if nargin > 2
+               obj.unit = sig.unit(varargin{:});
+            end
+        end
+        %%
+        function x = index(obj,sd)
+            x = obj.start + (1:sd)-1;
+        end
+        
+        function x = data(obj,sd)
+            x = obj.unit.generate(obj.index(sd));
+            if ~isempty(obj.subunit) && ...
+                    strcmpi(obj.name,obj.subunit.dimname)
+                x = obj.subunit.converter(x);
+            end
+        end
+        
+        function index = find(obj,param)
+            if strcmpi(param.unit,'sp')
+                index = param.value;
+            else
+                if ~isempty(obj.subunit) && ...
+                    strcmpi(param.unit,obj.subunit.unitname)
+                    param.value = obj.subunit.converter(param.value);
+                    param.value = param.value(end:-1:1);
+                    %param.unit = obj.unit.name;
+                end
+                index = obj.unit.finder(obj.unit,param.value);
+            end
+            index = index - obj.start + 1;
+        end
+    end
+end
