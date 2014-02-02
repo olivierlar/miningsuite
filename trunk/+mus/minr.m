@@ -1,13 +1,10 @@
+% Copyright (C) 2014, Olivier Lartillot
+% All rights reserved.
+% License: New BSD License. See full text of the license in LICENSE.txt in
+% the main folder of the MiningSuite distribution.
 function out = minr(arg,varargin)
-%varargout = sig.operate('musi','minr',initoptions,@init,@main,varargin);
 
 options = mus.options(initoptions,varargin);
-
-%function [x type] = init(x,option)
-%type = 'mus.sequence';
-
-
-%function out = main(in,option,postoption)
 
 if isa(arg,'mus.Sequence')
     out = arg;
@@ -176,8 +173,6 @@ if isequal(head(1:4)',[77 84 104 100])  % MIDI format
     else
         out.concept = concept;
     end
-else
-    %sig.operate('musi','minr',options,@init,@main,varargin);
 end
 
 
