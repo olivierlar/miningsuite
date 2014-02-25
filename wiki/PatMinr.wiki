@@ -27,7 +27,7 @@ Dependent property:
 The constructor:
  * for a new cyclic occurrence, construct the cycle model.
  * for a cyclic occurrence under extension, update the `cycle` property by removing the first state.
- * construct a new prefix if necessary: Occurrences that are more general than other occurrences are not explicitly represented, but if the more general occurrence needs to be extended (and that the extension is not more general than another occurrence), then the more general occurrence needs to be reconstructed.
+ * construct a new prefix if necessary: Occurrences that are more general than other occurrences are not explicitly represented, but if the more general occurrence needs to be extended (such that the extension is not more general than another occurrence), then the more general occurrence needs to be reconstructed.
 
 
 == How it works ==
