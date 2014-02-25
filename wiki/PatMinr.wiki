@@ -1,0 +1,21 @@
+#summary Overall description of the architecture of PatMinr module.
+
+= _PatMinr_ module =
+
+ Overall description of the architecture
+
+== Classes ==
+
+=== occurrence ===
+
+Represents each occurrence of a pattern.
+
+Properties:
+
+ * `id`: A numerical address.
+
+ * `pattern`: The associated pattern.
+
+ * `prefix`: The longest prefix, i.e. the occurrence without the last symbol (which is also a pattern occurrence).
+
+== How it works ==
