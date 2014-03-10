@@ -39,3 +39,5 @@ Tries to extend all the pattern occurrences (including cycles) ending at the pre
  * Then, extends the set of pattern occurrences ordered in decreasing order of specificity, by first calling `pat.occurrence.memorize` occurrence -> syntagm on each of them without generalization, and then calling once again `pat.occurrence.memorize` occurrence -> syntagm on each of them but this time with generalization.
 
 === `pat.occurrence.memorize` occurrence -> syntagm ===
+
+Calls `pat.pattern.remember` occurrence -> syntagm.
