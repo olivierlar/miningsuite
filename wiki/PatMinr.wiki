@@ -34,8 +34,8 @@ Constructs a syntagmatic relation between previous and current note.
 
 Tries to extend all the pattern occurrences (including cycles) ending at the previous note with the new syntagmatic relation, with the following order:
 
- * First, extends cycles: Call `memorize` cycle -> syntagm with generalization.
+ * First, extends cycles: Call `pat.occurrence.memorize` cycle -> syntagm with generalization.
 
- * Then, extends the set of pattern occurrences ordered in decreasing order of specificity, by first calling `memorize` occurrence -> syntagm on each of them without generalization, and then calling once again `memorize` occurrence -> syntagm on each of them but this time with generalization.
+ * Then, extends the set of pattern occurrences ordered in decreasing order of specificity, by first calling `pat.occurrence.memorize` occurrence -> syntagm on each of them without generalization, and then calling once again `pat.occurrence.memorize` occurrence -> syntagm on each of them but this time with generalization.
 
-=== `memorize` occurrence -> syntagm ===
+=== `pat.occurrence.memorize` occurrence -> syntagm ===
