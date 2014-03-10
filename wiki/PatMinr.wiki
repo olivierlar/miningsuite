@@ -11,15 +11,14 @@
 == How it works ==
 
 `mus.minr`:`Process_notes`:
-
 Each note:
-	`mus.minr`:`Process`:
+ * `mus.minr`:`Process`.
 
-  	Each syntagmatic relation:
 
-		`pat.syntagm`:
+ Each syntagmatic relation:
+    `pat.syntagm`:
 
-		Each cycle ending at the start of the syntagmatic relation:
+        Each cycle ending at the start of the syntagmatic relation:
 
 			`memorize` cycle->syntagm with generalization (cf. below)
 
@@ -31,7 +30,7 @@ Each note:
 
 			`memorize` occurrence->syntagm with generalization (cf. below)
 
-	Create a `pat.occurrence` of the elementary note pattern and call `memorize` ø->syntagm (cf. below)
+ * Create a `pat.occurrence` of the elementary note pattern and call `memorize` ø->syntagm (cf. below)
 
 
 `memorize` occurrence->syntagm:
