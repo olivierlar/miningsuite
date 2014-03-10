@@ -26,7 +26,7 @@ Each previous note syntagmatically leading to the note:
 
  * `pat.syntagm` previous note -> current note
 
- * Create a `pat.occurrence` of the elementary note pattern and call `memorize` ø->syntagm (cf. below)
+ * Create a `pat.occurrence` of the elementary note pattern and call `memorize` ø -> syntagm (cf. below)
 
 === `pat.syntagm` previous -> current ===
 
