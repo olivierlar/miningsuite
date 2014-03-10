@@ -30,16 +30,12 @@ Each previous note syntagmatically leading to the note:
 
 === `pat.syntagm` previous -> current ===
 
-Each cycle ending at the start of the syntagmatic relation:
+Constructs a syntagmatic relation between previous and current note.
 
- * `memorize` cycle -> syntagm with generalization
+Tries to extend all the pattern occurrences (including cycles) ending at the previous note with the new syntagmatic relation, with the following order:
 
-Each pattern occurrence ending at the start of the syntagmatic relation (ordered in decreasing order of specificity):
+ * First, extends cycles: Call `memorize` cycle -> syntagm with generalization.
 
- * `memorize` occurrence -> syntagm without generalization
-
-Each pattern occurrence ending at the start of the syntagmatic relation (ordered in decreasing order of specificity):
-
- * `memorize` occurrence -> syntagm with generalization
+ * Then, extends the set of pattern occurrences ordered in decreasing order of specificity, by first calling `memorize` occurrence -> syntagm on each of them without generalization, and then calling once again `memorize` occurrence -> syntagm on each of them but this time with generalization.
 
 === `memorize` occurrence -> syntagm ===
