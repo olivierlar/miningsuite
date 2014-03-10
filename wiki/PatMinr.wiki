@@ -8,9 +8,10 @@
 
 `pat.occurrence`: PatOccurrence
 
+to be continued…
+
 
 == How it works ==
-
 
 === `mus.minr`:`Process_notes`===
 
