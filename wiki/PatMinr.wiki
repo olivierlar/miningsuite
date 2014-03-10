@@ -8,29 +8,37 @@
 
 `pat.occurrence`: PatOccurrence
 
+
 == How it works ==
 
-`mus.minr`:`Process_notes`:
+
+=== `mus.minr`:`Process_notes`===
+
 Each note:
- * `mus.minr`:`Process`.
+
+ * `mus.minr`:`Process` note
 
 
- Each syntagmatic relation:
-    `pat.syntagm`:
+=== `mus.minr`:`Process` note ===
 
-        Each cycle ending at the start of the syntagmatic relation:
+Each previous note syntagmatically leading to the note:
 
-			`memorize` cycle->syntagm with generalization (cf. below)
-
-		Each pattern occurrence ending at the start of the syntagmatic relation (ordered in decreasing order of specificity):
-
-			`memorize` occurrence->syntagm without generalization (cf. below)
-
-		Each pattern occurrence ending at the start of the syntagmatic relation (ordered in decreasing order of specificity):
-
-			`memorize` occurrence->syntagm with generalization (cf. below)
+ * `pat.syntagm` previous note -> current note
 
  * Create a `pat.occurrence` of the elementary note pattern and call `memorize` ø->syntagm (cf. below)
 
+=== `pat.syntagm` previous -> current ===
 
-`memorize` occurrence->syntagm:
+Each cycle ending at the start of the syntagmatic relation:
+
+ * `memorize` cycle -> syntagm with generalization
+
+Each pattern occurrence ending at the start of the syntagmatic relation (ordered in decreasing order of specificity):
+
+ * `memorize` occurrence -> syntagm without generalization
+
+Each pattern occurrence ending at the start of the syntagmatic relation (ordered in decreasing order of specificity):
+
+ * `memorize` occurrence -> syntagm with generalization
+
+=== `memorize` occurrence -> syntagm ===
