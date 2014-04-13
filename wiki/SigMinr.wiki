@@ -24,10 +24,9 @@
 
 `sig.save`
 
-`sig.signal`
-
 `sig.chunklim`
 
+To be continued..
 
 
 == Overall description of the architecture == 
@@ -50,13 +49,15 @@
 
 === General signal processing classes === 
 
-`sig.Signal`
+`sig.signal`
+
+`sig.Envelope`
 
 `sig.Spectrum`
 
 `sig.Autocor`
 
-`sig.Envelope`
+To be continued..
 
 === Additional functions ===
 
