@@ -31,6 +31,18 @@ To be continued..
 
 == Overall description of the architecture == 
 
+=== General signal processing classes === 
+
+`sig.signal`
+
+`sig.Envelope`
+
+`sig.Spectrum`
+
+`sig.Autocor`
+
+To be continued..
+
 === Classes implementing the general behaviour of _Sig.Minr_ ===
 
 `sig.data`
@@ -46,18 +58,6 @@ To be continued..
 `sig.subunit`
 
 `sig.defaults`
-
-=== General signal processing classes === 
-
-`sig.signal`
-
-`sig.Envelope`
-
-`sig.Spectrum`
-
-`sig.Autocor`
-
-To be continued..
 
 === Additional functions ===
 
