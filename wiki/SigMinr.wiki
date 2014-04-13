@@ -1,0 +1,79 @@
+#summary Overall description of the architecture of SigMinr module.
+
+= _SigMinr_ module =
+
+== Operators ==
+
+`sig.envelope`
+
+`sig.rms`
+
+`sig.spectrum`
+
+`sig.autocor`
+
+`sig.hist`
+
+`sig.input`
+
+`sig.peak`
+
+`sig.play`
+
+`sig.ans`
+
+`sig.save`
+
+`sig.signal`
+
+`sig.chunklim`
+
+
+
+== Overall description of the architecture == 
+
+=== Classes implementing the general behaviour of _Sig.Minr_ ===
+
+`sig.data`
+
+`sig.design`
+
+`sig.axis`
+
+`sig.position`
+
+`sig.unit`
+
+`sig.subunit`
+
+`sig.defaults`
+
+=== General signal processing classes === 
+
+`sig.Signal`
+
+`sig.Spectrum`
+
+`sig.Autocor`
+
+`sig.Envelope`
+
+=== Additional functions ===
+
+`sig.operate`
+
+`sig.compute`
+
+`sig.options`
+
+`sig.read`
+
+`sig.evaleach`
+
+`sig.getfrate`
+
+`sig.playfile`
+
+`sig.savefile`
+
+`sig.warning`
