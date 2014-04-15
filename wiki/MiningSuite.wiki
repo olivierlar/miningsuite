@@ -1,4 +1,5 @@
 #summary What is The MiningSuite?
+#labels Featured
 
 The _MiningSuite_ is composed of a large set of modules corresponding to the different possible types of signal processing representations and audio and music descriptors. These modules are structured into packages related to the different domains of study: signal processing (_SigMinr_ package), auditory modelling (_AudMinr_), music analysis (_MusMinr_), voice analysis (_VocMinr_ package under plan), sequence processing (_SeqMinr_) and pattern mining (_PatMinr_).
 
