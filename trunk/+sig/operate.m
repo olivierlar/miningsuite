@@ -8,6 +8,12 @@
 % All rights reserved.
 % License: New BSD License. See full text of the license in LICENSE.txt in
 % the main folder of the MiningSuite distribution.
+%
+% For any reuse of the code below, please mention the following
+% publication:
+% Olivier Lartillot, "The MiningSuite: ?MIRtoolbox 2.0? + ?MIDItoolbox 2.0?
+% + pattern mining + ...", AES 53RD INTERNATIONAL CONFERENCE, London, UK,
+% 2014
 
 function out = operate(pack,name,options,init,main,argin,combine,extensive)
 arg = argin{1};
@@ -26,6 +32,13 @@ if ~isempty(frame) && ~frame.toggle && ...
     frame = arg.frame;
 end
 
+if ischar(arg)
+    filename = arg;
+    arg = sig.design('sig','input',arg,'sig.Signal',[],during);
+elseif isa(arg,'sig.design')
+    filename = arg.files;
+end
+
 [arg type] = init(arg,during);
 
 if ischar(arg) || isa(arg,'sig.design')
@@ -34,19 +47,19 @@ if ischar(arg) || isa(arg,'sig.design')
     end
     if extensive
         nochunk = 1;
-    elseif ischar(arg)
-        nochunk = 0;
+    %elseif ischar(arg)
+    %    nochunk = 0;
     else
         nochunk = arg.nochunk;
     end
     design = sig.design(pack,name,arg,type,main,during,after,frame,...
                         combine,argin(2:end),extract,extensive,nochunk);
     
-    if ischar(arg)
-        filename = arg;
-    else
-        filename = arg.files;
-    end
+    %if ischar(arg)
+    %    filename = arg;
+    %else
+    %    filename = arg.files;
+    %end
     
     if strcmpi(filename,'Design') || ~strcmp(name,'play')
         design.evaluate = 1;

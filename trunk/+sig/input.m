@@ -25,15 +25,8 @@
 % All rights reserved.
 % License: New BSD License. See full text of the license in LICENSE.txt in
 % the main folder of the MiningSuite distribution.
+
 function varargout = input(varargin)
-
-
-if isnumeric(varargin{1})
-    varargout = {sig.signal(varargin{1},'Matlab array','')};
-    return
-end
-
-    
-varargout = sig.operate('sig','input',sig.Signal.signaloptions,...
-                        sig.Signal.initmethod,sig.Signal.mainmethod,...
+varargout = sig.operate('sig','input',sig.signal.signaloptions,...
+                        sig.signal.initmethod,sig.signal.mainmethod,...
                         varargin,'concat_sample');

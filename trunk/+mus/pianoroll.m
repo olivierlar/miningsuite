@@ -82,7 +82,7 @@ for i = 1:nn
     else
         delta = .4;
     end
-    rectangle('Position',[t(1,i),chr(i)-delta,t(2,i)-t(1,i),2*delta],...
+    rectangle('Position',[t(1,i),chr(i)-delta,t(2,i)-t(1,i)+1e-3,2*delta],...
               'EdgeColor','b','LineWidth',lw);
     
     if 0 %~isempty(notes{i}.isprefix)

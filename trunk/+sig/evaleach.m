@@ -1,6 +1,5 @@
-function y = evaleach(design,filename,window,sr,frame,chunking) %,single,name
-% Top-down traversal of the design flowchart, at the beginning of the
-% evaluation phase.
+% SIG.EVALEACH performs the top-down traversal of the design flowchart, at 
+% the beginning of the evaluation phase.
 % This is during that traversal that we check whether a chunk decomposition
 % needs to be performed or not, and carry out that chunk decomposition.
 %
@@ -8,6 +7,14 @@ function y = evaleach(design,filename,window,sr,frame,chunking) %,single,name
 % All rights reserved.
 % License: New BSD License. See full text of the license in LICENSE.txt in
 % the main folder of the MiningSuite distribution.
+%
+% For any reuse of the code below, please mention the following
+% publication:
+% Olivier Lartillot, "The MiningSuite: ?MIRtoolbox 2.0? + ?MIDItoolbox 2.0?
+% + pattern mining + ...", AES 53RD INTERNATIONAL CONFERENCE, London, UK,
+% 2014
+
+function y = evaleach(design,filename,window,sr,frame,chunking) %,single,name
 
 if nargin<5
     frame = [];
@@ -40,30 +47,36 @@ if 0 %isaverage(specif)
     specif.eachchunk = 'Normal';
 end
 
-if ischar(design)
+if isempty(design.main)
     % The top-down traversal of the design flowchart now reaches the lowest
     % layer, i.e., audio file loading.
     % Now the actual evaluation will be carried out bottom-up.
     
     [data sr] = sig.read(filename,window);
     
-    %if frame.inner
-    %    warning('Inner frame has not been executed.');
-    %end
-    
-    if ~isempty(frame) && frame.toggle
-        frate = sig.compute(@sig.getfrate,sr,frame);
-        data = data.frame(frame,sr);
-        y = {sig.signal(data,'Xsampling',1/sr,'Name','audio',...
-                        'Sstart',(window(1)-1)/sr,'Srate',sr,...
-                        'Ssize',data.size('sample'),...
-                        'Frate',frate)};
-    elseif sr
-        y = {sig.signal(data,'Name','audio',...
-                        'Sstart',(window(1)-1)/sr,'Srate',sr,...
-                        'Ssize',data.size('sample'))};
-    else
-        y = data; % For MIDI note matrix
+    if sr % Audio data
+        if strcmpi(design.duringoptions.mix,'Pre')
+            data = data.sum('channel');
+        end
+
+        %if frame.inner
+        %    warning('Inner frame has not been executed.');
+        %end
+
+        if ~isempty(frame) && frame.toggle
+            frate = sig.compute(@sig.getfrate,sr,frame);
+            data = data.frame(frame,sr);
+            y = {sig.signal(data,'Xsampling',1/sr,'Name','audio',...
+                            'Sstart',(window(1)-1)/sr,'Srate',sr,...
+                            'Ssize',data.size('sample'),...
+                            'Frate',frate)};
+        else
+            y = {sig.signal(data,'Name','audio',...
+                            'Sstart',(window(1)-1)/sr,'Srate',sr,...
+                            'Ssize',data.size('sample'))};
+        end
+    else % MIDI data
+        y = data;
     end
     
     %if not(isempty(d.postoption)) && d.postoption.mono
@@ -82,7 +95,7 @@ else
         if design.extensive
             y = sig.evaleach(design.input,filename,window,sr,[],1);
             y = design.main(y,design.duringoptions,design.afteroptions);
-            if frame.toggle
+            if ~isempty(frame) && frame.toggle
                 frate = sig.compute(@sig.getfrate,y{1}.Srate,frame);
                 y{1}.Ydata = y{1}.Ydata.frame(frame,y{1}.Srate);
                 y{1}.Frate = frate;

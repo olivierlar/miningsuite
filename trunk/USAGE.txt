@@ -11,7 +11,7 @@ a = sig.input('ragtime','Extract',0,60,'s')% Loads file 'ragtime.wav' and extra
 b = sig.spectrum(a,'Frame','dB');
 % Computes FFT spectrogram
 
-b = aud.brightness(b,'FrameSize',.5,'s','FrameHop',.1,'s')
+c = aud.brightness(b,'FrameSize',.5,'s','FrameHop',.1,'s')
 % Computes brightness frame by frame with frame specification.
 
 ac = sig.autocor('ragtime')
