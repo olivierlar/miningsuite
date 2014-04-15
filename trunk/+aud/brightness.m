@@ -13,7 +13,12 @@ end
 
 %%
 function options = initoptions
-    options = sig.Signal.frameoptions(.05,.5);
+    options = sig.signal.frameoptions(.05,.5);
+    
+        cutoff.key = 'CutOff';
+        cutoff.type = 'Numeric';
+        cutoff.default = 1500;
+    options.cutoff = cutoff;
 end
 
 
@@ -26,8 +31,8 @@ end
 
 function out = main(in,option,postoption)
     x = in{1};
-    if 1 %~strcmpi(x.yname,'RMS energy')
-        res = sig.compute(@routine,x.Ydata);
+    if ~strcmpi(x.yname,'Brightness')
+        res = sig.compute(@routine,x.Ydata,x.xdata,option.cutoff);
         x = sig.signal(res{1},'Name','Brightness',...
                        'Srate',x.Srate,'Ssize',x.Ssize);
     end
@@ -35,15 +40,14 @@ function out = main(in,option,postoption)
 end
 
 
-function out = routine(d)
-    e = d.apply(@algo,{},{'element'},1);
-    %e = e.deframe;
+function out = routine(d,f,f0)
+    e = d.apply(@algo,{f,f0},{'element'},3);
     out = {e};
 end
 
 
-function y = algo(x)
-    y = x'*x;
+function y = algo(m,f,f0)
+    y = sum(m(f > f0,:,:)) ./ sum(m);
 end
 
 
