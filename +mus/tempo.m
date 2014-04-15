@@ -1,19 +1,19 @@
-function varargout = tempo(varargin)
+% MUS.TEMPO 
+%
+% Copyright (C) 2014, Olivier Lartillot
+% All rights reserved.
+% License: New BSD License. See full text of the license in LICENSE.txt in
+% the main folder of the MiningSuite distribution.
 
-    if isnumeric(varargin{1})
-        [options post] = sig.options(initoptions,varargin,'mus.tempo');
-        varargout = {sig.signal(varargin{1},'Name','Tempo')};
-    else
-        
-        varargout = sig.operate('musi','tempo',...
-                                initoptions,@init,@main,varargin,'plus');
-    end
+function varargout = tempo(varargin)
+    varargout = sig.operate('mus','tempo',initoptions,@init,@main,...
+                            varargin,'plus');
 end
 
 
 %%
 function options = initoptions
-    options = sig.Signal.frameoptions(5,.2);
+    options = sig.signal.signaloptions(5,.2);
     
         method.type = 'String';
         method.choice = {'Autocor','Pattern'};

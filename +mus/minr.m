@@ -1,7 +1,10 @@
+% MUS.MINR
+%
 % Copyright (C) 2014, Olivier Lartillot
 % All rights reserved.
 % License: New BSD License. See full text of the license in LICENSE.txt in
 % the main folder of the MiningSuite distribution.
+
 function out = minr(arg,varargin)
 
 options = mus.options(initoptions,varargin);
@@ -38,17 +41,21 @@ elseif isa(arg,'sig.design')
         end
     else
         in = arg.eval;
-        p = in{1}.sdata(in{1}.peak.content{1});
-        memory = [];
-        note = [];
-        ps = mus.paramstruct;
-        for i = 1:length(p)
-            param = mus.param(ps,0,NaN,NaN,p(i),p(i)+.01);
-            note = pat.event(out,param,note);
-            out = out.integrate(note);
-            if ~isempty(options)
-                [out.concept,memory] = process(out.concept,note,memory,...
-                                               options);
+        if isnumeric(in)
+            out = process_midi(out,in,arg.input,options,concept,0);
+        else
+            p = in{1}.sdata(in{1}.peak.content{1});
+            memory = [];
+            note = [];
+            ps = mus.paramstruct;
+            for i = 1:length(p)
+                param = mus.param(ps,0,NaN,NaN,p(i),p(i)+.01);
+                note = pat.event(out,param,note);
+                out = out.integrate(note);
+                if ~isempty(options)
+                    [out.concept,memory] = process(out.concept,note,...
+                                                   memory,options);
+                end
             end
         end
     end
@@ -117,69 +124,61 @@ end
 
 
 function out = read(out,name,options,concept,folder)
-memory = [];
-ps = mus.paramstruct;
-
 fid = fopen(name);
 if fid<0
     e = sig.envelope(name);
     p = sig.peak(e,'Threshold',.5);
     out = mus.minr(p);
     return
-    if ~folder
-        error('incorrect file');
-    end
-    return
 end
 head = fread(fid,'uint8');
 fclose(fid);
 if isequal(head(1:4)',[77 84 104 100])  % MIDI format
     [nmat options.tempo] = mus.midi2nmat(name);
-    if options.notes
-        options.notes(options.notes > size(nmat,1)) = [];
-        nmat = nmat(options.notes,:);
-    end
-    if options.t1
-        nmat(nmat(:,6) < options.t1,:) = [];
-    end
-    if options.t2
-        nmat(nmat(:,6) > options.t2,:) = [];
-    end
-    note = [];
-    if folder
-        out.content{end+1} = [];
-        out.files{end+1} = name;
-    else
-        out.files = name;
-    end
-    if options.metre
-        pattern = initpattern;
-    else
-        pattern = [];
-    end
-    for j = 1:size(nmat,1)
-        param = mus.param(ps,nmat(j,4),[],[],...
-                           nmat(j,6),nmat(j,6)+nmat(j,7));
-        note = pat.event(out,param,note);
-        note.address = j;
-        out = out.integrate(note);
-        if ~isempty(options)
-            [concept,memory,note] = process(concept,note,memory,...
-                                            options,pattern);
-        end
-    end
-    if folder
-        out.concept{end+1} = concept;
-    else
-        out.concept = concept;
-    end
+    out = process_midi(out,nmat,name,options,concept,folder);
 end
 
 
-function out = peaks(out,p,options)
+function out = process_midi(out,nmat,name,options,concept,folder)
 memory = [];
 ps = mus.paramstruct;
-for j = 1:length(p)
+if options.notes
+    options.notes(options.notes > size(nmat,1)) = [];
+    nmat = nmat(options.notes,:);
+end
+if options.t1
+    nmat(nmat(:,6) < options.t1,:) = [];
+end
+if options.t2
+    nmat(nmat(:,6) > options.t2,:) = [];
+end
+note = [];
+if folder
+    out.content{end+1} = [];
+    out.files{end+1} = name;
+else
+    out.files = name;
+end
+if options.metre
+    pattern = initpattern;
+else
+    pattern = [];
+end
+for j = 1:size(nmat,1)
+    param = mus.param(ps,nmat(j,4),[],[],...
+                       nmat(j,6),nmat(j,6)+nmat(j,7));
+    note = pat.event(out,param,note);
+    note.address = j;
+    out = out.integrate(note);
+    if ~isempty(options)
+        [concept,memory,note] = process(concept,note,memory,...
+                                        options,pattern);
+    end
+end
+if folder
+    out.concept{end+1} = concept;
+else
+    out.concept = concept;
 end
 
 

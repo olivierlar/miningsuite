@@ -13,7 +13,7 @@ end
 
 %%
 function options = initoptions
-    options = sig.Signal.frameoptions(.05,.5);
+    options = sig.signal.signaloptions(.05,.5);
     
         notchunking.type = 'Boolean';
         notchunking.when = 'After';

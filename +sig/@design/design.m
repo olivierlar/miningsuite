@@ -7,6 +7,13 @@
 % All rights reserved.
 % License: New BSD License. See full text of the license in LICENSE.txt in
 % the main folder of the MiningSuite distribution.
+%
+% For any reuse of the code below, please mention the following
+% publication:
+% Olivier Lartillot, "The MiningSuite: ?MIRtoolbox 2.0? + ?MIDItoolbox 2.0?
+% + pattern mining + ...", AES 53RD INTERNATIONAL CONFERENCE, London, UK,
+% 2014
+
 classdef design
     properties
         package
@@ -31,7 +38,7 @@ classdef design
         ver
         
         extensive
-        nochunk
+        nochunk = 0
     end
     properties (Dependent)
         files
@@ -48,17 +55,19 @@ classdef design
             obj.name = name;
             obj.input = input;
             obj.type = type;
-            obj.argin = argin;
-            obj.extract = extract;
             obj.main = main;
             obj.duringoptions = during;
-            obj.afteroptions = after;
-            obj.frame = frame;
-            obj.combine = combine;
-            obj.date = date;
-            obj.ver = ver;
-            obj.extensive = extensive;
-            obj.nochunk = nochunk;
+            if nargin>6
+                obj.afteroptions = after;
+                obj.frame = frame;
+                obj.combine = combine;
+                obj.argin = argin;
+                obj.extract = extract;
+                obj.date = date;
+                obj.ver = ver;
+                obj.extensive = extensive;
+                obj.nochunk = nochunk;
+            end
         end
         %%
         function f = get.files(obj)
@@ -109,14 +118,14 @@ classdef design
             for i = 1:nfiles
                 out{i} = sig.evaleach(obj,files{i},w,sr(i));
             end
+            %if isempty(obj.input.main)
+            %    out{1}.Ydata.design.input = files;
+            %end
             if nfiles > 1
                 out = combineaudiofile(files,out{:});
                 out{1}.celllayers = 'files';
             else
                 out = out{1};
-            end
-            if ischar(obj.input)
-                out{1}.Ydata.design.input = files;
             end
         end
         %%
@@ -133,13 +142,13 @@ classdef design
                     end
                     for i = 1:length(files)
                         out = obj.eval(files{i});
-                        if isa(out{1},'sig.Signal')
+                        if isa(out{1},'sig.signal')
                             out{1}.display;
                         end
                     end
                 else
                     out = obj.eval(obj.files);
-                    if isa(out{1},'sig.Signal')
+                    if isa(out{1},'sig.signal')
                         out{1}.display;
                     end
                 end
@@ -162,6 +171,9 @@ classdef design
             sig.ans(out);
         end
         function show(obj,varargin)
+            if isempty(obj.input)
+                return
+            end
             if ~ischar(obj.input)
                 obj.input.show(0);
             end
@@ -209,7 +221,7 @@ function f = getfiles(obj)
     f = obj.input;
     if isa(f,'sig.design')
         f = getfiles(f);
-    elseif isa(f,'sig.Signal')
+    elseif isa(f,'sig.signal')
         f = getfiles(f.design);
     end
 end
@@ -415,7 +427,7 @@ end
 function c = combine(v)
     c = v{1};
     l = length(v);
-    if isa(c,'sig.Signal')
+    if isa(c,'sig.signal')
         cfields = c.combinables;
         for i = 1:length(cfields)
             v1 = v{1}.(cfields{i});

@@ -6,6 +6,9 @@ classdef Sequence < seq.Sequence
     end
 %%
     methods
+        function s = Sequence(varargin)
+            s = s@seq.Sequence(varargin);
+        end
         function res = get(obj,param)
             c = obj.content;
             if iscell(obj.files)
