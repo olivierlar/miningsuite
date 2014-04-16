@@ -4,7 +4,7 @@
 Some examples of what you can try for the moment:
 
 {{{
-help mining suite
+help miningsuite
 }}}
 
 {{{
