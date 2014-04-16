@@ -1,4 +1,5 @@
 #summary Some examples of what you can try for the moment.
+#labels Featured
 
 Some examples of what you can try for the moment:
 
