@@ -1,0 +1,111 @@
+#summary Some examples of what you can try for the moment.
+
+Some examples of what you can try for the moment:
+
+{{{
+help mining suite
+}}}
+
+{{{
+a = sig.input('ragtime','Extract',0,60,'s')
+}}}
+Loads file 'ragtime.wav' and extracts the first minute, and stores the result in variable a.
+Note that if you add a semi-colon (';') at the end, the operation is not performed but the data flow is simply designed.
+
+ {{{
+b = sig.spectrum(a,'dB');
+}}}
+Computes FFT spectrum in dB scale of the variable a defined in previous line.
+
+ {{{
+c = aud.brightness(b)
+}}}
+Computes the brightness related to the FFT spectrum stored in variable b.
+
+{{{
+b = sig.spectrum(a,'Frame','dB');
+}}}
+Computes FFT spectrogram
+
+ {{{
+c = aud.brightness(b,'FrameSize',.5,'s','FrameHop',.1,'s')
+}}}
+Computes brightness frame by frame with frame specification.
+
+{{{
+ac = sig.autocor('ragtime')
+}}}
+Computes autocorrelation function directly on the audio waveform.
+
+{{{
+e = sig.envelope('ragtime')
+}}}
+Extract the energy envelope from the audio waveform.
+
+{{{
+ac = sig.autocor(e,'Max',5)
+}}}
+Computes autocorrelation function on the envelope curve.
+
+{{{
+sig.peak(ac)
+}}}
+Detects peaks on the autocorrelation function.
+
+{{{
+ac = sig.autocor(e,'Max',5,'FrameSize',3,'FrameHop',.5)
+sig.peak(ac)
+}}}
+
+{{{
+sig.rms('ragtime')
+}}}
+Computes RMS energy.
+
+{{{
+sig.rms('ragtime','Frame')
+}}}
+
+{{{
+mus.tempo('ragtime.wav')
+}}}
+Estimates tempo.
+
+{{{
+mus.tempo('ragtime.wav','FrameSize',3)
+}}}
+
+{{{
+mus.minr('laksin.mid')
+}}}
+Loads and displays a MIDI file.
+
+{{{
+mus.tempo('laksin.mid')
+}}}
+Estimates tempo from a MIDI file, using the same audio-based method as for the audio file.
+
+{{{
+m = mus.minr('laksin.mid','Notes',1:10)
+}}}
+Loads only the first ten notes of the MIDI file.
+
+{{{
+m = mus.minr('laksin.mid','EndTime',5)
+}}}
+Loads only the first five seconds of the MIDI file.
+
+{{{
+mus.minr(m,'Metre')
+}}}
+Constructs a beat structure on the MIDI file.
+
+{{{
+mus.tempo('laksin.mid','Pattern')
+}}}
+Estimates tempo based on that beat structure approach.
+
+{{{
+mus.minr('laksin.mid','Mode')
+}}}
+Estimates mode on the MIDI file, and uses the information for pitch spelling.
