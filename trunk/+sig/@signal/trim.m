@@ -1,7 +1,7 @@
 function obj = trim(obj,where,threshold)
     res = sig.compute(@main,obj.Ydata,obj.sdata,where,threshold);
     obj.Ydata  = res{1};
-    obj.Saxis.start = res{2};
+    obj.Sstart = res{2};
 end
     
    
@@ -19,8 +19,8 @@ function out = main(d,t,where,threshold)
     % replace by sig.rms
     for j = 1:nframes
         st = floor((j-1)*trimhop)+1;
-        d0 = sd.extract('sample',[st,st+trimframe-1]);
-        rms(j) = norm(d0.content)/sqrt(trimframe);
+        d0 = sd.content(st:st+trimframe-1);
+        rms(j) = norm(d0)/sqrt(trimframe);
     end
     
     rms = (rms-min(rms))./(max(rms)-min(rms));
@@ -46,5 +46,5 @@ function out = main(d,t,where,threshold)
     end
     
     d = d.extract('sample',[n1,n2]);    
-    out = {d n1};
+    out = {d t(n1)};
 end
