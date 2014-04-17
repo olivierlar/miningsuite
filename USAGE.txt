@@ -1,5 +1,7 @@
-Sorry! No proper documentation yet..
-Examples of what you can try for the moment:
+A documentation is currently under development in the wiki of the Google Code site of the MiningSuite.
+https://code.google.com/p/miningsuite/w/list
+
+Some examples of what you can try for the moment:
 
 help miningsuite
 
