@@ -50,14 +50,23 @@ Tries to extend all the pattern occurrences (including cycles) ending at the pre
 
 description under construction...
 
-=== `pat.memostruct.learn` pattern, memory, occurrence -> syntagm ===
+=== `pat.memory.learn` pattern, memory, occurrence -> syntagm ===
+
+Behavior different if the parametric memory is of type `pat.memostruct` (a combination of elementary memories) or of type `pat.memoparam` (an elementary memory).
+
+ === `pat.memostruct.learn` pattern, memory, occurrence -> syntagm ===
 
  * Accumulates the memory related to the more specific patterns.
  * Calls `pat.memory.combine` to process the learning phase along the different parametric dimension and combine them together.
 
+ === `pat.memoparam.learn` pattern, memory, occurrence -> syntagm ===
+
+ * Calls `pat.memoparam.find`to detects the syntagm description in the memory hash-table.
+ * If a previously memorised occurrence is identified as of same parametric description, calls `pat.pattern.link` for the current pattern, the pattern detection result, and occurrence -> syntagm.
+ * Else if...
+ * Calls recursively `pat.memoparam.learn` for the interval field, and for the more general parametric fields.
+
 === `pat.memory.combine` pattern, parametric memory, occurrence -> syntagm ===
 
- * Call recursively `learn` to the subfields of the parametric memory, and accumulates the pattern detection results. If the memory is of type `pat.memoparam`, cf. below.
- * If the combined pattern detection result is not empty, and is not implied by an already existing pattern extension, call `pat.pattern.link` for the current pattern, the pattern detection result, and occurrence -> syntagm.
-
-=== `pat.memoparam.learn` pattern, memory, occurrence -> syntagm ===
+ * Calls recursively `learn` to the subfields of the parametric memory, and accumulates the pattern detection results.
+ * If the combined pattern detection result is not empty, and is not implied by an already existing pattern extension, calls `pat.pattern.link` for the current pattern, the pattern detection result, and occurrence -> syntagm.
