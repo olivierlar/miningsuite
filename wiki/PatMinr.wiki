@@ -38,6 +38,10 @@ Tries to extend all the pattern occurrences (including cycles) ending at the pre
 
  * Then, extends the set of pattern occurrences ordered in decreasing order of specificity, by first calling `pat.occurrence.memorize` occurrence -> syntagm on each of them without generalization, and then calling once again `pat.occurrence.memorize` occurrence -> syntagm on each of them but this time with generalization.
 
-=== `pat.occurrence.memorize` occurrence -> syntagm ===
+=== `pat.occurrence.memorize` occurrence -> syntagm, with or without generalisation ===
 
-Calls `pat.pattern.remember` occurrence -> syntagm.
+ * Calls `pat.pattern.remember` (occurrence pattern, occurrence -> syntagm) to check if occurrence -> syntagm can be recognised as a known pattern extension of the occurrence pattern.
+ * Also calls `pat.pattern.remember` for all patterns more specific than the occurrence pattern.
+ * If there is generalisation, also calls `pat.pattern.remember` for all patterns more general than the occurrence pattern.
+ * Calls `pat.memoparam.learn` (occurrence pattern memory, occurrence -> syntagm) to check if  occurrence -> syntagm can be identified with a previously memorised extension, leading to a new pattern extension.
+ * If there is generalisation, also calls `pat.memoparam.learn` for all patterns more general than the occurrence pattern.
