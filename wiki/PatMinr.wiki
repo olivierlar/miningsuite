@@ -43,5 +43,21 @@ Tries to extend all the pattern occurrences (including cycles) ending at the pre
  * Calls `pat.pattern.remember` (occurrence pattern, occurrence -> syntagm) to check if occurrence -> syntagm can be recognised as a known pattern extension of the occurrence pattern.
  * Also calls `pat.pattern.remember` for all patterns more specific than the occurrence pattern.
  * If there is generalisation, also calls `pat.pattern.remember` for all patterns more general than the occurrence pattern.
- * Calls `pat.memoparam.learn` (occurrence pattern memory, occurrence -> syntagm) to check if  occurrence -> syntagm can be identified with a previously memorised extension, leading to a new pattern extension.
- * If there is generalisation, also calls `pat.memoparam.learn` for all patterns more general than the occurrence pattern.
+ * Calls `pat.memostruct.learn` (occurrence pattern memory, occurrence -> syntagm) to check if  occurrence -> syntagm can be identified with a previously memorised extension, leading to a new pattern extension.
+ * If there is generalisation, also calls `pat.memostruct.learn` for all patterns more general than the occurrence pattern.
+
+=== `c` pattern, occurrence -> syntagm ===
+
+description under construction...
+
+=== `pat.memostruct.learn` pattern, memory, occurrence -> syntagm ===
+
+ * Accumulates the memory related to the more specific patterns.
+ * Calls `pat.memory.combine` to process the learning phase along the different parametric dimension and combine them together.
+
+=== `pat.memory.combine` pattern, parametric memory, occurrence -> syntagm ===
+
+ * Call recursively `learn` to the subfields of the parametric memory, and accumulates the pattern detection results. If the memory is of type `pat.memoparam`, cf. below.
+ * If the combined pattern detection result is not empty, and is not implied by an already existing pattern extension, call `pat.pattern.link` for the current pattern, the pattern detection result, and occurrence -> syntagm.
+
+=== `pat.memoparam.learn` pattern, memory, occurrence -> syntagm ===
