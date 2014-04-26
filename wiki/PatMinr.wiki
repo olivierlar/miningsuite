@@ -46,7 +46,7 @@ Tries to extend all the pattern occurrences (including cycles) ending at the pre
  * Calls `pat.memostruct.learn` (occurrence pattern memory, occurrence -> syntagm) to check if  occurrence -> syntagm can be identified with a previously memorised extension, leading to a new pattern extension.
  * If there is generalisation, also calls `pat.memostruct.learn` for all patterns more general than the occurrence pattern.
 
-=== `c` pattern, occurrence -> syntagm ===
+=== `pat.pattern.remember` pattern, occurrence -> syntagm ===
 
 description under construction...
 
