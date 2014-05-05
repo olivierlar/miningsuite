@@ -41,17 +41,33 @@ Constructs a syntagmatic relation between previous and current note.
 
 Tries to extend all the pattern occurrences (including cycles) ending at the previous note, in decreasing order of specificity, with the new syntagmatic relation by calling:
 {{{
-pat.occurrence.memorize occurrence -> syntagm, general_patterns
+pat.occurrence.memorize occurrence -> syntagm, not_specific_general_patterns
 }}}
-where `general_patterns` is the set of patterns more general than the occurrence's pattern. To avoid duplicating the set of general patterns, for each occurrence, only general patterns that are not more general than the patterns of the more general occurrences are included.
+where `not_specific_general_patterns` is the set of patterns more general than the patterns of the more general occurrences. These general patterns will be already considered by more general occurrences, so don't need to be considered by the current more specific occurrence.
 
-=== `pat.occurrence.memorize` occurrence -> syntagm, general_patterns ===
+=== `pat.occurrence.memorize` occurrence -> syntagm, not_specific_general_patterns ===
 
- * Calls `pat.pattern.remember` (occurrence pattern, occurrence -> syntagm) to check if occurrence -> syntagm can be recognised as a known pattern extension of the occurrence pattern.
- * Also calls `pat.pattern.remember` for all patterns more specific than the occurrence pattern.
- * If there is generalisation, also calls `pat.pattern.remember` for all patterns more general than the occurrence pattern.
- * Calls `pat.memostruct.learn` (occurrence pattern memory, occurrence -> syntagm) to check if  occurrence -> syntagm can be identified with a previously memorised extension, leading to a new pattern extension.
- * If there is generalisation, also calls `pat.memostruct.learn` for all patterns more general than the occurrence pattern.
+ * Checks if occurrence -> syntagm can be recognised as a known pattern extension of the occurrence's pattern `pattern`, by calling
+{{{
+pat.pattern.remember pattern, occurrence -> syntagm
+}}}
+
+ * Do the same for any pattern `pattern` more specific than the occurrence pattern.
+
+ * Do the same for any pattern `pattern` more general than the occurrence pattern that meet the following conditions:
+   * It is not member of the set `not_specific_general_patterns` (which will be considered already by more general occurrences).
+   * It can be applied to the current context (cf. `pat.pattern.incompatible`).
+   * It is not more general than a cycle currently developing up to the occurrence's last note.
+
+ * Check if  occurrence -> syntagm can be identified with a previously memorised extension, leading to a new pattern extension, by calling:
+{{{
+pat.memostruct.learn memory, occurrence -> syntagm
+}}}
+where `memory` is the associative memory storing the extensions of the occurrence's pattern.
+
+ * Do the same for the associative memory `memory` related to any pattern more general than the occurrence pattern that meet the following conditions:
+   * It is not member of the set `not_specific_general_patterns` (which will be considered already by more general occurrences).
+   * It can be applied to the current context (cf. `pat.pattern.incompatible`).
 
 === `pat.pattern.remember` pattern, occurrence -> syntagm ===
 
