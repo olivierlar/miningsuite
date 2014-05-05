@@ -82,13 +82,13 @@ For each `child` of `pattern`, with parametric description `param`:
   * Skip that child if it can be found already associated to `syntagm`.
 
   * In the special case where `pattern` is more general than `occurrence`'s pattern (step 3 in calling function `pat.occurrence.memorize`):
-   * Checks if the resulting pattern would be closed by calling:
+Checks if the resulting pattern would be closed by calling:
 {{{
 closure_test occurrence -> syntagm, param, pattern
 }}}
 and if not, skip the child.
-   * Check if `param` can be found already as the parametric description of a child of `pattern`, else create a new child.
-   * Extends similarly any more general pattern, if possible.
+Check if `param` can be found already as the parametric description of a child of `pattern`, else create a new child.
+Extends similarly any more general pattern, if possible.
 
   * If `param` has been generalised, create a new child with that parametric description.
 
@@ -109,12 +109,47 @@ Behavior different if the parametric memory is of type `pat.memostruct` (a combi
 
  === `pat.memoparam.learn` pattern, memory, occurrence -> syntagm ===
 
- * Calls `pat.memoparam.find`to detects the syntagm description in the memory hash-table.
- * If a previously memorised occurrence is identified as of same parametric description, calls `pat.pattern.link` for the current pattern, the pattern detection result, and occurrence -> syntagm.
+ * Calls `pat.memoparam.find` to detects the syntagm description in the memory hash-table. The results is in the structure `retrieved`.
+
+ * If a previously memorised occurrence is identified as of same parametric description, attempts the creation of a pattern extension by calling:
+{{{
+pat.pattern.link pattern, retrieved, occurrence -> syntagm.
+}}}
+
  * Else if...
+
  * Calls recursively `pat.memoparam.learn` for the interval field, and for the more general parametric fields.
 
 === `pat.memory.combine` pattern, parametric memory, occurrence -> syntagm ===
 
  * Calls recursively `learn` to the subfields of the parametric memory, and accumulates the pattern detection results.
  * If the combined pattern detection result is not empty, and is not implied by an already existing pattern extension, calls `pat.pattern.link` for the current pattern, the pattern detection result, and occurrence -> syntagm.
+
+=== `pat.pattern.link` pattern, retrieved, occurrence -> syntagm ===
+
+Checks if the retrieved occurrence(s) can trigger a new pattern extension.
+
+  * If the retrieved occurrence already terminates to the current note, cancel the whole test.
+
+  * Forbid overlapping of occurrences in a same channel.
+
+  * The parametric description of the extension, `param`, is computed as the common description of the current `syntagm`and the one in `retrieved`. If `param` is not well defined, cancel the whole test. If `param`is already subsumed in a child of `pattern`, return simply that child.
+
+  * Checks if the resulting pattern would be closed by calling:
+{{{
+closure_test occurrence -> syntagm, param, pattern
+}}}
+and if not, cancel the whole test.
+
+  * Extend `pattern` with the new child parametrically defined by `param`.
+
+  * Possibly extend also the more general patterns similarly.
+
+  * Extend all the suitable retrieved occurrences with the new pattern child, leading to an extended occurrence `old_occurrence`, and memorise anyl syntagmatic connection `old_next_syntagm`following it:
+{{{
+pat.occurrence.memorize old_occurrence -> old_next_syntagm
+}}}
+
+  * Extend the current `occurrence` with the new pattern child.
+
+  * Detect cyclicity.
