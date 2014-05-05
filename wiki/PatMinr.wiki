@@ -47,31 +47,56 @@ where `not_specific_general_patterns` is the set of patterns more general than t
 
 === `pat.occurrence.memorize` occurrence -> syntagm, not_specific_general_patterns ===
 
- * Checks if occurrence -> syntagm can be recognised as a known pattern extension of the occurrence's pattern `pattern`, by calling
+ * 1. Checks if occurrence -> syntagm can be recognised as a known pattern extension of the occurrence's pattern `pattern`, by calling
 {{{
 pat.pattern.remember pattern, occurrence -> syntagm
 }}}
 
- * Do the same for any pattern `pattern` more specific than the occurrence pattern.
+ * 2. Do the same for any pattern `pattern` more specific than the occurrence pattern.
 
- * Do the same for any pattern `pattern` more general than the occurrence pattern that meet the following conditions:
+ * 3. Do the same for any pattern `pattern` more general than the occurrence pattern that meet the following conditions:
    * It is not member of the set `not_specific_general_patterns` (which will be considered already by more general occurrences).
    * It can be applied to the current context (cf. `pat.pattern.incompatible`).
    * It is not more general than a cycle currently developing up to the occurrence's last note.
 
- * Check if  occurrence -> syntagm can be identified with a previously memorised extension, leading to a new pattern extension, by calling:
+ * 4. Check if  occurrence -> syntagm can be identified with a previously memorised extension, leading to a new pattern extension, by calling:
 {{{
 pat.memostruct.learn memory, occurrence -> syntagm
 }}}
 where `memory` is the associative memory storing the extensions of the occurrence's pattern.
 
- * Do the same for the associative memory `memory` related to any pattern more general than the occurrence pattern that meet the following conditions:
+ * 5. Do the same for the associative memory `memory` related to any pattern more general than the occurrence pattern that meet the following conditions:
    * It is not member of the set `not_specific_general_patterns` (which will be considered already by more general occurrences).
    * It can be applied to the current context (cf. `pat.pattern.incompatible`).
 
 === `pat.pattern.remember` pattern, occurrence -> syntagm ===
 
-description under construction...
+Checks if occurrence -> syntagm can be recognised as a known pattern extension of `pattern`.
+
+For each `child` of `pattern`, with parametric description `param`:
+
+  * If necessary, generalise `param` so that it can apply to the `syntagm`'s description. If there is total incompatibility, skip that `child`.
+
+  * If the occurrence is cyclic, generalise `param` so that it can apply to the description of the next phase of the cycle. If there is total incompatibility, skip that `child`.
+
+  * Skip that child if it can be found already associated to `syntagm`.
+
+  * In the special case where `pattern` is more general than `occurrence`'s pattern (step 3 in calling function `pat.occurrence.memorize`):
+   * Checks if the resulting pattern would be closed by calling:
+{{{
+closure_test occurrence -> syntagm, param, pattern
+}}}
+and if not, skip the child.
+   * Check if `param` can be found already as the parametric description of a child of `pattern`, else create a new child.
+   * Extends similarly any more general pattern, if possible.
+
+  * If `param` has been generalised, create a new child with that parametric description.
+
+  * Creates the new occurrence related to that child.
+
+  * Detects new cyclicity.
+
+  * If the occurrence is already cyclic, checks if we arrive in a new start of cycle.
 
 === `pat.memory.learn` pattern, memory, occurrence -> syntagm ===
 
