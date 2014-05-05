@@ -133,7 +133,7 @@ Checks if the retrieved occurrence(s) can trigger a new pattern extension.
 
   * Forbid overlapping of occurrences in a same channel.
 
-  * The parametric description of the extension, `param`, is computed as the common description of the current `syntagm`and the one in `retrieved`. If `param` is not well defined, cancel the whole test. If `param`is already subsumed in a child of `pattern`, return simply that child.
+  * The parametric description of the extension, `param`, is computed as the common description of the current `syntagm` and the one in `retrieved`. If `param` is not well defined, cancel the whole test. If `param` is already subsumed in a child of `pattern`, return simply that child.
 
   * Checks if the resulting pattern would be closed by calling:
 {{{
@@ -153,3 +153,7 @@ pat.occurrence.memorize old_occurrence -> old_next_syntagm
   * Extend the current `occurrence` with the new pattern child.
 
   * Detect cyclicity.
+
+=== closure_test occurrence -> syntagm, param, pattern ===
+
+The extended occurrence (occurrence -> syntagm) is closed if there is no other occurrence `o` ending at the same note that ends the syntagm, such that the parametric description of the last extension of `o` is equal or more specific than `param`.
