@@ -17,28 +17,35 @@ to be continued…
 
 Each note:
 
- * `mus.minr`:`Process` note
-
+ {{{
+mus.minr:Process note
+}}}
 
 === `mus.minr`:`Process` note ===
 
 Each previous note syntagmatically leading to the note:
 
- * `pat.syntagm` previous note -> current note
+ * Constructs a syntagmatic relation:
+{{{
+syntagm = pat.syntagm previous_note -> note
+}}}
 
- * Create a `pat.occurrence` of the elementary note pattern and call `memorize` ø -> syntagm (cf. below)
+ * Creates a `pat.occurrence` ø of the elementary note pattern and call:
+{{{
+pat.occurrence.memorize ø -> syntagm
+}}}
 
-=== `pat.syntagm` previous -> current ===
+=== `pat.syntagm` previous_note -> note ===
 
 Constructs a syntagmatic relation between previous and current note.
 
-Tries to extend all the pattern occurrences (including cycles) ending at the previous note with the new syntagmatic relation, with the following order:
+Tries to extend all the pattern occurrences (including cycles) ending at the previous note, in decreasing order of specificity, with the new syntagmatic relation by calling:
+{{{
+pat.occurrence.memorize occurrence -> syntagm, general_patterns
+}}}
+where `general_patterns` is the set of patterns more general than the occurrence's pattern. To avoid duplicating the set of general patterns, for each occurrence, only general patterns that are not more general than the patterns of the more general occurrences are included.
 
- * First, extends cycles: Call `pat.occurrence.memorize` cycle -> syntagm with generalization.
-
- * Then, extends the set of pattern occurrences ordered in decreasing order of specificity, by first calling `pat.occurrence.memorize` occurrence -> syntagm on each of them without generalization, and then calling once again `pat.occurrence.memorize` occurrence -> syntagm on each of them but this time with generalization.
-
-=== `pat.occurrence.memorize` occurrence -> syntagm, with or without generalisation ===
+=== `pat.occurrence.memorize` occurrence -> syntagm, general_patterns ===
 
  * Calls `pat.pattern.remember` (occurrence pattern, occurrence -> syntagm) to check if occurrence -> syntagm can be recognised as a known pattern extension of the occurrence pattern.
  * Also calls `pat.pattern.remember` for all patterns more specific than the occurrence pattern.
