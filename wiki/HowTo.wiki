@@ -3,7 +3,7 @@
 
 = How to use the _MiningSuite_? =
 
-For the moment, the _MiningSuite_ being on a alpha development phase, there is no direct Download button. To download the code, you need to check out the Subversion repository. A new stable version 0.7 is planned for the end of April 2014, with a direct Download button.
+For the moment, the _MiningSuite_ being on a alpha development phase, there is no direct Download button. To download the code, you need to check out the Subversion repository. A new stable version 0.7 is planned for the end of June 2014, with a direct Download button.
 
 The _MiningSuite_ requires _Matlab_ 7.6 (r2008a) or newer versions. It also requires that the _Signal Processing Toolbox_, one of the optional sub-packages of _Matlab_, be properly installed. But actually, a certain number of operators can adapt to the absence of this toolbox, and can produce more or less reliable results. But for serious use of the _MiningSuite_, we strongly recommend a proper installation of the _Signal Processing Toolbox_.
 
