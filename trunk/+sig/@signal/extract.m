@@ -7,7 +7,9 @@ function obj = extract(obj,param,dim,axis,varargin)
     for i = 1:length(varargin)
         obj.(varargin{i}) = out{i};
     end
-    obj.Sstart = out{i+1};
+    if strcmp(dim,'sample')
+        obj.Sstart = out{i+1};
+    end
 end
     
    
