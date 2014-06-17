@@ -68,7 +68,7 @@ function display(obj)
             else
                 for j = 1:obj.peak.size('sample')
                     pj = p.view('sample',j);
-                    px = obj.Saxis.unit.generate(j);
+                    px = obj.Saxis.unit.generate(j+.5);
                     py = obj.Xaxis.unit.generate(pj{1});
                     plot(px,py,'+k');
                 end
