@@ -67,7 +67,7 @@ if ischar(arg) || isa(arg,'sig.design')
     else
         out = design.eval(filename);
     end
-elseif isa(arg,'sig.Signal')
+elseif isa(arg,'sig.signal')
     if ~isempty(frame) && frame.toggle
         frate = sig.compute(@sig.getfrate,arg.Srate,frame);
         arg.Ydata = arg.Ydata.frame(frame,arg.Srate);
@@ -78,7 +78,7 @@ elseif isa(arg,'sig.Signal')
         %                'Frate',frate)};
     end
         
-    if arg.design.evaluated
+    if 1 %arg.design.evaluated
         out = main({arg},during,after);
     else
         out = {arg.design.main({arg},during,after)};

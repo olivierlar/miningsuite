@@ -19,7 +19,7 @@ classdef data
 %%
     properties
         content
-        design
+        %design
         dims
         %layers
     end

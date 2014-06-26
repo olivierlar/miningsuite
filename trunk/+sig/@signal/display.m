@@ -17,7 +17,7 @@ function display(obj)
     elseif length(obj.xdata) == 1
         iscurve = 1;
         abscissa = 'sdata';
-        Xaxis = obj.Saxis;
+        Xaxis = obj.saxis;
         ydata = obj.Ydata;
         
     else
@@ -28,7 +28,7 @@ function display(obj)
         x = [ 1.5*x(1) - 0.5*x(2); ...
               (x(1:end-1) + x(2:end)) / 2; ...
               1.5*x(end) - 0.5*x(end-1) ];
-        Xaxis = obj.Saxis;
+        Xaxis = obj.saxis;
         ydata = obj.Ydata.format({'element','sample'});
     end
 
@@ -68,7 +68,7 @@ function display(obj)
             else
                 for j = 1:obj.peak.size('sample')
                     pj = p.view('sample',j);
-                    px = obj.Saxis.unit.generate(j+.5);
+                    px = obj.saxis.unit.generate(j+.5);
                     py = obj.Xaxis.unit.generate(pj{1});
                     plot(px,py,'+k');
                 end
