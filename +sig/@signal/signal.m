@@ -54,10 +54,10 @@ classdef signal
         %Xaxis
     	xdata
         
-        Saxis
+        saxis
         sdata
         
-        Faxis
+        faxis
         fstarts
         fends
         fcenters
@@ -115,14 +115,14 @@ classdef signal
             end
         end
         
-        function s = get.Saxis(obj)
+        function s = get.saxis(obj)
             s = sig.axis('time',obj.Sstart*obj.Srate+1,'s',0,1/obj.Srate);
         end
         function s = get.sdata(obj)
-            s = obj.Saxis.data(obj.Ydata.size('sample'));
+            s = obj.saxis.data(obj.Ydata.size('sample'));
         end
         
-        function f = get.Faxis(obj)
+        function f = get.faxis(obj)
             if obj.Frate
                 f = sig.axis('time',1,'s',0,1/obj.Frate);
             else
@@ -130,24 +130,24 @@ classdef signal
             end
         end
         function f = get.fstarts(obj)
-            if isempty(obj.Faxis)
+            if isempty(obj.faxis)
                 f = [];
             else
-                f = obj.Faxis.data(obj.Ydata.size('frame'));
+                f = obj.faxis.data(obj.Ydata.size('frame'));
             end
         end
         function f = get.fends(obj)
-            if isempty(obj.Faxis)
+            if isempty(obj.faxis)
                 f = [];
             else
-                f = obj.Faxis.data(obj.Ydata.size('frame')) + obj.Fsize;
+                f = obj.faxis.data(obj.Ydata.size('frame')) + obj.Fsize;
             end
         end
         function f = get.fcenters(obj)
-            if isempty(obj.Faxis)
+            if isempty(obj.faxis)
                 f = [];
             else
-                f = obj.Faxis.data(obj.Ydata.size('frame')) + obj.Fsize/2;
+                f = obj.faxis.data(obj.Ydata.size('frame')) + obj.Fsize/2;
             end
         end
         
@@ -385,7 +385,7 @@ function obj = after(obj,option)
         obj = obj.resample(option.sampling);
     end
     if ~isempty(option.extract)
-        obj = obj.extract(option.extract,'sample','Saxis','Ydata');
+        obj = obj.extract(option.extract,'sample','saxis','Ydata');
     end
     if option.trim
         obj = obj.trim(option.trimwhere,option.trimthreshold);

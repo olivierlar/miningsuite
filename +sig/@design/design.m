@@ -123,7 +123,7 @@ classdef design
             end
             out = cell(1,nfiles);
             for i = 1:nfiles
-                out{i} = sig.evaleach(obj,files{i},w,sr(i));
+                out{i} = sig.evaleach(obj,files{i},w(:,i),sr(i));
             end
             %if isempty(obj.input.main)
             %    out{1}.Ydata.design.input = files;
@@ -134,6 +134,24 @@ classdef design
             else
                 out = out{1};
             end
+            
+            if 0
+            out = sig.analysis;
+            if nfiles == 1
+                out.data = sig.evaleach(obj,files{1},w,sr);
+            else
+                out.layers{1} = 'files';
+                out.data = cell(1,nfiles);
+                for i = 1:nfiles
+                    out.data{i} = sig.evaleach(obj,files{i},w,sr(i));
+                end
+                %if isempty(obj.input.main)
+                %    out{1}.Ydata.design.input = files;
+                %end
+                out.data{i} = combineaudiofile(files,out{:});
+            end
+            end
+            
         end
         %%
         function out = display(obj,recurs)
@@ -304,6 +322,7 @@ function [sz,ch,sr] = fileinfo(file,folder)
                         sr = 0;
                         sz = 0;
                         if ~ch
+                            sz = [];
                             error;
                         end
                     catch
@@ -460,7 +479,7 @@ function c = combine(v)
                         end
                     end
                 end
-                if ~usecell
+                if 0 %~usecell
                     val = cell2mat(val);
                 end
                 if isdata
