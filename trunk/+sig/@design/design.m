@@ -74,11 +74,14 @@ classdef design
             f = getfiles(obj);
         end
         %%
-        function out = eval(obj,arg)
+        function out = eval(obj,arg,folder)
             if nargin<2
                 arg = obj.files;
             end
-            if strcmpi(arg,'Folder') || strcmpi(arg,'Folders')
+            if nargin<3
+                folder = 0;
+            end
+            if strcmpi(arg,'Folder') || strcmpi(arg,'Folders') % When is this used?
                 [nfiles sz sr files] = ...
                     folderinfo('',[],0,[],[],{},strcmpi(arg,'Folders'));
                 if nfiles == 0
@@ -101,7 +104,11 @@ classdef design
                     end
                 end
             else
-                [sz,ch,sr] = fileinfo(arg,0);
+                [sz,ch,sr] = fileinfo(arg,folder);
+                if ~sz
+                    out = [];
+                    return
+                end
                 if isempty(obj.extract)
                     w = [1;sz];
                 else
@@ -141,13 +148,13 @@ classdef design
                         return
                     end
                     for i = 1:length(files)
-                        out = obj.eval(files{i});
-                        if isa(out{1},'sig.signal')
+                        out = obj.eval(files{i},1);
+                        if ~isempty(out) && isa(out{1},'sig.signal')
                             out{1}.display;
                         end
                     end
                 else
-                    out = obj.eval(obj.files);
+                    out = obj.eval(obj.files,0);
                     if isa(out{1},'sig.signal')
                         out{1}.display;
                     end
