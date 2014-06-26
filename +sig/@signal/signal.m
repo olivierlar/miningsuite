@@ -49,6 +49,8 @@ classdef signal
         
         date
         ver
+        
+        design
     end
     properties (Dependent)
         %Xaxis
@@ -62,7 +64,7 @@ classdef signal
         fends
         fcenters
         
-        design
+        %design
         framed
         polyfile
         combinables
@@ -151,12 +153,12 @@ classdef signal
             end
         end
         
-        function d = get.design(obj)
-            d = obj.Ydata.design;
-        end
-        function obj = set.design(obj,d)
-            obj.Ydata.design = d;
-        end
+        %function d = get.design(obj)
+        %    d = obj.Ydata.design;
+        %end
+        %function obj = set.design(obj,d)
+        %    obj.Ydata.design = d;
+        %end
         
         function b = get.polyfile(obj)
             b = ~isempty(obj.celllayers) && strcmp(obj.celllayers,'files');

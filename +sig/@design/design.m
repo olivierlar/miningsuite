@@ -39,8 +39,8 @@ classdef design
         
         extensive
         nochunk = 0
-    end
-    properties (Dependent)
+    %end
+    %properties (Dependent)
         files
     end
 %%
@@ -68,11 +68,15 @@ classdef design
                 obj.extensive = extensive;
                 obj.nochunk = nochunk;
             end
+            obj.files = input;
+            if isa(input,'sig.design')
+                obj.files = input.files;
+            end
         end
         %%
-        function f = get.files(obj)
-            f = getfiles(obj);
-        end
+        %function f = get.files(obj)
+        %    f = getfiles(obj);
+        %end
         %%
         function out = eval(obj,arg,folder)
             if nargin<2
@@ -242,14 +246,14 @@ classdef design
 end
 
 %%
-function f = getfiles(obj)
-    f = obj.input;
-    if isa(f,'sig.design')
-        f = getfiles(f);
-    elseif isa(f,'sig.signal')
-        f = getfiles(f.design);
-    end
-end
+%function f = getfiles(obj)
+%    f = obj.input;
+%    if isa(f,'sig.design')
+%        f = getfiles(f);
+%    elseif isa(f,'sig.signal')
+%        f = getfiles(f.design);
+%    end
+%end
         
 
 function [l sz sr a] = folderinfo(path,s,l,sz,sr,a,folders)
@@ -489,6 +493,11 @@ function c = combine(v)
             end
         end
         c.celllayers = [{'files'} c.celllayers];
+        files = {};
+        for j = 1:l
+            files{j} = v{j}.files;
+        end
+        c.design.files = files;
     end
 end
 
