@@ -320,9 +320,8 @@ function [sz,ch,sr] = fileinfo(file,folder)
                     try
                         ch = midiread(file);
                         sr = 0;
-                        sz = 0;
+                        sz = [];
                         if ~ch
-                            sz = [];
                             error;
                         end
                     catch
