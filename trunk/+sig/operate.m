@@ -72,10 +72,6 @@ elseif isa(arg,'sig.signal')
         frate = sig.compute(@sig.getfrate,arg.Srate,frame);
         arg.Ydata = arg.Ydata.frame(frame,arg.Srate);
         arg.Frate = frate;
-        %y = {sig.signal(data,'Xsampling',1/sr,'Name','audio',...
-        %                'Sstart',(window(1)-1)/sr,'Srate',sr,...
-        %                'Ssize',data.size('sample'),...
-        %                'Frate',frate)};
     end
         
     if 1 %arg.design.evaluated

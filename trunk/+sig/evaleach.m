@@ -238,20 +238,14 @@ else
     end
 end
 
-if isa(y,'sig.signal')
-    if 1%iscell(y)
+for i = 1:length(y)
+    if isa(y{i},'sig.signal')
         if ischar(design)
-            y{1}.Ydata.design = {filename};
+            y{i}.design = {filename};
         else
-            y{1}.Ydata.design = design;
-            y{1}.Ydata.design.evaluated = 1;
-        end
-    else
-        if ischar(design)
-            y.Ydata.design = {filename};
-        else
-            y.Ydata.design = design;
-            y.Ydata.design.evaluated = 1;
+            y{i}.design = design;
+            y{i}.design.evaluated = 1;
+            y{i}.design.files = filename;
         end
     end
 end
