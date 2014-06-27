@@ -197,6 +197,9 @@ function m = search(y,option)
     m = find(y(2:end-1) >= option.cthr & y(2:end-1) >= option.thr & ...     
              dy(1:end-1) > 0 & dy(2:end) <= 0);
     m = m+1;
+    if isempty(m)
+        return
+    end
          
     if option.cthr
         finalm = [];
