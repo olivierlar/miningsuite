@@ -106,6 +106,25 @@ classdef signal
             s = after(s,post);
         end
         
+        function d = getdata(obj)
+            d = obj.Ydata;
+            if isempty(d)
+                d = [];
+                return
+            end
+            if ~iscell(d)
+                return
+            end
+            if isa(d{1},'sig.data')
+                for i = 1:length(d)
+                    d{i} = d{i}.content;
+                end
+            end
+            if length(d) == 1
+                d = d{1};
+            end
+        end
+        
         %function x = get.Xaxis(obj)
         %    x = sig.axis(obj.xname,obj.xstart,obj.xunit,0,obj.xsampling);
         %end
@@ -290,6 +309,12 @@ function options = classoptions(fsize,fhop)
         center.default = sig.signal.default.Center;
         center.when = 'After';
     options.center = center;
+
+%        normal.key = 'Normal';
+%        normal.type = 'Boolean';
+%        normal.default = 0;
+%        normal.when = 'After';
+%    options.normal = normal;
     
         channel.key = {'Channel','Channels'};
         channel.type = 'Numeric';
