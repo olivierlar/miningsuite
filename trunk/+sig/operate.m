@@ -39,9 +39,8 @@ elseif isa(arg,'sig.design')
     filename = arg.files;
 end
 
-[arg type] = init(arg,during);
-
 if ischar(arg) || isa(arg,'sig.design')
+    [arg type] = init(arg,during);
     if isempty(extract) && ~ischar(arg)
         extract = arg.extract;
     end
@@ -68,6 +67,8 @@ if ischar(arg) || isa(arg,'sig.design')
         out = design.eval(filename);
     end
 elseif isa(arg,'sig.signal')
+    error('Evaluated objects (sig.signal) cannot be used as argument of further operations yet..');
+    [arg type] = init(arg,during);
     if ~isempty(frame) && frame.toggle
         frate = sig.compute(@sig.getfrate,arg.Srate,frame);
         arg.Ydata = arg.Ydata.frame(frame,arg.Srate);
@@ -84,7 +85,9 @@ elseif isa(arg,'sig.signal')
                                frame,combine,argin(2:end),[],0,0);
     out{1}.design.evaluated = 1;
 elseif isa(arg,'mus.Sequence')
+    [arg type] = init(arg,during);
     out = main(arg,during,after);
 else
+    [arg type] = init(arg,during);
     out = {arg};
 end
