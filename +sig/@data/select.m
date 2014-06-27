@@ -1,6 +1,6 @@
-function obj = select(obj,dim,pos,type)
+function obj = select(obj,dim,pos,newtype)
     if nargin<4
-        type = '()';
+        newtype = '()';
     end
 
     data = obj.content;
@@ -17,15 +17,22 @@ function obj = select(obj,dim,pos,type)
     else
         oldtype = '()';
     end
-    [datargs posargs] = recurse(data,pos,foundim,start,start,1,ndimdata,...
+    [olddatargs posargs] = recurse(data,pos,foundim,start,start,1,ndimdata,...
                                 {},{},oldtype);
-    newdata = zeros(dimdata);
+    [newdatargs posargs] = recurse(data,pos,foundim,start,start,1,ndimdata,...
+                                {},{},newtype);
+    
+    if strcmp(newtype,'()')
+        newdata = zeros(dimdata);
+    elseif strcmp(newtype,'{}')
+        newdata = cell(dimdata);
+    end
 
-    for i = 1:length(datargs)
-        olddatai = subsref(data,datargs{i});
+    for i = 1:length(olddatargs)
+        olddatai = subsref(data,olddatargs{i});
         posi = subsref(posdata,posargs{i});
         newdatai = olddatai(posi);
-        newdata = subsasgn(newdata,datargs{i},newdatai);
+        newdata = subsasgn(newdata,newdatargs{i},newdatai);
     end
 
     obj.content = newdata;

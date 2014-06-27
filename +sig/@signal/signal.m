@@ -130,7 +130,7 @@ classdef signal
         %end
         function x = get.xdata(obj)
             if ~obj.xsampling
-                x = obj.xstart;
+                x = []; %obj.xstart;
             else
                 x = obj.Xaxis.data(obj.Ydata.size('element'));
             end
@@ -425,6 +425,6 @@ end
 
 
 function out = peakpos(d,p,peakdim)
-    e = d.select(peakdim,p);
+    e = d.select(peakdim,p,'{}');
     out = {e};
 end

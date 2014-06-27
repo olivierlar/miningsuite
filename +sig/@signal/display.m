@@ -14,8 +14,13 @@ function display(obj)
         Xaxis = obj.Xaxis;
         ydata = obj.Ydata;
         
-    elseif length(obj.xdata) == 1
-        iscurve = 1;
+    elseif isempty(obj.xdata) ... % Variable number of data points per sample
+            || length(obj.xdata) == 1   % Always one data point per sample
+        if length(obj.xdata) == 1
+            iscurve = 1;
+        else
+            iscurve = -1;
+        end
         abscissa = 'sdata';
         Xaxis = obj.saxis;
         ydata = obj.Ydata;
@@ -45,6 +50,27 @@ function display(obj)
         end
         
         if iscurve
+            if iscurve == -1
+                varpeaks = 0;
+                for j = 1:length(ydatai.content)
+                    if length(ydatai.content{j}) > 1
+                        varpeaks = 1;
+                        break
+                    end
+                end
+                if ~varpeaks
+                    iscurve = 1;
+                    d = zeros(1,length(ydatai.content));
+                    for j = 1:length(ydatai.content)
+                        if isempty(ydatai.content{j})
+                            d(j) = NaN;
+                        else
+                            d(j) = ydatai.content{j};
+                        end
+                    end
+                    ydatai.content = d;
+                end
+            end
             plot(obj.(abscissa),squeeze(ydatai.content))
         else
             surfplot(t,x,ydatai.content)
@@ -68,9 +94,11 @@ function display(obj)
             else
                 for j = 1:obj.peak.size('sample')
                     pj = p.view('sample',j);
-                    px = obj.saxis.unit.generate(j+.5);
-                    py = obj.Xaxis.unit.generate(pj{1});
-                    plot(px,py,'+k');
+                    if ~isempty(pj{1})
+                        px = obj.saxis.unit.generate(j+.5);
+                        py = obj.Xaxis.unit.generate(pj{1});
+                        plot(px,py,'+k');
+                    end
                 end
             end
         end

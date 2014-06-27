@@ -8,6 +8,9 @@ function [obj varargout] = apply(obj,func,argin,dimfunc,ndimfunc,type)
     end
 
     data = obj.content;
+    if isempty(data)
+        return
+    end
     dimdata = size(data);
     ndimdata = length(dimdata);
     ordim = zeros(1,ndimdata);
