@@ -469,13 +469,13 @@ function c = combine(v)
                 c.(cfields{i}) = val;
             else
                 usecell = 0;
-                isdata = isa(c.(cfields{i}),'sig.data');
+                %isdata = isa(c.(cfields{i}),'sig.data');
                 val = cell(1,l);
                 for j = 1:l
                     val{j} = v{j}.(cfields{i});
-                    if isdata
-                        val{j} = val{j}.content;
-                    end
+                    %if isdata
+                    %    val{j} = val{j}.content;
+                    %end
                     if ~usecell
                         if length(val{j})~=1
                             usecell = 1;
@@ -485,11 +485,11 @@ function c = combine(v)
                 if 0 %~usecell
                     val = cell2mat(val);
                 end
-                if isdata
-                    c.(cfields{i}).content = val;
-                else
+                %if isdata
+                %    c.(cfields{i}).content = val;
+                %else
                     c.(cfields{i}) = val;
-                end
+                %end
             end
         end
         c.celllayers = [{'files'} c.celllayers];
