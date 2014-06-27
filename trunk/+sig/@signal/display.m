@@ -1,6 +1,6 @@
 function display(obj)
     if obj.polyfile
-        for i = 1:length(obj.Ydata.content)
+        for i = 1:length(obj.Ydata)
             file = obj.selectfile(i);
             display(file);
         end
