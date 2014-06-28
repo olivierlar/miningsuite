@@ -116,7 +116,7 @@ classdef design
                 if isempty(obj.extract)
                     w = [1;sz];
                 else
-                    interval = obj.extract.value;
+                    interval = obj.extract.value(:);
                     if strcmpi(obj.extract.unit,'s')
                         interval = round(interval*sr) + 1;
                     end
@@ -234,6 +234,12 @@ classdef design
                         break
                     end
                 end
+            end
+        end
+        function obj = previous(obj,n)
+            obj = obj.input;
+            if nargin > 1 && n > 1
+                obj = obj.previous(n-1);
             end
         end
         function play(obj,varargin)
