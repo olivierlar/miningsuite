@@ -32,7 +32,7 @@ end
 fields = fieldnames(options);
 for i = 1:length(fields)
     field = fields{i};
-    if ~max(strcmpi(field,{'Frame','FrameSize','FrameHop'}))
+    if ~max(strcmpi(field,{'frame','fsize','fhop'}))
         if isfield(options.(field),'when') && ...
                 (strcmpi(options.(field).when,'After') || ...
                  strcmpi(options.(field).when,'Both'))
@@ -133,17 +133,17 @@ while i <= length(args)
                     if length(args) > i && isnumeric(args{i+1})
                         i = i+1;
                         optionvalue = args{i};
-                    elseif isfield(option.(field),'keydefault')
+                    elseif isfield(options.(field),'keydefault')
                         if strcmpi(type,'Integers')
-                            optionvalue = option.(field).keydefault;
+                            optionvalue = options.(field).keydefault;
                         else
-                            optionvalue = option.(field).keydefault(1);
+                            optionvalue = options.(field).keydefault(1);
                         end
-                    elseif isfield(option.(field),'default')
+                    elseif isfield(options.(field),'default')
                         if strcmpi(type,'Integers')
-                            optionvalue = option.(field).default;
+                            optionvalue = options.(field).default;
                         else
-                            optionvalue = option.(field).default(1);
+                            optionvalue = options.(field).default(1);
                         end
                     else
                         error(['SYNTAX ERROR IN ',func2str(method),...
