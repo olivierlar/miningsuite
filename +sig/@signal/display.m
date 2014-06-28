@@ -9,6 +9,10 @@ function display(obj)
     
     %%    
     if ~obj.Srate
+        if isempty(obj.xdata)
+            textual(obj.yname,obj.Ydata.content);
+            return
+        end
         iscurve = 1;
         abscissa = 'xdata';
         Xaxis = obj.Xaxis;
@@ -50,7 +54,7 @@ function display(obj)
         end
         
         if iscurve
-            if iscurve == -1
+            if iscurve == -1 && iscell(ydatai.content)
                 varpeaks = 0;
                 for j = 1:length(ydatai.content)
                     if length(ydatai.content{j}) > 1
@@ -111,4 +115,10 @@ function display(obj)
         title(obj.yname);
     end
     disp(['The ' obj.yname ' is displayed in Figure ',num2str(gcf),'.']);
+end
+
+
+function textual(name,data)
+    disp(['The ' name ' is:']);
+    display(data);
 end
