@@ -238,14 +238,16 @@ else
     end
 end
 
-for i = 1:length(y)
-    if isa(y{i},'sig.signal')
-        if ischar(design)
-            y{i}.design = {filename};
-        else
-            y{i}.design = design;
-            y{i}.design.evaluated = 1;
-            y{i}.design.files = filename;
+if iscell(y)
+    for i = 1:length(y)
+        if isa(y{i},'sig.signal')
+            if ischar(design)
+                y{i}.design = {filename};
+            else
+                y{i}.design = design;
+                y{i}.design.evaluated = 1;
+                y{i}.design.files = filename;
+            end
         end
     end
 end
