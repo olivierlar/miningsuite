@@ -103,7 +103,7 @@ classdef signal
             s.date = date;
             s.ver = ver;
             
-            s = after(s,post);
+            %s = after(s,post);
         end
         
         function d = getdata(obj)
