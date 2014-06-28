@@ -282,7 +282,7 @@ elseif strcmpi(fr.hop.unit,'s')
 elseif strcmpi(fr.hop.unit,'sp')
     h = fr.hop.value;
 elseif strcmpi(fr.hop.unit,'Hz')
-    h = sr/fr.hop.val;
+    h = sr/fr.hop.value;
 end
 n = floor((lsz-fl)/h)+1;   % Number of frames
 if n < 1
