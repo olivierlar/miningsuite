@@ -23,7 +23,7 @@ end
 
 
 %%
-function [x type] = init(x,option)
+function [x type] = init(x,option,frame)
     x = sig.spectrum(x);
     type = 'sig.Signal';
 end

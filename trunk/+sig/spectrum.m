@@ -40,7 +40,7 @@ end
 
 
 %%
-function [x type] = init(x,option)
+function [x type] = init(x,option,frame)
     type = '?';
 end
 

@@ -202,7 +202,7 @@ classdef signal
             end
         end    
         function p = get.peakpos(obj)
-            p = sig.compute(@peakpos,obj.Ydata,obj.peak,obj.peakdim);
+            p = sig.compute(@peakpos,obj.peak,obj.xdata);%,obj.peakdim);
             p = p{1};
         end
         %%
@@ -383,7 +383,7 @@ end
     
 
 %%
-function [x type] = init(x,option)
+function [x type] = init(x,option,frame)
     type = '?';
 end
 
@@ -424,7 +424,8 @@ function d = sonifier(d,varargin)
 end
 
 
-function out = peakpos(d,p,peakdim)
-    e = d.select(peakdim,p,'{}');
-    out = {e};
+function out = peakpos(d,p) %,peakdim)
+    d.content = p(d.content);
+    %e = d.select(peakdim,p,'{}');
+    out = {d};
 end
