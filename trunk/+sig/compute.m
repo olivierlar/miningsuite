@@ -23,13 +23,6 @@ end
 if iscell(arg1)
     l = length(arg1);
     argouts = cell(1,nout);
-    for j = 1:nout
-        if isa(argins{j},'sig.data')
-            argouts{j} = argins{j};
-        else
-            argouts{j} = cell(1,l);
-        end
-    end
     for i = 1:l
         argi = argins;
         for j = 1:length(argi)
@@ -53,9 +46,17 @@ if iscell(arg1)
             end
         end
         y = recurse(algo,argi,nout);
+        if ~iscell(y)
+            y = {y};
+        end
         for j = 1:nout
-            if isa(argouts{j},'sig.data')
-                argouts{j}.content{i} = y{j}.content;
+            if isa(y{j},'sig.data')
+                if i == 1
+                    argouts{j} = y{j};
+                    argouts{j}.content = {y{j}.content};
+                else
+                    argouts{j}.content{i} = y{j}.content;
+                end
             else
                 argouts{j}{i} = y{j};
             end
