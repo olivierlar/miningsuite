@@ -18,7 +18,7 @@ end
 
 
 function options = initoptions
-    options = sig.signal.signaloptions(.1,.1);
+    options = sig.signal.signaloptions(); %(.1,.1);
     
         filter.key = 'FilterType';
         filter.type = 'String';
