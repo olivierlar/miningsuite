@@ -6,7 +6,7 @@ function [obj varargout] = apply(obj,func,argin,dimfunc,ndimfunc,type)
     if nargin<6
         type = '()';
     end
-
+    
     data = obj.content;
     if isempty(data)
         return
@@ -21,6 +21,7 @@ function [obj varargout] = apply(obj,func,argin,dimfunc,ndimfunc,type)
         if isempty(foundim)
             ndimdata = ndimdata+1;
             foundim = ndimdata;
+            obj.dims{foundim} = dimfunc{i};
         end
         ordim(i) = foundim;
         dimdata(foundim) = 0;
@@ -56,7 +57,7 @@ function [obj varargout] = apply(obj,func,argin,dimfunc,ndimfunc,type)
         else
             argini = [{olddatai} argin];
         end
-        
+                
         if nargout == 1
             newdatai = func(argini{:});
         elseif nargout == 2
