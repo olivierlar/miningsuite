@@ -46,6 +46,7 @@ classdef signal
         celllayers
         peak
         peakdim
+        fbchannels
         
         date
         ver
@@ -318,11 +319,11 @@ function options = classoptions(fsize,fhop)
 %        normal.when = 'After';
 %    options.normal = normal;
     
-        channel.key = {'Channel','Channels'};
-        channel.type = 'Numeric';
-        channel.default = [];
-        channel.when = 'After';
-    options.channel = channel;
+    %    channel.key = {'Channel','Channels'};
+    %    channel.type = 'Numeric';
+    %    channel.default = [];
+    %    channel.when = 'After';
+    %options.channel = channel;
     
         sampling.key = 'Sampling';
         sampling.type = 'Numeric';
@@ -386,7 +387,7 @@ end
 
 %%
 function [x type] = init(x,option,frame)
-    type = '?';
+    type = 'sig.signal';
 end
 
 
