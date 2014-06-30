@@ -166,6 +166,8 @@ else
             end
 
             y = {};
+            options = design.duringoptions;
+            options.tmp = [];
             for i = 1:size(chunks,2)
                 disp([meth,num2str(i),'/',num2str(nch),'...'])
                 window = [chunks(1,i) chunks(2,i) (i == size(chunks,2))];
@@ -183,17 +185,11 @@ else
                    end
                 end
 
-                %d2 = set(d2,'InterChunk',tmp);
-
                 ss = sig.evaleach(design.input,filename,window,sr,frame);
-                ss = design.main(ss,design.duringoptions,[]);
+                ss = design.main(ss,options,[]);
 
-                if 0 %iscell(ss) && not(isempty(ss))
-                    tmp = get(ss{1},'InterChunk');
-                elseif 1 %isstruct(ss)
-                    tmp = [];
-                else
-                    tmp = get(ss,'InterChunk');
+                if length(ss)>1
+                    options.tmp = ss{2};
                 end
 
                 y = combinechunks(y,ss,i,design.combine);
@@ -358,10 +354,13 @@ end
 
 
 function old = combinesamples(old,new)
-for var = 1:length(new)
-    old{1}.Ydata = old{1}.Ydata.concat(new{1}.Ydata,'sample');
+for i = 1:length(new)
+    if ~isa(old{i},'sig.signal')
+        continue
+    end
+    old{i}.Ydata = old{i}.Ydata.concat(new{i}.Ydata,'sample');
     if ~isempty(old{1}.peak)
-        old{1}.peak = old{1}.peak.concat(new{1}.peak,'sample');
+        old{i}.peak = old{i}.peak.concat(new{i}.peak,'sample');
     end
 end
 
