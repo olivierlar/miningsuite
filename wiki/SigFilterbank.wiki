@@ -1,55 +1,56 @@
-#summary sig.filterbank
+#summary sig.filterbank: Filterbank decomposition
 
 = sig.filterbank: Filterbank decomposition =
 
-It is often interesting to decompose the audio signal into a series of audio signals of different frequency register, from low frequency channels to high frequency channels. This enables thus to study each of these channels separately. The decomposition is performed by a bank of fil- ters, each one selecting a particular range of frequency values. This transformation models an actual process of human perception, corresponding to the distribution of frequencies into critical bands in the cochlea.
+It is often interesting to decompose the audio signal into a series of audio signals of different frequency register, from low frequency channels to high frequency channels. This enables thus to study each of these channels separately. The decomposition is performed by a bank of filters, each one selecting a particular range of frequency values. This transformation models an actual process of human perception, corresponding to the distribution of frequencies into critical bands in the cochlea.
 
 == Flowchart interconnections ==
 
 sig.filterbank accepts as input data type either:
 
-  * sig.signal objects, where the audio waveform can be segmented (using sig.segment),
-  * file name or the ‘Folder’ keyword.
+  * {{{sig.signal}}} objects, where the audio waveform can be segmented (using {{{sig.segment}}}),
+  * file name(s), {{{'Folder'}}} or {{{'Folders'}}} keywords, etc.
 
 == Filterbank selection ==
 
 Two basic types of filterbanks are proposed:
 
-=== 'Gammatone' ===
+=== {{{'Gammatone'}}} ===
 
-sig.filterbank(..., 'Gammatone') carries out a Gammatone filterbank decomposition (Patterson et al, 1992). It is known to simulate well the response of the basilar membrane. It is based on a Equivalent Rectangular Bandwidth (ERB) filterbank, meaning that the width of each band is determined by a particular psychoacoustical law. For Gammatone filterbanks, mirfil- terbank calls the Auditory Toolbox routines MakeERBFilters and ERBfilterbank. This is the default choice when calling sig.filterbank.
+{{{sig.filterbank(..., 'Gammatone')}}} carries out a Gammatone filterbank decomposition (Patterson et al, 1992). It is known to simulate well the response of the basilar membrane. It is based on a Equivalent Rectangular Bandwidth (ERB) filterbank, meaning that the width of each band is determined by a particular psychoacoustical law. For Gammatone filterbanks, {{{sig.filterbank}}} calls the Auditory Toolbox routines MakeERBFilters and ERBfilterbank. This is the default choice when calling {{{sig.filterbank}}}.
 
-  * mirfilterbank(...,'Lowest', f) indicates the lowest frequency f, in Hz. Default value: 50 Hz.
+  * {{{mirfilterbank(...,'Lowest', f)}}} indicates the lowest frequency {{{f}}}, in Hz. Default value: 50 Hz.
 
-=== '2Channels' ===
+=== {{{'2Channels'}}} ===
 
-sig.filterbank(..., ‘2Channels’) performs a computational simplification of the filterbank using just two channels, one for low-frequencies, below 1000 Hz, and one for high-frequencies, over 1000 Hz (Tolonen and Karjalainen, 2000). On the high-frequency channel is performed an envelope extraction using a half-wave rectification and the same low-pass filter used for the low-frequency channel. This filterbank is mainly used for multi-pitch extraction (cf. aud.pitch).
+sig.filterbank(..., {{{'2Channels'}}}) performs a computational simplification of the filterbank using just two channels, one for low-frequencies, below 1000 Hz, and one for high-frequencies, over 1000 Hz (Tolonen and Karjalainen, 2000). On the high-frequency channel is performed an envelope extraction using a half-wave rectification and the same low-pass filter used for the low-frequency channel. This filterbank is mainly used for multi-pitch extraction (cf. AudPitch).
 
 === Further options ===
 
 For these general type of filterbanks are chosen, further options are available:
 
-  * mirfilterbank(...,'NbChannels', N) specifies the number of channels in the bank. By default: N
-= 10. This option is useless for ‘2Channels’.
-  * mirfilterbank(..., ‘Channel’, c) – or mirfilterbank(..., ‘Channels’,c) – only output the channels
-whose ranks are indicated in the array c. (default: c = (1:N))
+  * {{{sig.filterbank(...,'NbChannels', N)}}} specifies the number of channels in the bank. By default: {{{N}}}
+= 10. This option is useless for {{{'2Channels'}}}.
+  * {{{sig.filterbank(..., 'Channel', c)}}} – or {{{sig.filterbank(..., 'Channels',c)}}} – only output the channels
+whose ranks are indicated in the array {{{c{{{. (default: {{{c = (1:N)}}})
 
 == Manual specifications ==
 
-mirfilterbank(...,'Manual', f) specifies a set of non-overlapping low-pass, band-pass and high- pass eliptic filters (Scheirer, 1998). The series of cut-off frequencies f as to be specified as next parameter.
-￼  * If this series of frequencies begins with -Inf, the first filter is low-pass.
-  * If this series of frequencies ends with Inf, the last filter is high-pass.
+{{{sig.filterbank(...,'Manual', f)}}} specifies a set of non-overlapping low-pass, band-pass and high- pass eliptic filters (Scheirer, 1998). The series of cut-off frequencies {{{f}}} has to be specified as next parameter.
 
-mirfilterbank(...,'Order', o) specifies the order of the filters. The default is set to o = 4 (Scheirer, 1998)
-mirfilterbank(...,'H op', h) specifies the degree of spectral overlapping between successive channels.
-  * If h = 1 (default value), the filters are non-overlapping.
-  * If h = 2, the filters are half-overlapping.
-  * If h = 3, the spectral hop factor between successive filters is a third of the whole frequency region, etc.
+  * If this series of frequencies begins with {{{-Inf}}}, the first filter is low-pass.
+  * If this series of frequencies ends with {{{Inf}}}, the last filter is high-pass.
+
+{{{sig.filterbank(...,'Order', o)}}} specifies the order of the filters. The default is set to {{{o}}} = 4 (Scheirer, 1998)
+{{{sig.filterbank(...,'Hop', h)}}} specifies the degree of spectral overlapping between successive channels.
+  * If {{{h}}} = 1 (default value), the filters are non-overlapping.
+  * If {{{h}}} = 2, the filters are half-overlapping.
+  * If {{{h}}} = 3, the spectral hop factor between successive filters is a third of the whole frequency region, etc.
 
 == Preselected filterbanks ==
 
-mirfilterbank(..., p) specifies predefined filterbanks, all implemented using elliptic filters, by default of order 4:
-  * p = 'Mel': Mel scale (cf. aud.spectrum(..., ‘ Mel’)).
-  * p = ‘Bark’: Bark scale (cf. aud.spectrum(..., ‘Bark’)).
-  * p = ‘Scheirer’ proposed in (Scheirer, 1998) corresponds to 'Manual',[-Inf 200 400 800 1600 3200 Inf]
-  * p = ‘Klapuri’ proposed in (Klapuri, 1999) corresponds to {{{'Manual',44*[2.^ ([ 0:2, ( 9+(0:17) )/3 ]) ]}}}
+{{{sig.filterbank(..., p)}}} specifies predefined filterbanks, all implemented using elliptic filters, by default of order 4:
+  * {{{p = 'Mel'}}}: Mel scale (cf. {{{aud.spectrum(..., ‘ Mel’)}}}).
+  * {{{p = ‘Bark’}}}: Bark scale (cf. {{{aud.spectrum(..., ‘Bark’)}}}).
+  * {{{p = ‘Scheirer’}}} proposed in (Scheirer, 1998) corresponds to {{{'Manual',[-Inf 200 400 800 1600 3200 Inf]}}}
+  * {{{p = ‘Klapuri’}}} proposed in (Klapuri, 1999) corresponds to {{{'Manual',44*[2.^ ([ 0:2, ( 9+(0:17) )/3 ]) ]}}}
