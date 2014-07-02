@@ -29,10 +29,8 @@ sig.filterbank(..., {{{'2Channels'}}}) performs a computational simplification o
 
 For these general type of filterbanks are chosen, further options are available:
 
-  * {{{sig.filterbank(...,'NbChannels', N)}}} specifies the number of channels in the bank. By default: {{{N}}}
-= 10. This option is useless for {{{'2Channels'}}}.
-  * {{{sig.filterbank(..., 'Channel', c)}}} – or {{{sig.filterbank(..., 'Channels',c)}}} – only output the channels
-whose ranks are indicated in the array {{{c{{{. (default: {{{c = (1:N)}}})
+  * {{{sig.filterbank(...,'NbChannels', N)}}} specifies the number of channels in the bank. By default: {{{N}}} = 10. This option is useless for {{{'2Channels'}}}.
+  * {{{sig.filterbank(..., 'Channel', c)}}} – or {{{sig.filterbank(..., 'Channels',c)}}} – only output the channels whose ranks are indicated in the array {{{c}}}. (default: {{{c = (1:N)}}})
 
 == Manual specifications ==
 
@@ -50,7 +48,7 @@ whose ranks are indicated in the array {{{c{{{. (default: {{{c = (1:N)}}})
 == Preselected filterbanks ==
 
 {{{sig.filterbank(..., p)}}} specifies predefined filterbanks, all implemented using elliptic filters, by default of order 4:
-  * {{{p = 'Mel'}}}: Mel scale (cf. {{{aud.spectrum(..., ‘ Mel’)}}}).
-  * {{{p = ‘Bark’}}}: Bark scale (cf. {{{aud.spectrum(..., ‘Bark’)}}}).
-  * {{{p = ‘Scheirer’}}} proposed in (Scheirer, 1998) corresponds to {{{'Manual',[-Inf 200 400 800 1600 3200 Inf]}}}
-  * {{{p = ‘Klapuri’}}} proposed in (Klapuri, 1999) corresponds to {{{'Manual',44*[2.^ ([ 0:2, ( 9+(0:17) )/3 ]) ]}}}
+  * {{{p = 'Mel'}}}: Mel scale (cf. {{{aud.spectrum(...,'Mel')}}}).
+  * {{{p = 'Bark'}}}: Bark scale (cf. {{{aud.spectrum(...,'Bark')}}}).
+  * {{{p = 'Scheirer'}}} proposed in (Scheirer, 1998) corresponds to {{{'Manual',[-Inf 200 400 800 1600 3200 Inf]}}}
+  * {{{p = 'Klapuri'}}} proposed in (Klapuri, 1999) corresponds to {{{'Manual',44*[2.^ ([ 0:2, ( 9+(0:17) )/3 ]) ]}}}
