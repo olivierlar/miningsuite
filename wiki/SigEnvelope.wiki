@@ -1,0 +1,27 @@
+#summary sig.envelope: Amplitude envelope
+
+= sig.envelope: Amplitude envelope =
+
+From an audio waveform can be computed the envelope, which shows the global outer shape of the signal. It is particularly useful in order to show the long term evolution of the signal, and has application in particular to the detection of musical events such as notes.
+
+= Flowchart Interconnections =
+
+{{{sig.envelope}}} accepts as input data type either:
+  * {{{sig.signal}}} objects, where the audio waveform can be segmented (using {{{sig.segment}}}) and/or decomposed into channels (using {{{sig.filterbank}}}),
+  * *file name* or the {{{Folder}}} keyword,
+  * any scalar object (i.e., where there is one numerical value associated to each successive frame, such as _sig.flux, sig.novelty_, etc.): in this case, the *mirscalar* object is simply converted into a {{{sig.envelope}}} object. The advantages of this operation is that the resulting _sig.envelope_ can be further decomposed into frames, which would not have been possible using the *mirscalar* object as it is already decomposed into frames.
+
+= Parameters Specification =
+
+The envelope extraction is based on two alternate strategies: either based on a filtering of the signal (_*‘Filter’*_ option, used by default), or on a decomposition into frames via a spectrogram computation (_*‘Spectro’*_ option). Each of these strategies accepts particular options:
+
+ * {{{sig.envelope(…,‘Filter’)}}} extract the envelope through a filtering of the signal. (Default method.)
+
+ First the signal can be converted from the real domain to the complex domain using a Hilbert transform. In this way the envelope is estimated in a three-dimensional space defined by the product of the complex domain and the temporal axis. Indeed in this representation the signal looks like a “spring” of varying width, and the envelope would correspond to that varying width. In the real domain, on the other hand, the constant crossing of the signal with the zero axis may sometime give erroneous results.
+
+ An Hilbert transform can be performed in _sig.envelope_, based on the _Matlab_ function _hilbert_. In order to toggle on the Hilbert transform, the following keyword should be added:
+
+ {{{sig.envelope(…, ‘Hilbert’)}}}
+
+ Beware however that, although sometimes the use of the Hilbert transform seems to improve somewhat the results, and might in particular show clearer burst of energy, we noticed some problematic behavior, in particular at the beginning and the end of the signal, and after some particular bursts of energy. This becomes all the more problematic when chunk decompositions are used (cf. §5.3), since the continuity between chunk cannot be ensured any more. For that reason, since version 1.1 of _MIRtoolbox_, the use of Hilbert transform is toggled off by default.
+If the signal is in the real domain, the next step consists in a full-wave rectification, reflecting all the negative lobes of the signal into the positive domain, leading to a series of  positive half-wave lobes. The further smoothing of the signal (in the next step) will leads to an estimation of the envelope. If on the contrary the signal is in the complex domain, a direct estimation of the envelope can be obtained by computing the modulus, i.e., the width of the “string”. These two operations, either from the real or the complex domains, although apparently different, relate to the same _Matlab_ command _abs_.
