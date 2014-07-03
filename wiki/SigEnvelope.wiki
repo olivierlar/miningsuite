@@ -1,4 +1,4 @@
-#summary sig.envelope: Amplitude envelope
+q#summary sig.envelope: Amplitude envelope
 
 = sig.envelope: Amplitude envelope =
 
@@ -8,8 +8,8 @@ From an audio waveform can be computed the envelope, which shows the global oute
 
 {{{sig.envelope}}} accepts as input data type either:
   * {{{sig.signal}}} objects, where the audio waveform can be segmented (using {{{sig.segment}}}) and/or decomposed into channels (using {{{sig.filterbank}}}),
-  * *file name* or the {{{Folder}}} keyword,
-  * any scalar object (i.e., where there is one numerical value associated to each successive frame, such as _sig.flux, sig.novelty_, etc.): in this case, the *mirscalar* object is simply converted into a {{{sig.envelope}}} object. The advantages of this operation is that the resulting _sig.envelope_ can be further decomposed into frames, which would not have been possible using the *mirscalar* object as it is already decomposed into frames.
+  * *file name* or the _*'Folder'*_ keyword,
+  * any scalar object (i.e., where there is one numerical value associated to each successive frame, such as _sig.flux, sig.novelty_, etc.): in this case, the mirscalar object is simply converted into a {{{sig.envelope}}} object. The advantages of this operation is that the resulting _sig.envelope_ can be further decomposed into frames, which would not have been possible using the mirscalar object as it is already decomposed into frames.
 
 = Parameters Specification =
 
@@ -17,11 +17,121 @@ The envelope extraction is based on two alternate strategies: either based on a 
 
  * {{{sig.envelope(…,‘Filter’)}}} extract the envelope through a filtering of the signal. (Default method.)
 
- First the signal can be converted from the real domain to the complex domain using a Hilbert transform. In this way the envelope is estimated in a three-dimensional space defined by the product of the complex domain and the temporal axis. Indeed in this representation the signal looks like a “spring” of varying width, and the envelope would correspond to that varying width. In the real domain, on the other hand, the constant crossing of the signal with the zero axis may sometime give erroneous results.
+  * First the signal can be converted from the real domain to the complex domain using a Hilbert transform. In this way the envelope is estimated in a three-dimensional space defined by the product of the complex domain and the temporal axis. Indeed in this representation the signal looks like a “spring” of varying width, and the envelope would correspond to that varying width. In the real domain, on the other hand, the constant crossing of the signal with the zero axis may sometime give erroneous results.
 
  An Hilbert transform can be performed in _sig.envelope_, based on the _Matlab_ function _hilbert_. In order to toggle on the Hilbert transform, the following keyword should be added:
 
  {{{sig.envelope(…, ‘Hilbert’)}}}
 
  Beware however that, although sometimes the use of the Hilbert transform seems to improve somewhat the results, and might in particular show clearer burst of energy, we noticed some problematic behavior, in particular at the beginning and the end of the signal, and after some particular bursts of energy. This becomes all the more problematic when chunk decompositions are used (cf. §5.3), since the continuity between chunk cannot be ensured any more. For that reason, since version 1.1 of _MIRtoolbox_, the use of Hilbert transform is toggled off by default.
-If the signal is in the real domain, the next step consists in a full-wave rectification, reflecting all the negative lobes of the signal into the positive domain, leading to a series of  positive half-wave lobes. The further smoothing of the signal (in the next step) will leads to an estimation of the envelope. If on the contrary the signal is in the complex domain, a direct estimation of the envelope can be obtained by computing the modulus, i.e., the width of the “string”. These two operations, either from the real or the complex domains, although apparently different, relate to the same _Matlab_ command _abs_.
+
+ If the signal is in the real domain, the next step consists in a full-wave rectification, reflecting all the negative lobes of the signal into the positive domain, leading to a series of  positive half-wave lobes. The further smoothing of the signal (in the next step) will leads to an estimation of the envelope. If on the contrary the signal is in the complex domain, a direct estimation of the envelope can be obtained by computing the modulus, i.e., the width of the “string”. These two operations, either from the real or the complex domains, although apparently different, relate to the same _Matlab_ command _abs_.
+
+  * {{{sig.envelope(..., ‘PreDecim’, N)}}} down-samples by a factor _N>1_, where _N_ is an integer, before the low-pass filtering (Klapuri, 1999). Default value: _N = 1_, corresponding to no down-sampling.
+
+  * The next step consists in a low-pass filter than retain from the signal only the long-term evolution, by removing all the more rapid oscillations. This is performed through a filtering of the signal. Two types of filters are available, either a simple autoregressive coefficient, with Infinite Impulse Response (_*‘IIR’*_ default value in _*‘FilterType’*_ option), or a half-Hanning (raised cosine) filter (_*‘HalfHann’*_ value in _*‘FilterType’*_ option).
+
+  ** {{{sig.envelope(..., ‘FilterType’, ‘IIR’)}}} extract the envelope using an auto-regressive filter of infinite impulse response (IIR). This is the default method.
+
+ The range of frequencies to be filtered can be controlled by selecting a proper value for the a parameter. Another way of expressing this parameter is by considering its time constant. If we feed the filter with a step function (i.e. 0 before time 0, and 1 after time 0), the time constant will correspond to the time it will take for the output to reach 63 % of the input. Hence higher time constant means smoother filtering. The default time constant is set to .02 seconds and can be changed using the option:
+
+ {{{sig.envelope(..., ‘Tau’, t)}}}
+
+
+*Remarks*
+
+ # As low-pass filters actually lead to a shifting of the phases of the signal. This is counteracted using a second filtering of the reverse signal. The time constant _t_ is the time constant of each separate filter, therefore _the resulting time constant is around twice bigger_.
+ # The reverse filtering is not performed using Matlab _filtfilt_ function since version 1.1 of _MIRtoolbox_ – because this would not work in the case of chunk decomposition (cf. §5.3) – but has been partly re-implemented. In particular, contrary to _filtfilt_, care is not yet taken to minimize startup and ending transients by matching initial conditions.
+
+  * Once the signal has been smoothed, as there is a lot of redundancy between the successive samples, the signal can be down-sampled. The default parameter related to down-sampling is the down-sampling rate _N_, i.e. the _integer_ ratio between the old and the new sampling rate. _N_ is set by default to 16, and can be changed using the option:
+
+  {{{sig.envelope(..., ‘PostDecim’, N)}}}
+
+ Alternatively, any sampling rate _r_ (in Hz) can be specified using the post-processing option _*‘Sampling’*_.
+
+  * {{{sig.envelope(..., ‘Trim’)}}}: trims the initial ascending phase of the curves related to the transitory state.
+
+  * {{{sig.envelope(..., ‘Spectro’)}}} extracts the envelope through the computation of a spectrogram, with frame size 100 ms, hop factor 10% and the use of Hanning windowing:
+
+  _sig.spectrum(..., ‘Frame’, .1, ‘s’, .1, ‘/1’, ‘Window’, ‘hanning’, b)_
+
+  * {{{sig.envelope(..., b)}}} specifies whether the frequency range is further decomposed into bands (cf. _sig.spectrum_). Possible values:
+
+  * _b = ‘Freq’_: no band decomposition (default value),
+  * _b = ‘Mel’_: Mel-band decomposition,
+  * _b = ‘Bark’_: Bark-band decomposition,
+  * _b = ‘Cents’_: decompositions into cents.
+
+  * {{{sig.envelope(..., ‘Frame’,…)}}} modifies the default frame configuration.
+
+  * {{{sig.envelope(..., ‘UpSample’, N)}}} upsamples by a factor _N>1_, where _N_ is an integer. Default value if _*‘UpSample’*_ called: _N = 2_
+
+  * {{{sig.envelope(..., ‘Complex’)}}} toggles on the _*‘Complex’*_ method for the spectral flux computation (cf. _mirflux_).
+
+  * {{{sig.envelope(..., ‘PowerSpectrum’, 0)}}} turns off the computation of the power of the spectrum.
+
+  * {{{sig.envelope(..., ‘Terhardt’)}}} toggles on the _*‘Terhardt’*_ operation (cf. _sig.spectrum_).
+
+  * {{{sig.envelope(..., ‘TimeSmooth’, 0)}}} toggles on and controls the _*‘TimeSmooth’*_ operation. (cf. _sig.spectrum_).
+
+
+
+= Post-processing options =
+
+Different operations can be performed on the envelope curve:
+
+  * {{{sig.envelope(...,‘Sampling’, r)}}} resamples to rate _r_ (in Hz). _*‘PostDecim’*_ and _*‘Sampling’*_ options cannot therefore be combined.
+
+  * {{{sig.envelope(...,‘Halfwave’)}}} performs a half-wave rectification on the envelope.
+
+  * {{{sig.envelope(...,‘Center’)}}} centers the extracted envelope.
+
+  * {{{sig.envelope(...,‘HalfwaveCenter’)}}} performs a half-wave rectification on the centered envelope.
+
+  * {{{sig.envelope(...,‘Log’)}}} computes the common logarithm (base 10) of the envelope.
+
+  * {{{sig.envelope(...,‘MinLog’, ml)}}} selects the data in the logarithmic range [_-ml_ dB, 0 dB], where 0 dB corresponds to the maximal logarithmic amplitude, and excludes the data below that range.
+
+  * {{{sig.envelope(...,‘Mu’, mu)}}} computes the logarithm of the envelope, before the eventual differentiation, using a mu-law compression (Klapuri et al., 2006). Default value for _mu_: 100
+
+  * {{{sig.envelope(...,‘Power’)}}} computes the power (square) of the envelope.
+
+  * {{{sig.envelope(...,‘Diff’)}}} computes the differentiation of the envelope, i.e., the differences between successive samples.
+
+  * {{{sig.envelope(...,‘HalfwaveDiff’)}}} performs a half-wave rectification on the differentiated envelope.
+
+  * {{{sig.envelope(...,‘Normal’)}}} normalizes the values of the envelope by fixing the maximum value to 1.
+  If the audio signal is decomposed into segments, each segment is normalized individually.
+
+  * {{{sig.envelope(..., ‘Normal’, ‘AcrossSegments’)}}}, on the contrary, normalizes across segments, i.e., with respect to the global maxima across all the segments of that audio signal.
+
+  * {{{sig.envelope(...,‘Lambda’, l)}}} sums the half-wave rectified envelope with the non-differentiated envelope, using the respective weight 0<l<1 and (1-l). (Klapuri et al., 2006).
+
+  * {{{sig.envelope(...,‘Smooth’,o)}}} smooths the envelope using a movering average of order _o_. The default value when the option is toggled on: o=30
+
+  * {{{sig.envelope(...,‘Gauss’,o)}}} smooths the envelope using a gaussian of standard deviation o samples. The default value when the option is toggled on: _o=30_
+
+
+
+= Preselected Model =
+
+Complete (or nearly complete) model is available:
+
+  * {{{sig.envelope(..., ‘Klapuri06’)}}} follows the model proposed in (Klapuri et al., 2006). It corresponds to
+
+{{{
+e = sig.envelope(..., ‘Spectro’, ‘UpSample’, ‘Mu’, ‘HalfwaveDiff’, ‘Lambda’, .8);
+    mirsum(e, ‘Adjacent’, 10)
+}}}
+
+
+= Accessible Output =
+
+cf. §5.2 for an explanation of the use of the get method. Specific fields:
+
+  * _*‘Time’*_: the temporal positions of samples (same as _‘Pos’_),
+  * _*‘DownSampling’*_: the value of the _‘PostDecim’_ option,
+  * _*‘Halfwave’*_: whether the envelope has been half-wave rectified (1) or not (0),
+  * _*‘Diff’*_: whether the envelope has been differentiated (1) or not (0),
+  * _*‘Centered’*_: whether the envelope is centered (1) or not (0),
+  * _*‘Phase’*_: the phase of the spectrogram, if necessary.
