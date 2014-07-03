@@ -82,7 +82,7 @@ sig.spectrum(…,'Frame',.1,'s',.1,'/1','Window','hanning',b)
 
 
 
-= Post-processing options =
+== Post-processing options ==
 
 Different operations can be performed on the envelope curve:
 
@@ -119,7 +119,7 @@ Different operations can be performed on the envelope curve:
 
 
 
-= Preselected Model =
+== Preselected Model ==
 
 Complete (or nearly complete) model is available:
 
@@ -131,7 +131,7 @@ e = sig.envelope(..., ‘Spectro’, ‘UpSample’, ‘Mu’, ‘HalfwaveDiff�
 }}}
 
 
-= Accessible Output =
+== Accessible Output ==
 
 cf. §5.2 for an explanation of the use of the get method. Specific fields:
 
