@@ -17,28 +17,28 @@ The envelope extraction is based on two alternate strategies: either based on a 
 
 === `'Filter'` ===
 
-{{{sig.envelope(…,‘Filter’)}}} extract the envelope through a filtering of the signal. (Default method.)
+{{{sig.envelope(…,'Filter')}}} extract the envelope through a filtering of the signal. (Default method.)
 
   * First the signal can be converted from the real domain to the complex domain using a Hilbert transform. In this way the envelope is estimated in a three-dimensional space defined by the product of the complex domain and the temporal axis. Indeed in this representation the signal looks like a “spring” of varying width, and the envelope would correspond to that varying width. In the real domain, on the other hand, the constant crossing of the signal with the zero axis may sometime give erroneous results.
 
  An Hilbert transform can be performed in _sig.envelope_, based on the _Matlab_ function `hilbert`. In order to toggle on the Hilbert transform, the following keyword should be added:
  {{{
-sig.envelope(…, 'Hilbert')
+sig.envelope(…,'Hilbert')
 }}}
 
  Beware however that, although sometimes the use of the Hilbert transform seems to improve somewhat the results, and might in particular show clearer burst of energy, we noticed some problematic behavior, in particular at the beginning and the end of the signal, and after some particular bursts of energy. This becomes all the more problematic when chunk decompositions are used (cf. §5.3), since the continuity between chunk cannot be ensured any more. For that reason, since version 1.1 of _MIRtoolbox_, the use of Hilbert transform is toggled off by default.
 
  If the signal is in the real domain, the next step consists in a full-wave rectification, reflecting all the negative lobes of the signal into the positive domain, leading to a series of  positive half-wave lobes. The further smoothing of the signal (in the next step) will leads to an estimation of the envelope. If on the contrary the signal is in the complex domain, a direct estimation of the envelope can be obtained by computing the modulus, i.e., the width of the “string”. These two operations, either from the real or the complex domains, although apparently different, relate to the same _Matlab_ command `abs`.
 
-  * {{{sig.envelope(..., 'PreDecim', }}}_N_ {{{)}}} down-samples by a factor _N_>1, where _N_ is an integer, before the low-pass filtering (Klapuri, 1999). Default value: _N_ = 1, corresponding to no down-sampling.
+  * {{{sig.envelope(…,'PreDecim',}}}_N_{{{)}}} down-samples by a factor _N_>1, where _N_ is an integer, before the low-pass filtering (Klapuri, 1999). Default value: _N_ = 1, corresponding to no down-sampling.
 
   * The next step consists in a low-pass filter than retain from the signal only the long-term evolution, by removing all the more rapid oscillations. This is performed through a filtering of the signal. Two types of filters are available, either a simple autoregressive coefficient, with Infinite Impulse Response (`'IIR'` default value in `'FilterType'` option), or a half-Hanning (raised cosine) filter (`'HalfHann'` value in `'FilterType'` option).
 
-  ** {{{sig.envelope(..., 'FilterType', 'IIR')}}} extract the envelope using an auto-regressive filter of infinite impulse response (IIR). This is the default method.
+  ** {{{sig.envelope(…,'FilterType','IIR')}}} extract the envelope using an auto-regressive filter of infinite impulse response (IIR). This is the default method.
 
  The range of frequencies to be filtered can be controlled by selecting a proper value for the a parameter. Another way of expressing this parameter is by considering its time constant. If we feed the filter with a step function (i.e. 0 before time 0, and 1 after time 0), the time constant will correspond to the time it will take for the output to reach 63 % of the input. Hence higher time constant means smoother filtering. The default time constant is set to .02 seconds and can be changed using the option:
  {{{
-sig.envelope(…, 'Tau', t)
+sig.envelope(…,'Tau',t)
 }}}
 
 
@@ -48,27 +48,27 @@ sig.envelope(…, 'Tau', t)
 
   * Once the signal has been smoothed, as there is a lot of redundancy between the successive samples, the signal can be down-sampled. The default parameter related to down-sampling is the down-sampling rate _N_, i.e. the _integer_ ratio between the old and the new sampling rate. _N_ is set by default to 16, and can be changed using the option:
   {{{
-sig.envelope(…, 'PostDecim', N)
+sig.envelope(…,'PostDecim',N)
 }}}
 
- Alternatively, any sampling rate _r_ (in Hz) can be specified using the post-processing option _*'Sampling'*_.
+ Alternatively, any sampling rate _r_ (in Hz) can be specified using the post-processing option `'Sampling'`.
 
-  * {{{sig.envelope(…, ‘Trim’)}}}: trims the initial ascending phase of the curves related to the transitory state.
+  * {{{sig.envelope(…,'Trim')}}}: trims the initial ascending phase of the curves related to the transitory state.
 
 === `'Spectro'` ===
 
-{{{sig.envelope(..., 'Spectro')}}} extracts the envelope through the computation of a spectrogram, with frame size 100 ms, hop factor 10% and the use of Hanning windowing:
+{{{sig.envelope(…,'Spectro')}}} extracts the envelope through the computation of a spectrogram, with frame size 100 ms, hop factor 10% and the use of Hanning windowing:
 {{{
-sig.spectrum(…, 'Frame', .1, 's', .1, '/1', 'Window', 'hanning', b)
+sig.spectrum(…,'Frame',.1,'s',.1,'/1','Window','hanning',b)
 }}}
 
-  * {{{sig.envelope(..., }}}_b_ {{{)}}} specifies whether the frequency range is further decomposed into bands (cf. SigSpectrum). Possible values:
+  * {{{sig.envelope(…,}}}_b_{{{)}}} specifies whether the frequency range is further decomposed into bands (cf. SigSpectrum). Possible values:
    * _b_ = `'Freq'`: no band decomposition (default value),
    * _b_ = `'Mel'`: Mel-band decomposition,
    * _b_ = `'Bark'`: Bark-band decomposition,
    * _b_ = `'Cents'`: decompositions into cents.
 
-  * {{{sig.envelope(…, 'Frame', …)}}} modifies the default frame configuration.
+  * {{{sig.envelope(…,'Frame',…)}}} modifies the default frame configuration.
 
   * {{{sig.envelope(..., 'UpSample', }}}_N_ )}}} upsamples by a factor _N_>1, where _N_ is an integer. Default value if `'UpSample'` called: _N_ = 2
 
