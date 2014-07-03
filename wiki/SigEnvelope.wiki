@@ -62,16 +62,15 @@ sig.envelope(…, 'PostDecim', N)
 sig.spectrum(…, 'Frame', .1, 's', .1, '/1', 'Window', 'hanning', b)
 }}}
 
-  * {{{sig.envelope(..., b)}}} specifies whether the frequency range is further decomposed into bands (cf. _sig.spectrum_). Possible values:
+  * {{{sig.envelope(..., }}}_b_ {{{)}}} specifies whether the frequency range is further decomposed into bands (cf. SigSpectrum). Possible values:
+   * _b_ = `'Freq'`: no band decomposition (default value),
+   * _b_ = `'Mel'`: Mel-band decomposition,
+   * _b_ = `'Bark'`: Bark-band decomposition,
+   * _b_ = `'Cents'`: decompositions into cents.
 
-  * _b = ‘Freq’_: no band decomposition (default value),
-  * _b = ‘Mel’_: Mel-band decomposition,
-  * _b = ‘Bark’_: Bark-band decomposition,
-  * _b = ‘Cents’_: decompositions into cents.
+  * {{{sig.envelope(…, 'Frame', …)}}} modifies the default frame configuration.
 
-  * {{{sig.envelope(..., ‘Frame’,…)}}} modifies the default frame configuration.
-
-  * {{{sig.envelope(..., ‘UpSample’, N)}}} upsamples by a factor _N>1_, where _N_ is an integer. Default value if _*‘UpSample’*_ called: _N = 2_
+  * {{{sig.envelope(..., 'UpSample', }}}_N_ )}}} upsamples by a factor _N_>1, where _N_ is an integer. Default value if `'UpSample'` called: _N_ = 2
 
   * {{{sig.envelope(..., ‘Complex’)}}} toggles on the _*‘Complex’*_ method for the spectral flux computation (cf. _mirflux_).
 
