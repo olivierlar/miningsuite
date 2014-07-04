@@ -1,4 +1,4 @@
-#summary sig.spectrum
+#summary sig.spectrum: Fourier transform
 
 = sig.spectrum: Fourier transform =
 
