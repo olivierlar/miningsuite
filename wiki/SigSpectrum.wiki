@@ -4,142 +4,141 @@
 
 A decomposition of the energy of a signal (be it an audio waveform, or an envelope, etc.) along frequencies can be performed using a Discrete Fourier Transform, which, for an audio signal x has for equation:
 
-This decomposition is performed using a Fast Fourier Transform by the _sig.spectrum_ function by calling Matlab _fft_ function. The graph returned by the function highlights the repartition of the amplitude of the frequencies (i.e., the modulus of _Xk_ for all _k_), such as the following:
+This decomposition is performed using a Fast Fourier Transform by the {{{sig.spectrum}}} function by calling Matlab _fft_ function. The graph returned by the function highlights the repartition of the amplitude of the frequencies (i.e., the modulus of _Xk_ for all _k_), such as the following:
 
 We can also obtain for each frequency the actual phase position (i.e., the phase of _Xk_), which indicates the exact position of each frequency component at the instant _t = 0_. If the result of the spectrum decomposition is s, the phase spectrum is obtained by using the command:
 
-  {{{get(s, ‘Phase’)}}}
+  {{{
+  get(s, 'Phase')
+  }}}
 
 == Flowchart Interconnections ==
-
-
 
 {{{sig.spectrum}}} accepts as input data type either:
 
   * {{{sig.input}}} objects, where the audio waveform can be segmented (using {{{sig.segment}}}), decomposed into channels (using {{{sig.filterbank}}}), and/or decomposed into frames (using {{{sig.frame}}});
 
-  * file name or the {{{‘Folder’}}} keyword;
+  * file name(s) or the `'Folder'` keyword;
 
-  * data in the onset detection curve category (cf. {{{sig.onset}}}):
+  * data in the onset detection curve category (cf. SigOnset):
   *  {{{sig.envelope}}} objects, frame-decomposed or not,
-  * fluxes (cf. {{{sig.flux}}}), frame-decomposed or not;
+  * fluxes (cf. SigFlux), frame-decomposed or not;
 
-  * {{{sig.spectrum}}} frame-decomposed objects: by calling again {{{sig.spectrum}}} with the _‘AlongBands’_ option, Fourier transforms are computed this time on each temporal signal related to each separate frequency bin (or frequency band, cf. below).
+  * {{{sig.spectrum}}} frame-decomposed objects: by calling again {{{sig.spectrum}}} with the `'AlongBands'` option, Fourier transforms are computed this time on each temporal signal related to each separate frequency bin (or frequency band, cf. below).
 
 
-== Frame decomposition =
-{{{sig.spectrum(..., ‘Frame’, …)}}} performs first a frame decomposition, with by default a frame length of 50 ms and half overlapping. For the specification of other frame configuration using additional parameters, cf. the previous _sig.frame vs. ‘Frame’_ section.
+== Frame decomposition ==
+{{{sig.spectrum(…, 'Frame', …)}}} performs first a frame decomposition, with by default a frame length of 50 ms and half overlapping. For the specification of other frame configuration using additional parameters, cf. the previous SigFrame vs. 'Frame' section.
 
 == Parameters specification ==
 The range of frequencies, in Hz, can be specified by the options:
 
-  * {{{sig.spectrum(..., ‘Min’, mi)}}} indicates the lowest frequency taken into consideration, expressed in Hz. Default value: 0 Hz.
+  * {{{sig.spectrum(…, 'Min', mi)}}} indicates the lowest frequency taken into consideration, expressed in Hz. Default value: 0 Hz.
 
-  * {{{sig.spectrum(..., ‘Max’, ma)}}} indicates the highest frequency taken into consideration, expressed in Hz. Default value: the maximal possible frequency, corresponding to the sampling rate divided by 2.
+  * {{{sig.spectrum(…, 'Max', ma)}}} indicates the highest frequency taken into consideration, expressed in Hz. Default value: the maximal possible frequency, corresponding to the sampling rate divided by 2.
 
-  * {{{sig.spectrum(..., ‘Window’, w)}}} specifies the windowing method. Windows are used to avoid the problems due to the discontinuities provoked by finite signals. Indeed, an audio sequence is not infinite, and the application of the Fourier Transform requires to replace the infinite time before and after the sequence by zeroes, leading to possible discontinuities at the borders. Windows are used to counteract those discontinuities. Possible values for _w_ are either _w = 0_ (no windowing) or any windowing function proposed in the _Signal Processing Toolbox^1^_. Default value: _w = ‘hamming’_, the Hamming window being a particular good window for Fourier Transform.
+  * {{{sig.spectrum(…, 'Window', w)}}} specifies the windowing method. Windows are used to avoid the problems due to the discontinuities provoked by finite signals. Indeed, an audio sequence is not infinite, and the application of the Fourier Transform requires to replace the infinite time before and after the sequence by zeroes, leading to possible discontinuities at the borders. Windows are used to counteract those discontinuities. Possible values for _w_ are either _w = 0_ (no windowing) or any windowing function proposed in the _Signal Processing Toolbox^1^_. Default value: _w_ = `'hamming'`, the Hamming window being a particular good window for Fourier Transform.
 
-  * {{{sig.spectrum(..., ‘NormalInput’)}}} normalizes the waveform between 0 and 1 before computing the Fourier Transform.
+  * {{{sig.spectrum(…, 'NormalInput')}}} normalizes the waveform between 0 and 1 before computing the Fourier Transform.
 
-  * {{{sig.spectrum(..., ‘Phase’, ‘No’)}}} does not compute the related FFT phase. The FFT phase is not computed anyway whenever another option that will make the phase information irrelevant (such as _‘Log’_, _‘dB’_, etc.) is specified.
-
-^1^ The list of possible window arguments can be found in the _window_ documentation ({{{help window}}}).
+  * {{{sig.spectrum(…, 'Phase', 'No')}}} does not compute the related FFT phase. The FFT phase is not computed anyway whenever another option that will make the phase information irrelevant (such as _'Log'_, _'dB'_, etc.) is specified.
+  ^1^ The list of possible window arguments can be found in the _window_ documentation:
+  {{{
+  help window
+  }}}
 
 == Resolution specification ==
 
 The frequency resolution of the spectrum directly depends on the size of the audio waveform: the longer the waveform, the better the frequency resolution. It is possible, however, to increase the frequency resolution of a given audio waveform by simply adding a series of zeros at the end of the sequence, which is called _zero-padding_. Besides, an optimized version of the Discrete Fourier Transform, called Fast Fourier Transform (FFT) can be performed if the length of the audio waveform (including the zero-padding) is a power of 2. For this reason, by default, a zero-padding is performed by default in order to ensure that the length of the audio waveform is a power of 2. But these operations can be tuned individually:
 
-  * {{{sig.spectrum(...,‘MinRes’, mr)}}} adds a constraint related to the a minimal frequency resolution, fixed to the value _mr_ (in Hz). The audio waveform is automatically zero-padded to the lowest power of 2 ensuring the required frequency resolution.
+  * {{{sig.spectrum(…,'MinRes', mr)}}} adds a constraint related to the a minimal frequency resolution, fixed to the value _mr_ (in Hz). The audio waveform is automatically zero-padded to the lowest power of 2 ensuring the required frequency resolution.
 
-  * {{{sig.spectrum(..., ‘MinRes’, r, ‘ OctaveRatio’, tol)}}}: Indicates the minimal accepted resolution in terms of number of divisions of the octave. Low frequencies are ignored in order to reach the desired resolution. The corresponding required frequency resolution is equal to the difference between the first frequency bins, multiplied by the constraining multiplicative factor _tol_ (set by default to .75).
+  * {{{sig.spectrum(…, 'MinRes', r, ' OctaveRatio', tol)}}}: Indicates the minimal accepted resolution in terms of number of divisions of the octave. Low frequencies are ignored in order to reach the desired resolution. The corresponding required frequency resolution is equal to the difference between the first frequency bins, multiplied by the constraining multiplicative factor _tol_ (set by default to .75).
 
-  * {{{sig.spectrum(...,‘Res’, r)}}} specifies the frequency resolution _r_ (in Hz) that will be secured as closely as possible, through an automated zero-padding. The length of the resulting audio waveform will not necessarily be a power of 2, therefore the FFT routine will rarely be used.
+  * {{{sig.spectrum(…,'Res', r)}}} specifies the frequency resolution _r_ (in Hz) that will be secured as closely as possible, through an automated zero-padding. The length of the resulting audio waveform will not necessarily be a power of 2, therefore the FFT routine will rarely be used.
 
-  * {{{sig.spectrum(...,‘Length’, l)}}} specifies the length of the audio waveform after zero-padding. If the length is not a power of 2, the FFT routine will not be used.
+  * {{{sig.spectrum(…,'Length', l)}}} specifies the length of the audio waveform after zero-padding. If the length is not a power of 2, the FFT routine will not be used.
 
-  * {{{sig.spectrum(...,‘ZeroPad’, s)}}} performs a zero-padding of s samples. If the total length is not a power of 2, the FFT routine will not be used.
+  * {{{sig.spectrum(…,'ZeroPad', s)}}} performs a zero-padding of s samples. If the total length is not a power of 2, the FFT routine will not be used.
 
-  * {{{sig.spectrum(...,‘WarningRes’, mr)}}} indicates a required frequency resolution, in Hz, for the input signal. If the resolution does not reach that prerequisite, a warning is displayed.
+  * {{{sig.spectrum(…,'WarningRes', mr)}}} indicates a required frequency resolution, in Hz, for the input signal. If the resolution does not reach that prerequisite, a warning is displayed.
 
 Alternatively, the spectrum decomposition can be performed through a Constant Q Transform instead of a FFT, which enables to express the frequency resolution as a constant number of bins per octave:
 
-  * {{{sig.spectrum(...,‘ConstantQ’, nb)}}} fixes the number of bins per octave to _nb_. Default value when the _‘ConstantQ’_ option is toggled on: _nb=12_ bins per octave.
+  * {{{sig.spectrum(…,'ConstantQ', nb)}}} fixes the number of bins per octave to _nb_. Default value when the `'ConstantQ'` option is toggled on: _nb=12_ bins per octave.
 
-Please note however that the Constant Q Transform is implemented as a _Matlab_ M file, whereas _Matlab’s_ FFT algorithm is optimized, therefore faster.
+Please note however that the Constant Q Transform is implemented as a _Matlab_ M file, whereas _Matlab's_ FFT algorithm is optimized, therefore faster.
 
 == Post-processing options ==
 
-  * {{{sig.spectrum(...,‘Terhardt’)}}} modulates the energy following (Terhardt, 1979) outer ear model. The function is mainly characterized by an attenuation in the lower and higher registers of the spectrum, and an emphasis around 2–5 KHz, where much of the speech information is carried. (Code based on Pampalk's MA toolbox). 
+  * {{{sig.spectrum(…,'Terhardt')}}} modulates the energy following (Terhardt, 1979) outer ear model. The function is mainly characterized by an attenuation in the lower and higher registers of the spectrum, and an emphasis around 2–5 KHz, where much of the speech information is carried. (Code based on Pampalk's MA toolbox). 
 
-  * {{{sig.spectrum(..., ‘Normal’)}}} normalizes with respect to energy: each magnitude is divided by the euclidian norm (root sum of the squared magnitude). 
+  * {{{sig.spectrum(…, 'Normal')}}} normalizes with respect to energy: each magnitude is divided by the euclidian norm (root sum of the squared magnitude). 
 
-  * {{{sig.spectrum(..., ‘NormalLength’)}}} normalizes with respect to the duration (in s.) of the audio input data.
+  * {{{sig.spectrum(…, 'NormalLength')}}} normalizes with respect to the duration (in s.) of the audio input data.
 
-  * {{{sig.spectrum(...,‘Power’)}}} squares the energy: each magnitude is squared.
+  * {{{sig.spectrum(…,'Power')}}} squares the energy: each magnitude is squared.
 
-  * {{{sig.spectrum(..., ‘dB’)}}} represents the spectrum energy in decibel scale. For the previous example we obtain the following spectrum:
+  * {{{sig.spectrum(…, 'dB')}}} represents the spectrum energy in decibel scale. For the previous example we obtain the following spectrum:
 
-  * {{{sig.spectrum(..., 'dB', th)}}} keeps only the highest energy over a range of _th_ dB. For example if we take only the 20 most highest dB in the previous example we obtain:
+  * {{{sig.spectrum(…, 'dB', th)}}} keeps only the highest energy over a range of _th_ dB. For example if we take only the 20 most highest dB in the previous example we obtain:
 
-  * {{{sig.spectrum(...,‘Resonance’, r)}}} multiplies the spectrum curve with a resonance curve that emphasizes pulsations that are more easily perceived. Two resonance curves are available:
+  * {{{sig.spectrum(…,'Resonance', r)}}} multiplies the spectrum curve with a resonance curve that emphasizes pulsations that are more easily perceived. Two resonance curves are available:<p>
+   * _r_ = `'ToiviainenSnyder'` (Toiviainen & Snyder 2003), default choice, used for onset detection (cf. SigTempo),<p>
+   * _r_ = `'Fluctuation'` : fluctuation strength (Fastl 1982), default choice for frame-decomposed `'sig.spectrum'` objects redecomposed in 'Mel' bands (cf. SigFluctuation).
 
-_r  = ‘ToiviainenSnyder’_ (Toiviainen & Snyder 2003), default choice, used for onset detection (cf. _sig.tempo_),<br>
-_r = ‘Fluctuation’_: fluctuation strength (Fastl 1982), default choice for frame-decomposed mirspectrum objects redecomposed in ‘Mel’ bands (cf. _sig.fluctuation_).
 
+  * {{{sig.spectrum(…,'Smooth', o)}}} smooths the spectrum curve using a moving average of order o. Default value when the option is toggled on: _o=10_
 
-  * {{{sig.spectrum(...,‘Smooth’, o)}}} smooths the spectrum curve using a moving average of order o. Default value when the option is toggled on: _o=10_
-
-  * {{{sig.spectrum(...,‘Gauss’, o)}}} smooths the spectrum curve using a gaussian of standard deviation o samples. Default value when the option is toggled on: _o=10_
+  * {{{sig.spectrum(…,'Gauss', o)}}} smooths the spectrum curve using a gaussian of standard deviation o samples. Default value when the option is toggled on: _o=10_
  
- * mirspectrum(...,‘TimeSmooth’, o) smooths each  frequency channel of a spectrogram using a moving average of order o. Default value when the option is toggled on: _o=10_
+  * {{{sig.spectrum(…,'TimeSmooth', o)}}} smooths each frequency channel of a spectrogram using a moving average of order o. Default value when the option is toggled on: _o=10_
 
 
 == Frequency redistribution ==
-  * {{{sig.spectrum(..., ‘Cents’)}}} redistributes the frequencies along cents. Each octave is decomposed into 1200 bins equally distant in the logarithmic representation. The frequency axis is hence expressed in MIDI-cents unit: to each pitch of the equal temperament is associated the corresponding MIDI pitch standard value multiply by 100 (69*100=6900 for A4=440Hz, 70*100=7000 for B4, etc.).
+  * {{{sig.spectrum(…, 'Cents')}}} redistributes the frequencies along cents. Each octave is decomposed into 1200 bins equally distant in the logarithmic representation. The frequency axis is hence expressed in MIDI-cents unit: to each pitch of the equal temperament is associated the corresponding MIDI pitch standard value multiply by 100 (69*100=6900 for A4=440Hz, 70*100=7000 for B4, etc.).
+  
+ It has to be noticed that this decomposition requires a frequency resolution that gets higher for lower frequencies: a cent-distribution starting from infinitely low frequency (near 0 Hz would require an infinite frequency resolution). Hence by default, the cent-decomposition is defined only for the frequency range suitable for the frequency resolution initially associated to the given spectrum representation. Two levers are available here:<p>
+   * If a minimal frequency range for the spectrum representation has been set (using the `'Min'` parameter), the frequency resolution of the spectrum is automatically set in order to meet that particular requirement.<p>
+   * By increasing the frequency resolution of the spectrum (for instance by using the `'Res'` or `'MinRes'` parameters), the frequency range will be increased accordingly.
 
-It has to be noticed that this decomposition requires a frequency resolution that gets higher for lower frequencies: a cent-distribution starting from infinitely low frequency (near 0 Hz would require an infinite frequency resolution). Hence by default, the cent-decomposition is defined only for the frequency range suitable for the frequency resolution initially associated to the given spectrum representation. Two levers are available here:
+  * {{{sig.spectrum(…, 'Collapsed')}}} collapses the cent-spectrum into one octave. In the resulting spectrum, the abscissa contains in total 1200 bins, representing the 1200 cents of one octave, and each bin contains the energy related to one position of one octave and of all the multiple of this octave.
 
-- If a minimal frequency range for the spectrum representation has been set (using the _‘Min’_ parameter), the frequency resolution of the spectrum is automatically set in order to meet that particular requirement.
+  * {{{sig.spectrum(…, 'Mel')}}} redistributes the frequencies along Mel bands. The Mel-scale of auditory pitch was established on the basis of listening experiments with simple tones (Stevens and Volkman, 1940). The Mel scale is now mainly used for the reason of its historical priority only. It is closely related to the Bark scale. It requires the _Auditory Toolbox_.
 
-- By increasing the frequency resolution of the spectrum (for instance by using the _‘Res’_ or _‘MinRes’_ parameters), the frequency range will be increased accordingly.
+  * {{{sig.spectrum(…, 'Bands', b)}}} specifies the number of band in the decomposition. By default _b = 40_.
 
-  * {{{sig.spectrum(..., ‘Collapsed’)}}} collapses the cent-spectrum into one octave. In the resulting spectrum, the abscissa contains in total 1200 bins, representing the 1200 cents of one octave, and each bin contains the energy related to one position of one octave and of all the multiple of this octave.
-
-  * {{{sig.spectrum(..., ‘Mel’)}}} redistributes the frequencies along Mel bands. The Mel-scale of auditory pitch was established on the basis of listening experiments with simple tones (Stevens and Volkman, 1940). The Mel scale is now mainly used for the reason of its historical priority only. It is closely related to the Bark scale. It requires the _Auditory Toolbox_.
-
-  * {{{sig.spectrum(..., ‘Bands’, b)}}} specifies the number of band in the decomposition. By default _b = 40_.
 In our example we obtain the following:
 
-The Mel-scale transformation requires a sufficient frequency resolution of the spectrum: as the lower bands are separated with a distance of 66 Hz, the frequency resolution should be higher than 66 Hz in order to ensure that each Mel band can be associated with at least one frequency bin of the spectrum. If the _‘Mel’_ option is performed in the same _sig.spectrum_ command that performs the actual FFT, then the minimal frequency resolution is implicitly ensured, by forcing the minimal frequency resolution (_‘MinRes’_ parameter) to be equal or below 66 Hz. If on the contrary the _‘Mel’_ is performed in a second step, and if the frequency resolution is worse than 66 Hz, then a warning message is displayed in the Command Window.
+The Mel-scale transformation requires a sufficient frequency resolution of the spectrum: as the lower bands are separated with a distance of 66 Hz, the frequency resolution should be higher than 66 Hz in order to ensure that each Mel band can be associated with at least one frequency bin of the spectrum. If the `'Mel'` option is performed in the same _sig.spectrum_ command that performs the actual FFT, then the minimal frequency resolution is implicitly ensured, by forcing the minimal frequency resolution (`'MinRes'` parameter) to be equal or below 66 Hz. If on the contrary the `'Mel'` is performed in a second step, and if the frequency resolution is worse than 66 Hz, then a warning message is displayed in the Command Window.
 
-  * {{{sig.spectrum(..., ‘Bark’)}}} redistributes the frequencies along critical band rates (in Bark). Measurement of the classical "critical bandwidth" typically involves loudness summation experiments (Zwicker et al., 1957). The critical band rate scale differs from Mel-scale mainly in that it uses the critical band as a natural scale unit. The code is based on the _MA_ toolbox.
+  * {{{sig.spectrum(…, 'Bark')}}} redistributes the frequencies along critical band rates (in Bark). Measurement of the classical "critical bandwidth" typically involves loudness summation experiments (Zwicker et al., 1957). The critical band rate scale differs from Mel-scale mainly in that it uses the critical band as a natural scale unit. The code is based on the _MA_ toolbox.
 
-  * {{{sig.spectrum(..., ‘Mask’)}}} models masking phenomena in each band: when a certain energy appears at a given frequency, lower frequencies in the same frequency region may be unheard, following particular equations. By modeling these masking effects, the unheard periodicities are removed from the spectrum. The code is based on the _MA_ toolbox. In our example this will lead to:
-
+  * {{{sig.spectrum(…, 'Mask')}}} models masking phenomena in each band: when a certain energy appears at a given frequency, lower frequencies in the same frequency region may be unheard, following particular equations. By modeling these masking effects, the unheard periodicities are removed from the spectrum. The code is based on the _MA_ toolbox. In our example this will lead to:
 
 == Harmonic spectral analysis ==
 
 A lot of natural sounds, especially musical ones, are harmonic: each sound consists of a series of frequencies at a multiple ratio of the one of lowest frequency, called fundamental. Techniques have been developed in signal processing to reduce each harmonic series to its fundamental, in order to simplify the representation. _MiningSuite_ includes two related techniques for the attenuation of harmonics in spectral representation (Alonso et al, 2003):
 
-  * {{{sig.spectrum(..., ‘Prod’, m)}}} Enhances components that have harmonics located at multiples of range(s) m of the signal's fundamental frequency. Computed by compressing the signal by a list of factors m, and by multiplying all the results with the original signal. Default value is _m = 1:6_. Hence for this initial spectrum:
+  * {{{sig.spectrum(…, 'Prod', m)}}} Enhances components that have harmonics located at multiples of range(s) m of the signal's fundamental frequency. Computed by compressing the signal by a list of factors m, and by multiplying all the results with the original signal. Default value is _m = 1:6_. Hence for this initial spectrum:
 
 we obtain this reduced spectrum:
 
-  * {{{sig.spectrum(..., ‘Sum’, m)}}} Similar idea using addition of the multiples instead of multiplication.
+  * {{{sig.spectrum(…, 'Sum', m)}}} Similar idea using addition of the multiples instead of multiplication.
 
 
 == Accessible Output ==
 
-cf. §5.2 for an explanation of the use of the _get_ method. Specific fields:
+cf. §5.2 for an explanation of the use of the `'get'` method. Specific fields:
 
-  * _‘Frequency’_: the frequency (in Hz.) associated to each bin (same as _‘Pos’_),
+  * `'Frequency'`: the frequency (in Hz.) associated to each bin (same as `'Pos'`),
 
-  * _‘Magnitude’_: the magnitude associated to each bin (same as _‘Data’_),
+  * `'Magnitude'`: the magnitude associated to each bin (same as `'Data'`),
 
-  * _‘Phase’_: the phase associated to each bin,
+  * `'Phase'`: the phase associated to each bin,
 
-  * _‘XScale’_: whether the frequency scale has been redistributed into cents – with (_‘Cents(Collapsed)’_) or without (_‘Cents’_) collapsing into one octave –, meld (_‘Mel’_), barks (_‘Bark’_), or not redistributed at all (_‘Freq’_),
+  * `'XScale'`: whether the frequency scale has been redistributed into cents – with (`'Cents(Collapsed)'`) or without (`'Cents'`) collapsing into one octave –, mels (`'Mel'`), barks (`'Bark'`), or not redistributed at all (`'Freq'`),
 
-  * _‘Power’_: whether the spectrum has been squared (1) or not (0),
+  * `'Power'`: whether the spectrum has been squared (1) or not (0),
 
-  * _‘Log’_: whether the spectrum is in log-scale (1) or in linear scale (0).
+  * `'Log'`: whether the spectrum is in log-scale (1) or in linear scale (0).
