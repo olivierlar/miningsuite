@@ -27,4 +27,4 @@ sig.filterbank accepts as input data type either:
 
 == Auditory model ==
 
-Auditory modelling of filterbank decomposition are available in AudFilterbank.
+Auditory modelling of filterbank decomposition are available in [AudFilterbank aud.filterbank].
