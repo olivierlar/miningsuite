@@ -88,7 +88,7 @@ Please note however that the Constant Q Transform is implemented as a _Matlab_ M
 
   https://miningsuite.googlecode.com/svn/wiki/SigSpectrum_ex2.png
 
-  * `sig.spectrum(…, dB',`_th_`)` keeps only the highest energy over a range of _th_ dB. For example if we take only the 20 most highest dB in the previous example we obtain:<p>
+  * `sig.spectrum(…,'dB',`_th_`)` keeps only the highest energy over a range of _th_ dB. For example if we take only the 20 most highest dB in the previous example we obtain:<p>
 
   https://miningsuite.googlecode.com/svn/wiki/SigSpectrum_ex3.png
 
@@ -115,7 +115,7 @@ Please note however that the Constant Q Transform is implemented as a _Matlab_ M
    * If a minimal frequency range for the spectrum representation has been set (using the `'Min'` parameter), the frequency resolution of the spectrum is automatically set in order to meet that particular requirement.<p>
 
   https://miningsuite.googlecode.com/svn/wiki/SigSpectrum_ex5.png
-  mirspectrum(‘ragtime’,’Cents’,’Min’,100)
+    _sig.spectrum('ragtime','Cents','Min',100)_
 
    * By increasing the frequency resolution of the spectrum (for instance by using the `'Res'` or `'MinRes'` parameters), the frequency range will be increased accordingly.
 
@@ -134,7 +134,7 @@ The Mel-scale transformation requires a sufficient frequency resolution of the s
   * `sig.spectrum(…,'Bark')` redistributes the frequencies along critical band rates (in Bark). Measurement of the classical "critical bandwidth" typically involves loudness summation experiments (Zwicker et al., 1957). The critical band rate scale differs from Mel-scale mainly in that it uses the critical band as a natural scale unit. The code is based on the _MA_ toolbox.
 
   * `sig.spectrum(…,'Mask')` models masking phenomena in each band: when a certain energy appears at a given frequency, lower frequencies in the same frequency region may be unheard, following particular equations. By modeling these masking effects, the unheard periodicities are removed from the spectrum. The code is based on the _MA_ toolbox. In our example this will lead to:<p>
-
+	
   https://miningsuite.googlecode.com/svn/wiki/SigSpectrum_ex7.png
 
 
