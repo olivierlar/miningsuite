@@ -103,7 +103,7 @@ https://miningsuite.googlecode.com/svn/wiki/SigAutocor_enhanced5.png
 https://miningsuite.googlecode.com/svn/wiki/SigAutocor_enhanced6.png
 https://miningsuite.googlecode.com/svn/wiki/SigAutocor_freqenhanced.png
 
-_fig 1: Waveform autocorrelation of a piano chord Amaj3 (blue), and scaled autocorrelation of factor 2 (red);  fig 2: subtraction of the autocorrelation by the previous scaled autocorrelation (blue), scaled autocorrelation of factor 3 (red); fig 3: resulting subtraction (blue), scaled autocorrelation of factor 4(red); fig 4: idem for factor 5; fig 5: idem for factor 6; fig 6:idem for factor 7; fig 7: resulting autocorrelation curve in the frequency domain and peak picking_
+_fig 1: Waveform autocorrelation of a piano chord Amaj3 (blue), and scaled autocorrelation of factor 2 (red);fig 2: subtraction of the autocorrelation by the previous scaled autocorrelation (blue), scaled autocorrelation of factor 3 (red); fig 3: resulting subtraction (blue), scaled autocorrelation of factor 4(red); fig 4: idem for factor 5; fig 5: idem for factor 6; fig 6:idem for factor 7; fig 7: resulting autocorrelation curve in the frequency domain and peak picking_
 
 
 == Accessible Output ==
