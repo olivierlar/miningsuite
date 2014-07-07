@@ -1,0 +1,67 @@
+% SIG.FILTERBANK.MAIN
+% Main routine of sig.filterbank, also called by aud.filterbank
+%
+% Copyright (C) 2014, Olivier Lartillot
+%
+% All rights reserved.
+% License: New BSD License. See full text of the license in LICENSE.txt in
+% the main folder of the MiningSuite distribution.
+
+function x = main(x,option,filterspecif)
+    out = sig.compute(@routine,x{1}.Ydata,x{1}.Srate,x{1}.fbchannels,...
+                      option,filterspecif);
+    x{1}.Ydata = out{1};
+    x{1}.fbchannels = out{3};
+    x{2} = out{2};
+end
+
+
+function out = routine(in,sampling,ch,option,filterspecif)
+    if in.size('fb_channel') > 1
+        %warning('WARNING IN SIG.FILTERBANK: The input data is already decomposed into channels. No more channel decomposition.');
+        if option.Ch
+            in = in.extract('fb_channel',option.Ch);
+            out = {in [] option.Ch};
+        else
+            out = {in [] ch};
+        end
+    else
+        nCh = option.nCh;
+        ch = option.Ch;
+        
+        if isfield(option,'tmp')
+            tmp = option.tmp;
+        else
+            tmp = [];
+        end
+
+        if isempty(tmp)
+            [Hd,ch] = filterspecif(option,sampling,nCh,ch);
+        else
+            Hd = tmp;
+        end
+        
+        [out{1},out{2}] = in.apply(@subroutine,{Hd},...
+                                   {'sample','fb_channel'},Inf);
+        out{3} = ch;
+    end
+end
+
+
+function [y Hd] = subroutine(x,Hd)
+    y = zeros(size(x,1),length(Hd));
+    for k = 1:length(Hd)
+        Hdk = Hd{k};
+        if ~iscell(Hdk)
+            Hdk = {Hdk};
+        end
+        for h = 1:length(Hdk)
+            if isa(Hdk{h},'function_handle')
+                yh = Hdk{h}(x);
+            else
+                yh = Hdk{h}.filter(x);
+            end
+        end
+        y(:,k) = yh;
+    end
+end
