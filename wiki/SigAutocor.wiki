@@ -4,9 +4,11 @@
 
 Another way to evaluate periodicities in signals (be it an audio waveform, a spectrum, an envelope, etc.) consists in looking at local correlation between samples. If we take a signal x, such as for instance this trumpet sound:
 ￼
+https://miningsuite.googlecode.com/svn/wiki/SigAutocor_ex1.png
 
 the autocorrelation function is computed as follows:
 
+https://miningsuite.googlecode.com/svn/wiki/SigAutocor_eq1.png
 
 For a given lag _j_, the autocorrelation _Rxx(j)_ is computed by multiplying point par point the signal with a shifted version of it of _j_ samples. We obtain this curve:
 
