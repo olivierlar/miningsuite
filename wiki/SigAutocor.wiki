@@ -10,7 +10,9 @@ the autocorrelation function is computed as follows:<p>
 
 https://miningsuite.googlecode.com/svn/wiki/SigAutocor_eq1.png
 
-For a given lag _j_, the autocorrelation _Rxx(j)_ is computed by multiplying point par point the signal with a shifted version of it of _j_ samples. We obtain this curve:
+For a given lag _j_, the autocorrelation _Rxx(j)_ is computed by multiplying point par point the signal with a shifted version of it of _j_ samples. We obtain this curve:<p>
+
+https://miningsuite.googlecode.com/svn/wiki/SigAutocor_ex1.png
 
 Hence when the lag _j_ corresponds to a period of the signal, the signal is shifted to one period ahead, and therefore is exactly superposed to the original signal. Hence the summation gives very high value, as the two signals are highly correlated.
 
@@ -57,19 +59,27 @@ Hence when the lag _j_ corresponds to a period of the signal, the signal is shif
   * `sig.autocor(…,'Resonance',`_r_`)` multiplies the autocorrelation curve with a resonance curve that emphasizes pulsations that are more easily perceived. Two resonance curves are proposed:
    * _r_ = `'ToiviainenSnyder'` (Toiviainen & Snyder 2003) (default value if `'Resonance'` option toggled on),
    * _r_ = `'vanNoorden'` (van Noorden & Moelants, 1999).
+
  This option should be used only when the input of the `sig.autocor` function is an amplitude envelope, i.e., a `´sig.envelope´` object.
  * `sig.autocor(…,'Center',`_c_`)` assigns the center value of the resonance curve, in seconds. Works mainly with `'ToiviainenSnyder'` option. Default value: _c_ = 0.5.
+
+https://miningsuite.googlecode.com/svn/wiki/SigAutocor_Toiviainen.png
+https://miningsuite.googlecode.com/svn/wiki/SigAutocor_vanNoorden.png
  
  
-Resonance curves `'ToiviainenSnyder'` (left) and `'vanNoorden'` (right)
+_Resonance curves `'ToiviainenSnyder'` (left) and `'vanNoorden'` (right)_
 
 `sig.autocor(…,'Halfwave')` performs a half-wave rectification on the result, in order to just show the positive autocorrelation coefficients.
 
 == Generalized autocorrelation ==
 
-`sig.autocor(…,'Compres',`_k_`)` – or equivalently `sig.autocor(…,'Generalized',`_k_`)` – computes the autocorrelation in the frequency domain and includes a magnitude compression of the spectral representation. Indeed an autocorrelation can be expressed using Discrete Fourier Transform as 
+`sig.autocor(…,'Compres',`_k_`)` – or equivalently `sig.autocor(…,'Generalized',`_k_`)` – computes the autocorrelation in the frequency domain and includes a magnitude compression of the spectral representation. Indeed an autocorrelation can be expressed using Discrete Fourier Transform as:
+
+_y = IDFT(|DFT(x)|^2),_
 
 which can be generalized as: 
+
+_y = IDFT(|DFT(x)|^k)_
 
 Compression of the autocorrelation (i.e., setting a value of _k_ lower than 2) are recommended in (Tolonen & Karjalainen, 2000) because this decreases the width of the peaks in the autocorrelation curve, at the risk however of increasing the sensitivity to noise. According to this study, a good compromise seems to be achieved using value _k_ = .67. By default, no compression is performed (hence _k_ = 2), whereas if the `'Compress'` keyword is used, value _k_ = .67 is set by default if no other value is indicated.
 
@@ -83,8 +93,15 @@ If the curve does not start from zero at low lags but begins instead with strict
   * if the curve starts with a descending slope, the whole part before the first local minimum is removed from the curve,
   * if the curve starts with an ascending slope, the curve is prolonged to the left following the same slope but which is increased by a factor of 1.1 at each successive bin, until the curve reaches the x-axis.
 
-See the figure below for an example of enhanced autocorrelation when computing the pitch content of a piano _Amin3_ chord, with the successive step of the default enhancement, as used by default in `sig.pitch` (cf. description of SigPitch).
+See the figure below for an example of enhanced autocorrelation when computing the pitch content of a piano _Amin3_ chord, with the successive step of the default enhancement, as used by default in `sig.pitch` (cf. description of SigPitch).<p>
 
+https://miningsuite.googlecode.com/svn/wiki/SigAutocor_enhanced1.png
+https://miningsuite.googlecode.com/svn/wiki/SigAutocor_enhanced2.png
+https://miningsuite.googlecode.com/svn/wiki/SigAutocor_enhanced3.png
+https://miningsuite.googlecode.com/svn/wiki/SigAutocor_enhanced4.png
+https://miningsuite.googlecode.com/svn/wiki/SigAutocor_enhanced5.png
+https://miningsuite.googlecode.com/svn/wiki/SigAutocor_enhanced6.png
+https://miningsuite.googlecode.com/svn/wiki/SigAutocor_freqenhanced.png
 
 _fig 1: Waveform autocorrelation of a piano chord Amaj3 (blue), and scaled autocorrelation of factor 2 (red);  fig 2: subtraction of the autocorrelation by the previous scaled autocorrelation (blue), scaled autocorrelation of factor 3 (red); fig 3: resulting subtraction (blue), scaled autocorrelation of factor 4(red); fig 4: idem for factor 5; fig 5: idem for factor 6; fig 6:idem for factor 7; fig 7: resulting autocorrelation curve in the frequency domain and peak picking_
 
