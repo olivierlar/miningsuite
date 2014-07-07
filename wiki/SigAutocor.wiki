@@ -2,11 +2,11 @@
 
 = sig.autocor: Autocorrelation function =
 
-Another way to evaluate periodicities in signals (be it an audio waveform, a spectrum, an envelope, etc.) consists in looking at local correlation between samples. If we take a signal x, such as for instance this trumpet sound:
+Another way to evaluate periodicities in signals (be it an audio waveform, a spectrum, an envelope, etc.) consists in looking at local correlation between samples. If we take a signal x, such as for instance this trumpet sound:<p>
 ￼
 https://miningsuite.googlecode.com/svn/wiki/SigAutocor_ex1.png
 
-the autocorrelation function is computed as follows:
+the autocorrelation function is computed as follows:<p>
 
 https://miningsuite.googlecode.com/svn/wiki/SigAutocor_eq1.png
 
@@ -29,7 +29,7 @@ Hence when the lag _j_ corresponds to a period of the signal, the signal is shif
 
 
 == Frame decomposition ==
-
+	
 `mirautocor(…,'Frame',…)` performs first a frame decomposition, with by default a frame length of 50 ms and half overlapping. For the specification of other frame configuration using additional parameters, cf. the previous SigFrame vs. 'Frame' section.
 
 
