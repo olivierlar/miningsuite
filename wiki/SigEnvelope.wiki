@@ -114,8 +114,6 @@ https://miningsuite.googlecode.com/svn/wiki/SigEnvelope_ex5.png
   * `sig.envelope(…,'Log')` computes the common logarithm (base 10) of the envelope.<p>
    * `sig.envelope(…,'MinLog',`_ml_`)` selects the data in the logarithmic range [_-ml_ dB, 0 dB], where 0 dB corresponds to the maximal logarithmic amplitude, and excludes the data below that range.
 
-  * `sig.envelope(…,'Mu',`_mu_`)` computes the logarithm of the envelope, before the eventual differentiation, using a mu-law compression (Klapuri et al., 2006). Default value for _mu_: 100
-
   * `sig.envelope(…,‘Power')` computes the power (square) of the envelope.
 
   * `sig.envelope(…,'Diff')` computes the differentiation of the envelope, i.e., the differences between successive samples.<p>
@@ -131,33 +129,20 @@ https://miningsuite.googlecode.com/svn/wiki/SigEnvelope_ex7.png
    * If the audio signal is decomposed into segments, each segment is normalized individually.<p>
    * `sig.envelope(…,'Normal','AcrossSegments')`, on the contrary, normalizes across segments, i.e., with respect to the global maxima across all the segments of that audio signal.
 
-  * `sig.envelope(…,'Lambda',`_l_`)` sums the half-wave rectified envelope with the non-differentiated envelope, using the respective weight 0<l<1 and (1-l). (Klapuri et al., 2006).
-
   * `sig.envelope(…,‘Smooth’,`_o_`)` smooths the envelope using a movering average of order _o_. The default value when the option is toggled on: _o_ = 30
 
   * `sig.envelope(…,‘Gauss’,`_o_`)` smooths the envelope using a gaussian of standard deviation _o_ samples. The default value when the option is toggled on: _o_ = 30
+ 
 
+== Auditory model ==
 
-
-== Preselected Model ==
-
-Complete (or nearly complete) model is available:
-
-  * `sig.envelope(…,'Klapuri06')` follows the model proposed in (Klapuri et al., 2006). It corresponds to
-
-{{{
-e = sig.envelope(…, 'Spectro', 'UpSample', 'Mu', 'HalfwaveDiff', 'Lambda', .8);
-    mirsum(e, 'Adjacent', 10)
-}}}
+Auditory modelling of envelope extraction is available in [AudEnvelope aud.envelope].
 
 
 == Accessible Output ==
 
-cf. §5.2 for an explanation of the use of the get method. Specific fields:
+Specific fields:
 
-  * `'Time'`: the temporal positions of samples (same as `'Pos'`),
-  * `'DownSampling'`: the value of the `'PostDecim'` option,
-  * `'Halfwave'`: whether the envelope has been half-wave rectified (1) or not (0),
-  * `'Diff'`: whether the envelope has been differentiated (1) or not (0),
-  * `'Centered'`: whether the envelope is centered (1) or not (0),
-  * `'Phase'`: the phase of the spectrogram, if necessary.
+  * `'Method'`: the value of the `'Method'` option,
+  * `'Log'`: whether the envelope has been logged using the 'Log' option (1) or not (0),
+  * `'Diff'`: whether the envelope has been differentiated (1) or not (0).
