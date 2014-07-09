@@ -12,31 +12,8 @@
 % the main folder of the MiningSuite distribution.
 
 function varargout = envelope(varargin)
-    varargout = sig.operate('sig','envelope',initoptions,@init,@main,...
-                                             varargin,'concat','extensive');
-end
-
-
-function options = initoptions
-    options = sig.signal.signaloptions(); %(.1,.1);
-    
-        filter.key = 'FilterType';
-        filter.type = 'String';
-        filter.choice = {'IIR','HalfHann','Butter',0};
-        filter.default = 'IIR';
-    options.filter = filter;
-
-            %% options related to 'IIR': 
-            tau.key = 'Tau';
-            tau.type = 'Numeric';
-            tau.default = .02;
-    options.tau = tau;
-end
-
-
-%%
-function [x type] = init(x,option,frame)
-    type = 'sig.Envelope';
+    varargout = sig.operate('sig','envelope',sig.envelope.options,...
+                            @sig.envelope.init,@main,varargin,'concat'); %,'extensive');
 end
 
 
@@ -61,45 +38,22 @@ function out = main(x,option,postoption)
         end
         %%
         d = sig.data(g,{'sample'});
-        obj = sig.Envelope(d,'Srate',ndivs,'Sstart',0,'Ssize',length(g));
-    elseif isa(x{1},'sig.Envelope')
-        obj = x{1};
+        out = sig.Envelope(d,'Srate',ndivs,'Sstart',0,'Ssize',length(g));
     else
-        d = sig.compute(@routine,x{1}.Ydata,x{1}.Srate,option);
-        
-        obj = sig.Envelope(d,'Srate',x{1}.Srate,...
-                           'Sstart',x{1}.Sstart,'Ssize',x{1}.Ssize);
+        [out,postoption,tmp] = sig.envelope.main(x,option,postoption);
     end
     if isempty(postoption)
-        out = {obj};
+        out = {out tmp};
     else
-        out = {obj.after(postoption)};
+        out = {after(out,postoption) tmp};
     end
 end
 
 
-function out = routine(in,sampling,option)
-    if strcmpi(option.filter,'IIR')
-        a2 = exp(-1/(option.tau*sampling)); % filter coefficient 
-        a = [1 -a2];
-        b = 1-a2;
-    elseif strcmpi(option.filter,'HalfHann')
-        a = 1;
-        b = hann(sampling*.4);
-        b = b(ceil(length(b)/2):end);
-    elseif strcmpi(option.filter,'Butter')
-        % From Timbre Toolbox
-        w = 5 / ( sampling/2 );
-        [b,a] = butter(3, w);
-    end
-    
-    in = in.apply(@abs,{},{'sample'});
-    
-    if 1 %isempty(state)
-        [out state] = in.apply(@filter,{b,a,'self'},{'sample'});
-    else
-        [out state] = in.apply(@filter,{b,a,'self',state},{'sample'});
-    end
-    
-    out = out.apply(@max,{0},{'sample'}); % For security reason...
+function x = after(x,postoption)
+    x = sig.envelope.resample(x,postoption);
+    x = sig.envelope.rescale(x,postoption);
+    x = sig.envelope.upsample(x,postoption);
+    x.Ydata = sig.envelope.diff(x,postoption);
+    x = sig.envelope.after(x,postoption);
 end
