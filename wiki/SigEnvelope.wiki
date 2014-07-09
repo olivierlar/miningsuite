@@ -45,17 +45,13 @@ sig.envelope(…,'Hilbert')
   * `sig.envelope(…,'PreDecim',`_N_`)` down-samples by a factor _N_>1, where _N_ is an integer, before the low-pass filtering (Klapuri, 1999). Default value: _N_ = 1, corresponding to no down-sampling.
 
   * The next step consists in a low-pass filter than retain from the signal only the long-term evolution, by removing all the more rapid oscillations. This is performed through a filtering of the signal. Two types of filters are available, either a simple autoregressive coefficient, with Infinite Impulse Response (`'IIR'` default value in `'FilterType'` option), or a half-Hanning (raised cosine) filter (`'HalfHann'` value in `'FilterType'` option).
-
-  ** `sig.envelope(…,'FilterType','IIR')` extract the envelope using an auto-regressive filter of infinite impulse response (IIR). This is the default method.<p>
-
-https://miningsuite.googlecode.com/svn/wiki/SigEnvelope_ex3.png
- _Detail of the ‘IIR’ envelope extraction process_
-
- The range of frequencies to be filtered can be controlled by selecting a proper value for the a parameter. Another way of expressing this parameter is by considering its time constant. If we feed the filter with a step function (i.e. 0 before time 0, and 1 after time 0), the time constant will correspond to the time it will take for the output to reach 63 % of the input. Hence higher time constant means smoother filtering. The default time constant is set to .02 seconds and can be changed using the option:
+    * `sig.envelope(…,'FilterType','IIR')` extract the envelope using an auto-regressive filter of infinite impulse response (IIR). This is the default method. The range of frequencies to be filtered can be controlled by selecting a proper value for the a parameter. Another way of expressing this parameter is by considering its time constant. If we feed the filter with a step function (i.e. 0 before time 0, and 1 after time 0), the time constant will correspond to the time it will take for the output to reach 63 % of the input. Hence higher time constant means smoother filtering. The default time constant is set to .02 seconds and can be changed using the option:
  {{{
 sig.envelope(…,'Tau',t)
 }}}
 
+https://miningsuite.googlecode.com/svn/wiki/SigEnvelope_ex3.png
+ _Detail of the ‘IIR’ envelope extraction process_
 
 || *Remarks* ||
 ||  As low-pass filters actually lead to a shifting of the phases of the signal. This is counteracted using a second filtering of the reverse signal. The time constant _t_ is the time constant of each separate filter, therefore _the resulting time constant is around twice bigger_. ||
