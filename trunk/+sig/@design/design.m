@@ -39,6 +39,7 @@ classdef design
         
         extensive
         nochunk = 0
+        tmpfile
     %end
     %properties (Dependent)
         files
