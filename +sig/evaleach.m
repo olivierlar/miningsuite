@@ -14,17 +14,46 @@
 % + pattern mining + ...", AES 53RD INTERNATIONAL CONFERENCE, London, UK,
 % 2014
 
-function y = evaleach(design,filename,window,sr,frame,chunking) %,single,name
-
+function y = evaleach(design,filename,window,sr,frame,chunking,nbsamples) %,single,name
 if nargin<5
     frame = [];
 end
 if nargin<6
     chunking = 0;
 end
+if nargin<7
+    nbsamples = window(2)-window(1)+1;
+end
 
-lwindow = diff(window)+1;    
-len = lwindow/sr;
+if isfield(design,'fid')
+    % The input can be read from the temporary file
+    y = {design.data};
+    channels = y{1}.fbchannels;
+    if isempty(channels)
+        channels = 1;
+    else
+        channels = length(channels);
+    end
+    current = ftell(design.fid);
+    origin = current-nbsamples*channels*8;
+    if origin < 0
+        nbsamples = nbsamples + origin/channels/8;
+        origin = 0;
+    end
+    fseek(design.fid,origin,'bof');
+    [data count] = fread(design.fid,[nbsamples,channels],'double');
+    data = reshape(data,[nbsamples,1,channels]);
+    fseek(design.fid,current-nbsamples*channels*8,'bof');
+    y{1}.Ydata.content = data;
+    %a.Sstart = 
+    if window(3)
+        fclose(design.fid);
+        delete(design.filename);
+    end
+    %argin{i} = a;
+    return
+end
+
 %chan = d.channel;
 
 %sg = d.segment;
@@ -102,20 +131,26 @@ else
             end
         else
             y = sig.evaleach(design.input,filename,window,sr,frame,1);
-            y = design.main(y,design.duringoptions,design.afteroptions);
+            switch chunking 
+                case 1
+                    after = design.afteroptions;
+                case 2
+                    after = [];
+            end
+            y = design.main(y,design.duringoptions,after);
         end
     else
         meth = 'Chunk ';
         %frnochunk = isfield(d.frame,'dontchunk');
         %frchunkbefore = isfield(d.frame,'chunkbefore');
         if ~isempty(frame) && frame.toggle % && ~frame.inner
-            chunks = compute_frames(frame,sr,window,lwindow,sig.chunklim,0);
+            chunks = compute_frames(frame,sr,window,nbsamples,sig.chunklim,0);
         else
-            if lwindow > sig.chunklim
+            if nbsamples > sig.chunklim
             % The required memory exceed the max memory threshold.
-                nch = ceil(lwindow/sig.chunklim); 
-                chunks = max(0,lwindow-sig.chunklim*(nch:-1:1))+window(1);
-                chunks(2,:) = lwindow-sig.chunklim*(nch-1:-1:0)+window(1)-1;
+                nch = ceil(nbsamples/sig.chunklim); 
+                chunks = max(0,nbsamples-sig.chunklim*(nch:-1:1))+window(1);
+                chunks(2,:) = nbsamples-sig.chunklim*(nch-1:-1:0)+window(1)-1;
             else
                 chunks = [];
             end
@@ -131,12 +166,10 @@ else
             else
                 h = 0;
             end
-            if 0 %not(isempty(d.tmpfile)) && d.tmpfile.fid == 0
+            if not(isempty(design.tmpfile)) && design.tmpfile.fid == 0
                 % When applicable, a new temporary file is created.
-                d.tmpfile.fid = fopen('tmpfile.mirtoolbox','w');
-            end
-            %tmpfile = [];
-            if 0 %not(d.ascending)
+                tmpname = [design.files '.sig.tmp'];
+                design.tmpfile.fid = fopen(tmpname,'w');
                 chunks = fliplr(chunks);
             end
 
@@ -185,14 +218,21 @@ else
                    end
                 end
 
-                ss = sig.evaleach(design.input,filename,window,sr,frame);
+                ss = sig.evaleach(design.input,filename,window,sr,frame,...
+                                  chunking,nbsamples);
+                if length(ss)>1 && isstruct(ss{2})
+                    design.input.input = ss{2};
+                    design.input.tmpfile = [];
+                    chunking = 2;
+                end
+                              
                 ss = design.main(ss,options,[]);
 
                 if length(ss)>1
                     options.tmp = ss{2};
                 end
 
-                y = combinechunks(y,ss,i,design.combine);
+                y = combinechunks(y,ss,i,design,chunks);
 
                 clear ss
                 if h
@@ -206,10 +246,20 @@ else
                 end
             end
 
-            y = design.main(y,design.duringoptions,design.afteroptions);
-            %y = afterchunk_noframe(y,lsz,d,afterpostoption,d2);
-            % Final operations to be executed after the chunk decomposition
-
+            if isempty(design.tmpfile)
+                y = design.main(y,design.duringoptions,design.afteroptions);
+            else
+                % Final operations to be executed after the chunk decomposition
+                adr = ftell(design.tmpfile.fid);
+                fclose(design.tmpfile.fid);
+                ytmpfile.fid = fopen(tmpname);
+                fseek(ytmpfile.fid,adr,'bof');
+                ytmpfile.data = y{1};
+                ytmpfile.layer = 0;
+                ytmpfile.filename = tmpname;
+                y{2} = ytmpfile;
+            end
+            
             if 0 %isa(d,'mirstruct') && ...
                     (isempty(d.frame) || isfield(d.frame,'dontchunk'))
                 y = evalbranches(d,y);
@@ -310,7 +360,15 @@ end
 
 
 %%
-function res = combinechunks(old,new,i,method) %,sg,chunks,single)
+function res = combinechunks(old,new,i,design,chunks) %,sg,single)
+if ~isempty(design.tmpfile) && design.tmpfile.fid > 0
+    if i < size(chunks,2)
+        fwrite(design.tmpfile.fid,new{1}.Ydata.content,'double');
+    end
+    res = new;
+    return
+end
+
 if i == 1
     res = new;
 else
@@ -331,7 +389,7 @@ else
                 %if strcmpi(design.combine,'Concat')
                 %    res{z} = concatchunk(old{z},new{z},d2.ascending);
                 %elseif strcmpi(design.combine,'Sum')
-            res{z}.Ydata = old{z}.Ydata.(method)(new{z}.Ydata);
+            res{z}.Ydata = old{z}.Ydata.(design.combine)(new{z}.Ydata);
                 %else
                 %    error(['SYNTAX ERROR: ',design.combine,...
                 %           ' is not a known keyword for combinechunk.']);
