@@ -144,5 +144,5 @@ Auditory modelling of envelope extraction is available in [AudEnvelope aud.envel
 Specific fields:
 
   * `'Method'`: the value of the `'Method'` option,
-  * `'Log'`: whether the envelope has been logged using the 'Log' option (1) or not (0),
+  * `'Log'`: whether the envelope has been logged using the `'Log'` option (1) or not (0),
   * `'Diff'`: whether the envelope has been differentiated (1) or not (0).
