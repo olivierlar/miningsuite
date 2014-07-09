@@ -55,7 +55,7 @@ https://miningsuite.googlecode.com/svn/wiki/SigEnvelope_ex3.png
 
 || *Remarks* ||
 ||  As low-pass filters actually lead to a shifting of the phases of the signal. This is counteracted using a second filtering of the reverse signal. The time constant _t_ is the time constant of each separate filter, therefore _the resulting time constant is around twice bigger_. ||
-||  The reverse filtering is not performed using Matlab `filtfilt` function because this would not work in the case of chunk decomposition (cf. §5.3) – but has been partly re-implemented. In particular, contrary to `filtfilt`, care is not yet taken to minimize startup and ending transients by matching initial conditions. ||
+||  The reverse filtering is not performed using Matlab `filtfilt` function because this would not work in the case of chunk decomposition (cf. ChunkDecomposition) – but has been partly re-implemented. In particular, contrary to `filtfilt`, care is not yet taken to minimize startup and ending transients by matching initial conditions. ||
 
   * Once the signal has been smoothed, as there is a lot of redundancy between the successive samples, the signal can be down-sampled. The default parameter related to down-sampling is the down-sampling rate _N_, i.e. the _integer_ ratio between the old and the new sampling rate. _N_ is set by default to 16, and can be changed using the option:
   {{{
