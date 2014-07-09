@@ -2,7 +2,7 @@
 
 = aud.filterbank: Filterbank decomposition based on auditory modelling =
 
-This operations is a specialisation of the general signal processing operator [SigFilterbank sig.filterbank] focused on auditory models. The filte bank decomposition models an actual process of human perception, corresponding to the distribution of frequencies into critical bands in the cochlea.
+This operations is a specialisation of the general signal processing operator [SigFilterbank sig.filterbank] focused on auditory models. The filterbank decomposition models an actual process of human perception, corresponding to the distribution of frequencies into critical bands in the cochlea.
 
 == Flowchart interconnections ==
 
