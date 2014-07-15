@@ -36,7 +36,7 @@ where _v_ is a cell array, where each cell, corresponding to one audio file, is 
 sg=sig.segment(a,m)
 }}}
 
-where _m_ is the name of one of the following segmentation methods: `'Novelty'` (default, cf. SigNovelty), 'HCDF' (cf. SigHcdf) or 'RMS' (cf. SigRms).
+where _m_ is the name of one of the following segmentation methods: `'Novelty'` (default, cf. SigNovelty), `'HCDF'` (cf. SigHcdf) or `'RMS'` (cf. SigRms).
 
 `sig.segment` accepts uniquely as main input a `sig.input` objects not frame-decomposed, not channel decomposed, and not already segmented. Alternatively, file name or the `'Folder'` keyword can be used as well.
 
