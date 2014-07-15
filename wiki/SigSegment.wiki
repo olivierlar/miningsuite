@@ -11,7 +11,7 @@ If _p_ is a frame-decomposed scalar curve, the audio waveform _a_ will be segmen
 
   * An audio waveform _a_ can be segmented at the beginning of the pitch events detected using `sig.pitch`:
 {{{
-p=sig.pitch(a, ‘Frame’, ‘Segment’, ...)
+p=sig.pitch(a,'Frame','Segment',…)
 
 sg=sig.segment(a,p)
 }}}
@@ -36,26 +36,30 @@ where _v_ is a cell array, where each cell, corresponding to one audio file, is 
 sg=sig.segment(a,m)
 }}}
 
-where _m_ is the name of one of the following segmentation methods: `'Novelty'` (default, cf. SigNovelty), ‘HCDF’ (cf. SigHcdf) or ‘RMS’ (cf. SigRms).
+where _m_ is the name of one of the following segmentation methods: `'Novelty'` (default, cf. SigNovelty), 'HCDF' (cf. SigHcdf) or 'RMS' (cf. SigRms).
 
-`sig.segment` accepts uniquely as main input a `sig.input` objects not frame-decomposed, not channel decomposed, and not already segmented. Alternatively, file name or the `‘Folder’` keyword can be used as well.
+`sig.segment` accepts uniquely as main input a `sig.input` objects not frame-decomposed, not channel decomposed, and not already segmented. Alternatively, file name or the `'Folder'` keyword can be used as well.
 
 The first argument of the `sig.segment` function is the audio file that needs to be segmented. It is possible for instance to compute the segmentation curve using a downsampled version of the signal and to perform the actual segmentation using the original audio file.
 
 == Example ==
 
 {{{
-sg=sig.segment(‘ragtime’,‘Novelty’,‘KernelSize’,32)
+sg=sig.segment('ragtime','Novelty','KernelSize',32)
 }}}
+
+https://miningsuite.googlecode.com/svn/wiki/SigSegment_ex1.png
 
 The output can be sent to any further analysis, for instance:
 {{{
-sp=sig.spectrum(sg,‘dB’)
+sp=sig.spectrum(sg,'dB')
 }}}
+
+https://miningsuite.googlecode.com/svn/wiki/SigSegment_ex2.png
 
 
 == Accessible Output ==
 
 cf. §5.2 for an explanation of the use of the `'get'` method. 
 
-`‘FramePos’`: For segmented data, this returns a cell array where each cell is a matrix containing the starting and ending temporal positions of the frames in each successive segment. When there is no frame decomposition, each cell contains simply the starting and ending time of each successive segment.
+`'FramePos'`: For segmented data, this returns a cell array where each cell is a matrix containing the starting and ending temporal positions of the frames in each successive segment. When there is no frame decomposition, each cell contains simply the starting and ending time of each successive segment.
