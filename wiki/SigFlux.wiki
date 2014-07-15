@@ -1,0 +1,70 @@
+#summary sig.flux: Distance between successive frames
+
+Given a spectrogram:
+{{{
+s = mirspectrum(a, ‘Frame’)
+}}}
+
+we can compute the spectral flux as being the distance between the spectrum of each successive frames.
+
+{{{
+mirflux(s)
+}}}
+
+The peaks in the curve indicate the temporal position of important contrast in the spectrogram.
+
+In MIRtoolbox fluxes are generalized to any kind of frame-decomposed representation, for instance a cepstral flux:
+
+{{{
+c = mircepstrum(a, ‘Frame’)
+}}}
+
+
+{{{
+mirflux(c)
+}}}
+
+== Flowchart Interconnections ==
+
+`sig.flux` usually accepts either:
+  * `sig.spectrum` frame-decomposed objects.
+  * `sig.input` objects, where the audio waveform can be segmented (using `sig.segment`), decomposed into channels (using `sig.filterbank`). The audio waveform is decomposed into frames if it was not decomposed yet. If the input is a _sig.input_ object, the default flux is a spectral flux: i.e., the audio waveform is passed to the _sig.spectrum_ operator before being fed into _sig.flux_.
+  * file name(s) or the `'Folder'` keyword: same behavior as for `sig.input` objects;
+  * `sig.autocor` frame-decomposed objects;
+  * `sig.cepstrum` frame-decomposed objects;
+  * `sig.mfcc` frame-decomposed objects;
+  * `sig.chromagram` frame-decomposed objects;
+  * `sig.keystrength` frame-decomposed objects.
+
+== Frame decomposition ==
+
+`sig.flux(..., ‘Frame’, …)` specifies the frame configuration, the default being a frame length of 50 ms and half overlapping. For the syntax, cf. the previous SigFrame vs. ‘Frame’ section.
+
+== Parameters specification ==
+  * `sig.flux(x, 'Dist’, d)` specifies the distance between successive frames, among the list of distances available in pdist (cf. help pdist). Default distance: ‘Euclidean’.
+  * `sig.flux(..., 'Inc’)`: Only positive difference between frames are summed, in order to focus on increase of energy solely. If toggled on, ‘Dist’ parameter can only accept ‘Euclidean’, ‘Cosine’ or ‘City’.
+  * `sig.flux(..., ‘Complex’)`, for spectral flux, combines the use of both energy and phase information (Bello et al, 2004).
+  * `sig.flux(..., ‘SubBand’)` decomposes first the input waveform using a 10-channel filterbank of octave-scaled second-order elliptical filters, with frequency cut of the first (low-pass) filter at 50 Hz:
+
+{{{
+mirfilterbank(..., ‘Manual’, [-Inf 50*2.^(0:1:8) Inf], ‘Order’, 2)
+}}}
+
+Alluri and Toiviainen (2010, 2012) introduced this model, using a frame size of 25 ms and half-overlapping, corresponding to the command:
+
+{{{
+mirflux(..., ‘SubBand’, ‘Frame’, .025)
+}}}
+
+The authors found that fluctuations in the lower channels, around 50 Hz ~ 200 Hz (sub-bands 2 and 3) represent perceived “Fullness”, and those around 1600 ~ 6400 Hz (sub-Bands 7 and 8) represent perceived “Activity”.
+
+Alternatively, other filterbanks proposed in SigFilterbank can be specified, using the syntax:
+
+  * `sig.flux(..., ‘SubBand’, ‘Gammatone’)`
+  * `sig.flux(..., ‘SubBand’, ‘2Channels’)`
+
+== Post-processing ==
+
+  * `sig.flux(..., ‘Halfwave’)`: performs a half-wave  rectification on the result.
+  * `sig.flux(..., ‘Median’, l, C)`: removes small spurious peaks by subtracting to the result its median filtering. The median filter computes the point-wise median inside a window of length l (in seconds), that  includes a same number of previous and next samples. C is a scaling factor whose purpose is to artificially rise the curve slightly above the steady state of the signal. If no parameters are given, the default values are: _l_ = 0.2 s. and _C_ = 1.3
+  * `sig.flux(..., ‘Median’, l, C, ‘Halfwave’)`: The scaled median filtering is designed to be succeeded by the  half-wave rectification process in order to select peaks above the dynamic threshold calculated with the help of the median filter. The resulting signal is called _“detection function”_ (Alonso et al., 2003). To ensure accurate detection, the length l of the median filter must be longer than the average width of the peaks of the detection function.
