@@ -17,7 +17,7 @@ https://miningsuite.googlecode.com/svn/wiki/SigFlux_ex2.png
 
 The peaks in the curve indicate the temporal position of important contrast in the spectrogram.
 
-In MIRtoolbox fluxes are generalized to any kind of frame-decomposed representation, for instance a cepstral flux:
+In MiningSuite fluxes are generalized to any kind of frame-decomposed representation, for instance a cepstral flux:
 
 {{{
 c = mircepstrum(a,'Frame')
@@ -55,7 +55,7 @@ https://miningsuite.googlecode.com/svn/wiki/SigFlux_ex4.png
   * `sig.flux(…,'SubBand')` decomposes first the input waveform using a 10-channel filterbank of octave-scaled second-order elliptical filters, with frequency cut of the first (low-pass) filter at 50 Hz:
 
 {{{
-mirfilterbank(…,'Manual',[-Inf 50*2.^(0:1:8) Inf], 'Order', 2)
+sig.filterbank(…,'Manual',[-Inf 50*2.^(0:1:8) Inf], 'Order', 2)
 }}}
 
 https://miningsuite.googlecode.com/svn/wiki/SigFlux_ex5.png
@@ -63,7 +63,7 @@ https://miningsuite.googlecode.com/svn/wiki/SigFlux_ex5.png
 Alluri and Toiviainen (2010, 2012) introduced this model, using a frame size of 25 ms and half-overlapping, corresponding to the command:
 
 {{{
-mirflux(…,'SubBand','Frame',.025)
+sig.flux(…,'SubBand','Frame',.025)
 }}}
 
 The authors found that fluctuations in the lower channels, around 50 Hz ~ 200 Hz (sub-bands 2 and 3) represent perceived “Fullness”, and those around 1600 ~ 6400 Hz (sub-Bands 7 and 8) represent perceived “Activity”.
