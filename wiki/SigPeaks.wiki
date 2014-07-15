@@ -2,7 +2,7 @@
 
 = sig.peaks: Peak picking =
 
-Peaks (or important local maxima) can be detected automatically from any data _x_ produced in MinigSuite using the command 
+Peaks (or important local maxima) can be detected automatically from any data _x_ produced in MiningSuite using the command 
 
 {{{
 sig.peaks(x)
@@ -25,7 +25,7 @@ https://miningsuite.googlecode.com/svn/wiki/SigPeaks_ex2.png
    * _o_ = `'Amplitude'` orders the peaks from highest to lowest (Default choice.)
    * _o_ = `'Abscissa'` orders the peaks along the abscissa axis.
   * `sig.peaks(…,'Valleys')` detect valleys (local minima) instead of peaks.
-  * `sig.peaks(…,'Contrast',`_cthr_`)`: A given local maximum will be considered as a peak if the difference of amplitude with respect to both the previous and successive local minima (when they exist) is higher than the threshold cthr. This distance is expressed with respect to the total amplitude of the input signal: a distance of 1, for instance, is equivalent to the distance between the maximum and the minimum of the input signal. Default value: _cthr_ = 0.1
+  * `sig.peaks(…,'Contrast',`_cthr_`)`: A given local maximum will be considered as a peak if the difference of amplitude with respect to both the previous and successive local minima (when they exist) is higher than the threshold _cthr_. This distance is expressed with respect to the total amplitude of the input signal: a distance of 1, for instance, is equivalent to the distance between the maximum and the minimum of the input signal. Default value: _cthr_ = 0.1
 
 https://miningsuite.googlecode.com/svn/wiki/SigPeaks_ex3.png
 
@@ -40,9 +40,8 @@ https://miningsuite.googlecode.com/svn/wiki/SigPeaks_ex4.png
 
   * `sig.peaks(…,'Reso',`_r_`)` removes peaks whose abscissa distance to one or several higher peaks is lower than a given threshold. Possible value for the threshold: _r_ = `'SemiTone'`: ratio between the two peak positions equal to 2^(1/12). By default, out of two conflicting peaks, the higher peak remains. If the keyword `'First'` is added, the peak with lower abscissa value remains instead.
   * `sig.peaks(…,'Pref',`_c,std_`)` indicates a region of preference for the peak picking, centered on the abscissa value _c_, with a standard deviation of _std_.
-  * `sig.peaks(…,'Nearest',`_t,s_`)` takes the peak nearest a given abscissa values _t_. The distance is computed either on a linear scale (_s_ = `'Lin'`) or logarithmic scale (_s_ = `'Log'`). When using the `'Nearest'` option, only one peak is extracted.
-
-  The `'Total'` parameter can then be used to indicate the number of peaks to preselect before the `'Nearest'` selection. If `'Total'` was still set to 1, it is then ignored – i.e., forced to Inf – in order to preselect all possible peaks.
+  * `sig.peaks(…,'Nearest',`_t,s_`)` takes the peak nearest a given abscissa values _t_. The distance is computed either on a linear scale (_s_ = `'Lin'`) or logarithmic scale (_s_ = `'Log'`). When using the `'Nearest'` option, only one peak is extracted.<p>
+   The `'Total'` parameter can then be used to indicate the number of peaks to preselect before the `'Nearest'` selection. If `'Total'` was still set to 1, it is then ignored – i.e., forced to Inf – in order to preselect all possible peaks.
   * `sig.peaks(…,'Normalize',`_n_`)` specifies whether frames are normalized globally or individually.
    * _n_ = `'Global'` normalizes across the whole frames (as well as across the whole segments) of each audio file from 0 to  1 (default choice).
    * _n_ = `'Local'`: normalizes each segment, each frame, from 0 to 1 separately.
@@ -57,7 +56,7 @@ https://miningsuite.googlecode.com/svn/wiki/SigPeaks_ex4.png
  }}}
  https://miningsuite.googlecode.com/svn/wiki/SigPeaks_ex6.png
 
-  * ￼sig.peaks(…,'Only'), keeps from the original curve only the data corresponding to the peaks, and zeroes the remaining data.<p>
+  * ￼`sig.peaks(…,'Only')`, keeps from the original curve only the data corresponding to the peaks, and zeroes the remaining data.<p>
  {{{
  sig.peaks(ac,'Only')
  }}}
