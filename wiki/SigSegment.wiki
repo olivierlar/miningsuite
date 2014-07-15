@@ -1,0 +1,61 @@
+#summary sig.segment: Segmentation
+
+= sig.segment: Segmentation =
+
+An audio waveform a can be segmented using the output _p_ of a peak picking from data resulting from a itself, using the following syntax:
+{{{
+sg=sig.segment(a,p)
+}}}
+
+If _p_ is a frame-decomposed scalar curve, the audio waveform _a_ will be segmented at the middle of each frame containing a peak.
+
+  * An audio waveform _a_ can be segmented at the beginning of the pitch events detected using `sig.pitch`:
+{{{
+p=sig.pitch(a, ‘Frame’, ‘Segment’, ...)
+
+sg=sig.segment(a,p)
+}}}
+
+  * An audio waveform _a_ can also be segmented manually, based on temporal position directly given by the user, in the form:
+{{{
+sg=sig.segment(a,v)
+}}}
+where _v_ is an array of numbers corresponding to time positions in seconds.
+
+If _a_ is a set of _N_ audio waveforms, and if _v_ is a matrix of _N_ columns, then each column _i_ indicates the segmentation points for the waveform _i_. If _v_ has only one column, then all waveforms use that same column of segmentation points.
+
+  * A segmented audio waveform _a_ can be further segmented manually, based on temporal position directly given by the user, in the form:
+{{{
+sg=sig.segment(a,v)
+}}}
+
+where _v_ is a cell array, where each cell, corresponding to one audio file, is itself a cell array, where each cell, corresponding to one segment, is an array of numbers corresponding to time positions in seconds.
+
+  * Automated segmentation methods are provided as well, that can be called using the syntax:
+{{{
+sg=sig.segment(a,m)
+}}}
+
+where _m_ is the name of one of the following segmentation methods: `'Novelty'` (default, cf. SigNovelty), ‘HCDF’ (cf. SigHcdf) or ‘RMS’ (cf. SigRms).
+
+`sig.segment` accepts uniquely as main input a `sig.input` objects not frame-decomposed, not channel decomposed, and not already segmented. Alternatively, file name or the `‘Folder’` keyword can be used as well.
+
+The first argument of the `sig.segment` function is the audio file that needs to be segmented. It is possible for instance to compute the segmentation curve using a downsampled version of the signal and to perform the actual segmentation using the original audio file.
+
+== Example ==
+
+{{{
+sg=sig.segment(‘ragtime’,‘Novelty’,‘KernelSize’,32)
+}}}
+
+The output can be sent to any further analysis, for instance:
+{{{
+sp=sig.spectrum(sg,‘dB’)
+}}}
+
+
+== Accessible Output ==
+
+cf. §5.2 for an explanation of the use of the `'get'` method. 
+
+`‘FramePos’`: For segmented data, this returns a cell array where each cell is a matrix containing the starting and ending temporal positions of the frames in each successive segment. When there is no frame decomposition, each cell contains simply the starting and ending time of each successive segment.
