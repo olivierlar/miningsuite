@@ -1,0 +1,41 @@
+#summary sig.sum: Summation of filterbank channels
+
+= sig.sum: Summation of filterbank channels =
+
+Once an audio waveform is decomposed into channels using a filterbank:
+{{{
+f = sig.filterbank(a)
+}}}
+
+An envelope extraction, for instance, can be computed using this very simple syntax:
+{{{
+e = sig.envelope(f)
+}}}
+
+Then the channels can be summed back using the mirsum command:
+{{{
+s = sig.sum(e)
+}}}
+
+The summation can be centered using the command:
+{{{
+s = sig,sum(..., ‘Center’)
+}}}
+
+The summation can be divided by the number of channels using the command:
+{{{
+s = sig.sum(..., ‘Mean’)
+}}}
+
+== Summary of filterbank channels ==
+If we compute for instance an autocorrelation from the envelopes:
+{{{
+ac = sig.autocor(e)
+}}}
+
+Then we can sum all the autocorrelation using exactly the same mirsum command:
+{{{
+s = sig.sum(e)
+}}}
+
+This summation of non-temporal signals across channels is usually called _summary_.
