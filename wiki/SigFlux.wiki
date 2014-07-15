@@ -1,8 +1,10 @@
 #summary sig.flux: Distance between successive frames
 
+= sig.flux: Distance between successive frames =
+
 Given a spectrogram:
 {{{
-s = mirspectrum(a,'Frame')
+s = sig.spectrum(a,'Frame')
 }}}
 
 https://miningsuite.googlecode.com/svn/wiki/SigFlux_ex1.png
@@ -10,7 +12,7 @@ https://miningsuite.googlecode.com/svn/wiki/SigFlux_ex1.png
 we can compute the spectral flux as being the distance between the spectrum of each successive frames.
 
 {{{
-mirflux(s)
+sig.flux(s)
 }}}
 
 https://miningsuite.googlecode.com/svn/wiki/SigFlux_ex2.png
@@ -20,13 +22,13 @@ The peaks in the curve indicate the temporal position of important contrast in t
 In MiningSuite fluxes are generalized to any kind of frame-decomposed representation, for instance a cepstral flux:
 
 {{{
-c = mircepstrum(a,'Frame')
+c = sig.cepstrum(a,'Frame')
 }}}
 
 https://miningsuite.googlecode.com/svn/wiki/SigFlux_ex3.png
 
 {{{
-mirflux(c)
+sig.flux(c)
 }}}
 
 https://miningsuite.googlecode.com/svn/wiki/SigFlux_ex4.png
@@ -49,7 +51,7 @@ https://miningsuite.googlecode.com/svn/wiki/SigFlux_ex4.png
 `sig.flux(…,'Frame',…)` specifies the frame configuration, the default being a frame length of 50 ms and half overlapping. For the syntax, cf. the previous SigFrame vs. 'Frame' section.
 
 == Parameters specification ==
-  * `sig.flux(x,'Dist',`_d_`)` specifies the distance between successive frames, among the list of distances available in pdist (cf. `help pdist`). Default distance: `'Euclidean'.
+  * `sig.flux(x,'Dist',`_d_`)` specifies the distance between successive frames, among the list of distances available in pdist (cf. `help pdist`). Default distance: `'Euclidean'`.
   * `sig.flux(…,'Inc')`: Only positive difference between frames are summed, in order to focus on increase of energy solely. If toggled on, `'Dist'` parameter can only accept `'Euclidean'`, `'Cosine'` or 'City'`.
   * `sig.flux(…,'Complex')`, for spectral flux, combines the use of both energy and phase information (Bello et al, 2004).
   * `sig.flux(…,'SubBand')` decomposes first the input waveform using a 10-channel filterbank of octave-scaled second-order elliptical filters, with frequency cut of the first (low-pass) filter at 50 Hz:
