@@ -18,35 +18,34 @@ Certain classes of temporal data can be saved:
 
 == Frame decomposition == 
 
-`sig.save(...,‘Frame’,…)` performs first a frame decomposition, with by default a frame length of 50 ms and half overlapping. For the specification of other frame configuration using additional parameters, cf. the previous SigFrame vs. 'Frame' section.
+`sig.save(…,'Frame',…)` performs first a frame decomposition, with by default a frame length of 50 ms and half overlapping. For the specification of other frame configuration using additional parameters, cf. the previous SigFrame vs. 'Frame' section.
 
 
 == Options ==
 
   * The name and extension of the saved file can be specified in different ways, as shown in the tables below.
-   * By default, the files are saved in WAV format, using the extension ‘.mir.sav’ in order to lower the risk of overwriting original audio files.
-   * If the string ‘.au’ is indicated as second argument of mirsave, the audio will be saved in AU format.
-   * A string can be indicated as second argument of mirsave.
-    * If the miraudio object to be saved contains only one audio file, the specified string will be used as the name of the new audio file.
-    * If the miraudio object to be saved contains several audio files, the specified string will be concatenated to the original name of each audio file.
-   * If the second argument of mirsave is a string ended by ‘.au’, the file name will follow the convention explained in the previous point, and the files will be saved in AU format.
+   * By default, the files are saved in WAV format, using the extension `'.mir.sav'` in order to lower the risk of overwriting original audio files.
+   * If the string `'.au'` is indicated as second argument of sig.save, the audio will be saved in AU format.
+   * A string can be indicated as second argument of sig.save.
+    * If the `sig.input` object to be saved contains only one audio file, the specified string will be used as the name of the new audio file.
+    * If the `sig.input` object to be saved contains several audio files, the specified string will be concatenated to the original name of each audio file.
+   * If the second argument of sig.save is a string ended by `'.au'`, the file name will follow the convention explained in the previous point, and the files will be saved in AU format.
 
-|| `a = sig.input(‘mysong.au’)` || mysong.au ||
+|| *Diverse ways of saving into an audio file* ||
+|| `a=sig.input('mysong.au')` || mysong.au ||
 || `sig.save(a)` || mysong.mir.wav ||
-|| `mirsave(a,‘new’)` || new.wav ||
-|| `mirsave(a,‘.au’)` || mysong.mir.au ||
-|| `mirsave(a,‘new.au’)` || new.au ||
+|| `sig.save(a,'new')` || new.wav ||
+|| `sig.save(a,'.au')` || mysong.mir.au ||
+|| `sig.save(a,'new.au')` || new.au ||
 
-_Diverse ways of saving into an audio file_
+|| *Diverse ways of saving as a batch of audio files* ||
+|| `a=sig.input('Folder')` || song1.wav || song2.wav || song3.au ||
+|| `sig.save(a)` || song1.mir.wav || song2.mir.wav || song3.mir.wav ||
+|| `sig.save(a,'new')` || song1new.wav || song2new.wav || song3new.wav ||
+|| `sig.save(a,'.au')` || song1.mir.au || song2.mir.au || song3.mir.au ||
+|| `sig.save(a,'new.au')` || song1new.au || song2new.au || song3new.au ||
 
-|| `a = miraudio(‘Folder’)` || song1.wav || song2.wav || song3.au ||
-|| `mirsave(a)` || song1.mir.wav || song2.mir.wav || song3.mir.wav ||
-|| `mirsave(a,‘new’)` || song1new.wav || song2new.wav || song3new.wav ||
-|| `mirsave(a,‘.au’)` || song1.mir.au || song2.mir.au || song3.mir.au ||
-|| `mirsave(a,‘new.au’)` || song1new.au || song2new.au || song3new.au ||
 
-_Diverse ways of saving as a batch of audio files_
+  * `sig.save(a,filename,'SeparateChannels')` save each separate channel in a different file. The channel number is added to the file name, before any file extension.
 
-  * `sig.save(a, filename, ‘SeparateChannels’)` save each separate channel in a different file. The channel number is added to the file name, before any file extension.
-
-  * `sig.save(a, filename, ‘SeparateSegments’)` save each separate segment in a different file. The segment number is added to the file name, before any file extension.
+  * `sig.save(a,filename,'SeparateSegments')` save each separate segment in a different file. The segment number is added to the file name, before any file extension.
