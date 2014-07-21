@@ -11,14 +11,14 @@ The global energy of the signal _x_ can be computed simply by taking the root av
 
   * `sig.input` objects, where the audio waveform can be segmented (using `sig.segment`), decomposed into channels (using `sig.filterbank`), and/or decomposed into frames (using `sig.frame`),
 
-  * file name(s) or the `‘Folder’` keyword,
+  * file name(s) or the `'Folder'` keyword,
 
   * other vectorial objects, such as `sig.spectrum`, are accepted as well, although a warning is displayed in case this particular configuration was unintended, i.e., due to an erroneous script.
 
 The following command orders the computation of the RMS related to a given audio file:
 
 {{{
-sig.rms(‘ragtime’)
+sig.rms('ragtime')
 }}}
 
 which produce the resulting message in the Command Window:
@@ -27,20 +27,24 @@ which produce the resulting message in the Command Window:
 
 == Frame decomposition ==
 
-`sig.rms(..., ‘Frame’, …)` performs first a frame decomposition, with by default a frame length of 50 ms and half overlapping. For the specification of other frame configuration using additional parameters, cf. the previous SigFrame vs. ‘Frame’ section.
+`sig.rms(…,'Frame',…)` performs first a frame decomposition, with by default a frame length of 50 ms and half overlapping. For the specification of other frame configuration using additional parameters, cf. the previous SigFrame vs. 'Frame' section.
 
 For instance:
 
 {{{
-sig.rms(‘ragtime’, ‘Frame’)
+sig.rms('ragtime','Frame')
 }}}
 
 we obtain a temporal evolution of the energy:
 
+https://miningsuite.googlecode.com/svn/wiki/SigRms_ex1.png
+
 We can note that this energy curve is very close to the envelope:
+
+https://miningsuite.googlecode.com/svn/wiki/SigRms_ex2.png
 
 == Options ==
 
-  * `sig.rms(..., 'Median’)` replaces the mean by the median, corresponding to what could be called a “root-median-square”.
+  * `sig.rms(…,'Median')` replaces the mean by the median, corresponding to what could be called a “root-median-square”.
 
-  * `mirrms(..., 'Warning’, 0)` toggles off the warning message, explained above, i.e., when the input is a vectorial data that is not a `sig.input` object.
+  * `sig.rms(…,'Warning',0)` toggles off the warning message, explained above, i.e., when the input is a vectorial data that is not a `sig.input` object.
