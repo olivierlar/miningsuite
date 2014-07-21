@@ -7,6 +7,6 @@
 
 == Options ==
 
-  * `sig.length(..., ‘Unit’, _u_)` specifies the length unit. The possible values are:
-   * _u_ = `‘Second’`: duration in seconds (Default choice).
-   * _u_ = `‘Sample’`: length in number of samples.
+  * `sig.length(…,'Unit',`_u_`)` specifies the length unit. The possible values are:
+   * _u_ = `'Second'`: duration in seconds (Default choice).
+   * _u_ = `'Sample'`: length in number of samples.
