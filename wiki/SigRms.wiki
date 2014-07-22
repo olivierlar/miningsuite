@@ -4,6 +4,7 @@
 
 The global energy of the signal _x_ can be computed simply by taking the root average of the square of the amplitude, also called root-mean-square (RMS):
 
+https://miningsuite.googlecode.com/svn/wiki/SigRms_eq1.png
 
 == Flowchart Interconnections ==
 
