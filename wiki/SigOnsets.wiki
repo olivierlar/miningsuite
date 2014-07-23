@@ -5,7 +5,7 @@
 Another way of determining the tempo is based on first the computation of an onset detection curve, showing the successive bursts of energy corresponding to the successive pulses. A peak picking is automatically performed on the onset detection curve, in order to show the estimated positions of the notes.
 
 {{{
-￼sig.onsets(‘ragtime’)
+￼sig.onsets('ragtime')
 }}}
 
 
@@ -13,157 +13,157 @@ Another way of determining the tempo is based on first the computation of an ons
 
 The onset detection curve can be computed in various ways:
 
-  * mironsets(..., ‘Envelope’) computes an amplitude envelope, using mirenvelope (default choice). The envelope extraction can be specified, as in mirenvelope:<p>
-   * either the ‘Spectro’ option (default):<p>
-    * mironsets(...,‘SpectroFrame’, fl, fh) species the frame length fl (in s.) and the hop factor  fh (as a value between 0 and 1). Default values: fl = .1 s., fh = .1
-    * the frequency reassigment method can be specified: ‘Freq’ (default), ‘Mel’, ‘Bark’ or ‘Cents’ (cf. mirspectrum).
-    * mironsets(..., ‘PowerSpectrum’, 0) turns off the computation of the power of the spectrum.
-    * mironsets(..., ‘Terhardt’) toggles on the ‘Terhardt’ operation (cf. mirspectrum).<p>
-   * or the ‘Filter’ option: Related options in mirenvelope can be specified: ‘FilterType’, ‘Tau’, ‘PreDecim’ with same default value than for mirenvelope.
-    * mironsets(...,‘Filterbank’, N) specifies the number of channels for the filterbank decomposition (mirfilterbank): the default value being N = 40. N = 0 toggles off the filterbank decomposition.
-    * mironsets(...,‘FilterbankType’, t) specifies the type of filterbank decomposition (cf. mirfilterbank).<p>
-   * mironsets(..., ‘Sum’, ‘off’) toggles off the channel summation (mirsum) that is performed by default.<p>
-   * Other available options, related to mirenvelope: ‘HalfwaveCenter’, ‘Log’, ‘MinLog’, ‘Mu’, ‘Power’, ‘Diff’, ‘HalfwaveDiff’, ‘Lambda’, ‘Center’, ‘Smooth’, ‘PostDecim’, ‘Sampling’, ‘UpSample’, all with same default as in mirenvelope. In addition, mirenvelope’s ‘Normal’ option can be controlled as well, with a default set to 1.<p>
-  * mironsets(..., ‘SpectralFlux’) computes a spectral flux. Options related to mirflux can be passed here as well: 
-   * ‘Inc’ (toggled on by default here),
-   * ‘Halfwave’ (toggled on by default here),
-   * ‘Complex’ (toggled off by default as usual),
-   * ‘Median’ (toggled on by default here, with same default parameters than in mirflux).<p>
-  * mironsets(..., ‘Emerge’) is an improved version of the ‘SpectralFlux’ method that is able to detect more notes and in the same time ignore the spectral variation produced by vibrato.
+  * `sig.onsets(…,'Envelope')` computes an amplitude envelope, using `sig.envelope` (default choice). The envelope extraction can be specified, as in `sig.envelope`:<p>
+   * either the `'Spectro'` option (default):<p>
+    * `sig.onsets(…,'SpectroFrame',`_fl_`,`_fh_`)` species the frame length _fl_ (in s.) and the hop factor _fh_ (as a value between 0 and 1). Default values: _fl_ = .1 s., _fh_ = .1
+    * the frequency reassigment method can be specified: `'Freq'` (default), `'Mel'`, `'Bark'` or `'Cents'` (cf. SigSpectrum).
+    * `sig.onsets(…,'PowerSpectrum', 0)` turns off the computation of the power of the spectrum.
+    * `sig.onsets(…,'Terhardt')` toggles on the `'Terhardt'` operation (cf. SigSpectrum).<p>
+   * or the `'Filter'` option: Related options in sig.envelope can be specified: `'FilterType'`, `'Tau'`, `'PreDecim'` with same default value than for `sig.envelope`.
+    * `sig.onsets(…,'Filterbank',`_N_`)` specifies the number of channels for the filterbank decomposition (`sig.filterbank`): the default value being _N_ = 40. _N_ = 0 toggles off the filterbank decomposition.
+    * `sig.onsets(…,'FilterbankType',`_t_`)` specifies the type of filterbank decomposition (cf. SigFilterbank).<p>
+   * `sig.onsets(…,'Sum','off')` toggles off the channel summation (`sig.sum`) that is performed by default.<p>
+   * Other available options, related to sig.envelope: `'HalfwaveCenter'`, `'Log'`, `'MinLog'`, `'Mu'`, `'Power'`, `'Diff'`, `'HalfwaveDiff'`, `'Lambda'`, `'Center'`, `'Smooth'`, `'PostDecim'`, `'Sampling'`, `'UpSample'`, all with same default as in `sig.envelope`. In addition, sig.envelope's `'Normal'` option can be controlled as well, with a default set to 1.<p>
+  * `sig.onsets(…,'SpectralFlux')` computes a spectral flux. Options related to `sig.flux` can be passed here as well: 
+   * `'Inc'` (toggled on by default here),
+   * `'Halfwave'` (toggled on by default here),
+   * `'Complex'` (toggled off by default as usual),
+   * `'Median'` (toggled on by default here, with same default parameters as in `sig.flux`).<p>
+  * `sig.onsets(…,'Emerge')` is an improved version of the `'SpectralFlux'` method that is able to detect more notes and in the same time ignore the spectral variation produced by vibrato.
 
-When the ‘Emerge’ method is used for academic research, please cite the following publication:
+When the `'Emerge'` method is used for academic research, please cite the following publication:
 
 || Lartillot, O., Cereghetti, D., Eliard, K., Trost, W. J., Rappaz, M.-A., Grandjean, D., "Estimating tempo and metrical features by tracking the whole metrical hierarchy", 3rd International Conference on Music & Emotion, Jyväskylä, 2013.||
 
 
-  * mironsets(..., ‘Pitch’) computes a frame-decomposed autocorrelation function (mirautocor), of same default characteristics than those returned by mirpitch – with however a range of frequencies set by the following options:
-   * ‘Min’ (set by default to 30 Hz),
-   * ‘Max’ (set by default to 1000 Hz),
-  and subsequently computes the novelty curve of the resulting similarity matrix. Option related to mirnovelty can be passed here as well:
-    * ‘KernelSize’ (set to 32 samples by default).
-  * mironsets(..., ‘Novelty’) computes a power-spectrogram (mirspectrum) in dB with maximum frequency 1000 Hz, minimal frequency resolution 3 Hz and 50 ms frame with 10 ms hop factor, and subsequently computes the novelty curve of the resulting similarity matrix, using ‘Euclidean’ distance and the ‘oneminus’ similarity measure. Option related to mirnovelty can be passed here as well:
-   * ‘KernelSize’ (set to 64 samples by default).
-  Besides, the ‘Diff’ option can also be used when using the ‘Novelty’ method.
+  * `sig.onsets(…,'Pitch')` computes a frame-decomposed autocorrelation function (`sig.autocor`), of same default characteristics than those returned by `sig.pitch` – with however a range of frequencies set by the following options:
+   * `'Min'` (set by default to 30 Hz),
+   * `'Max'` (set by default to 1000 Hz),
+  and subsequently computes the novelty curve of the resulting similarity matrix. Option related to `sig.novelty` can be passed here as well:
+    * `'KernelSize'` (set to 32 samples by default).
+  * `sig.onsets(…,'Novelty')` computes a power-spectrogram (`sig.spectrum`) in dB with maximum frequency 1000 Hz, minimal frequency resolution 3 Hz and 50 ms frame with 10 ms hop factor, and subsequently computes the novelty curve of the resulting similarity matrix, using `'Euclidean'` distance and the 'oneminus' similarity measure. Option related to `sig.novelty` can be passed here as well:
+   * `'KernelSize'` (set to 64 samples by default).
+  Besides, the `'Diff'` option can also be used when using the `'Novelty'` method.
 
-Whatever the chosen method, the onset curve is finally converted into an envelope (using mirenvelope), and further operations are performed in this order:
-  * ‘Center’ (performed if ‘Center’ was specified while calling mironset).
-  * ‘Normal’ (always performed).
+Whatever the chosen method, the onset curve is finally converted into an envelope (using `sig.envelope`), and further operations are performed in this order:
+  * `'Center'` (performed if `'Center'` was specified while calling `sig.onset`).
+  * `'Normal'` (always performed).
 
-mironsets accepts as input data type either:
+`sig.onsets` accepts as input data type either:
 
-  * envelope curves (resulting from mirenvelope),
+  * envelope curves (resulting from `sig.envelope`),
   * any scalar object, in particular:
-   * fluxes (resulting from mirflux)
-   * novelty curves (resulting from mirnovelty)
-  * similatrix matrices (resulting from mirsimatrix): its novelty is automatically computed, with a ‘KernelSize’ of 32 samples.
-  * miraudio objects, where the audio waveform can be:
-   * segmented (using mirsegment), 
-   * decomposed into channels (using mirfilterbank),
-   * decomposed into frames or not (using mirframe):
+   * fluxes (resulting from `sig.flux`)
+   * novelty curves (resulting from `sig.novelty`)
+  * similatrix matrices (resulting from `sig.simatrix`): its novelty is automatically computed, with a `'KernelSize'` of 32 samples.
+  * `sig.input` objects, where the audio waveform can be:
+   * segmented (using `sig.segment`), 
+   * decomposed into channels (using `sig.filterbank`),
+   * decomposed into frames or not (using `sig.frame`):
     * if the audio waveform is decomposed into frames, the onset curve will be based on the spectral flux;
     * if the audio waveform is not decomposed into frames, the default onset curve will be based on the envelope;
-  * file name or the ‘Folder’ keyword: same behavior than for miraudio objects,
-  * any other object: it is decomposed into frames (if not already decomposed) using the parameters specified by the ‘Frame’ option; the flux will be automatically computed by default, or the novelty (if the ‘Pitch’ option has been chosen).
+  * file name or the `'Folder'` keyword: same behavior than for `sig.input` objects,
+  * any other object: it is decomposed into frames (if not already decomposed) using the parameters specified by the `'Frame'` option; the flux will be automatically computed by default, or the novelty (if the `'Pitch'` option has been chosen).
 
 == Example ==
 
-Differentiating the envelope using the ‘Diff’ option highlights the difference of energy. By subsequently applying a halfwave rectification of the result (‘HalfwaveDiff’), bursts of energy are emphasized:
+Differentiating the envelope using the `'Diff'` option highlights the difference of energy. By subsequently applying a halfwave rectification of the result (`'HalfwaveDiff'`), bursts of energy are emphasized:
 For the previous example (cf. figure above) we obtain now for the differentiated envelopes the following representation:
 
 {{{
-o = mironsets(‘ragtime', ‘Diff', ‘Sum', ‘no’, ‘Filterbank', 5, 'Halfwavediff', 'Detect', 'no')
+o = sig.onsets('ragtime','Diff','Sum','no','Filterbank',5,'Halfwavediff','Detect','no')
 }}}
 
 And once the enveloped are summed:
 {{{
-￼mirsum(o)
+￼sig.sum(o)
 }}}
 
 === Onset detection ===
-  * mironsets(..., 'Detect’, d) specifies options related to the peak picking from the onset detection curve:
-   * d = ‘Peaks’ (default choice): local maxima are chosen as onset positions;
-   * d = ‘Valleys’: local minima are chosen as onset positions;
-   * d = 0, or ‘no’, or ‘off’: no peak picking is performed.
+  * `sig.onsets(…,'Detect',`_d_`)` specifies options related to the peak picking from the onset detection curve:
+   * _d_ = `'Peaks'` (default choice): local maxima are chosen as onset positions;
+   * _d_ = `'Valleys'`: local minima are chosen as onset positions;
+   * _d_ = 0, or `'no'`, or `'off'`: no peak picking is performed.
 
-Options associated to the mirpeaks function can be specified as well. In particular:
-  * mironsets(..., ‘Contrast’, c) with default value here c = .01, 
-  * mironsets(..., ‘Threshold’, t) with default value here t = 0.
-  * mironsets(..., ‘Single’) selects only the highest peak.
+Options associated to the `sig.peaks` function can be specified as well. In particular:
+  * `sig.onsets(…,'Contrast',`_c_`)` with default value here _c_ = .01, 
+  * `sig.onsets(…,'Threshold',`_t_`)` with default value here _t_ = 0.
+  * `sig.onsets(…,'Single')` selects only the highest peak.
 
 === Attack and release ===
-The maxima of the onset detection curve show the positions of the note onsets, but more precisely the end of the attack phase. The ‘Attack’ and ‘Release’ options estimate the beginning of the attack phase and the end of the release phase of each note by searching for the local minimum before and after each peak.
+The maxima of the onset detection curve show the positions of the note onsets, but more precisely the end of the attack phase. The `'Attack'` and `'Release'` options estimate the beginning of the attack phase and the end of the release phase of each note by searching for the local minimum before and after each peak.
 
-  * mironsets(..., 'Attack’) (or 'Attacks’) detects attack phases.
+  * `sig.onsets(…,'Attack')` (or `'Attacks'`) detects attack phases.
 {{{
-mironsets(‘ragtime’, ‘attacks’)
+sig.onsets('ragtime','attacks')
 }}}
 
-  * mironsets(..., 'Release’, r) (or 'Releases’) detects release phases.
+  * `sig.onsets(…,'Release',`_r_`)` (or `'Releases'`) detects release phases.
 
 {{{
-￼mironsets(‘ragtime’, ‘releases’)
+￼sig.onsets('ragtime','releases')
 }}}
 
-If the 'Attack' or 'Release' method discovers that some attack/release phases are overlapped, the redundant onset is filtered out. If for instance, two successive peaks have either the same start attack time, or the same end release time, only one peak is kept.
+If the `'Attack'` or `'Release'` method discovers that some attack/release phases are overlapped, the redundant onset is filtered out. If for instance, two successive peaks have either the same start attack time, or the same end release time, only one peak is kept.
 
 === Segmentation ===
 
 The onset points can be used for segmentation of the initial waveform:
 {{{
-o = mironsets(‘ragtime’); mirsegment(‘ragtime’, o)
+o=sig.onsets('ragtime'); sig.segment('ragtime',o)
 }}}
 
 Alternatively, the beginning of the attack phases can be used for the segmentation:
 {{{
-o = mironsets(‘ragtime’, ‘Attacks’); mirsegment(‘ragtime’, o)
+o=sig.onsets('ragtime','Attacks');sig.segment('ragtime',o)
 }}}
 
 === Frame decomposition ===
 
-The onset detection curve can be further decomposed into frames if the ‘Frame’ option has been specified, with default frame length 3 seconds and hop factor of 10% (0.3 second).
+The onset detection curve can be further decomposed into frames if the `'Frame'` option has been specified, with default frame length 3 seconds and hop factor of 10% (0.3 second).
 
 
 === Preselected Model ===
 
 Complete (or nearly complete) models are available:
 
-  * mironsets(..., ‘Scheirer’) follows the model proposed in (Scheirer, 1998). Il corresponds to
+  * `sig.onsets(…,'Scheirer')` follows the model proposed in (Scheirer, 1998). It corresponds to:
 {{{
-mironsets(..., ‘FilterbankType’, ‘Scheirer’, ‘FilterType’, ‘HalfHann’, ‘Sampling’, 200, ‘HalfwaveDiff’, ‘Sum’, 0, ‘Detect’, 0)
+sig.onsets(…,'FilterbankType','Scheirer','FilterType','HalfHann','Sampling',200,'HalfwaveDiff','Sum',0,'Detect',0)
 }}}
 
-mirenvelope(..., ‘Klapuri99) follows the model proposed in (Klapuri., 1999). Il corresponds to
+sig.envelope(…,'Klapuri99) follows the model proposed in (Klapuri., 1999). It corresponds to:
 {{{
-o = mironsets(..., ‘FilterbankType’, ‘Klapuri’, ‘FilterType’, ‘HalfHann’, ‘PreDecim’, 180, ‘Sum’, 0, ‘PostDecim’, 0);
+o=sig.onsets(…,'FilterbankType','Klapuri','FilterType','HalfHann','PreDecim',180,'Sum',0,'PostDecim',0);
 
-o2= mirenvelope(o, ‘HalfwaveDiff'); % absolute distance function D
+o2=sig.envelope(o,'HalfwaveDiff'); % absolute distance function D
 
-o= mirenvelope(o, ‘Mu’, ‘HalfwaveDiff'); % relative distance function W
+o=sig.envelope(o,'Mu','HalfwaveDiff'); % relative distance function W
 
-p = mirpeaks(o, ‘Contrast’, .2, ‘Chrono’);
+p=sig.peaks(o,'Contrast',.2,'Chrono');
 
-p2 = mirpeaks(o2, ‘ScanForward’, p, ‘Chrono’);
+p2=sig.peaks(o2,'ScanForward',p,'Chrono');
 
-o = combinepeaks(p, p2, .05);
+o=combinepeaks(p,p2,.05);
 }}}
 
-where combinepeaks is a dedicated function that creates a curve made of burst at position of peaks p and with amplitude related to peaks p2.
+where combinepeaks is a dedicated function that creates a curve made of burst at position of peaks _p_ and with amplitude related to peaks _p2_.
 
 {{{
-o = mirsum(o, ‘Weights’, fB);
+o=sig.sum(o,'Weights',fB);
 }}}
 
 The intensity is multiplied by the band center frequency fB.
 
 {{{
-o = mirenvelope(o, ‘Smooth’, 12);
+o=sig.envelope(o,'Smooth',12);
 }}}
 
 == Accessible Output ==
 
 cf. §5.2 for an explanation of the use of the get method. Specific fields:
 
-  * ‘AttackPos’: the abscissae position of the starting attack phases, in sample index,
-  * ‘AttackPosUnit’: the abscissae position of the starting attack phases, in the default abscissae representation,
-  * ‘ReleasePos’: the abscissae position of the ending release phases, in sample index,
-  * ‘ReleasePosUnit’: the abscissae position of the ending release phases, in the default abscissae representation.
+  * `'AttackPos'`: the abscissae position of the starting attack phases, in sample index,
+  * `'AttackPosUnit'`: the abscissae position of the starting attack phases, in the default abscissae representation,
+  * `'ReleasePos'`: the abscissae position of the ending release phases, in sample index,
+  * `'ReleasePosUnit'`: the abscissae position of the ending release phases, in the default abscissae representation.
