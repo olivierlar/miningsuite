@@ -11,8 +11,8 @@ The implementation proposed in MiningSuite includes a subset of the series of op
 
   * The Terhardt outer ear modeling is computed.
 
-  * A multi-band redistribution of the energy is performed along the ‘Bark’ bands decomposition. 
-   * `sig.fluctuation(...,  ‘Mel’)`  performs a decomposition into 40 Mel bands instead of 20 Bark bands. 
+  * A multi-band redistribution of the energy is performed along the 'Bark' bands decomposition. 
+   * `sig.fluctuation(…,'Mel')`  performs a decomposition into 40 Mel bands instead of 20 Bark bands. 
 
   * Masking effects are estimated on the multi-band distribution.
 
@@ -20,47 +20,47 @@ The implementation proposed in MiningSuite includes a subset of the series of op
 
 This is summarized in one MiningSuite command line:
 {{{
-s = mirspectrum(..., ‘Frame’, .023, ‘s’, hr, ‘Hz’,...
-   ‘Power’, ‘Terhardt’, b, ‘Mask’, ‘dB’)
+s=sig.spectrum(…,'Frame',.023,'s',hr,'Hz',…
+  'Power','Terhardt',b,'Mask','dB')
 }}}
 
-where _b_ is either ‘Bark’ or ‘Mel’.
+where _b_ is either 'Bark' or 'Mel'.
 
 
 2. Then a FFT is computed on each band:
-  * Frequencies range from 0 to m Hz, where m is set by default to 10 Hz can be controlled by a ‘Max’ option: mirfluctuation(...,  ‘Max’, m)
+  * Frequencies range from 0 to m Hz, where m is set by default to 10 Hz can be controlled by a `'Max'` option:<br>`sig.fluctuation(…,'Max',`_m_`)`
 
-  * The frequency resolution of the FFT mr is set by default to .01 Hz and can also be controlled by a ‘MinRes’ option: mirfluctuation(...,  ‘MinRes’, mr)
+  * The frequency resolution of the FFT mr is set by default to .01 Hz and can also be controlled by a `'MinRes'` option:<br>`sig.fluctuation(…,'MinRes',`_mr_`)`
 
   * The amplitude modulation coefficients are weighted based on the psychoacoustic model of the fluctuation strength (Fastl, 1982).
 
-This is summarized in one MIRtoolbox command line:
+This is summarized in one MiningSuite command line:
 {{{
-f = mirspectrum(s, ‘AlongBands’, ‘Max’, m, ‘MinRes’, mr, ‘Window’, 0, ...
-‘Resonance’, ‘Fluctuation’, ‘NormalLength’)
+f = sig.spectrum(s,'AlongBands','Max',m,'MinRes',mr,'Window',0,…
+  'Resonance','Fluctuation','NormalLength')
 }}}
 
 We can see in the matrix the rhythmic periodicities for each different Bark band.
 
-3. `mirfluctuation(..., ‘Summary’)` subsequently sums the resulting spectrum across bands, leading to a spectrum summary, showing the global repartition of rhythmic periodicities:
+3. `sig.fluctuation(…,'Summary')` subsequently sums the resulting spectrum across bands, leading to a spectrum summary, showing the global repartition of rhythmic periodicities:
 {{{
-mirsum(f)
+sig.sum(f)
 }}}
 
 
 == Flowchart Interconnections ==
 
-  * mirfluctuation accepts as input data type either:
+  * `sig.fluctuation` accepts as input data type either:
 
-  * mirspectrum frame-decomposed objects (i.e., spectrograms),
+  * `sig.spectrum` frame-decomposed objects (i.e., spectrograms),
 
-  * miraudio objects, where the audio waveform can be segmented (using mirsegment). The audio waveform is decomposed into frames if it was not decomposed yet.
+  * `sig.input` objects, where the audio waveform can be segmented (using `sig.segment`). The audio waveform is decomposed into frames if it was not decomposed yet.
 
-  * file name or the ‘Folder’ keyword: same behavior than for miraudio objects.
+  * file name(s) or the `'Folder'` keyword: same behavior than for `sig.input` objects.
 
 
 == Frame decomposition ==
 
-  * mirfluctuation(..., ‘InnerFrame’, l, r) specifies the spectrogram frame length l (in second), and, optionally, the frame rate r (in Hertz), with by default a frame length of 23 ms and a frame rate of 80 Hz.
+  * `sig.fluctuation(…,'InnerFrame',`_l_`,`_r_`)` specifies the spectrogram frame length _l_ (in second), and, optionally, the frame rate _r_ (in Hertz), with by default a frame length of 23 ms and a frame rate of 80 Hz.
 
-  * mirfluctuation(..., ‘Frame’, l, h) computes fluctuation using a window moving along the spectrogram, whose length l (in second) and frame rate r (in Hertz) can be specified as well, with by default a frame length of 1 s and a frame rate of 10 Hz.
+  * `sig.fluctuation(…,'Frame',`_l_`,`_h_`)` computes fluctuation using a window moving along the spectrogram, whose length _l_ (in second) and frame rate _r_ (in Hertz) can be specified as well, with by default a frame length of 1 s and a frame rate of 10 Hz.
