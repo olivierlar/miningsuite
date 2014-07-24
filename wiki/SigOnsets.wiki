@@ -4,6 +4,8 @@
 
 Another way of determining the tempo is based on first the computation of an onset detection curve, showing the successive bursts of energy corresponding to the successive pulses. A peak picking is automatically performed on the onset detection curve, in order to show the estimated positions of the notes.
 
+https://miningsuite.googlecode.com/svn/wiki/SigOnsets_ex1.png
+
 {{{
 ￼sig.onsets('ragtime')
 }}}
@@ -70,11 +72,16 @@ Whatever the chosen method, the onset curve is finally converted into an envelop
 Differentiating the envelope using the `'Diff'` option highlights the difference of energy. By subsequently applying a halfwave rectification of the result (`'HalfwaveDiff'`), bursts of energy are emphasized:
 For the previous example (cf. figure above) we obtain now for the differentiated envelopes the following representation:
 
+https://miningsuite.googlecode.com/svn/wiki/SigOnsets_ex2.png
+
 {{{
 o = sig.onsets('ragtime','Diff','Sum','no','Filterbank',5,'Halfwavediff','Detect','no')
 }}}
 
 And once the enveloped are summed:
+
+https://miningsuite.googlecode.com/svn/wiki/SigOnsets_ex3.png
+
 {{{
 ￼sig.sum(o)
 }}}
@@ -94,11 +101,16 @@ Options associated to the `sig.peaks` function can be specified as well. In part
 The maxima of the onset detection curve show the positions of the note onsets, but more precisely the end of the attack phase. The `'Attack'` and `'Release'` options estimate the beginning of the attack phase and the end of the release phase of each note by searching for the local minimum before and after each peak.
 
   * `sig.onsets(…,'Attack')` (or `'Attacks'`) detects attack phases.
+
+https://miningsuite.googlecode.com/svn/wiki/SigOnsets_ex4.png
+
 {{{
 sig.onsets('ragtime','attacks')
 }}}
 
   * `sig.onsets(…,'Release',`_r_`)` (or `'Releases'`) detects release phases.
+  
+https://miningsuite.googlecode.com/svn/wiki/SigOnsets_ex5.png  
 
 {{{
 ￼sig.onsets('ragtime','releases')
@@ -109,11 +121,17 @@ If the `'Attack'` or `'Release'` method discovers that some attack/release phase
 === Segmentation ===
 
 The onset points can be used for segmentation of the initial waveform:
+
+https://miningsuite.googlecode.com/svn/wiki/SigOnsets_ex6.png
+
 {{{
 o=sig.onsets('ragtime'); sig.segment('ragtime',o)
 }}}
 
 Alternatively, the beginning of the attack phases can be used for the segmentation:
+
+https://miningsuite.googlecode.com/svn/wiki/SigOnsets_ex7.png
+
 {{{
 o=sig.onsets('ragtime','Attacks');sig.segment('ragtime',o)
 }}}
