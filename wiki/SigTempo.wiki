@@ -69,6 +69,8 @@ The tempo estimation related to the ragtime example
 }}}
 leads to a tempo t = 129.1832 bpm and to the following autocorrelation curve ac:
 
+https://miningsuite.googlecode.com/svn/wiki/SigTempo_ex1.png
+
 The frame-decomposed tempo estimation related to the czardas example
 {{{
 [t ac] = mirtempo(‘czardas’, ‘Frame’)
@@ -76,9 +78,17 @@ The frame-decomposed tempo estimation related to the czardas example
 
 leads to the following tempo curve t:
 
+https://miningsuite.googlecode.com/svn/wiki/SigTempo_ex2.png
+
 and the following autocorrelation frame decomposition ac:
 
+https://miningsuite.googlecode.com/svn/wiki/SigTempo_ex3.png
+
 ￼Below are the results of the analysis of a more challenging example: the first seconds of the first movement of a performance of J.S. Bach’s  Brandenburg concert No.2 in F Major, BWV 1047:
+
+https://miningsuite.googlecode.com/svn/wiki/SigTempo_ex4.png
+
+https://miningsuite.googlecode.com/svn/wiki/SigTempo_ex5.png
 
 ￼￼The classical method generates a tempo curve with a lot of shifts from one metrical level to another.
 
@@ -100,6 +110,10 @@ mirtempo(..., ‘Metre’) can return several outputs:
 ## the mirmetre representation.
 
 Below are the results of the analysis of the same excerpt of J.S. Bach’s  Brandenburg concert No.2 in F Major, BWV 1047, this time using the ‘Metre’ option:
+
+https://miningsuite.googlecode.com/svn/wiki/SigTempo_ex6.png
+
+https://miningsuite.googlecode.com/svn/wiki/SigTempo_ex7.png
 
 The metrical structure built using the ‘Metre’ strategy enables to find coherent metrical levels leading to a continuous tempo curve.
 
