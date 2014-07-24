@@ -9,113 +9,117 @@ The classical paradigm for tempo estimation is based on detecting periodicities 
 
 Tempo estimation is carried out in several steps:
 
-  * The onset detection curve computed in mironsets can be controlled using the following options:  
-   * ‘Envelope’ (default) and ‘DiffEnvelope’:
-    * with the ‘Method’ set by default to ‘Filter’:
-     * with ‘FilterType’ option with same default,
-     * with ‘Filterbank’ option set to 10 by default,
-     * with ‘FilterbankType’ option with same default,
-    * ‘Method’ can be set to ‘Spectro’ as well, and the 'Freq','Mel','Bark','Cents' selection can be specified, with same default.
-    * Besides ‘Method’: ‘HalfwaveCenter’, ‘HalfwaveDiff’, ‘Lambda’, ‘Center’, ‘Smooth’, ‘Sampling’, ‘Log’ and ‘Mu’, all with same default and ‘Diff’ set to ‘On’ by default.
-   * ‘SpectralFlux’: with ‘Complex’, ‘Inc’, ‘Median’ and ‘Halfwave’ with same default.
-   *  ‘Pitch’ and ‘Novelty’.
+  * The onset detection curve computed in `sig.onsets` can be controlled using the following options:<p>
+   * `'Envelope'` (default) and `'DiffEnvelope'`:
+    * with the `'Method'` set by default to `'Filter'`:
+     * with `'FilterType'` option with same default,
+     * with `'Filterbank'` option set to 10 by default,
+     * with `'FilterbankType'` option with same default,
+    * `'Method'` can be set to `'Spectro'` as well, and the `'Freq'`,`'Mel'`,`'Bark'`,`'Cents'` selection can be specified, with same default.
+    * Besides `'Method'`: `'HalfwaveCenter'`, `'HalfwaveDiff'`, `'Lambda'`, `'Center'`, `'Smooth'`, `'Sampling'`, `'Log'` and `'Mu'`, all with same default and `'Diff'` set to `'On'` by default.<p>
+   * `'SpectralFlux'`: with `'Complex'`, `'Inc'`, `'Median'` and `'Halfwave'` with same default.<p>
+   *  `'Pitch'` and `'Novelty'`.
 
-Other options related to mironsets can be specified:
-   * ‘Filterbank’, with same default value than for mironsets,
-   * mironsets(..., 'Sum’, w) specifies when to sum the channels. Possible values:
-    * w = 'Before’: sum before the autocorrelation or spectrum computation.
-    * w = 'After’: autocorrelation or spectrum computed for each band, and summed into a "summary".
-    * w = 0: tempo estimated for each band separately, with no channel recombination.
+Other options related to `sig.onsets` can be specified:
+   * `'Filterbank'`, with same default value as for `sig.onsets`,<p>
+   * `sig.onsets(…,'Sum',`_w_`)` specifies when to sum the channels. Possible values:
+    * _w_ = `'Before'`: sum before the autocorrelation or spectrum computation.
+    * _w_ = `'After'`: autocorrelation or spectrum computed for each band, and summed into a "summary".
+    * _w_ = `0`: tempo estimated for each band separately, with no channel recombination.
 
-  * mirtempo(..., ‘Frame’, ...) optionally performs a frame decomposition of the onset curve, with by default a frame length of 3 s and a hop factor of 10% (0.3 s). For the specification of other frame configuration using additional parameters, cf. the previous mirframe vs. ‘Frame’ section.
-  * Periodicities are detected on the onset detection curve based on several possible strategies:  
-   * mirtempo(..., ‘Autocor’) computes an autocorrelation function of the onset detection curve, using mirautocor (default choice). Options related to mirautocor can be specified:
-    * 'Enhanced’ (toggled on by default^2^ here),
-    * 'Resonance’ (set by default to ‘ToiviainenSnyder’),
-    * ‘NormalWindow’ (same default value).
-   * mirtempo(..., ‘Spectrum’) computes a spectral decomposition of the onset detection curve, using mirspectrum. Options related to mirspectrum can be passed here as well: 
-    * 'ZeroPad’ (set by default here to 10 000 samples),
-    * 'Prod’ (same default, when toggled on, as for mirspectrum),
-    * 'Resonance’ either ‘ToiviainenSnyder’ (default value) or 0, ‘off’, or ‘no’.
-   * mirtempo(..., ‘Autocor’, ‘Spectrum’) combines both strategies: the autocorrelation function is translated into the frequency domain in order to be compared to the spectrum curve, and the two curves are subsequently multiplied.
-  * A peak picking is applied to the autocorrelation function or to the spectrum representation. The parameters of the peak picking can be tuned:
-   * mirtempo(..., ‘Total’, m) selects not only the best tempo, but the m best tempos.
-   * mirtempo(..., ‘Min’, mi) indicates the lowest tempo taken into consideration, expressed in bpm. Default value: 40 bpm.
-   * mirtempo(..., ‘Max’, ma) indicates the highest tempo taken into consideration, expressed in bpm. Default value: 200 bpm.
-   * mirtempo(..., ‘Track’, t) tracks peaks along time, in order to obtain a stabilized tempo curve and to limit therefore switches between alternative pulsations. Default value when option toggled on: t = 0.1 s. When ‘Track’ is toggled on, ‘Enhanced’ is forced to off.
-   * mirtempo(..., ‘Contrast’, c) specifies the contrast factor for the peak picking. Default value: c = 0.1
-   * mirtempo(..., ‘Nearest’, n) chooses the peak closest to n (in s.). Default value when option toggled on: n = 0.5 s.
+  * `sig.tempo(…,'Frame',…)` optionally performs a frame decomposition of the onset curve, with by default a frame length of 3 s and a hop factor of 10% (0.3 s). For the specification of other frame configuration using additional parameters, cf. the previous SigFrame vs. 'Frame' section.<p>
+  * Periodicities are detected on the onset detection curve based on several possible strategies:<p>
+   * `sig.tempo(…,'Autocor')` computes an autocorrelation function of the onset detection curve, using `sig.autocor` (default choice). Options related to `sig.autocor` can be specified:
+    * `'Enhanced'` (toggled on by default^*^ here),
+    * `'Resonance'` (set by default to `'ToiviainenSnyder'`),
+    * `'NormalWindow'` (same default value).<p>
+   * `sig.tempo(…,'Spectrum')` computes a spectral decomposition of the onset detection curve, using `sig.spectrum`. Options related to `sig.spectrum` can be passed here as well: 
+    * `'ZeroPad'` (set by default here to 10 000 samples),
+    * `'Prod'` (same default, when toggled on, as for `sig.spectrum`),
+    * `'Resonance'` either `'ToiviainenSnyder'` (default value) or `0`, `'off'`, or `'no'`.<p>
+   * `sig.tempo(…,'Autocor','Spectrum')` combines both strategies: the autocorrelation function is translated into the frequency domain in order to be compared to the spectrum curve, and the two curves are subsequently multiplied.<p>
+  * A peak picking is applied to the autocorrelation function or to the spectrum representation. The parameters of the peak picking can be tuned:<p>
+   * `sig.tempo(…,'Total',`_m_`)` selects not only the best tempo, but the _m_ best tempos.<p>
+   * `sig.tempo(…,'Min',`_mi_`)` indicates the lowest tempo taken into consideration, expressed in bpm. Default value: 40 bpm.<p>
+   * `sig.tempo(…,'Max',`_ma_`)` indicates the highest tempo taken into consideration, expressed in bpm. Default value: 200 bpm.<p>
+   * `sig.tempo(…,'Track',`_t_`)` tracks peaks along time, in order to obtain a stabilized tempo curve and to limit therefore switches between alternative pulsations. Default value when option toggled on: _t_ = 0.1 s. When `'Track'` is toggled on, `'Enhanced'` is forced to off.<p>
+   * `sig.tempo(…,'Contrast',`_c_`)` specifies the contrast factor for the peak picking. Default value: _c_ = 0.1<p>
+   * `sig.tempo(…,'Nearest',`_n_`)` chooses the peak closest to _n_ (in s.). Default value when option toggled on: _n_ = 0.5 s.<p>
 
-  ^2^ except when ‘Track’ option is used, as explained.
+  ^*^ except when `'Track'` option is used, as explained above.
 
-When ‘Track’ is used for academic research, please cite the following publication:
+When `'Track'` is used for academic research, please cite the following publication:
 ||Olivier Lartillot, “mirtempo: Tempo estimation through advanced frame-by-frame peaks tracking”, Music Information Retrieval Evaluation eXchange (MIREX 2010).||
 
 
 
-mirtempo accepts as input data type either:
-  * mirautocor objects,
-  * mirspectrum objects,
-  * onset detection curve (resulting from mironsets), frame-decomposed or not, channel-decomposed or not,
-  * and all the input data accepted by mironsets.
-
-mirtempo can return several outputs:
-  # the tempo itself (or set of tempi) and
-  ## the mirspectrum or  mirautocor data, where is highlighted the (set of) peak(s) corresponding to the estimated tempo (or set of tempi).
-
+<br>
+`sig.tempo` accepts as input data type either:
+  * `sig.autocor` objects,<p>
+  * `sig.spectrum` objects,<p>
+  * onset detection curve (resulting from `sig.onsets`), frame-decomposed or not, channel-decomposed or not,<p>
+  * and all the input data accepted by `sig.onsets`.<p>
+<br>
+`sig.tempo` can return several outputs:
+  # the tempo itself (or set of tempi) and<p>
+  ## the `sig.spectrum` or `sig.autocor` data, where is highlighted the (set of) peak(s) corresponding to the estimated tempo (or set of tempi).
+<br>
 The tempo estimation related to the ragtime example 
 {{{
-[t ac] = mirtempo(‘ragtime’)
+[t ac]=sig.tempo('ragtime')
 }}}
-leads to a tempo t = 129.1832 bpm and to the following autocorrelation curve ac:
+leads to a tempo _t_ = 129.1832 bpm and to the following autocorrelation curve _ac_:
 
 https://miningsuite.googlecode.com/svn/wiki/SigTempo_ex1.png
 
 The frame-decomposed tempo estimation related to the czardas example
 {{{
-[t ac] = mirtempo(‘czardas’, ‘Frame’)
+[t ac]=sig.tempo('czardas','Frame')
 }}}
 
-leads to the following tempo curve t:
+leads to the following tempo curve _t_:
 
 https://miningsuite.googlecode.com/svn/wiki/SigTempo_ex2.png
 
-and the following autocorrelation frame decomposition ac:
+and the following autocorrelation frame decomposition _ac_:
 
 https://miningsuite.googlecode.com/svn/wiki/SigTempo_ex3.png
 
-￼Below are the results of the analysis of a more challenging example: the first seconds of the first movement of a performance of J.S. Bach’s  Brandenburg concert No.2 in F Major, BWV 1047:
+￼Below are the results of the analysis of a more challenging example: the first seconds of the first movement of a performance of J.S. Bach's  Brandenburg concert No.2 in F Major, BWV 1047:
 
 https://miningsuite.googlecode.com/svn/wiki/SigTempo_ex4.png
 
 https://miningsuite.googlecode.com/svn/wiki/SigTempo_ex5.png
 
 ￼￼The classical method generates a tempo curve with a lot of shifts from one metrical level to another.
+<br><br>
 
 == 2. Metre-Based Version ==
 
-mirtempo(..., ‘Metre’) tracks tempo by building a hierarchical metrical structure (using mirmetre). This enables to find coherent metrical levels leading to a continuous tempo curve.
+`sig.tempo(…,'Metre')` tracks tempo by building a hierarchical metrical structure (using `sig.metre`). This enables to find coherent metrical levels leading to a continuous tempo curve.
 
-When the ‘Metre’ option is used for academic research, please cite the following publication:
+When the `'Metre'` option is used for academic research, please cite the following publication:
 
 ||Lartillot, O., Cereghetti, D., Eliard, K., Trost, W. J., Rappaz, M.-A., Grandjean, D., "Estimating tempo and metrical features by tracking the whole metrical hierarchy", 3rd International Conference on Music & Emotion, Jyväskylä, 2013.||
 
-mirtempo(..., ‘Metre’) accepts as input data type either:
-  * mirautocor objects,
-  * onset detection curve (resulting from mironsets), frame-decomposed or not, channel-decomposed or not,
-  * and all the input data accepted by mironsets.
 
-mirtempo(..., ‘Metre’) can return several outputs:
-# the tempo itself and
-## the mirmetre representation.
-
-Below are the results of the analysis of the same excerpt of J.S. Bach’s  Brandenburg concert No.2 in F Major, BWV 1047, this time using the ‘Metre’ option:
+<br>
+`sig.tempo(…,'Metre')` accepts as input data type either:
+  * `sig.autocor` objects,<p>
+  * onset detection curve (resulting from `sig.onsets`), frame-decomposed or not, channel-decomposed or not,<p>
+  * and all the input data accepted by `sig.onsets`.
+<br>
+`sig.tempo(…,'Metre')` can return several outputs:<p>
+  # the tempo itself and<p>
+  ## the `sig.metre` representation.
+<br>
+Below are the results of the analysis of the same excerpt of J.S. Bach's  Brandenburg concert No.2 in F Major, BWV 1047, this time using the 'Metre' option:
 
 https://miningsuite.googlecode.com/svn/wiki/SigTempo_ex6.png
 
 https://miningsuite.googlecode.com/svn/wiki/SigTempo_ex7.png
 
-The metrical structure built using the ‘Metre’ strategy enables to find coherent metrical levels leading to a continuous tempo curve.
-
+The metrical structure built using the `'Metre'` strategy enables to find coherent metrical levels leading to a continuous tempo curve.
+<br><br>
 == Tempo Change ==
-mirtempo(..., ‘Change’) computes the difference between successive values of the tempo curve. Tempo change is expressed independently from the choice of a metrical level by computing the ratio of tempo values between successive frames, and is expressed in logarithmic scale (base 2), so that no tempo change gives a value of 0, increase of tempo gives positive value, and decrease of tempo gives negative value.
+`sig.tempo(…,'Change')` computes the difference between successive values of the tempo curve. Tempo change is expressed independently from the choice of a metrical level by computing the ratio of tempo values between successive frames, and is expressed in logarithmic scale (base 2), so that no tempo change gives a value of 0, increase of tempo gives positive value, and decrease of tempo gives negative value.
