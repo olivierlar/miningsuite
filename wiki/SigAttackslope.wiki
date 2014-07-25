@@ -1,0 +1,35 @@
+#summary sig.attackslope: Average slope of the attack phase
+
+= sig.attackslope: Average slope of the attack phase =
+
+Another description of the attack phase is related to its average slope. Values are expressed in the same scale than the original signal, but normalized by time in seconds.
+
+
+== Flowchart Interconnections ==
+
+mirattackslope accepts as input data type either:
+  * onset detection curves (resulting from mironsets),<p>
+  * and all the input data accepted by mironsets. In this case mironsets is called with the ‘Filter’ method.
+<br>
+mironsets is normalized using the ‘Normal’ option set to ‘AcrossSegments’.
+<br><br>
+
+Some options in mironsets can be controlled:
+
+  * mirattackslope(..., ‘Single’) toggles on the ‘Single’ option in mironsets.<p>
+  * mirattackslope(..., ‘LogOnset’) toggles on the ‘Log’ option in mironsets.<p>
+  * mirattackslope(..., ‘MinLog’, ml) controls the ‘MinLog’ option in mironsets.
+<br>
+The peak picking from the onset detection is performed in any case. Its ‘Contrast’ parameter can be specified. Its default value is the same as in mironsets.
+<br><br>
+
+mirattackslope can return several outputs:
+  * the attack slope itself and<p>
+  * the onset detection curve returned by mironsets, including the detected onsets.
+<br>
+
+== Options ==
+
+  * mirattackslope(x, meth) specifies the method for slope estimation. Possible values for meth are:<p>
+   * meth = ‘Diff’ computes the slope as a ratio between the magnitude difference at the beginning and the ending of the attack period, and the corresponding time difference. (Default choice)<p>
+   * meth = ‘Gauss’ computes the average of the slope, weighted by a gaussian curve that emphasizes values at the middle of the attack period (similar to Peeters, 2004).
