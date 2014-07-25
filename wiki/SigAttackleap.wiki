@@ -2,25 +2,25 @@
 
 = sig.attackleap: estimating amplitude differences of the attack phase =
 
-Another simple way of describing the attack phase, proposed in mirattackleap, consists in estimating the amplitude difference between the beginning and the end of the attack phase. Values are expressed in the same scale than the original signal.
+Another simple way of describing the attack phase, proposed in `sig.attackleap`, consists in estimating the amplitude difference between the beginning and the end of the attack phase. Values are expressed in the same scale than the original signal.
 
 == Flowchart Interconnections ==
 
-mirattackleap accepts as input data type either:
-  * onset detection curves (resulting from mironsets), already including peaks or not,<p>
-  * and all the input data accepted by mironsets. In this case mironsets is called with the ‘Filter’ method.
+`sig.attackleap` accepts as input data type either:
+  * onset detection curves (resulting from `sig.onsets`), already including peaks or not,<p>
+  * and all the input data accepted by `sig.onsets`. In this case `sig.onsets` is called with the `'Filter'` method.
 <br>
-mironsets is normalized using the ‘Normal’ option set to ‘AcrossSegments’.
+`sig.onsets` is normalized using the `'Normal'` option set to `'AcrossSegments'`.
 <br><br>
 
-Some options in mironsets can be controlled:
+Some options in `sig.onsets` can be controlled:
 
-  * mirattackleap(..., ‘Single’) toggles on the ‘Single’ option in mironsets.<p>
-  * mirattackleap(..., ‘LogOnset’) toggles on the ‘Log’ option in mironsets.<p>
-  * mirattackleap(..., ‘MinLog’, ml) controls the ‘MinLog’ option in mironsets.
+  * `sig.attackleap(…,'Single')` toggles on the `'Single'` option in `sig.onsets`.<p>
+  * `sig.attackleap(…,'LogOnset')` toggles on the `'Log'` option in `sig.onsets`.<p>
+  * `sig.attackleap(…,'MinLog',`_ml_`)` controls the `'MinLog'` option in `sig.onsets`.
 <br>
-The peak picking from the onset detection is performed in any case. Its ‘Contrast’ parameter can be specified. Its default value is the same as in mironsets.
+The peak picking from the onset detection is performed in any case. Its `'Contrast'` parameter can be specified. Its default value is the same as in `sig.onsets`.
 
-mirattackleap can return several outputs:
+`sig.attackleap` can return several outputs:
   * the attack leap itself and<p>
-  * the onset detection curve returned by mironsets, including the detected onsets.
+  * the onset detection curve returned by `sig.onsets`, including the detected onsets.
