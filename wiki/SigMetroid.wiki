@@ -2,30 +2,30 @@
 
 = sig.metroid: Metrical centroid and strength =
 
-Provides two description derived from the metrical analysis carried out using mirmetre, with a further selection of primary metrical levels.
+Provides two description derived from the metrical analysis carried out using `sig.metre`, with a further selection of primary metrical levels.
 
   # *Dynamic metrical centroid*: an assessment of metrical activity that is based on the computation of the centroid of the selected metrical levels. The resulting metrical centroid curve indicates the temporal evolution of the metrical activity expressed in BPM, so that the values can be compared with the tempo values also in BPM. High BPM values for the metrical centroid indicate that more elementary metrical levels (i.e., very fast levels corresponding to very fast rhythmical values) predominate. Low BPM values indicate on the contrary that higher metrical levels (i.e., slow pulsations corresponding to whole notes, bars, etc.) predominate. If one particular level is particularly dominant, the value of the metrical centroid naturally approaches the corresponding tempo value on that particular level.<p>
   ## *Dynamic metrical strength*: indicates whether there is a clear and strong pulsation, or even a strong metrical hierarchy, or whether on in the other hand the pulsation is somewhat hidden, unclear, or there is a complex mixture of pulsations. Instead of simply identifying beat strength with the autocorrelation score of that main metrical level, we sum the autocorrelation scores of the selected metrical levels. The metrical strength is increased by any increase of autocorrelation score at any dominant level, or if new dominant levels are added to the selection. Whereas the autocorrelation score is a value lower than 1, the metrical strength can exceed 1.
 
-When mirmetroid is used for academic research, please cite the following publication:
+When `sig.metroid` is used for academic research, please cite the following publication:
 
 ||Lartillot, O., Cereghetti, D., Eliard, K., Trost, W. J., Rappaz, M.-A., Grandjean, D., "Estimating tempo and metrical features by tracking the whole metrical hierarchy", 3rd International Conference on Music & Emotion, Jyväskylä, 2013.||
 
 
 == Flowchart Interconnections ==
-mirmetroid accepts as input data type either:
-  * mirmetre objects,<p>
-  * mirautocor objects,<p>
-  * onset detection curve (resulting from mironsets), frame-decomposed or not, channel-decomposed or not,<p>
-  * and all the input data accepted by mironsets.<p>
+`sig.metroid` accepts as input data type either:
+  * `sig.metre` objects,<p>
+  * `sig.autocor` objects,<p>
+  * onset detection curve (resulting from `sig.onsets`), frame-decomposed or not, channel-decomposed or not,<p>
+  * and all the input data accepted by `sig.onsets`.<p>
 
 
 == Options ==
 
 For each frame, the dominant metrical levels are selected and the centroid of their periodicity (in seconds) is computed, using as weights the amount of autocorrelation score at that specific level that exceeds the autocorrelation score of the underlying metrical sub-levels. In this way, any sudden change in the number of selected metrical levels from one time frame to the successive one does not lead to abrupt changes in the metrical centroid curve.
 
-  * mirmetroid(..., ‘Gate’) uses a simpler method, where the weights are simply identified to the corresponding autocorrelation scores, leading to possible abrupt changes in the metrical centroid curve.
+  * `sig.metroid(…,'Gate')` uses a simpler method, where the weights are simply identified to the corresponding autocorrelation scores, leading to possible abrupt changes in the metrical centroid curve.
 
 If several metrical hierarchies are detected in parallel, separate metrical centroid and strength curves for each individual metrical hierarchy. The multiple metrical centroid and strength curves are then combined into one metrical centroid curve and one metrical strength curve. The combined metrical centroid curve is the weighted average of the metrical centroid curves of the separate metrical hierarchies, using the metrical strengths as weights. The combined metrical strength is the summation of the metrical strength curves of the separate metrical hierarchies.
 
-  * mirmetroid(..., ‘Combine’, 0) does not perform the combination of the metrical centroid and strength curves, displaying therefore as many curves as metrical hierarchies detected.
+  * `sig.metroid(…,'Combine',0)` does not perform the combination of the metrical centroid and strength curves, displaying therefore as many curves as metrical hierarchies detected.
