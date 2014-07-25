@@ -7,29 +7,29 @@ Another description of the attack phase is related to its average slope. Values 
 
 == Flowchart Interconnections ==
 
-mirattackslope accepts as input data type either:
-  * onset detection curves (resulting from mironsets),<p>
-  * and all the input data accepted by mironsets. In this case mironsets is called with the ‘Filter’ method.
+`sig.attackslope` accepts as input data type either:
+  * onset detection curves (resulting from `sig.onsets`),<p>
+  * and all the input data accepted by `sig.onsets`. In this case `sig.onsets` is called with the `'Filter'` method.
 <br>
-mironsets is normalized using the ‘Normal’ option set to ‘AcrossSegments’.
+`sig.onsets` is normalized using the `'Normal'` option set to `'AcrossSegments'`.
 <br><br>
 
-Some options in mironsets can be controlled:
+Some options in sig.onsets can be controlled:
 
-  * mirattackslope(..., ‘Single’) toggles on the ‘Single’ option in mironsets.<p>
-  * mirattackslope(..., ‘LogOnset’) toggles on the ‘Log’ option in mironsets.<p>
-  * mirattackslope(..., ‘MinLog’, ml) controls the ‘MinLog’ option in mironsets.
+  * `sig.attackslope(…,'Single')` toggles on the `'Single'` option in `sig.onsets`.<p>
+  * `sig.attackslope(…,'LogOnset')` toggles on the `'Log'` option in `sig.onsets`.<p>
+  * `sig.attackslope(…,'MinLog',`_ml_`)` controls the `'MinLog'` option in `sig.onsets`.
 <br>
-The peak picking from the onset detection is performed in any case. Its ‘Contrast’ parameter can be specified. Its default value is the same as in mironsets.
+The peak picking from the onset detection is performed in any case. Its `'Contrast'` parameter can be specified. Its default value is the same as in `sig.onsets`.
 <br><br>
 
-mirattackslope can return several outputs:
+`sig.attackslope` can return several outputs:
   * the attack slope itself and<p>
-  * the onset detection curve returned by mironsets, including the detected onsets.
+  * the onset detection curve returned by `sig.onsets`, including the detected onsets.
 <br>
 
 == Options ==
 
-  * mirattackslope(x, meth) specifies the method for slope estimation. Possible values for meth are:<p>
-   * meth = ‘Diff’ computes the slope as a ratio between the magnitude difference at the beginning and the ending of the attack period, and the corresponding time difference. (Default choice)<p>
-   * meth = ‘Gauss’ computes the average of the slope, weighted by a gaussian curve that emphasizes values at the middle of the attack period (similar to Peeters, 2004).
+  * `sig.attackslope(x,`_meth_`)` specifies the method for slope estimation. Possible values for _meth_ are:<p>
+   * _meth_ = `'Diff'` computes the slope as a ratio between the magnitude difference at the beginning and the ending of the attack period, and the corresponding time difference. (Default choice)<p>
+   * _meth_ = `'Gauss'` computes the average of the slope, weighted by a gaussian curve that emphasizes values at the middle of the attack period (similar to Peeters, 2004).
