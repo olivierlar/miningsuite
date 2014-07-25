@@ -1,0 +1,26 @@
+#summary sig.attackleap: estimating amplitude differences of the attack phase
+
+= sig.attackleap: estimating amplitude differences of the attack phase =
+
+Another simple way of describing the attack phase, proposed in mirattackleap, consists in estimating the amplitude difference between the beginning and the end of the attack phase. Values are expressed in the same scale than the original signal.
+
+== Flowchart Interconnections ==
+
+mirattackleap accepts as input data type either:
+  * onset detection curves (resulting from mironsets), already including peaks or not,<p>
+  * and all the input data accepted by mironsets. In this case mironsets is called with the ‘Filter’ method.
+<br>
+mironsets is normalized using the ‘Normal’ option set to ‘AcrossSegments’.
+<br><br>
+
+Some options in mironsets can be controlled:
+
+  * mirattackleap(..., ‘Single’) toggles on the ‘Single’ option in mironsets.<p>
+  * mirattackleap(..., ‘LogOnset’) toggles on the ‘Log’ option in mironsets.<p>
+  * mirattackleap(..., ‘MinLog’, ml) controls the ‘MinLog’ option in mironsets.
+<br>
+The peak picking from the onset detection is performed in any case. Its ‘Contrast’ parameter can be specified. Its default value is the same as in mironsets.
+
+mirattackleap can return several outputs:
+  * the attack leap itself and<p>
+  * the onset detection curve returned by mironsets, including the detected onsets.
