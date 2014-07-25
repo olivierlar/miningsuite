@@ -2,23 +2,23 @@
 
 = sig.rolloff: High-frequency energy (I) =
 
-One way to estimate the amount of high frequency in the signal consists in finding the frequency such that a certain fraction of the total energy is contained below that frequency. This ratio is fixed by default to .85 (following Tzanetakis and Cook, 2002), other have proposed .95 (Pohle, Pampalk and Widmer, 2005).
+One way to estimate the amount of high frequency in the signal consists in finding the frequency such that a certain fraction of the total energy is contained below that frequency. This ratio is fixed by default to .85 (following Tzanetakis and Cook, 2002), others have proposed .95 (Pohle, Pampalk and Widmer, 2005).
 <br><br>
 
 == Flowchart Interconnections ==
 
 `sig.rolloff` accepts either:
-  * `sig.spectrum` objects, or
-  * `sig.input` objects (same as for `sig.spectrum`),
-  * file name(s) or the ‘Folder’ keyword.
+  * `sig.spectrum` objects, or<p>
+  * `sig.input` objects (same as for `sig.spectrum`),<p>
+  * file name(s) or the `'Folder'` keyword.
 <br>
 
 == Frame decomposition ==
 
-`mirrolloff(...,‘Frame’,...)` performs first a frame decomposition, with by default a frame length of 50 ms and half overlapping. For the specification of other frame configuration using additional parameters, cf. the previous SigFrame vs. ‘Frame’ section.
+`sig.rolloff(…,'Frame',…)` performs first a frame decomposition, with by default a frame length of 50 ms and half overlapping. For the specification of other frame configuration using additional parameters, cf. the previous SigFrame vs. 'Frame' section.
 <br><br>
 
 == Option ==
 
-  * `sig,rolloff(...,'Threshold’,`_p_`)` specifies the energy threshold, as a percentage. Default value: .85<p>
-  * `sig.rolloff(...,‘MinRMS’,`_m_`)` specifies the threshold _m_, as a value from 0 to 1, for the detection of quasi-silent frames, for which no value is given. For a given frame, if the RMS of the input spectrogram is below _m_ times the highest RMS value over the frames, NaN is returned. default value: _m_ = .005
+  * `sig,rolloff(…,'Threshold',`_p_`)` specifies the energy threshold, as a percentage. Default value: .85<p>
+  * `sig.rolloff(…,'MinRMS',`_m_`)` specifies the threshold _m_, as a value from 0 to 1, for the detection of quasi-silent frames, for which no value is given. For a given frame, if the RMS of the input spectrogram is below _m_ times the highest RMS value over the frames, NaN is returned. default value: _m_ = .005
