@@ -2,32 +2,32 @@
 
 = sig.attacktime: Attack phase detection =
 
-The attack phase detected using the ‘Attacks’ option in mironsets can offer some timbral characterizations. One simple way of describing the attack phase, proposed in mirattacktime, consists in estimating its temporal duration.
+The attack phase detected using the `'Attacks'` option in `sig.onsets` can offer some timbral characterizations. One simple way of describing the attack phase, proposed in `sig.attacktime`, consists in estimating its temporal duration.
 
 == Flowchart Interconnections ==
 
-mirattacktime accepts as input data type either:
+`sig.attacktime` accepts as input data type either:
 
-  * onset detection curves (resulting from mironsets), already including peaks or not,<p>
-  * and all the input data accepted by mironsets. In this case mironsets is called with the ‘Filter’ method.
+  * onset detection curves (resulting from `sig.onsets`), already including peaks or not,<p>
+  * and all the input data accepted by `sig.onsets`. In this case `sig.onsets` is called with the `'Filter'` method.
 
 <br>
-mironsets is normalized using the ‘Normal’ option set to ‘AcrossSegments’.
+`sig.onsets` is normalized using the `'Normal'` option set to `'AcrossSegments'`.
 <br><br>
 
-Some options in mironsets can be controlled:
-  * mirattacktime(..., ‘Single’) toggles on the ‘Single’ option in mironsets.<p>
-  * mirattacktime(..., ‘LogOnset’) toggles on the ‘Log’ option in mironsets.<p>
-  * mirattacktime(..., ‘MinLog’, ml) controls the ‘MinLog’ option in mironsets.
+Some options in `sig.onsets` can be controlled:
+  * `sig.attacktime(…,'Single')` toggles on the `'Single'` option in `sig.onsets`.<p>
+  * `sig.attacktime(…,'LogOnset')` toggles on the `'Log'` option in `sig.onsets`.<p>
+  * `sig.attacktime(…,'MinLog',`_ml_`)` controls the `'MinLog'` option in `sig.onsets`.
 
 <br>
-mirattacktime can return several outputs:
+sig.attacktime can return several outputs:
   # the attack time itself and<p>
-  ## the onset detection curve returned by mironsets, including the detected onsets.
+  ## the onset detection curve returned by `sig.onsets`, including the detected onsets.
 
 <br>
 == Options ==
 
-  * mirattacktime(..., scale) specifies the output scale, linear or logarithmic. Possible values for scale are:<p>
-   * scale = ‘Lin’ returns the duration in a linear scale (in seconds). (Default choice)<p>
-   * scale = ‘Log’ returns the duration in a log scale (Krimphoff et al., 1994).
+  * `sig.attacktime(…,`_scale_`)` specifies the output scale, linear or logarithmic. Possible values for scale are:<p>
+   * _scale_ = `'Lin'` returns the duration in a linear scale (in seconds). (Default choice)<p>
+   * _scale_ = `'Log'` returns the duration in a log scale (Krimphoff et al., 1994).
