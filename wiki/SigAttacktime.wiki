@@ -1,0 +1,33 @@
+#summary sig.attacktime: Attack phase detection
+
+= sig.attacktime: Attack phase detection =
+
+The attack phase detected using the ‘Attacks’ option in mironsets can offer some timbral characterizations. One simple way of describing the attack phase, proposed in mirattacktime, consists in estimating its temporal duration.
+
+== Flowchart Interconnections ==
+
+mirattacktime accepts as input data type either:
+
+  * onset detection curves (resulting from mironsets), already including peaks or not,<p>
+  * and all the input data accepted by mironsets. In this case mironsets is called with the ‘Filter’ method.
+
+<br>
+mironsets is normalized using the ‘Normal’ option set to ‘AcrossSegments’.
+<br><br>
+
+Some options in mironsets can be controlled:
+  * mirattacktime(..., ‘Single’) toggles on the ‘Single’ option in mironsets.<p>
+  * mirattacktime(..., ‘LogOnset’) toggles on the ‘Log’ option in mironsets.<p>
+  * mirattacktime(..., ‘MinLog’, ml) controls the ‘MinLog’ option in mironsets.
+
+<br>
+mirattacktime can return several outputs:
+  # the attack time itself and<p>
+  ## the onset detection curve returned by mironsets, including the detected onsets.
+
+<br>
+== Options ==
+
+  * mirattacktime(..., scale) specifies the output scale, linear or logarithmic. Possible values for scale are:<p>
+   * scale = ‘Lin’ returns the duration in a linear scale (in seconds). (Default choice)<p>
+   * scale = ‘Log’ returns the duration in a log scale (Krimphoff et al., 1994).
