@@ -1,0 +1,24 @@
+#summary sig.entropy: Statistical description of spectral distribution
+
+= sig.entropy: Statistical description of spectral distribution =
+
+The spectral distribution can be described by statistical moments: centroid, spread, skewness, kurtosis, flatness as well as by entropy.<p>
+See the Statistics section (§4.2) for more details about each operator.
+<br><br>
+
+== Flowchart Interconnections ==
+
+`sig.entropy` accepts either:
+  * `sig.spectrum` objects<p>
+  * `sig.input` objects (same as for `sig.spectrum`)<p>
+  * file name(s) or the `'Folder'` keyword. 
+<br>
+
+== Frame decomposition ==
+
+`'Frame'` performs first a frame decomposition, with by default a frame length of 50 ms and half overlapping. For the specification of other frame configuration using additional parameters, cf. the previous SigFrame vs. 'Frame' section.
+<br><br>
+
+== Options ==
+
+See the Statistics section (§4.2) for more details about the operator.
