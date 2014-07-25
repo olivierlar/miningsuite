@@ -1,0 +1,66 @@
+#summary sig.pulseclarity: Estimating rhythmic clarity
+
+= sig.pulseclarity: Estimating rhythmic clarity =
+
+Estimates the rhythmic clarity, indicating the strength of the beats estimated by the mirtempo function.
+
+When mirpulseclarity is used for academic research, please cite the following publication:
+
+||Olivier Lartillot, Tuomas Eerola, Petri Toiviainen, Jose Fornari, "Multi-feature modeling of pulse clarity: Design, validation, and optimization", International Conference on Music Information Retrieval, Philadelphia, 2008.||
+
+<br>
+== Flowchart Interconnections ==
+
+The pulse clarity can be estimated in various ways:
+
+  * mirpulseclarity(..., s) selects a particular heuristic for pulse clarity estimation. Most heuristics are based on the autocorrelation curve computed for tempo estimation (i.e., the second output of mirtempo) (Lartillot, Eerola, Toiviainen, and Fornari, 2008):<p>
+   * s = ‘MaxAutocor’ selects the maximum correlation value in the autocorrelation curve (default heuristic).
+   * s = ‘MinAutocor’ selects the minimum correlation value in the autocorrelation curve.
+   * s = ‘MeanPeaksAutocor’ averages the local maxima in the autocorrelation curve.
+   * s = ‘KurtosisAutocor’ computes the kurtosis of the autocorrelation curve.
+   * s = ‘EntropyAutocor’ computes the entropy of the autocorrelation curve.
+   * s = ‘InterfAutocor’ computes the harmonic relations between pulsations.
+   * s = ‘TempoAutocor’ selects the tempo related to the highest autocorrelation.
+   Others heuristics are based more simply on the onset curve itself: 
+   * s = ‘Articulation’ estimates the average silence ratio of the onset curve (option ‘ASR’ in mirlowenergy.
+   * s = ‘Attack’ averages the attack slopes of all onsets (the ‘Diff’, ‘Gauss’ can be specified, with same default).
+   * s = ‘ExtremEnvelope’ estimates the total amplitude variability of the onset curve.
+   mirpulseclarity(..., ‘Model’, m) selects one out of two possible models that have been found as optimal in our experiments<br>(Lartillot, Eerola, Toiviainen, and Fornari, 2008):
+   * m = 1 selects the default model with its associated weight.
+   * m = 2 selects the following model: ‘Gammatone’, no log, no ‘Resonance’, ‘Lambda’ set to .8, and ‘Sum’ set to ‘After’, with its associated weight.
+   * m = [1 2] sums the two models altogether.
+<br><br>
+The onset detection curve computed in mironsets can be controlled using the following options:
+
+  * ‘Envelope’ (default) and ‘DiffEnvelope’:<p>
+   * with the ‘Method’ set by default to ‘Spectro’, and the 'Freq','Mel','Bark','Cents' selection can be specified, with same default.<p>
+   * ‘Method’ can be set to ‘Filter’ as well:
+    * with ‘FilterType’ option with same default,
+    * with ‘Filterbank’ option set to 20 by default,
+    * with ‘FilterbankType’ option set to ‘Scheirer’ by default,<p>
+   * Besides ‘Method’: ‘HalfwaveDiff’, ‘Lambda’, ‘Smooth’, ‘Log’ with same default, and ‘Mu’, set by default here to 100.<p>
+  * ‘SpectralFlux’: with ‘Inc’ with same default, and ‘Median’ and ‘Halfwave’ toggled off by default.<p>
+  * and ‘Pitch’.
+<br><br>
+The autocorrelation function performed in mirautocor can be controlled using the following options: 
+
+  * ‘Enhanced’ (toggled off by default; forced to ‘Off’ in ‘MinAutocor’),<p>
+  * ‘Resonance’, ‘Min’, ‘Max’ (with same default as in mirautocor).
+<br><br>
+Some further options operates as in mirtempo:
+  * ‘Sum’,<p>
+  * ‘Total’ (ignored in ‘MaxAutocor’, ‘MinAutocor‘ and ‘EntropyAutocor’ methods),<p>
+  * ‘Contrast’: with a default value set to .01,
+<br><br>
+mirpulseclarity accepts as input data type either:
+  * mirautocor objects,<p>
+  * onset detection curve (resulting from mironsets), frame-decomposed or not, channel-decomposed or not,<p>
+  * and all the input data accepted by mironsets.
+<br><br>
+mirpulseclarity can return several outputs:
+  # the pulse clarity value and<p>
+  ## the mirautocor data that was used for the estimation of pulse clarity.
+<br><br>
+
+== Frame decomposition ==
+mirpulseclarity(..., ‘Frame’, ...) performs first a frame decomposition, with by default a frame length of 5 s and a hop factor of 10% (0.5 s). For the specification of other frame configuration using additional parameters, cf. the previous mirframe vs. ‘Frame’ section.
