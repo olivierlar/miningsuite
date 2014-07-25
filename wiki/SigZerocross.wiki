@@ -7,19 +7,19 @@ A simple indicator of noisiness consists in counting the number of times the sig
 
 == Flowchart Interconnections ==
 
-mirzerocross actually accepts any input data type (cf. section 4.2).
+`sig.zerocross` actually accepts any input data type (cf. section 4.2).
 <br><br>
 
 == Frame decomposition ==
 
-mirzerocross(..., ‘Frame’, ...) performs first a frame decomposition, with by default a frame length of 50 ms and half overlapping. For the specification of other frame configuration using additional parameters, cf. the previous mirframe vs. ‘Frame’ section. 
+`sig.zerocross(…,'Frame',…)` performs first a frame decomposition, with by default a frame length of 50 ms and half overlapping. For the specification of other frame configuration using additional parameters, cf. the previous SigFrame vs. 'Frame' section. 
 <br><br>
 
 == Options ==
 
-  * mirzerocross(..., ‘Per’, p) precises the temporal reference for the rate computation. Possible values:
-   * p = ‘Second’: number of sign-changes per second (Default).
-   * p = ‘Sample’: number of sign-changes divided by the total  number of samples. The ‘Second’ option returns a result equal to the one returned by the ‘Sample’ option multiplied by the sampling rate.<p>
-  * mirzerocross(..., ‘Dir’, d) precises the definition of sign change. Possible values:
-   * d = ‘One’: number of sign-changes from negative to positive only (or, equivalently, from positive to negative only). (Default)
-   * d = 'Both': number of sign-changes in both ways. The 'Both' option returns a result equal to twice the one returned by the 'One’ option.
+  * `sig.zerocross(…,'Per',`_p_`)` precises the temporal reference for the rate computation. Possible values:
+   * _p_ = `'Second'`: number of sign-changes per second (Default).
+   * _p_ = `'Sample'`: number of sign-changes divided by the total  number of samples. The `'Second'` option returns a result equal to the one returned by the `'Sample'` option multiplied by the sampling rate.<p>
+  * `sig.zerocross(…,'Dir',`_d_`)` precises the definition of sign change. Possible values:
+   * _d_ = `'One'`: number of sign-changes from negative to positive only (or, equivalently, from positive to negative only). (Default)
+   * _d_ = `'Both'`: number of sign-changes in both ways. The `'Both'` option returns a result equal to twice the one returned by the `'One'` option.
