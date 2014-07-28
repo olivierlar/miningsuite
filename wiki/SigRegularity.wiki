@@ -24,4 +24,4 @@ The `'Contrast'` parameter associated to `sig.peaks` can be specified, and is se
 == Options ==
 
   * `sig.regularity(…,'Jensen')` is based on (Jensen, 1999), where the irregularity is the sum of the square of the difference in amplitude between adjoining partials.(Default approach)<p> https://miningsuite.googlecode.com/svn/wiki/SigRegularity_eq1.png<p>
-  * `sig.regularity(…,'Krimphoff')` is based on (Krimphoff et al., 1994), where the irregularity is the sum of the amplitude minus the mean of the preceding, same and next amplitude.<p>https://miningsuite.googlecode.com/svn/wiki/SigRegularity_eq1.png
+  * `sig.regularity(…,'Krimphoff')` is based on (Krimphoff et al., 1994), where the irregularity is the sum of the amplitude minus the mean of the preceding, same and next amplitude.<p>https://miningsuite.googlecode.com/svn/wiki/SigRegularity_eq2.png
