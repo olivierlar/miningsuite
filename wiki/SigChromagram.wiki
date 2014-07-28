@@ -3,6 +3,7 @@
 = sig.chromagram: Energy distribution along pitches =
 
 The chromagram, also called Harmonic Pitch Class Profile, shows the distribution of energy along the pitches or pitch classes.
+<br><br>
   * First the spectrum is computed in the logarithmic scale, with selection of, by default, the 20 highest dB, and restriction to a certain frequency range that covers an integer number of octaves, and normalization of the audio waveform before computation of the FFT.
 {{{
 s=sig.spectrum(…,'dB',20,'Min',fmin,'Max',fmax,'NormalInput','MinRes',r,'OctaveRatio',.85)
