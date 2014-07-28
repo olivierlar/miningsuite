@@ -2,7 +2,7 @@
 
 = sig.keyclass: Probability of key candidates =
 
-mirkeystrength computes the key strength, a score between -1 and +1 associated with each possible key candidate, through a cross-correlation of the chromagram returned by mirchromagram, wrapped and normalized (using the ‘Normal’ option), with similar profiles representing all the possible tonality candidates (Krumhansl, 1990; Gomez, 2006).
+sig.keystrength computes the key strength, a score between -1 and +1 associated with each possible key candidate, through a cross-correlation of the chromagram returned by `sig.chromagram`, wrapped and normalized (using the `'Normal'` option), with similar profiles representing all the possible tonality candidates (Krumhansl, 1990; Gomez, 2006).
 
 https://miningsuite.googlecode.com/svn/wiki/SigKeyclass_ex1.png
 
@@ -14,28 +14,28 @@ https://miningsuite.googlecode.com/svn/wiki/SigKeyclass_ex2.png
 
 == Flowchart Interconnections ==
 
-For the moment, only the ‘Weight’ and ‘Triangle’ options used in mirchromagram can be tuned directly in mirkeystrength.
+For the moment, only the `'Weight'` and `'Triangle'` options used in `sig.chromagram` can be tuned directly in `sig.keystrength`.
 
-mirkeystrength accepts either:
-  * mirchromagram objects,<p>
-  * mirspectrum objects,<p>
-  * miraudio objects (same as for mirchromagram),<p>
-  * file name or the ‘Folder’ keyword.
+`sig.keystrength` accepts either:
+  * `sig.chromagram` objects,<p>
+  * `sig.spectrum` objects,<p>
+  * `sig.input` objects (same as for `sig.chromagram`),<p>
+  * file name(s) or the `'Folder'` keyword.
 <br>
 
-mirkeystrength can return several outputs:
+sig.keystrength can return several outputs:
   * the key strength itself, and<p>
-  * the mirchromagram data.
+  * the `sig.chromagram` data.
 <br>
 
 == Frame decomposition ==
 
-mirkeystrength(..., ‘Frame’, ...) performs first a frame decomposition, with by default a frame length of 200 ms and a hop factor of 5% (10 ms). For the specification of other frame configuration using additional parameters, cf. the previous mirframe vs. ‘Frame’ section.
+`sig.keystrength(…,'Frame',…)` performs first a frame decomposition, with by default a frame length of 200 ms and a hop factor of 5% (10 ms). For the specification of other frame configuration using additional parameters, cf. the previous SigFrame vs. 'Frame' section.
 
 <br>
 == Example ==
 {{{
-mirkeystrength(‘ragtime’,‘Frame’)
+sig.keystrength('ragtime','Frame')
 }}}
 
 https://miningsuite.googlecode.com/svn/wiki/SigKeyclass_ex3.png
@@ -43,7 +43,7 @@ https://miningsuite.googlecode.com/svn/wiki/SigKeyclass_ex3.png
 <br>
 == Accessible Output ==
 
-cf. §5.2 for an explanation of the use of the get method. Specific fields:
+cf. §5.2 for an explanation of the use of the `'get'` method. Specific fields:
 
-  * ‘Strength’: the key strength value for each key and each temporal position (same as ‘Data’). The resulting matrix is distributed along two layers along the fourth dimension: a first layer for major keys, and a second layer for minor keys.<p>
-  * ‘Tonic’: the different key centres (same as ‘Pos’).
+  * `'Strength'`: the key strength value for each key and each temporal position (same as `'Data'`). The resulting matrix is distributed along two layers along the fourth dimension: a first layer for major keys, and a second layer for minor keys.<p>
+  * `'Tonic'`: the different key centres (same as `'Pos'`).
