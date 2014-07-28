@@ -1,0 +1,19 @@
+#summary sig.midi: Automated Transcription
+
+= sig.midi: Automated Transcription =
+
+Segments the audio into events, extracts pitches related to each event and attempts a conversion of the result into a MIDI representation. 
+
+The audio segmentation is based on the onset detection given by mironsets with the default parameter, but with the `'Sum'` option toggled off in order to keep the channel decomposition of the input audio data.
+
+The MIDI output is represented using the MIDI Toolbox note matrix representation. The displayed output is the piano-roll representation of the MIDI data, which requires MIDI Toolbox. Similarly, the result can be:
+
+  * sonified using mirplay, with the help of MIDI Toolbox;<p>
+  * saved using mirsave:<p>
+   * as a MIDI file (by default), with the help of MIDI Toolbox,<p>
+   * as a LilyPond file (if the specified file has a '.ly' extension).
+<br>
+
+== Flowchart Interconnections ==
+
+The `'Contrast'` parameter associated to `sig.pitch` can be specified, and is set by default to .3
