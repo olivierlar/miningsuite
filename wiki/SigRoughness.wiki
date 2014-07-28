@@ -1,0 +1,38 @@
+#summary sig.roughness: Sensory dissonance
+
+= sig.roughness: Sensory dissonance =
+
+Plomp and Levelt (1965) have proposed an estimation of the sensory dissonance, or roughness, related to the beating phenomenon whenever pair of sinusoids are closed in frequency. The authors propose as a result an estimation of roughness depending on the frequency ratio of each pair of sinusoids represented as follows:
+
+https://miningsuite.googlecode.com/svn/wiki/SigRoughness_ex1.png
+
+An estimation of the total roughness is available in mirroughness by computing the peaks of the spectrum, and taking the average of all the dissonance between all possible pairs of peaks (Sethares, 1998).
+<br><br>
+
+== Flowchart Interconnections ==
+
+The ‘Contrast’ parameter associated to mirpeaks can be specified, and is set by default to .01
+
+mirroughness accepts either:
+
+  * mirspectrum objects, where peaks have already been picked or not,<p>
+  * sig.input objects: same as for mirspectrum, except that a frame decomposition is automatically performed. This forced frame decomposition is due to the fact that roughness can only be associated to a spectral representation association to a short-term sound excerpt: there is no sensory dissonance provoked by a pair of sinusoid significantly distant in time.<p>
+  * file name(s) or the ‘Folder’ keyword.
+<br>
+
+mirroughness can return several outputs:
+  # the roughness value itself and<p>
+  ## the spectral representation (output of mirspectrum) showing the picked peaks (returned by mirpeaks).
+<br>
+
+== Frame decomposition ==
+
+mirroughness(..., ‘Frame’, ...) specifies the frame configuration, with by default a frame length of 50 ms and half overlapping. For the syntax, cf. the previous mirframe vs. ‘Frame’ section. 
+<br><br>
+
+== Options ==
+
+  * mirroughness(..., m) specifies the method used:<p>
+   * m = ‘Sethares’ (default): based on the summation of roughness between all pairs of sines (obtained through spectral peak-picking) (Sethares, 1998). For each pair of peaks, the corresponding elementary roughness is obtained by multiplying the two peak amplitudes altogether, and by weighting the results with the corresponding factor given on the dissonance curve.<p>
+    * mirroughness(..., ‘Min’): Variant of the Sethares model where the summation is weighted by the minimum amplitude of each pair of peak, instead of the product of their amplitudes (Weisser and Lartillot, 2013).<p>
+   * m = ‘Vassilakis’: variant of ‘Sethares’ model with a more complex weighting (Vassilakis, 2001, Eq. 6.23).
