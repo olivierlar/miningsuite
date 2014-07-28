@@ -1,0 +1,27 @@
+#summary sig.regularity: Spectral peaks variability
+
+= sig.regularity: Spectral peaks variability =
+
+The irregularity of a spectrum is the degree of variation of the successive peaks of the spectrum.
+
+
+== Flowchart Interconnections ==
+
+The ‘Contrast’ parameter associated to mirpeaks can be specified, and is set by default to .01
+
+mirregularity accepts either:
+
+  * mirspectrum objects, where peaks have already been picked or not,
+  * sig.input objects (same as for mirspectrum),
+  * file name(s) or the ‘Folder’ keyword.
+
+
+== Frame decomposition ==
+
+mirregularity(..., ‘Frame’, ...) performs first a frame decomposition, with by default a frame length of 50 ms and half overlapping. For the specification of other frame configuration using additional parameters, cf. the previous mirframe vs. ‘Frame’ section. 
+
+
+== Options ==
+
+  * mirregularity(..., 'Jensen’) is based on (Jensen, 1999), where the irregularity is the sum of the square of the difference in amplitude between adjoining partials.(Default approach)<p> https://miningsuite.googlecode.com/svn/wiki/SigRegularity_eq1.png<p>
+  * mirregularity(..., 'Krimphoff’) is based on (Krimphoff et al., 1994), where the irregularity is the sum of the amplitude minus the mean of the preceding, same and next amplitude.<p>https://miningsuite.googlecode.com/svn/wiki/SigRegularity_eq1.png
