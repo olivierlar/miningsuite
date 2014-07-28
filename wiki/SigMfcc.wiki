@@ -1,0 +1,50 @@
+#summary sig.mfcc: Mel-Frequency Cepstral Coefficients
+
+= sig.mfcc: Mel-Frequency Cepstral Coefficients =
+
+MFCC offers a description of the spectral shape of the sound. We recall that the computation of the cepstrum followed the following scheme:
+
+
+
+The computation of mel-frequency cepstral coefficients is highly similar:
+
+
+Here the frequency bands are positioned logarithmically (on the Mel scale) which approximates the human auditory system's response more closely than the linearly-spaced frequency bands. And the Fourier Transform is replaced by a Discrete Cosine Transform. A discrete cosine transform (DCT) is a Fourier-related transform similar to the discrete Fourier transform (DFT), but using only real numbers. It has a strong "energy compaction" property: most of the signal information tends to be concentrated in a few low-frequency components of the DCT. That is why by default only the first 13 components are returned.
+
+By convention, the coefficient of rank zero simply indicates the average energy of the signal.
+
+<br>
+== Flowchart Interconnections ==
+
+mirmfcc accepts either:
+  * mirspectrum objects, or<p>
+  * miraudio objects (same as for mirspectrum),<p>
+  * file name or the ‘Folder’ keyword.
+<br>
+
+mirmfcc can return several outputs:
+  * the mfcc coefficients themselves and<p>
+  * the spectral representation (output of mirspectrum), in mel-band and log-scale.
+<br>
+
+== Frame decomposition ==
+
+mirmfcc(..., ‘Frame’, ...) performs first a frame decomposition, with by default a frame length of 50 ms and half overlapping. For the specification of other frame configuration using additional parameters, cf. the previous mirframe vs. ‘Frame’ section.
+<br><br>
+
+
+== Options ==
+
+  * mirmfcc(..., 'Bands’, b) indicates the number of bands used in the mel-band spectrum decomposition. By default, b = 40.<p>
+  * mirmfcc(..., 'Rank’, N) computes the coefficients of rank(s) N. The default value is N = 1:13. Beware that the coefficient related to the average energy is by convention here of rank 0. This zero value can be included to the array N as well.<p>
+  * If the output is frame-decomposed, showing the the temporal evolution of the MFCC along the successive frames, the temporal differentiation can be computed:<p>
+   * mirmfcc(..., 'Delta’, d) performs temporal differentiations of order d of the coefficients, also called delta-MFCC (for d = 1) or delta-delta-MFCC (for d = 2). By default, d = 1.<p>
+   * mirmfcc(..., 'Radius’, r) specifies, for each frame, the number of successive and previous neighbouring frames taken into consideration for the least-square approximation used for the derivation. For a given radius r, the Delta operation for each frame i is computed by summing the MFCC coefficients at frame i+j (with j from -r to +r) , each coefficient being multiplied by its weight j. Usually the radius is equal to 1 or 2. Default value: r = 2.
+<br>
+
+== Accessible Output ==
+
+cf. §5.2 for an explanation of the use of the get method. Specific fields:
+
+  * ‘Rank’: the series of rank(s) taken into consideration (same as ‘Pos’),<p>
+  * ‘Delta’: the number of times the delta operation has been performed.
