@@ -4,11 +4,11 @@
 
 sig.keystrength computes the key strength, a score between -1 and +1 associated with each possible key candidate, through a cross-correlation of the chromagram returned by `sig.chromagram`, wrapped and normalized (using the `'Normal'` option), with similar profiles representing all the possible tonality candidates (Krumhansl, 1990; Gomez, 2006).
 
-https://miningsuite.googlecode.com/svn/wiki/SigKeyclass_ex1.png
+https://miningsuite.googlecode.com/svn/wiki/SigKeystrength_ex1.png
 
 The resulting graph indicate the cross-correlation score for each different tonality candidate.
 
-https://miningsuite.googlecode.com/svn/wiki/SigKeyclass_ex2.png
+https://miningsuite.googlecode.com/svn/wiki/SigKeystrength_ex2.png
 <br><br>
 
 
@@ -37,7 +37,7 @@ sig.keystrength can return several outputs:
 sig.keystrength('ragtime','Frame')
 }}}
 
-https://miningsuite.googlecode.com/svn/wiki/SigKeyclass_ex3.png
+https://miningsuite.googlecode.com/svn/wiki/SigKeystrength_ex3.png
 
 
 == Accessible Output ==
