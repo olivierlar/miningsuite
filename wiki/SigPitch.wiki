@@ -1,0 +1,103 @@
+#summary sig.pitch: Pitch estimation
+
+= sig.pitch: Pitch estimation =
+
+Extract pitches, returned either as continuous pitch curves or as discretized note events.
+<br><br>
+
+== Flowchart Interconnections ==
+
+The pitch content can be estimated in various ways:
+  * mirpitch(..., ‘Autocor’) computes an autocorrelation function of the audio waveform, using mirautocor. This is the default strategy. Options related to mirautocor can be specified:<p>
+   * 'Enhanced’, toggled on by default here,
+   * 'Compress’, set by default to .5,
+   * filterbank configuration can be specified: either ‘2Channels’ (default configuration), ‘Gammatone’ or ‘NoFilterbank’,
+   * if a filterbank is used, ‘Sum’ specifies whether the channels are recombined once the autocorrelation function is computed (‘Sum’, 1, which is the default), or if on the contrary, the channels are kept separate, and pitch content is extracted in each channel separately (‘Sum’, 0).<p>
+  * mirpitch(..., ‘Spectrum’) computes the FFT spectrum (mirspectrum).<p>
+  * mirpitch(..., ‘AutocorSpectrum’) computes the autocorrelation (mirautocor) of the FFT spectrum (mirspectrum).<p>
+  * mirpitch(..., ‘Cepstrum’) computes the cepstrum (mircepstrum).<p>
+  * These methods can be combined. In this case, the resulting representations (autocorrelation function or cepstral representations) are all expressed in the frequency domain and multiplied altogether.
+<br>
+Then a peak picking is applied to the autocorrelation function or to the cepstral representation. The parameters of the peak picking can be tuned.
+  * mirpitch(..., 'Total’, m) selects only the m best pitches.<p>
+  * mirpitch(..., 'Mono’) only select the best pitch, corresponding hence to mirpitch(..., 'Total’, 1).<p>
+  * mirpitch(..., 'Min’, mi) indicates the lowest pitch taken into consideration, in Hz. Default value: 75 Hz, following a convention in the Praat software (Boersma & Weenink, 2005).<p>
+  * mirpitch(..., 'Max’, ma) indicates the highest pitch taken into consideration, expressed in Hz. Default value: 2400 Hz, because there seem to be some problems with higher frequency, due probably to the absence of pre-whitening in our implementation of Tolonen and Karjalainen autocorrelation approach (used by default).<p>
+  * mirpitch(..., 'Threshold’, t) specifies the threshold factor for the peak picking. Default value: c = 0.4.<p>
+  * mirpitch(..., 'Contrast’, c) specifies the contrast factor for the peak picking. Default value: c = 0.1.<p>
+  * mirpitch(..., 'Order’, o) specifies the ordering for the peak picking. Default value: o = ‘Amplitude’.
+<br>
+mirpitch accepts as input data type either:
+  * mirpitch objects,<p>
+  * output of mirpeaks computation,<p>
+  * mirautocor objects,<p>
+  * mircepstrum objects,<p>
+  * mirspectrum objects,<p>
+  * miraudio objects, where the audio waveform can be:<p>
+   * segmented (using mirsegment), 
+   * when pitch is estimated by autocorrelating the audio waveform (‘Autocor’ strategy), the audio waveform is be default first decomposed into channels (cf. the ‘Filterbank’ option below),
+   * decomposed into frames or not (using mirframe);
+   * file name or the ‘Folder’ keyword: same behavior than for miraudio objects,
+   * mirmidi objects.
+<br>
+mirpitch can return several outputs:
+  # the pitch frequencies themselves, and<p>
+  ## the mirautocor or  mircepstrum data, where is highlighted the (set of) peak(s) corresponding to the estimated pitch (or set of pitches).
+<br>
+
+== Frame decomposition ==
+
+mirpitch(..., ‘Frame’, ...) performs first a frame decomposition, with by default a frame length of 46.4 ms and a hop factor of 10 ms (Tolonen & Karjalainen, 2000). For the specification of other frame configuration using additional parameters, cf. the previous mirframe vs. ‘Frame’ section. 
+<br><br>
+
+== Post-Processing Options ==
+  * mirpitch(..., 'Cent’) convert the pitch axis from Hz to cent scale. One octave corresponds to 1200 cents, so that 100 cents correspond to a semitone in equal temperament.<p>
+  * mirpitch(..., 'Segment’) segments the obtained monodic^*^ pitch curve in cents as a succession of notes with stable frequencies.
+
+When ‘Segment’ is used for academic research, please cite the following publication:
+||Olivier Lartillot, “Computational analysis of maqam music: From audio transcription to musicological analysis, everything is tightly intertwined”, Acoustics 2012 Hong Kong Conference.||
+
+   * mirpitch(..., ‘SegMinLength’, l) specifies the minimum length of segments, in number of samples. Default length: l = 7 samples.<p>
+   * mirpitch(..., ‘SegPitchGap’, g) specifies the maximum tolerated pitch gap within a segment, in cents. The pitch distance is computed between the current sample is more distant and the average pitch of the segment before that point. Default gap: g = 10 cents.<p>
+   * mirpitch(..., ‘SegTimeGap’, g) specifies the maximum tolerated silence within a segment, in number of samples. Default gap: g = 20 samples.<p>
+   * Segments with too low pitch periodicity (of autocorrelation value lower than 5% of the maximal value in that audio piece) are discarded.
+  * mirpitch(..., 'Median’, l) performs a median filtering of the pitch curve. The length of the median filter is given by l (in s.). Its default value is .1 s. The median filtering can only be applied to mono-pitch curve. If several pitches were extracted in each frame, a mono-pitch curve is first computed by selecting the best peak of each successive frame.<p>
+  * mirpitch(..., 'Stable’, th, n) remove pitch values when the difference (or more precisely absolute logarithmic quotient) with the n precedent frames exceeds the threshold th. 
+   * if th is not specified, the default value .1 is used.
+   * if n is not specified, the default value 3 is used.<p>
+  * mirpitch(..., 'Reso’, 'SemiTone’) removes peaks whose distance to one or several higher peaks is lower than a given threshold 2^(1/12) (corresponding to a semitone).<p>
+
+^*^ This ‘Segment’ option requires a monodic pitch curve extraction using the ‘Mono’ option, which is therefore toggled on, as well as the ‘Cent’ and ‘Frame’ options.
+
+<br>
+
+== Preset Model ==
+  * mirpitch(..., 'Tolonen’) implements (part of) the model proposed in (Tolonen & Karjalainen, 2000). It is equivalent to:
+{{{
+mirpitch(..., 'Enhanced', 2:10, 'Generalized', .67, '2Channels')
+}}}
+<br>
+== Example ==
+{{{
+[p ac] = mirpitch(‘ragtime', 'Frame')
+}}}
+
+
+https://miningsuite.googlecode.com/svn/wiki/SigPitch_ex1.png<p>
+https://miningsuite.googlecode.com/svn/wiki/SigPitch_ex2.png
+
+<br>
+==￼￼Accessible Output ==
+
+cf. §5.2 for an explanation of the use of the get method. Specific fields:
+  * ‘Amplitude’: the amplitude associated with each pitch component.
+<br>
+
+== Importation of Pitch Data ==
+
+mirpitch(f, a, r) creates a mirpitch object based on the frequencies specified in f and the related amplitudes specified in a, using a frame sampling rate of r Hz (set by default to 100 Hz).
+
+Both f and a can be either:
+
+  * a matrix where each column represent one pitch track and lines corresponds to frames,<p>
+  * an array of cells, where each cell, representing one individual frame, contains a vector.
