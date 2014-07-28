@@ -1,0 +1,39 @@
+#summary sig.inharmonicity: Partials non-multiple of fundamentals
+
+= sig.inharmonicity: Partials non-multiple of fundamentals =
+
+`sig.inharmonicity(`_x_`)` estimates the inharmonicity, i.e., the amount of partials that are not multiples of the fundamental frequency, as a value between 0 and 1. More precisely, the inharmonicity considered here takes into account the amount of energy outside the ideal harmonic series.
+
+For that purpose, we use a simple function estimating the inharmonicity of each frequency given the fundamental frequency _f0_:
+
+||*WARNING*: This simple model presupposes that there is only one fundamental frequency.||
+
+<br>
+== Flowchart Interconnections ==
+
+mirinharmonicity accepts as main input either:
+  * sig.spectrum objects,<p>
+  * sig.input objects (same as for sig.spectrum),<p>
+  * file name(s) or the 'Folder' keyword.
+<br>
+
+sig.inharmonicity can return several outputs:
+  # the inharmonicity rate itself,<p>
+  ## the `sig.spectrum data`, and<p>
+  ## the fundamental frequency _'f0'_.
+
+<br>
+== Frame decomposition ==
+
+`sig.inharmonicity(…,'Frame',…)` performs first a frame decomposition, with by default a frame length of 10 ms and a hop factor of 12,5% (1.25 ms). For the specification of other frame configuration using additional parameters, cf. the previous SigFrame vs. ‘Frame’ section. 
+
+<br>
+== Option ==
+
+`sig.inharmonicity(…,'f0',`_f_`)` bases the computation of the inharmonicity on the fundamental frequency indicated by _f_. The frequency data can be either a number, or a sig.scalar object (for instance, the output of a `sig.pitch` computation).
+
+By default, the fundamental frequency is computed using the command:
+
+{{{
+f=mirpitch(…,'Mono')
+}}}
