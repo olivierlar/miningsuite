@@ -1,0 +1,29 @@
+#summary sig.tonalcentroid: 6-dimensional tonal centroid
+
+= sig.tonalcentroid: 6-dimensional tonal centroid =
+
+Calculates the 6-dimensional tonal centroid vector from the chromagram. It corresponds to a projection of the chords along circles of fifths, of minor thirds, and of major thirds (Harte and Sandler, 2006).
+
+<br>
+== Flowchart Interconnections ==
+
+mirtonalcentroid accepts either:
+  * mirchromagram objects,<p>
+  * mirspectrum objects,<p>
+  * sig.input objects , where the audio waveform can be segmented (using mirsegment), decomposed into channels (using mirfilterbank), and/or decomposed into frames (using mirframe),<p>
+  * file name(s) or the ‘Folder’ keyword.
+
+<br>
+mirtonalcentroid can return several outputs:
+  # the tonal centroid itself, and<p>
+  ## the mirchromagram data.
+
+<br>
+== Frame decomposition ==
+mirtonalcentroid(..., ‘Frame’, ...) performs first a frame decomposition, with by default a frame length of 743 ms and a hop factor of 10% (74.3 ms). For the specification of other frame configuration using additional parameters, cf. the previous mirframe vs. ‘Frame’ section. 
+
+<br>
+== Accessible Output ==
+cf. §5.2 for an explanation of the use of the get method. Specific fields:
+  * ‘Dimensions’: the index of the 6 dimensions (same as ‘Pos’),<p>
+  * ‘Positions’: the position of each data within the 6-dimensional space (same as ‘Data’).
