@@ -1,0 +1,19 @@
+#summary sig.segment(…,'HCDF'): Segmenting using HCDF
+
+= sig.segment(…,'HCDF'): Segmenting using HCDF =
+
+Peak detection applied to the HCDF returns the temporal position of tonal discontinuities that can be used for the actual segmentation of the audio sequence.
+
+<br>
+== Flowchart Interconnections ==
+
+`sig.segment` accepts uniquely as main input `sig.input` objects not frame-decomposed, not channel decomposed, and not already segmented.
+
+Alternatively, file name(s) or the `'Folder'` keyword can be used as well.
+
+<br>
+`sig.segment(…,'HCDF')` can return several outputs:
+  # the segmented audio waveform itself,<p>
+  ## the HCDF (`sig.hcdf`) after peak picking (`sig.peaks`),<p>
+  ## the tonal centroid (`sig.tonalcentroid`), and<p>
+  ## the chromagram (`sig.chromagram`).
