@@ -1,0 +1,20 @@
+#summary sig.hdcf: Harmonic Change Detection Function
+
+= sig.hdcf: Harmonic Change Detection Function =
+
+The Harmonic Change Detection Function (HCDF) is the flux of the tonal centroid (Harte and Sandler, 2006).
+
+<br>
+== Flowchart Interconnections ==
+
+`mirhcdf` accepts either:
+  * `mirtonalcentroid` frame-decomposed objects,<p>
+  * `mirchromagram` frame-decomposed objects,<p>
+  * `mirspectrum` frame-decomposed objects,<p>
+  * `sig.input` objects , where the audio waveform can be segmented (using `mirsegment`), decomposed into channels (using `mirfilterbank`). If not decomposed yet, it is decomposed into frames (using the `'Frame'` option, with by default a frame length of .743 s and a hop factor of .1),<p>
+  * file name(s) or the `'Folder'` keyword.
+
+<br>
+== Frame decomposition ==
+
+`mirhcdf(…,'Frame',…)` performs first a frame decomposition, with by default a frame length of 743 ms and a hop factor of 10% (74.3 ms). For the specification of other frame configuration using additional parameters, cf. the previous SigFrame vs. 'Frame' section.
