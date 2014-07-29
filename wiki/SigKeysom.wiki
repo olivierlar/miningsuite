@@ -25,10 +25,9 @@ The result is displayed as a pseudo-color map, where colors correspond to Pearso
 {{{
 sig.keysom('ragtime')
 }}}
-
 https://miningsuite.googlecode.com/svn/wiki/SigKeysom_ex1.png
 
-<br>
+
 == Accessible Output ==
 cf. §5.2 for an explanation of the use of the `'get'` method. Specific fields:
 
