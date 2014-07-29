@@ -7,35 +7,35 @@ Gives a broad estimation of tonal center positions and their respective clarity.
 <br>
 == Flowchart Interconnections ==
 
-It consists simply of a peak picking in the mirkeystrength curve(s). Two options of mirpeaks are accessible from mirkey:
-  * ‘Total’, set to 1<p>
-  * ‘Contrast’, set to .1
+It consists simply of a peak picking in the `sig.keystrength` curve(s). Two options of `sig.peaks` are accessible from `sig.key`:
+  * `'Total'`, set to 1<p>
+  * `'Contrast'`, set to .1
 <br>
-The ‘Weight’ and ‘Triangle’ options used in mirchromagram can be changed directly in mirkeystrength.
+The `'Weight'` and `'Triangle'` options used in `sig.chromagram` can be changed directly in `sig.keystrength`.
 
 <br>
-mirkey accepts either: 
-  * mirkeystrength objects, where peaks have been already extracted or not,<p>
-  * mirchromagram objects,<p>
-  * mirspectrum objects,<p>
-  * sig.input objects , where the audio waveform can be segmented (using mirsegment), decomposed into channels (using mirfilterbank), and/or decomposed into frames (using mirframe or the ‘Frame’ option, with by default a frame length of 1 s and half overlapping),<p>
-  * file name(s) or the ‘Folder’ keyword.
+`sig.key` accepts either: 
+  * `sig.keystrength` objects, where peaks have been already extracted or not,<p>
+  * `sig.chromagram` objects,<p>
+  * `sig.spectrum` objects,<p>
+  * `sig.input` objects , where the audio waveform can be segmented (using `sig.segment`), decomposed into channels (using `sig.filterbank`), and/or decomposed into frames (using `sig.frame` or the `'Frame'` option, with by default a frame length of 1 s and half overlapping),<p>
+  * file name(s) or the `'Folder'` keyword.
 
 <br>
-mirkey can return several outputs:
+`sig.key` can return several outputs:
   # the best key(s), i.e., the peak abscissa(e);<p>
   ## the key clarity: i.e., the key strength associated to the best key(s), i.e., the peak ordinate(s);<p>
-  ## the mirkeystrength data including the picked peaks (mirpeaks).
+  ## the `sig.keystrength` data including the picked peaks (sig.peaks).
 
 <br>
 == Frame decomposition ==
 
-mirkey(...,‘Frame’,...) performs first a frame decomposition, with by default a frame length of 1 s and a hop factor of 50% (0.5 s). For the specification of other frame configuration using additional parameters, cf. the previous mirframe vs. ‘Frame’ section.
+`sig.key(…,'Frame',…)` performs first a frame decomposition, with by default a frame length of 1 s and a hop factor of 50% (0.5 s). For the specification of other frame configuration using additional parameters, cf. the previous SigFrame vs. 'Frame' section.
 
 <br>
 == Example ==
 {{{
-[k c s]=mirkey(‘ragtime','Frame')
+[k c s]=sig.key('ragtime','Frame')
 }}}
 <br>
 https://miningsuite.googlecode.com/svn/wiki/SigKey_ex1.png<p>
