@@ -1,0 +1,33 @@
+#summary sig.keysom: Self-organizing map
+
+= sig.keysom: Self-organizing map =
+
+Projects the chromagram (normalized using the ‘Normal’ option) into a self-organizing map trained with the Krumhansl-Kessler profiles (modified for chromagrams) (Toiviainen and Krumhansl, 2003; Krumhansl, 1990).
+
+The result is displayed as a pseudo-color map, where colors correspond to Pearson correlation values. In case of frame decomposition, the projection maps are shown one after the other in an animated figure.
+
+<br>
+== Flowchart Interconnections ==
+
+mirkeysom accepts either:
+  * `mirchromagram` objects,<p>
+  * `mirspectrum` objects,<p>
+  * `sig.input` objects , where the audio waveform can be segmented (using mirsegment), decomposed into channels (using mirfilterbank), and/or decomposed into frames (using mirframe),<p>
+  * file name or the `‘Folder’` keyword.
+
+<br>
+== Frame decomposition ==
+
+`mirkeysom(...,‘Frame’,...)` performs first a frame decomposition, with by default a frame length of 1 s and a hop factor of 50% (0.5 s). For the specification of other frame configuration using additional parameters, cf. the previous SigFrame vs. ‘Frame’ section.
+
+<br>
+== Example ==
+{{{
+mirkeysom(‘ragtime’)
+}}}
+
+<br>
+== Accessible Output ==
+cf. §5.2 for an explanation of the use of the `'get'` method. Specific fields:
+
+  * `‘Weight’`: the projection value associated to each map location (same as `‘Data’`).
