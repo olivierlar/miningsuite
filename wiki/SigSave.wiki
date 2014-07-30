@@ -7,20 +7,17 @@ Certain classes of temporal data can be saved:
   * `sig.input` objects: the waveform is directly saved, and
    * if the audio waveform is segmented (using `sig.segment`), segments are concatenated with a short burst of noise in-between;
    * if the audio waveform is decomposed into channels (using `sig.filterbank`), each channel is saved in a separate file;
-   * if the audio is decomposed into frames (using `sig.frame`), frames are concatenated;
-
-  * file name(s) or the `'Folder'` keyword: same behavior as for `sig.input` objects;
-
-  * `sig.envelope` objects (frame-decomposed or not) are sonified using a white noise modulated in amplitude by the envelope,
-
+   * if the audio is decomposed into frames (using `sig.frame`), frames are concatenated;<p>
+  * file name(s) or the `'Folder'` keyword: same behavior as for `sig.input` objects;<p>
+  * `sig.envelope` objects (frame-decomposed or not) are sonified using a white noise modulated in amplitude by the envelope,<p>
   * `sig.pitch` results: each extracted frequency is sonified using a sinusoid.
 
-
+<br>
 == Frame decomposition == 
 
 `sig.save(…,'Frame',…)` performs first a frame decomposition, with by default a frame length of 50 ms and half overlapping. For the specification of other frame configuration using additional parameters, cf. the previous SigFrame vs. 'Frame' section.
 
-
+<br>
 == Options ==
 
   * The name and extension of the saved file can be specified in different ways, as shown in the tables below.
@@ -31,6 +28,7 @@ Certain classes of temporal data can be saved:
     * If the `sig.input` object to be saved contains several audio files, the specified string will be concatenated to the original name of each audio file.
    * If the second argument of sig.save is a string ended by `'.au'`, the file name will follow the convention explained in the previous point, and the files will be saved in AU format.
 
+<br>
 || *Diverse ways of saving into an audio file* ||
 || `a=sig.input('mysong.au')` || mysong.au ||
 || `sig.save(a)` || mysong.mir.wav ||
@@ -38,6 +36,7 @@ Certain classes of temporal data can be saved:
 || `sig.save(a,'.au')` || mysong.mir.au ||
 || `sig.save(a,'new.au')` || new.au ||
 
+<br>
 || *Diverse ways of saving as a batch of audio files* ||
 || `a=sig.input('Folder')` || song1.wav || song2.wav || song3.au ||
 || `sig.save(a)` || song1.mir.wav || song2.mir.wav || song3.mir.wav ||
@@ -45,7 +44,6 @@ Certain classes of temporal data can be saved:
 || `sig.save(a,'.au')` || song1.mir.au || song2.mir.au || song3.mir.au ||
 || `sig.save(a,'new.au')` || song1new.au || song2new.au || song3new.au ||
 
-
-  * `sig.save(a,filename,'SeparateChannels')` save each separate channel in a different file. The channel number is added to the file name, before any file extension.
-
+<br>
+  * `sig.save(a,filename,'SeparateChannels')` save each separate channel in a different file. The channel number is added to the file name, before any file extension.<p>
   * `sig.save(a,filename,'SeparateSegments')` save each separate segment in a different file. The segment number is added to the file name, before any file extension.
