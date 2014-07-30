@@ -42,6 +42,7 @@ where _m_ is the name of one of the following segmentation methods: `'Novelty'` 
 
 The first argument of the `sig.segment` function is the audio file that needs to be segmented. It is possible for instance to compute the segmentation curve using a downsampled version of the signal and to perform the actual segmentation using the original audio file.
 
+<br>
 == Example ==
 
 {{{
@@ -57,7 +58,7 @@ sp=sig.spectrum(sg,'dB')
 
 https://miningsuite.googlecode.com/svn/wiki/SigSegment_ex2.png
 
-
+<br>
 == Accessible Output ==
 
 cf. §5.2 for an explanation of the use of the `'get'` method. 
