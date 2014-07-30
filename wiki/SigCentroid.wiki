@@ -1,24 +1,40 @@
-#summary sig.centroid: Statistical description of spectral distribution
+#summary sig.centroid: Centroid of the data
 
-= sig.centroid: Statistical description of spectral distribution =
+= sig.centroid: Centroid of the data =
 
-The spectral distribution can be described by statistical moments: centroid, spread, skewness, kurtosis, flatness as well as by entropy.<p>
-See the Statistics section (§4.2) for more details about each operator.
-<br><br>
+An important and useful description of the shape of a distribution can be obtained through the use of its moments. The first moment, called the mean, is the geometric center (centroid) of the distribution and is a measure of central tendency for the random variable.
 
+https://miningsuite.googlecode.com/svn/wiki/SigCentroid_eq1.png
+
+https://miningsuite.googlecode.com/svn/wiki/SigCentroid_ex1.png
+
+<br>
 == Flowchart Interconnections ==
 
 `sig.centroid` accepts either:
   * `sig.spectrum` objects<p>
   * `sig.input` objects (same as for `sig.spectrum`)<p>
   * file name(s) or the `'Folder'` keyword. 
-<br>
 
+<br>
 == Frame decomposition ==
 
 `'Frame'` performs first a frame decomposition, with by default a frame length of 50 ms and half overlapping. For the specification of other frame configuration using additional parameters, cf. the previous SigFrame vs. 'Frame' section.
-<br><br>
 
+<br>
+== Input ==
+
+Any data can be used as input.
+
+If the input is an audio waveform, a file name, or the `'Folder'` keyword, the centroid is computed on the spectrum (spectral centroid). For quasi-silent frames, as specified by the `'MinRMS'` option, NaN is returned.
+
+If the input is a series of peak lobes produced by `sig.peaks(…,'Extract')`, the centroid will be computed for each of these lobes separately.
+
+<br>
 == Options ==
 
-See the Statistics section (§4.2) for more details about the operator.
+  * When the input contains peaks (using `sig.peaks`), `sig.centroid(…,'Peaks',`_i_`)` will compute the centroids of the distribution of peaks. The argument i accepts two arguments:
+   * _i_ = `'NoInterpol'`: the centroid is computed on the non-interpolated peaks (default choice),
+   * _i_ = `'Interpol'`: the centroid is computed on the interpolated peaks (cf. `'Interpol'` option in SigPeaks).<p>
+  * `sig.centroid(…,'MinRMS',`_m_`)` specifies the threshold _m_, as a value from 0 to 1, for the detection of quasi-silent frames, for which no value is given. For a given frame, if the RMS of the input (for spectral centroid, the input is each frame of the spectrogram, etc.) is below m times the highest RMS value over the frames, NaN is returned. default value: _m_ = .005<p>
+  * `sig.centroid(…,'MaxEntropy'`_h_`)` specifies the threshold _h_, as a value from 0 to 1, for the detection of quasi-flat frames, for which no value is given. For a given frame, if the entropy of the input (for spectral centroid, the input is each frame of the spectrogram, etc.) is over _m_, NaN is returned. default value: _m_ = .95
