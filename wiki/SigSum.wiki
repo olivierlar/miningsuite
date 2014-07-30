@@ -33,7 +33,9 @@ The summation can be divided by the number of channels using the command:
 s=sig.sum(…,'Mean')
 }}}
 
+<br>
 == Summary of filterbank channels ==
+
 If we compute for instance an autocorrelation from the envelopes:
 {{{
 ac=sig.autocor(e)
