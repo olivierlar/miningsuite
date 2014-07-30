@@ -4,6 +4,9 @@
 
 Another simple way of describing the attack phase, proposed in `sig.attackleap`, consists in estimating the amplitude difference between the beginning and the end of the attack phase. Values are expressed in the same scale than the original signal.
 
+https://miningsuite.googlecode.com/svn/wiki/SigAttackleap_ex1.png
+
+
 == Flowchart Interconnections ==
 
 `sig.attackleap` accepts as input data type either:
@@ -18,9 +21,11 @@ Some options in `sig.onsets` can be controlled:
   * `sig.attackleap(…,'Single')` toggles on the `'Single'` option in `sig.onsets`.<p>
   * `sig.attackleap(…,'LogOnset')` toggles on the `'Log'` option in `sig.onsets`.<p>
   * `sig.attackleap(…,'MinLog',`_ml_`)` controls the `'MinLog'` option in `sig.onsets`.
+
 <br>
 The peak picking from the onset detection is performed in any case. Its `'Contrast'` parameter can be specified. Its default value is the same as in `sig.onsets`.
 
+<br>
 `sig.attackleap` can return several outputs:
-  * the attack leap itself and<p>
-  * the onset detection curve returned by `sig.onsets`, including the detected onsets.
+  # the attack leap itself and<p>
+  ## the onset detection curve returned by `sig.onsets`, including the detected onsets.
