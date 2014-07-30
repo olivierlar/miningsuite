@@ -10,7 +10,7 @@ sig.onsets('ragtime')
 
 https://miningsuite.googlecode.com/svn/wiki/SigOnsets_ex1.png
 
-
+<br>
 == Flowchart Interconnections ==
 
 The onset detection curve can be computed in various ways:
@@ -82,12 +82,13 @@ When the `'Emerge'` method is used for academic research, please cite the follow
 
   * any other object: it is decomposed into frames (if not already decomposed) using the parameters specified by the `'Frame'` option; the flux will be automatically computed by default, or the novelty (if the `'Pitch'` option has been chosen).
 
+<br>
 == Example ==
 
 Differentiating the envelope using the `'Diff'` option highlights the difference of energy. By subsequently applying a halfwave rectification of the result (`'HalfwaveDiff'`), bursts of energy are emphasized.
 
 {{{
-o = sig.onsets('ragtime','Diff','Sum','no','Filterbank',5,'Halfwavediff','Detect','no')
+o=sig.onsets('ragtime','Diff','Sum','no','Filterbank',5,'Halfwavediff','Detect','no')
 }}}
 
 For the previous example (cf. figure above) we obtain now for the differentiated envelopes the following representation:
@@ -103,16 +104,18 @@ sig.sum(o)
 https://miningsuite.googlecode.com/svn/wiki/SigOnsets_ex3.png
 
 == Onset detection ==
-  * `sig.onsets(…,'Detect',`_d_`)` specifies options related to the peak picking from the onset detection curve:<p>
+`sig.onsets(…,'Detect',`_d_`)` specifies options related to the peak picking from the onset detection curve:<p>
    * _d_ = `'Peaks'` (default choice): local maxima are chosen as onset positions;<p>
    * _d_ = `'Valleys'`: local minima are chosen as onset positions;<p>
    * _d_ = 0, or `'no'`, or `'off'`: no peak picking is performed.<p>
 
+<br>
 Options associated to the `sig.peaks` function can be specified as well. In particular:<p>
   * `sig.onsets(…,'Contrast',`_c_`)` with default value here _c_ = .01, <p>
   * `sig.onsets(…,'Threshold',`_t_`)` with default value here _t_ = 0.<p>
   * `sig.onsets(…,'Single')` selects only the highest peak.<p>
 
+<br>
 == Attack and release ==
 The maxima of the onset detection curve show the positions of the note onsets, but more precisely the end of the attack phase. The `'Attack'` and `'Release'` options estimate the beginning of the attack phase and the end of the release phase of each note by searching for the local minimum before and after each peak.
 
@@ -134,6 +137,7 @@ https://miningsuite.googlecode.com/svn/wiki/SigOnsets_ex5.png
 
 If the `'Attack'` or `'Release'` method discovers that some attack/release phases are overlapped, the redundant onset is filtered out. If for instance, two successive peaks have either the same start attack time, or the same end release time, only one peak is kept.
 
+<br>
 == Segmentation ==
 
 The onset points can be used for segmentation of the initial waveform:
@@ -158,7 +162,7 @@ https://miningsuite.googlecode.com/svn/wiki/SigOnsets_ex7.png
 
 The onset detection curve can be further decomposed into frames if the `'Frame'` option has been specified, with default frame length 3 seconds and hop factor of 10% (0.3 second).
 
-
+<br>
 == Preselected Model ==
 
 Complete (or nearly complete) models are available:
@@ -193,6 +197,7 @@ o=sig.sum(o,'Weights',fB);
 o=sig.envelope(o,'Smooth',12);
 }}}
 
+<br>
 == Accessible Output ==
 
 cf. §5.2 for an explanation of the use of the get method. Specific fields:
