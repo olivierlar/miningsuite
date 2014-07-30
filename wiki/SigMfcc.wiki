@@ -6,6 +6,7 @@ MFCC offers a description of the spectral shape of the sound. We recall that the
 
 https://miningsuite.googlecode.com/svn/wiki/SigMfcc_ex1.png
 
+<br>
 The computation of mel-frequency cepstral coefficients is highly similar:
 
 https://miningsuite.googlecode.com/svn/wiki/SigMfcc_ex2.png
@@ -41,11 +42,10 @@ By convention, the coefficient of rank zero simply indicates the average energy 
   * If the output is frame-decomposed, showing the the temporal evolution of the MFCC along the successive frames, the temporal differentiation can be computed:<p>
    * `sig.mfcc(…,'Delta',`_d_`)` performs temporal differentiations of order _d_ of the coefficients, also called delta-MFCC (for _d_ = 1) or delta-delta-MFCC (for _d_ = 2). By default, _d_ = 1.<p>
    * `sig.mfcc(…,'Radius',`_r_`)` specifies, for each frame, the number of successive and previous neighbouring frames taken into consideration for the least-square approximation used for the derivation. For a given radius _r_, the Delta operation for each frame _i_ is computed by summing the MFCC coefficients at frame _i+j_ (with _j_ from _-r_ to _+r_) , each coefficient being multiplied by its weight _j_. Usually the radius is equal to 1 or 2. Default value: _r_ = 2.
-<br>
 
+<br>
 == Accessible Output ==
 
-cf. §5.2 for an explanation of the use of the get method. Specific fields:
-
+cf. §5.2 for an explanation of the use of the `'get'` method. Specific fields:
   * `'Rank'`: the series of rank(s) taken into consideration (same as `'Pos'`),<p>
   * `'Delta'`: the number of times the delta operation has been performed.
