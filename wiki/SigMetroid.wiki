@@ -11,15 +11,16 @@ When `sig.metroid` is used for academic research, please cite the following publ
 
 ||Lartillot, O., Cereghetti, D., Eliard, K., Trost, W. J., Rappaz, M.-A., Grandjean, D., "Estimating tempo and metrical features by tracking the whole metrical hierarchy", 3rd International Conference on Music & Emotion, Jyväskylä, 2013.||
 
-
+<br>
 == Flowchart Interconnections ==
+
 `sig.metroid` accepts as input data type either:
   * `sig.metre` objects,<p>
   * `sig.autocor` objects,<p>
   * onset detection curve (resulting from `sig.onsets`), frame-decomposed or not, channel-decomposed or not,<p>
   * and all the input data accepted by `sig.onsets`.<p>
 
-
+<br>
 == Options ==
 
 For each frame, the dominant metrical levels are selected and the centroid of their periodicity (in seconds) is computed, using as weights the amount of autocorrelation score at that specific level that exceeds the autocorrelation score of the underlying metrical sub-levels. In this way, any sudden change in the number of selected metrical levels from one time frame to the successive one does not lead to abrupt changes in the metrical centroid curve.
