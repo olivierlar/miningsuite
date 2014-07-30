@@ -16,25 +16,25 @@ https://miningsuite.googlecode.com/svn/wiki/SigAutocor_ex1.png
 
 Hence when the lag _j_ corresponds to a period of the signal, the signal is shifted to one period ahead, and therefore is exactly superposed to the original signal. Hence the summation gives very high value, as the two signals are highly correlated.
 
-
+<br>
 == Flowchart Interconnections ==
 
 `sig.autocor` usually accepts either:
 
-  * file name(s) or the 'Folder' keyword, 
-  * `sig.input` objects, where the audio waveform can be segmented (using `sig.segment`), decomposed into channels (using `sig.filterbank`), and/or decomposed into frames (using `sig.frame`),
-  * `sig.spectrum` objects,
+  * file name(s) or the 'Folder' keyword,<p>
+  * `sig.input` objects, where the audio waveform can be segmented (using `sig.segment`), decomposed into channels (using `sig.filterbank`), and/or decomposed into frames (using `sig.frame`),<p>
+  * `sig.spectrum` objects,<p>
   * data in the onset detection curve category (cf. SigOnsets):
    * `sig.envelope` objects, frame-decomposed or not,
-   * fluxes (cf. SigFlux), frame-decomposed or not,
+   * fluxes (cf. SigFlux), frame-decomposed or not,<p>
   * `sig.autocor` objects, for further processing.
 
-
+<br>
 == Frame decomposition ==
 	
 `mirautocor(…,'Frame',…)` performs first a frame decomposition, with by default a frame length of 50 ms and half overlapping. For the specification of other frame configuration using additional parameters, cf. the previous SigFrame vs. 'Frame' section.
 
-
+<br>
 == Parameters specification ==
 
   * `sig.autocor(…,'Min',`_mi_`)` indicates the lowest delay taken into consideration. Default value: 0 s. The unit can be specified:
@@ -47,7 +47,7 @@ Hence when the lag _j_ corresponds to a period of the signal, the signal is shif
 
   * `sig.autocor(…,'Normal',`_n_`)` specifies a normalization option for the cross-correlation (`'biased', 'unbiased', 'coeff', 'none'`). This corresponds exactly to the normalization options in _Matlab xcorr_ function, as `sig.autocor` actually calls _xcorr_ for the actual computation. The default value is _'coeff'_,  corresponding to a normalization so that the autocorrelation at zero lag is identically 1. If the data is multi-channel, the normalization is such that the sum over channels at zero lag becomes identically 1. Note however that the `'coeff'` routine is not used when the compression (`'Compres'`) factor _k_ is not equal to 2 (see below).
 
-
+<br>
 == Post-processing options ==
 
   * `sig.autocor(…,'Freq')` represents the autocorrelation function in the frequency domain: the periods are expressed in Hz instead of seconds (see the last curve in the figure below for an illustration).
@@ -58,64 +58,65 @@ Hence when the lag _j_ corresponds to a period of the signal, the signal is shif
 
   * `sig.autocor(…,'Resonance',`_r_`)` multiplies the autocorrelation curve with a resonance curve that emphasizes pulsations that are more easily perceived. Two resonance curves are proposed:
    * _r_ = `'ToiviainenSnyder'` (Toiviainen & Snyder 2003) (default value if `'Resonance'` option toggled on),
-   * _r_ = `'vanNoorden'` (van Noorden & Moelants, 1999).
-
- This option should be used only when the input of the `sig.autocor` function is an amplitude envelope, i.e., a `´sig.envelope´` object.
- * `sig.autocor(…,'Center',`_c_`)` assigns the center value of the resonance curve, in seconds. Works mainly with `'ToiviainenSnyder'` option. Default value: _c_ = 0.5.
-
-
+   * _r_ = `'vanNoorden'` (van Noorden & Moelants, 1999).<p>
+   This option should be used only when the input of the `sig.autocor` function is an amplitude envelope, i.e., a `´sig.envelope´` object.<p>
+   * `sig.autocor(…,'Center',`_c_`)` assigns the center value of the resonance curve, in seconds. Works mainly with `'ToiviainenSnyder'` option. Default value: _c_ = 0.5.<p>
 https://miningsuite.googlecode.com/svn/wiki/SigAutocor_Toiviainen.png
-https://miningsuite.googlecode.com/svn/wiki/SigAutocor_vanNoorden.png<p>
- 
- 
-_Resonance curves `'ToiviainenSnyder'` (left) and `'vanNoorden'` (right)_
+https://miningsuite.googlecode.com/svn/wiki/SigAutocor_vanNoorden.png<p> 
+   _Resonance curves `'ToiviainenSnyder'` (left) and `'vanNoorden'` (right)_<p>
+   * `sig.autocor(…,'Halfwave')` performs a half-wave rectification on the result, in order to just show the positive autocorrelation coefficients.
 
-`sig.autocor(…,'Halfwave')` performs a half-wave rectification on the result, in order to just show the positive autocorrelation coefficients.
-
+<br>
 == Generalized autocorrelation ==
 
 `sig.autocor(…,'Compres',`_k_`)` – or equivalently `sig.autocor(…,'Generalized',`_k_`)` – computes the autocorrelation in the frequency domain and includes a magnitude compression of the spectral representation. Indeed an autocorrelation can be expressed using Discrete Fourier Transform as:
 
-_y = IDFT(|DFT(x)|^2),_
+_y = IDFT(|DFT(x)|^2^),_
 
 which can be generalized as: 
 
-_y = IDFT(|DFT(x)|^k)_
+_y = IDFT(|DFT(x)|^k^)_
 
 Compression of the autocorrelation (i.e., setting a value of _k_ lower than 2) are recommended in (Tolonen & Karjalainen, 2000) because this decreases the width of the peaks in the autocorrelation curve, at the risk however of increasing the sensitivity to noise. According to this study, a good compromise seems to be achieved using value _k_ = .67. By default, no compression is performed (hence _k_ = 2), whereas if the `'Compress'` keyword is used, value _k_ = .67 is set by default if no other value is indicated.
 
-
+<br>
 == Enhanced autocorrelation ==
 In the autocorrelation function, for each periodicity in the signal, peaks will be shown not only at the lag corresponding to that periodicity, but also to all the multiples of that periodicity. In order to avoid such redundancy of information, techniques have been proposed that automatically remove these harmonics. In the frequency domain, this corresponds to sub-harmonics of the peaks.
 
 `sig.autocor(…,'Enhanced',`_a_`)`: The original autocorrelation function is half-wave rectified, time-scaled by factor a (which can be a factor list as well), and subtracted from the original clipped function (Tolonen & Karjalainen, 2000). If the `'Enhanced'` option is not followed by any value, the default value is _a_ = 2:10, i.e., from 2 to 10.
 
 If the curve does not start from zero at low lags but begins instead with strictly positive values, the initial discontinuity would be propagated throughout all the scaled version of the curve. In order to avoid this phenomenon, the curve is modified in two successive ways:
-  * if the curve starts with a descending slope, the whole part before the first local minimum is removed from the curve,
+  * if the curve starts with a descending slope, the whole part before the first local minimum is removed from the curve,<p>
   * if the curve starts with an ascending slope, the curve is prolonged to the left following the same slope but which is increased by a factor of 1.1 at each successive bin, until the curve reaches the x-axis.
 
 See the figure below for an example of enhanced autocorrelation when computing the pitch content of a piano _Amin3_ chord, with the successive step of the default enhancement, as used by default in `sig.pitch` (cf. description of SigPitch).<p>
 
-|| https://miningsuite.googlecode.com/svn/wiki/SigAutocor_enhanced1.png  || https://miningsuite.googlecode.com/svn/wiki/SigAutocor_enhanced2.png ||
+|| 1. https://miningsuite.googlecode.com/svn/wiki/SigAutocor_enhanced1.png  || 2. https://miningsuite.googlecode.com/svn/wiki/SigAutocor_enhanced2.png ||
 
-|| https://miningsuite.googlecode.com/svn/wiki/SigAutocor_enhanced3.png || https://miningsuite.googlecode.com/svn/wiki/SigAutocor_enhanced4.png || 
+|| 3. https://miningsuite.googlecode.com/svn/wiki/SigAutocor_enhanced3.png || 4. https://miningsuite.googlecode.com/svn/wiki/SigAutocor_enhanced4.png || 
 
-|| https://miningsuite.googlecode.com/svn/wiki/SigAutocor_enhanced5.png || https://miningsuite.googlecode.com/svn/wiki/SigAutocor_enhanced6.png ||
+|| 5. https://miningsuite.googlecode.com/svn/wiki/SigAutocor_enhanced5.png || 6. https://miningsuite.googlecode.com/svn/wiki/SigAutocor_enhanced6.png ||
 
-|| https://miningsuite.googlecode.com/svn/wiki/SigAutocor_freqenhanced.png ||
+|| 7. https://miningsuite.googlecode.com/svn/wiki/SigAutocor_freqenhanced.png ||
 
-_fig 1: Waveform autocorrelation of a piano chord Amaj3 (blue), and scaled autocorrelation of factor 2 (red);fig 2: subtraction of the autocorrelation by the previous scaled autocorrelation (blue), scaled autocorrelation of factor 3 (red); fig 3: resulting subtraction (blue), scaled autocorrelation of factor 4(red); fig 4: idem for factor 5; fig 5: idem for factor 6; fig 6:idem for factor 7; fig 7: resulting autocorrelation curve in the frequency domain and peak picking_
+  * _Fig 1: Waveform autocorrelation of a piano chord Amaj3 (blue), and scaled autocorrelation of factor 2 (red);
+  * Fig 2: Subtraction of the autocorrelation by the previous scaled autocorrelation (blue), scaled autocorrelation of factor 3 (red);
+  * Fig 3: Resulting subtraction (blue), scaled autocorrelation of factor 4(red);
+  * Fig 4: Idem for factor 5;
+  * Fig 5: Idem for factor 6;
+  * Fig 6: Idem for factor 7;
+  * Fig 7: Resulting autocorrelation curve in the frequency domain and peak picking_
 
-
+<br>
 == Accessible Output ==
 cf. §5.2 for an explanation of the use of the `'get'` method. Specific fields:
-  * `'Coeff'`: the autocorrelation coefficients (same as `'Data'`),
-  * `'Lag'`: the lags (same as `'Pos'`),
-  * `'FreqDomain'`: whether the lags are in s. (0) or in Hz. (1),
-  * `'OfSpectrum'`: whether the input is a temporal signal (0), or a spectrum (1),
-  * `'Window'`: contains the complete envelope signal used for the windowing,
+  * `'Coeff'`: the autocorrelation coefficients (same as `'Data'`),<p>
+  * `'Lag'`: the lags (same as `'Pos'`),<p>
+  * `'FreqDomain'`: whether the lags are in s. (0) or in Hz. (1),<p>
+  * `'OfSpectrum'`: whether the input is a temporal signal (0), or a spectrum (1),<p>
+  * `'Window'`: contains the complete envelope signal used for the windowing,<p>
   * `'Resonance': indicates the resonance curve that has been applied, or empty string if no resonance curve has been applied.
 
-
+<br>
 == Combining representations ==
 It is also possible to multiple points by points diverse spectral representations and autocorrelation functions, the latter being automatically translated to the spectrum domain (Peeters, 2006). Curves are half-wave rectified before multiplication.
