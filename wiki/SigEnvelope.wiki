@@ -15,14 +15,15 @@ https://miningsuite.googlecode.com/svn/wiki/SigEnvelope_ex2.png
  _Corresponding envelope of the ragtime excerpt_
 
 
-
+<br>
 == Flowchart Interconnections ==
 
 `sig.envelope` accepts as input data type either:
-  * `sig.signal` objects, where the audio waveform can be segmented (using `sig.segment`) and/or decomposed into channels (using `sig.filterbank`),
-  * file name(s), `'Folder'` or `'Folders'` keywords, etc.
+  * `sig.signal` objects, where the audio waveform can be segmented (using `sig.segment`) and/or decomposed into channels (using `sig.filterbank`),<p>
+  * file name(s), `'Folder'` or `'Folders'` keywords, etc.<p>
   * any scalar object (i.e., where there is one numerical value associated to each successive frame, such as _sig.flux, sig.novelty_, etc.): in this case, the mirscalar object is simply converted into a `sig.envelope` object. The advantages of this operation is that the resulting _sig.envelope_ can be further decomposed into frames, which would not have been possible using the mirscalar object as it is already decomposed into frames.
 
+<br>
 == Parameters Specification ==
 
 The envelope extraction is based on two alternate strategies: either based on a filtering of the signal (`'Filter'` option, used by default), or on a decomposition into frames via a spectrogram computation (`'Spectro'` option). Each of these strategies accepts particular options:
@@ -81,7 +82,7 @@ sig.spectrum(…,'Frame',.1,'s',.1,'/1','Window','hanning',b)
 
   * `sig.envelope(…,'Frame',…)` modifies the default frame configuration.
 
-  * `sig.envelope(…,'UpSample',`_N_`)` upsamples by a factor _N_>1, where _N_ is an integer. Default value if `'UpSample'` called: _N_ = 2
+  * `sig.envelope(…,'UpSample',`_N_`)` upsamples by a factor _N_ > 1, where _N_ is an integer. Default value if `'UpSample'` called: _N_ = 2
 
   * `sig.envelope(…,'Complex')` toggles on the `'Complex'` method for the spectral flux computation (cf. SigFlux).
 
@@ -92,7 +93,7 @@ sig.spectrum(…,'Frame',.1,'s',.1,'/1','Window','hanning',b)
   * `sig.envelope(…,'TimeSmooth',0)` toggles on and controls the `'TimeSmooth'` operation. (cf. SigSpectrum).
 
 
-
+<br>
 == Post-processing options ==
 
 Different operations can be performed on the envelope curve:
@@ -105,13 +106,13 @@ Different operations can be performed on the envelope curve:
 
 https://miningsuite.googlecode.com/svn/wiki/SigEnvelope_ex4.png
 
-
+<br>
   * `sig.envelope(…,'HalfwaveCenter)` performs a half-wave rectification on the centered envelope.<p>
 
 https://miningsuite.googlecode.com/svn/wiki/SigEnvelope_ex5.png
 
-
-  * `sig.envelope(…,'Log')` computes the common logarithm (base 10) of the envelope.<p>
+<br>
+  * `sig.envelope(…,'Log')` computes the common logarithm (base 10) of the envelope.
    * `sig.envelope(…,'MinLog',`_ml_`)` selects the data in the logarithmic range [_-ml_ dB, 0 dB], where 0 dB corresponds to the maximal logarithmic amplitude, and excludes the data below that range.
 
   * `sig.envelope(…,‘Power')` computes the power (square) of the envelope.
@@ -120,29 +121,30 @@ https://miningsuite.googlecode.com/svn/wiki/SigEnvelope_ex5.png
 
 https://miningsuite.googlecode.com/svn/wiki/SigEnvelope_ex6.png
 
+<br>
   * `sig.envelope(…,'HalfwaveDiff')` performs a half-wave rectification on the differentiated envelope.<p>
 
 https://miningsuite.googlecode.com/svn/wiki/SigEnvelope_ex7.png
 
 
-  * `sig.envelope(…,'Normal')` normalizes the values of the envelope by fixing the maximum value to 1.<p>
-   * If the audio signal is decomposed into segments, each segment is normalized individually.<p>
-   * `sig.envelope(…,'Normal','AcrossSegments')`, on the contrary, normalizes across segments, i.e., with respect to the global maxima across all the segments of that audio signal.
+  * `sig.envelope(…,'Normal')` normalizes the values of the envelope by fixing the maximum value to 1.
+   * If the audio signal is decomposed into segments, each segment is normalized individually.
+   * `sig.envelope(…,'Normal','AcrossSegments')`, on the contrary, normalizes across segments, i.e., with respect to the global maxima across all the segments of that audio signal.<p>
 
   * `sig.envelope(…,‘Smooth’,`_o_`)` smooths the envelope using a movering average of order _o_. The default value when the option is toggled on: _o_ = 30
 
   * `sig.envelope(…,‘Gauss’,`_o_`)` smooths the envelope using a gaussian of standard deviation _o_ samples. The default value when the option is toggled on: _o_ = 30
  
-
+<br>
 == Auditory model ==
 
 Auditory modelling of envelope extraction is available in [AudEnvelope aud.envelope].
 
-
+<br>
 == Accessible Output ==
 
 Specific fields:
 
-  * `'Method'`: the value of the `'Method'` option,
-  * `'Log'`: whether the envelope has been logged using the `'Log'` option (1) or not (0),
+  * `'Method'`: the value of the `'Method'` option,<p>
+  * `'Log'`: whether the envelope has been logged using the `'Log'` option (1) or not (0),<p>
   * `'Diff'`: whether the envelope has been differentiated (1) or not (0).
