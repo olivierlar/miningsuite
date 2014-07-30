@@ -4,16 +4,15 @@
 
 The global energy of the signal _x_ can be computed simply by taking the root average of the square of the amplitude, also called root-mean-square (RMS):
 
-https://miningsuite.googlecode.com/svn/wiki/SigRms_eq1.png
+ https://miningsuite.googlecode.com/svn/wiki/SigRms_eq1.png
 
+<br>
 == Flowchart Interconnections ==
 
 `sig.rms` accepts as input data type either:
 
-  * `sig.input` objects, where the audio waveform can be segmented (using `sig.segment`), decomposed into channels (using `sig.filterbank`), and/or decomposed into frames (using `sig.frame`),
-
-  * file name(s) or the `'Folder'` keyword,
-
+  * `sig.input` objects, where the audio waveform can be segmented (using `sig.segment`), decomposed into channels (using `sig.filterbank`), and/or decomposed into frames (using `sig.frame`),<p>
+  * file name(s) or the `'Folder'` keyword,<p>
   * other vectorial objects, such as `sig.spectrum`, are accepted as well, although a warning is displayed in case this particular configuration was unintended, i.e., due to an erroneous script.
 
 The following command orders the computation of the RMS related to a given audio file:
@@ -23,9 +22,11 @@ sig.rms('ragtime')
 }}}
 
 which produce the resulting message in the Command Window:
+{{{
+The RMS energy related to file ragtime is 0.017932
+}}}
 
-`The RMS energy related to file ragtime is 0.017932`
-
+<br>
 == Frame decomposition ==
 
 `sig.rms(…,'Frame',…)` performs first a frame decomposition, with by default a frame length of 50 ms and half overlapping. For the specification of other frame configuration using additional parameters, cf. the previous SigFrame vs. 'Frame' section.
@@ -44,8 +45,8 @@ We can note that this energy curve is very close to the envelope:
 
 https://miningsuite.googlecode.com/svn/wiki/SigRms_ex2.png
 
+<br>
 == Options ==
 
-  * `sig.rms(…,'Median')` replaces the mean by the median, corresponding to what could be called a “root-median-square”.
-
+  * `sig.rms(…,'Median')` replaces the mean by the median, corresponding to what could be called a “root-median-square”.<p>
   * `sig.rms(…,'Warning',0)` toggles off the warning message, explained above, i.e., when the input is a vectorial data that is not a `sig.input` object.
