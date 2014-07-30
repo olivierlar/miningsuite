@@ -4,22 +4,17 @@
 
 The beat spectrum has been proposed as a measure of acoustic self-similarity as a function of time lag, and is computed from the similarity matrix (cf. SigSimatrix) (Foote, Cooper and Nam, 2002).
 
-
+<br>
 == Flowchart Interconnections ==
 
 One parameter related to `sig.simatrix` is accessible in `sig.beatspectrum`:
   * 'Distance'.
 <br>
 `sig.beatspectrum` accepts either:
-
-  * `sig.simatrix` objects,
-
-  * `sig.spectrum` frame-decomposed objects,
-
-  * `sig.input` objects: in this case, the similarity matrix will be based on the mfcc (`sig.mfcc`), computed from ranks 8 to 33. The audio waveform is decomposed into frames if it was not decomposed yet
-
-  * file name(s) or the `'Folder'` keyword: same behavior as for `sig.input` objects,
-
+  * `sig.simatrix` objects,<p>
+  * `sig.spectrum` frame-decomposed objects,<p>
+  * `sig.input` objects: in this case, the similarity matrix will be based on the mfcc (`sig.mfcc`), computed from ranks 8 to 33. The audio waveform is decomposed into frames if it was not decomposed yet<p>
+  * file name(s) or the `'Folder'` keyword: same behavior as for `sig.input` objects,<p>
   * other frame-decomposed analysis.
 <br>
 `sig.beatspectrum` can return several outputs:
@@ -27,6 +22,6 @@ One parameter related to `sig.simatrix` is accessible in `sig.beatspectrum`:
   # the beat spectrum curve itself, and<p>
   # the similarity matrix (`sig.simatrix`).
 
-
+<br>
 == Frame decomposition ==
 `sig.beatspectrum(…,'Frame',…)` specifies the frame configuration, with by default a frame length of 25 ms and a hop factor of 10 ms. For the specification of other frame configuration using additional parameters, cf. the previous SigFrame vs. 'Frame' section.
