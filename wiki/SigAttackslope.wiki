@@ -32,4 +32,5 @@ The peak picking from the onset detection is performed in any case. Its `'Contra
 
   * `sig.attackslope(x,`_meth_`)` specifies the method for slope estimation. Possible values for _meth_ are:<p>
    * _meth_ = `'Diff'` computes the slope as a ratio between the magnitude difference at the beginning and the ending of the attack period, and the corresponding time difference. (Default choice)<p>
+   https://miningsuite.googlecode.com/svn/wiki/SigAttackslope_ex1.png
    * _meth_ = `'Gauss'` computes the average of the slope, weighted by a gaussian curve that emphasizes values at the middle of the attack period (similar to Peeters, 2004).
