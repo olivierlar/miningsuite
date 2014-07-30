@@ -3,8 +3,11 @@
 = sig.zerocross: Waveform sign-change rate =
 
 A simple indicator of noisiness consists in counting the number of times the signal crosses the X-axis (or, in other words, changes sign).
-<br><br>
 
+https://miningsuite.googlecode.com/svn/wiki/SigZerocross_ex1.png
+
+
+<br>
 == Flowchart Interconnections ==
 
 `sig.zerocross` actually accepts any input data type (cf. section 4.2).
