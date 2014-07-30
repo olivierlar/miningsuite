@@ -4,7 +4,7 @@
 
 A decomposition of the energy of a signal (be it an audio waveform, or an envelope, etc.) along frequencies can be performed using a Discrete Fourier Transform, which, for an audio signal x has for equation:<p>
 
-https://miningsuite.googlecode.com/svn/wiki/SigSpectrum_eq1.png
+  https://miningsuite.googlecode.com/svn/wiki/SigSpectrum_eq1.png
 
 This decomposition is performed using a Fast Fourier Transform by the `sig.spectrum function by calling Matlab _fft_ function. The graph returned by the function highlights the repartition of the amplitude of the frequencies (i.e., the modulus of _Xk_ for all _k_), such as the following:<p>
 
@@ -12,45 +12,41 @@ https://miningsuite.googlecode.com/svn/wiki/SigSpectrum_ex1.png
 
 We can also obtain for each frequency the actual phase position (i.e., the phase of _Xk_), which indicates the exact position of each frequency component at the instant _t = 0_. If the result of the spectrum decomposition is s, the phase spectrum is obtained by using the command:
 
-  {{{
-  get(s,'Phase')
-  }}}
+{{{
+get(s,'Phase')
+}}}
 
+<br>
 == Flowchart Interconnections ==
 
 `sig.spectrum` accepts as input data type either:
 
-  * `sig.input` objects, where the audio waveform can be segmented (using `sig.segment`), decomposed into channels (using `sig.filterbank`), and/or decomposed into frames (using `sig.frame`);
-
-  * file name(s) or the `'Folder'` keyword;
-
-  * data in the onset detection curve category (cf. SigOnset):
-  *  `sig.envelope` objects, frame-decomposed or not,
-  * fluxes (cf. SigFlux), frame-decomposed or not;
-
+  * `sig.input` objects, where the audio waveform can be segmented (using `sig.segment`), decomposed into channels (using `sig.filterbank`), and/or decomposed into frames (using `sig.frame`);<p>
+  * file name(s) or the `'Folder'` keyword;<p>
+  * data in the onset detection curve category (cf. SigOnset):<p>
+  *  `sig.envelope` objects, frame-decomposed or not,<p>
+  * fluxes (cf. SigFlux), frame-decomposed or not;<p>
   * `sig.spectrum` frame-decomposed objects: by calling again `sig.spectrum` with the `'AlongBands'` option, Fourier transforms are computed this time on each temporal signal related to each separate frequency bin (or frequency band, cf. below).
 
-
+<br>
 == Frame decomposition ==
 `sig.spectrum(…,'Frame',…)` performs first a frame decomposition, with by default a frame length of 50 ms and half overlapping. For the specification of other frame configuration using additional parameters, cf. the previous SigFrame vs. 'Frame' section.
 
+<br>
 == Parameters specification ==
 The range of frequencies, in Hz, can be specified by the options:
 
-  * `sig.spectrum(…,'Min',`_mi_`)` indicates the lowest frequency taken into consideration, expressed in Hz. Default value: 0 Hz.
-
-  * `sig.spectrum(…,'Max',`_ma_`)` indicates the highest frequency taken into consideration, expressed in Hz. Default value: the maximal possible frequency, corresponding to the sampling rate divided by 2.
-
-  * `sig.spectrum(…,'Window',`_w_`)` specifies the windowing method. Windows are used to avoid the problems due to the discontinuities provoked by finite signals. Indeed, an audio sequence is not infinite, and the application of the Fourier Transform requires to replace the infinite time before and after the sequence by zeroes, leading to possible discontinuities at the borders. Windows are used to counteract those discontinuities. Possible values for _w_ are either _w = 0_ (no windowing) or any windowing function proposed in the _Signal Processing Toolbox^1^_. Default value: _w_ = `'hamming'`, the Hamming window being a particular good window for Fourier Transform.
-
-  * `sig.spectrum(…,'NormalInput')` normalizes the waveform between 0 and 1 before computing the Fourier Transform.
-
+  * `sig.spectrum(…,'Min',`_mi_`)` indicates the lowest frequency taken into consideration, expressed in Hz. Default value: 0 Hz.<p>
+  * `sig.spectrum(…,'Max',`_ma_`)` indicates the highest frequency taken into consideration, expressed in Hz. Default value: the maximal possible frequency, corresponding to the sampling rate divided by 2.<p>
+  * `sig.spectrum(…,'Window',`_w_`)` specifies the windowing method. Windows are used to avoid the problems due to the discontinuities provoked by finite signals. Indeed, an audio sequence is not infinite, and the application of the Fourier Transform requires to replace the infinite time before and after the sequence by zeroes, leading to possible discontinuities at the borders. Windows are used to counteract those discontinuities. Possible values for _w_ are either _w = 0_ (no windowing) or any windowing function proposed in the _Signal Processing Toolbox^*^_. Default value: _w_ = `'Hamming'`, the Hamming window being a particular good window for Fourier Transform.<p>
+  * `sig.spectrum(…,'NormalInput')` normalizes the waveform between 0 and 1 before computing the Fourier Transform.<p>
   * `sig.spectrum(…,'Phase','No')` does not compute the related FFT phase. The FFT phase is not computed anyway whenever another option that will make the phase information irrelevant (such as `'Log','dB'`, etc.) is specified.
-  ^1^ The list of possible window arguments can be found in the _window_ documentation:
-  {{{
-  help window
-  }}}
+  ^*^ The list of possible window arguments can be found in the _window_ documentation:
+{{{
+help window
+}}}
 
+<br>
 == Resolution specification ==
 
 The frequency resolution of the spectrum directly depends on the size of the audio waveform: the longer the waveform, the better the frequency resolution. It is possible, however, to increase the frequency resolution of a given audio waveform by simply adding a series of zeros at the end of the sequence, which is called _zero-padding_. Besides, an optimized version of the Discrete Fourier Transform, called Fast Fourier Transform (FFT) can be performed if the length of the audio waveform (including the zero-padding) is a power of 2. For this reason, by default, a zero-padding is performed by default in order to ensure that the length of the audio waveform is a power of 2. But these operations can be tuned individually:
@@ -73,6 +69,7 @@ Alternatively, the spectrum decomposition can be performed through a Constant Q 
 
 Please note however that the Constant Q Transform is implemented as a _Matlab_ M file, whereas _Matlab's_ FFT algorithm is optimized, therefore faster.
 
+<br>
 
 == Post-processing options ==
 
@@ -92,10 +89,9 @@ Please note however that the Constant Q Transform is implemented as a _Matlab_ M
 
   https://miningsuite.googlecode.com/svn/wiki/SigSpectrum_ex3.png
 
-  * `sig.spectrum(…,'Resonance',`_r_`)` multiplies the spectrum curve with a resonance curve that emphasizes pulsations that are more easily perceived. Two resonance curves are available:<p>
-   * _r_ = `'ToiviainenSnyder'` (Toiviainen & Snyder 2003), default choice, used for onset detection (cf. SigTempo),<p>
-   * _r_ = `'Fluctuation'` : fluctuation strength (Fastl 1982), default choice for frame-decomposed `'sig.spectrum'` objects redecomposed in 'Mel' bands (cf. SigFluctuation).
-
+  * `sig.spectrum(…,'Resonance',`_r_`)` multiplies the spectrum curve with a resonance curve that emphasizes pulsations that are more easily perceived. Two resonance curves are available:
+   * _r_ = `'ToiviainenSnyder'` (Toiviainen & Snyder 2003), default choice, used for onset detection (cf. SigTempo),
+   * _r_ = `'Fluctuation'` : fluctuation strength (Fastl 1982), default choice for frame-decomposed `'sig.spectrum'` objects redecomposed in 'Mel' bands (cf. SigFluctuation).<p>
 
   * `sig.spectrum(…,'Smooth',`_o_`)` smooths the spectrum curve using a moving average of order _o_. Default value when the option is toggled on: _o_ = 10
 
@@ -103,7 +99,7 @@ Please note however that the Constant Q Transform is implemented as a _Matlab_ M
  
   * `sig.spectrum(…,'TimeSmooth',`_o_`)` smooths each frequency channel of a spectrogram using a moving average of order _o_. Default value when the option is toggled on: _o_ = 10
 
-
+<br>
 == Frequency redistribution ==
 
   * `sig.spectrum(…,'Cents')` redistributes the frequencies along cents. Each octave is decomposed into 1200 bins equally distant in the logarithmic representation. The frequency axis is hence expressed in MIDI-cents unit: to each pitch of the equal temperament is associated the corresponding MIDI pitch standard value multiply by 100 (69*100=6900 for A4=440Hz, 70*100=7000 for B4, etc.).
@@ -142,7 +138,7 @@ The Mel-scale transformation requires a sufficient frequency resolution of the s
 
 A lot of natural sounds, especially musical ones, are harmonic: each sound consists of a series of frequencies at a multiple ratio of the one of lowest frequency, called fundamental. Techniques have been developed in signal processing to reduce each harmonic series to its fundamental, in order to simplify the representation. _MiningSuite_ includes two related techniques for the attenuation of harmonics in spectral representation (Alonso et al, 2003):
 
-  * `sig.spectrum(…,'Prod',`_m_`)` Enhances components that have harmonics located at multiples of range(s) m of the signal's fundamental frequency. Computed by compressing the signal by a list of factors _m_, and by multiplying all the results with the original signal. Default value is _m_ = 1:6. Hence for this initial spectrum:
+  * `sig.spectrum(…,'Prod',`_m_`)` Enhances components that have harmonics located at multiples of range(s) _m_ of the signal's fundamental frequency. Computed by compressing the signal by a list of factors _m_, and by multiplying all the results with the original signal. Default value is _m_ = 1:6. Hence for this initial spectrum:
 
   https://miningsuite.googlecode.com/svn/wiki/SigSpectrum_ex8.png
 
@@ -152,7 +148,7 @@ we obtain this reduced spectrum:
 
   * `sig.spectrum(…,'Sum',`_m_`)` Similar idea using addition of the multiples instead of multiplication.
 
-
+<br>
 == Accessible Output ==
 
 cf. §5.2 for an explanation of the use of the `'get'` method. Specific fields:
