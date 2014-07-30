@@ -33,42 +33,34 @@ sig.flux(c)
 
 https://miningsuite.googlecode.com/svn/wiki/SigFlux_ex4.png
 
-
+<br>
 == Flowchart Interconnections ==
 
 `sig.flux` usually accepts either:
-  * `sig.spectrum` frame-decomposed objects.
-
-  * `sig.input` objects, where the audio waveform can be segmented (using `sig.segment`), decomposed into channels (using `sig.filterbank`). The audio waveform is decomposed into frames if it was not decomposed yet. If the input is a _sig.input_ object, the default flux is a spectral flux: i.e., the audio waveform is passed to the _sig.spectrum_ operator before being fed into _sig.flux_.
-
-  * file name(s) or the `'Folder'` keyword: same behavior as for `sig.input` objects;
-
-  * `sig.autocor` frame-decomposed objects;
-
-  * `sig.cepstrum` frame-decomposed objects;
-
-  * `sig.mfcc` frame-decomposed objects;
-
-  * `sig.chromagram` frame-decomposed objects;
-
+  * `sig.spectrum` frame-decomposed objects.<p>
+  * `sig.input` objects, where the audio waveform can be segmented (using `sig.segment`), decomposed into channels (using `sig.filterbank`). The audio waveform is decomposed into frames if it was not decomposed yet. If the input is a _sig.input_ object, the default flux is a spectral flux: i.e., the audio waveform is passed to the _sig.spectrum_ operator before being fed into _sig.flux_.<p>
+  * file name(s) or the `'Folder'` keyword: same behavior as for `sig.input` objects;<p>
+  * `sig.autocor` frame-decomposed objects;<p>
+  * `sig.cepstrum` frame-decomposed objects;<p>
+  * `sig.mfcc` frame-decomposed objects;<p>
+  * `sig.chromagram` frame-decomposed objects;<p>
   * `sig.keystrength` frame-decomposed objects.
 
+<br>
 == Frame decomposition ==
 
 `sig.flux(…,'Frame',…)` specifies the frame configuration, the default being a frame length of 50 ms and half overlapping. For the syntax, cf. the previous SigFrame vs. 'Frame' section.
 
+<br>
 == Parameters specification ==
 
-  * `sig.flux(`_x_`,'Dist',`_d_`)` specifies the distance between successive frames, among the list of distances available in pdist (cf. `help pdist`). Default distance: `'Euclidean'`.
-
-  * `sig.flux(…,'Inc')`: Only positive difference between frames are summed, in order to focus on increase of energy solely. If toggled on, `'Dist'` parameter can only accept `'Euclidean'`, `'Cosine'` or 'City'`.
-
-  * `sig.flux(…,'Complex')`, for spectral flux, combines the use of both energy and phase information (Bello et al, 2004).
-
+  * `sig.flux(`_x_`,'Dist',`_d_`)` specifies the distance between successive frames, among the list of distances available in pdist (cf. `help pdist`). Default distance: `'Euclidean'`.<p>
+  * `sig.flux(…,'Inc')`: Only positive difference between frames are summed, in order to focus on increase of energy solely. If toggled on, `'Dist'` parameter can only accept `'Euclidean'`, `'Cosine'` or 'City'`.<p>
+  * `sig.flux(…,'Complex')`, for spectral flux, combines the use of both energy and phase information (Bello et al, 2004).<p>
   * `sig.flux(…,'SubBand')` decomposes first the input waveform using a 10-channel filterbank of octave-scaled second-order elliptical filters, with frequency cut of the first (low-pass) filter at 50 Hz:
-  {{{
-  sig.filterbank(…,'Manual',[-Inf 50*2.^(0:1:8) Inf], 'Order', 2)
-  }}}
+{{{
+sig.filterbank(…,'Manual',[-Inf 50*2.^(0:1:8) Inf], 'Order', 2)
+}}}
 
 https://miningsuite.googlecode.com/svn/wiki/SigFlux_ex5.png
 
@@ -81,11 +73,10 @@ sig.flux(…,'SubBand','Frame',.025)
 The authors found that fluctuations in the lower channels, around 50 Hz ~ 200 Hz (sub-bands 2 and 3) represent perceived “Fullness”, and those around 1600 ~ 6400 Hz (sub-Bands 7 and 8) represent perceived “Activity”.
 
 Alternatively, other filterbanks proposed in SigFilterbank can be specified, using the syntax:
-
-  * `sig.flux(…,'SubBand','Gammatone')`
-
+  * `sig.flux(…,'SubBand','Gammatone')`<p>
   * `sig.flux(…,'SubBand','2Channels')`
 
+<br>
 == Post-processing ==
 
   * `sig.flux(…,'Halfwave')`: performs a half-wave  rectification on the result.
