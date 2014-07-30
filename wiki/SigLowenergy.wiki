@@ -4,22 +4,26 @@
 
 The energy curve can be used to get an assessment of the temporal distribution of energy, in order to see if its remains constant throughout the signal, or if some frames are more contrastive than others. One way to estimate this consists in computing the low energy rate, i.e. the percentage of frames showing less-than-average energy (Tzanetakis and Cook, 2002).
 
+<br>
 == Flowchart Interconnections ==
 
 `sig.lowenergy` accepts as input data type either:
 
-  * `sig.rms` frame-decomposed data,
-  * `sig.input` objects, where the audio waveform can be segmented (using mirsegment), decomposed into channels (using `sig.filterbank`). The audio waveform is decomposed into frames if it was not decomposed yet. 
-  * file name(s) or the `'Folder'` keyword: same behavior than for miraudio objects.
+  * `sig.rms` frame-decomposed data,<p>
+  * `sig.input` objects, where the audio waveform can be segmented (using mirsegment), decomposed into channels (using `sig.filterbank`). The audio waveform is decomposed into frames if it was not decomposed yet. <p>
+  * file name(s) or the `'Folder'` keyword: same behavior than for sig.input objects.
 
+<br>
 `sig.lowenergy` can return several outputs:
-   * the low-energy rate itself and
+   * the low-energy rate itself and<p>
    * the `sig.rms` frame-decomposed data.
 
-
+<br>
 == Frame decomposition ==
+
 `sig.lowenergy(…,'Frame',…)` specifies the frame configuration, with by default a frame length of 50 ms and half overlapping. For the syntax, cf. the previous SigFrame vs. 'Frame' section. 
 
+<br>
 == Examples ==
 
 If we take for instance this energy curve:
@@ -36,6 +40,7 @@ sig.lowenergy(r1)
 
 we obtain the value 0.71317.
 
+<br>
 For this opposite example:
 {{{
 r2=sig.rms('a2','Frame')
@@ -49,7 +54,8 @@ sig.lowenergy(r2)
 }}}
 equal to 0.42398.
 
+<br>
 == Options ==
 
-  * `sig.lowenergy(…,'Threshold',`_t_`)` expressed as a ratio to the average energy over the frames. Default value: _t_ = 1
+  * `sig.lowenergy(…,'Threshold',`_t_`)` expressed as a ratio to the average energy over the frames. Default value: _t_ = 1<p>
   * `sig.lowenergy(…,'ASR')` computes the Average Silence Ratio (Feng, Zhuang, Pan, 2003), which corresponds to a RMS without the square-root, and a default threshold set to _t_ = .5
