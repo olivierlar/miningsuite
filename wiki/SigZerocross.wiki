@@ -7,7 +7,6 @@ A simple indicator of noisiness consists in counting the number of times the sig
 https://miningsuite.googlecode.com/svn/wiki/SigZerocross_ex1.png
 
 
-<br>
 == Flowchart Interconnections ==
 
 `sig.zerocross` actually accepts any input data type (cf. section 4.2).
