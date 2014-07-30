@@ -8,34 +8,32 @@ Certain classes of temporal data can be sonified:
    * if the audio waveform is decomposed into channels (using `sig.filterbank`), channels are played successively from low to high register;
    * if the audio is decomposed into frames (using `sig.frame`), frames are played successively;
 
-  * file name(s) or the ‘Folder' keyword: same behavior than for `sig.input` objects;
+  * file name(s) or the `'Folder'` keyword: same behavior than for `sig.input` objects;
 
   * `sig.envelope` objects (frame-decomposed or not) are sonified using a white noise modulated in amplitude by the envelope, and
    * if peaks have been picked on the envelope curve (using sig.peaks), they are sonified using a short impulse sound;
 
   * `sig.pitch` results: each extracted frequency is sonified using a sinusoid.
 
-
+<br>
 == Frame decomposition ==
+
 `sig.play(…,'Frame',…)` performs first a frame decomposition, with by default a frame length of 50 ms and half overlapping. For the specification of other frame configuration using additional parameters, cf. the previous SigFrame vs. ‘Frame' section. 
 
-
+<br>
 == Options ==
-  * `sig.play(…,'Channel',`_i_`)` plays the channel(s) of rank(s) indicated by the array _i_.
 
-  * `sig.play(…,'Segment',`_k_`)` plays the segment(s) of rank(s) indicated by the array _k_.
-
-  * `sig.play(…,'Sequence',`_l_`)` plays a sequence of audio files using the order indicated by the array _l_.
-
-  * `sig.play(…,'Increasing',`_d_`)` plays the sequences in increasing order of _d_, which can be either an array of number or a sig.scalar data (i.e., a scalar data returned by sig.toolbox).
-
-  * `sig.play(…,'Decreasing',`_d_`)` plays the sequences in decreasing order of _d_, which can be either an array of number or a sig.scalar data (i.e., a scalar data returned by sig.toolbox).
-
-  * `sig.play(…,'Every',`_s_`)` plays every _s_ sequence, where _s_ is a number indicating the step between sequences.
-
+  * `sig.play(…,'Channel',`_i_`)` plays the channel(s) of rank(s) indicated by the array _i_.<p>
+  * `sig.play(…,'Segment',`_k_`)` plays the segment(s) of rank(s) indicated by the array _k_.<p>
+  * `sig.play(…,'Sequence',`_l_`)` plays a sequence of audio files using the order indicated by the array _l_.<p>
+  * `sig.play(…,'Increasing',`_d_`)` plays the sequences in increasing order of _d_, which can be either an array of number or a sig.scalar data (i.e., a scalar data returned by sig.toolbox).<p>
+  * `sig.play(…,'Decreasing',`_d_`)` plays the sequences in decreasing order of _d_, which can be either an array of number or a sig.scalar data (i.e., a scalar data returned by sig.toolbox).<p>
+  * `sig.play(…,'Every',`_s_`)` plays every _s_ sequence, where _s_ is a number indicating the step between sequences.<p>
   * `sig.play(…,'Burst','No')` toggles off the burst sound between segments.
 
-*Example:*
+<br>
+== Example ==
+
 {{{
 e=sig.envelope('Folder');
 
