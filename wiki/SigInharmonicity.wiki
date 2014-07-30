@@ -6,6 +6,9 @@
 
 For that purpose, we use a simple function estimating the inharmonicity of each frequency given the fundamental frequency _f0_:
 
+https://miningsuite.googlecode.com/svn/wiki/SigInharmonicity_ex1.png
+
+
 ||*WARNING*: This simple model presupposes that there is only one fundamental frequency.||
 
 <br>
