@@ -4,18 +4,18 @@
 
 Segmentation at positions of long silences. A frame decomposed RMS is computed using sig.rms (with default options), and segments are selected from temporal positions where the RMS rises to a given `'On'` threshold, until temporal positions where the RMS drops back to a given `'Off'` threshold.
 
+<br>
 == Options ==
 
-  * `sig.segment(…,'Off',`_t1_`)` specifies the RMS `'Off'` threshold. Default value: _t1_ = .01
-
+  * `sig.segment(…,'Off',`_t1_`)` specifies the RMS `'Off'` threshold. Default value: _t1_ = .01<p>
   * `sig.segment(…,'On',`_t2_`)` specifies the RMS `'On'` threshold. Default value: _t2_ = .02
 
+<br>
 == Flowchart Interconnections ==
 
 `sig.segment` accepts uniquely as main input a miraudio objects not frame-decomposed, not channel decomposed, and not already segmented. Alternatively, file name or the `'Folder'` keyword can be used as well.
 
 `sig.segment(…,'RMS')` can return several outputs:
 
-  * the segmented audio waveform itself,
-
+  * the segmented audio waveform itself,<p>
   * the RMS curve (`sig.rms`).
