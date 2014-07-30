@@ -16,44 +16,33 @@ If _x_ is a frame-decomposed matrix, peaks are represented by white crosses:
 
 https://miningsuite.googlecode.com/svn/wiki/SigPeaks_ex2.png
 
+<br>
 == Parameters specification ==
-  * `sig.peaks(…,'Total',`_m_`)`: only the _m_ highest peaks are selected. If _m = Inf_, no limitation of number of peaks. Default value: _m = Inf_
 
+  * `sig.peaks(…,'Total',`_m_`)`: only the _m_ highest peaks are selected. If _m = Inf_, no limitation of number of peaks. Default value: _m = Inf_<p>
   * Border effects can be specified:
    * `sig.peaks(…,'NoBegin')` does not consider the first sample as a possible peak candidate.
-   * `sig.peaks(…,'NoEnd')` does not consider the last sample as a possible peak candidate.
-
+   * `sig.peaks(…,'NoEnd')` does not consider the last sample as a possible peak candidate.<p>
   * `sig.peaks(…,'Order',`_o_`)` specifies the ordering of the peaks.
    * _o_ = `'Amplitude'` orders the peaks from highest to lowest (Default choice.)
-   * _o_ = `'Abscissa'` orders the peaks along the abscissa axis.
-
-  * `sig.peaks(…,'Valleys')` detects valleys (local minima) instead of peaks.
-
-  * `sig.peaks(…,'Contrast',`_cthr_`)`: A given local maximum will be considered as a peak if the difference of amplitude with respect to both the previous and successive local minima (when they exist) is higher than the threshold _cthr_. This distance is expressed with respect to the total amplitude of the input signal: a distance of 1, for instance, is equivalent to the distance between the maximum and the minimum of the input signal. Default value: _cthr_ = 0.1
-
+   * _o_ = `'Abscissa'` orders the peaks along the abscissa axis.<p>
+  * `sig.peaks(…,'Valleys')` detects valleys (local minima) instead of peaks.<p>
+  * `sig.peaks(…,'Contrast',`_cthr_`)`: A given local maximum will be considered as a peak if the difference of amplitude with respect to both the previous and successive local minima (when they exist) is higher than the threshold _cthr_. This distance is expressed with respect to the total amplitude of the input signal: a distance of 1, for instance, is equivalent to the distance between the maximum and the minimum of the input signal. Default value: _cthr_ = 0.1<p>
 https://miningsuite.googlecode.com/svn/wiki/SigPeaks_ex3.png
 
-  * `sig.peaks(…,'SelectFirst',`_fthr_`)`: If the `'Contrast'` selection has been chosen, this additional option specifies that when one peak has to be chosen out of two candidates, and if the  difference of their amplitude is below the threshold _thr_, then the most ancien one is selected. Option toggled off by default. Default value if toggled on: _fthr_ = _cthr_/2
-
-  * `sig.peaks(…,'Threshold',`_thr_`)`: A given local maximum will be considered as a peak if its normalized amplitude is higher than this threshold thr. A given local minimum will be considered as a valley if its normalized amplitude is lower than this threshold.  The normalized amplitude can have value between 0 (the minimum  of the signal in each frame) and 1 (the maximum in each frame). Default value: _thr_ = 0 for peaks, _thr_ = 1 for valleys.
-
+  * `sig.peaks(…,'SelectFirst',`_fthr_`)`: If the `'Contrast'` selection has been chosen, this additional option specifies that when one peak has to be chosen out of two candidates, and if the  difference of their amplitude is below the threshold _thr_, then the most ancien one is selected. Option toggled off by default. Default value if toggled on: _fthr_ = _cthr_/2<p>
+  * `sig.peaks(…,'Threshold',`_thr_`)`: A given local maximum will be considered as a peak if its normalized amplitude is higher than this threshold thr. A given local minimum will be considered as a valley if its normalized amplitude is lower than this threshold.  The normalized amplitude can have value between 0 (the minimum  of the signal in each frame) and 1 (the maximum in each frame). Default value: _thr_ = 0 for peaks, _thr_ = 1 for valleys.<p>
 https://miningsuite.googlecode.com/svn/wiki/SigPeaks_ex4.png
-
   * `sig.peaks(…,'Interpol',`_i_`)` estimates more precisely the peak position and amplitude using interpolation. Performed only on data with numerical abscissae axis.
    * _i_ = `'', 'no', 'off', 0`: no interpolation
-   * _i_ = `'Quadratic'`: quadratic interpolation. (default value).
-
-  * `sig.peaks(…,'Reso',`_r_`)` removes peaks whose abscissa distance to one or several higher peaks is lower than a given threshold. Possible value for the threshold: _r_ = `'SemiTone'`: ratio between the two peak positions equal to 2^(1/12). By default, out of two conflicting peaks, the higher peak remains. If the keyword `'First'` is added, the peak with lower abscissa value remains instead.
-
-  * `sig.peaks(…,'Pref',`_c_`,`_std_`)` indicates a region of preference for the peak picking, centered on the abscissa value _c_, with a standard deviation of _std_.
-
+   * _i_ = `'Quadratic'`: quadratic interpolation. (default value).<p>
+  * `sig.peaks(…,'Reso',`_r_`)` removes peaks whose abscissa distance to one or several higher peaks is lower than a given threshold. Possible value for the threshold: _r_ = `'SemiTone'`: ratio between the two peak positions equal to 2^(1/12). By default, out of two conflicting peaks, the higher peak remains. If the keyword `'First'` is added, the peak with lower abscissa value remains instead.<p>
+  * `sig.peaks(…,'Pref',`_c_`,`_std_`)` indicates a region of preference for the peak picking, centered on the abscissa value _c_, with a standard deviation of _std_.<p>
   * `sig.peaks(…,'Nearest',`_t_`,`_s_`)` takes the peak nearest a given abscissa values _t_. The distance is computed either on a linear scale (_s_ = `'Lin'`) or logarithmic scale (_s_ = `'Log'`). When using the `'Nearest'` option, only one peak is extracted.<p>
-   The `'Total'` parameter can then be used to indicate the number of peaks to preselect before the `'Nearest'` selection. If `'Total'` was still set to 1, it is then ignored – i.e., forced to Inf – in order to preselect all possible peaks.
-
+   The `'Total'` parameter can then be used to indicate the number of peaks to preselect before the `'Nearest'` selection. If `'Total'` was still set to 1, it is then ignored – i.e., forced to Inf – in order to preselect all possible peaks.<p>
   * `sig.peaks(…,'Normalize',`_n_`)` specifies whether frames are normalized globally or individually.
    * _n_ = `'Global'` normalizes across the whole frames (as well as across the whole segments) of each audio file from 0 to  1 (default choice).
-   * _n_ = `'Local'`: normalizes each segment, each frame, from 0 to 1 separately.
-
+   * _n_ = `'Local'`: normalizes each segment, each frame, from 0 to 1 separately.<p>
   * `sig.peaks(…,'Extract')` extracts from the curves all the positive continuous segments (or "curve portions") where peaks are located. First, a low-pass filtered version of the curve is computed, on which the temporal span of the positive lobes containing each peak are stored. The output consists of the part of the original non-filtered curve corresponding to the same temporal span. For instance:<p>
  {{{
  ac=sig.autocor('ragtime')
@@ -82,8 +71,9 @@ https://miningsuite.googlecode.com/svn/wiki/SigPeaks_ex8.png
 
   * `sig.peaks(…,'CollapseTracks',`_ct_`)`, collapses tracks into one single track, and remove small track transitions, of length shorter than _ct_ samples. Default value: _ct_ = 7.
 
-
+<br>
 == Accessible Output ==
+
 cf. §5.2 for an explanation of the use of the get method. Specific fields:
 
   * `'PeakPos'`: the abscissae position of the detected peaks, in sample index,
