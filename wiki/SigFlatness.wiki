@@ -1,24 +1,34 @@
-#summary sig.flatness: Statistical description of spectral distribution
+#summary sig.flatness: Flatness of the data
 
-= sig.flatness: Statistical description of spectral distribution =
+= sig.flatness: Flatness of the data =
 
-The spectral distribution can be described by statistical moments: centroid, spread, skewness, kurtosis, flatness as well as by entropy.<p>
-See the Statistics section (§4.2) for more details about each operator.
-<br><br>
+`sig.flatness` returns the flatness of the data.
 
+The flatness indicates whether the distribution is smooth or spiky, and results from the simple ratio between the geometric mean and the arithmetic mean:
+
+https://miningsuite.googlecode.com/svn/wiki/SigFlatness_eq1.png
+
+<br>
 == Flowchart Interconnections ==
 
 `sig.flatness` accepts either:
   * `sig.spectrum` objects<p>
   * `sig.input` objects (same as for `sig.spectrum`)<p>
   * file name(s) or the `'Folder'` keyword. 
-<br>
 
+<br>
 == Frame decomposition ==
 
 `'Frame'` performs first a frame decomposition, with by default a frame length of 50 ms and half overlapping. For the specification of other frame configuration using additional parameters, cf. the previous SigFrame vs. 'Frame' section.
-<br><br>
 
+<br>
+== Inputs ==
+
+Any data can be used as input.
+
+If the input is an audio waveform, a file name, or the `'Folder'` keyword, the flatness is computed on the spectrum (spectral flatness).
+
+<br>
 == Options ==
 
-See the Statistics section (§4.2) for more details about the operator.
+`sig.flatness(…,'MinRMS',`_m_`)` specifies the threshold _m_, as a value from 0 to 1, for the detection of quasi-silent frames, for which no value is given. For a given frame, if the RMS of the input (for spectral flatness, the input is each frame of the spectrogram, etc.) is below _m_ times the highest RMS value over the frames, NaN is returned. default value: _m_ = .01
