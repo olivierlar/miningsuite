@@ -1,11 +1,23 @@
-#summary sig.skewness: Statistical description of spectral distribution
+#summary sig.skewness: Skewness of the data
 
 = sig.skewness: Statistical description of spectral distribution =
 
-The spectral distribution can be described by statistical moments: centroid, spread, skewness, kurtosis, flatness as well as by entropy.<p>
-See the Statistics section (§4.2) for more details about each operator.
-<br><br>
+`sig.skewness` returns the coefficient of skewness of the data.
 
+The third central moment is called the skewness and is a measure of the symmetry of the distribution. The skewness can have a positive value in which case the distribution is said to be positively skewed with a few values much larger than the mean and therefore a long tail to the right. A negatively skewed distribution has a longer tail to the left. A symmetrical distribution has a skewness of zero. (Koch)
+
+https://miningsuite.googlecode.com/svn/wiki/SigSkewness_eq1.png
+
+The coefficient of skewness is the ratio of the skewness to the standard deviation raised to the third power.
+
+https://miningsuite.googlecode.com/svn/wiki/SigSkewness_eq2.png
+
+The coefficient of skewness has more convenient units than does the skewness and often ranges from -3.0 to 3.0 for data from natural systems. Again, a symmetrical distribution has a coefficient of skewness of zero. A positive coefficient of skewness often indicates that the distribution exhibits a concentration of mass toward the left and a long tail to the right whereas a negative value generally indicates the opposite. (Koch)
+
+https://miningsuite.googlecode.com/svn/wiki/SigSkewness_ex1.png
+
+
+<br>
 == Flowchart Interconnections ==
 
 `sig.skewness` accepts either:
@@ -19,6 +31,10 @@ See the Statistics section (§4.2) for more details about each operator.
 `'Frame'` performs first a frame decomposition, with by default a frame length of 50 ms and half overlapping. For the specification of other frame configuration using additional parameters, cf. the previous SigFrame vs. 'Frame' section.
 <br><br>
 
-== Options ==
+== Inputs ==
 
-See the Statistics section (§4.2) for more details about the operator.
+Any data can be used as input.
+
+If the input is an audio waveform, a file name, or the `'Folder'` keyword, the skewness is computed on the spectrum (spectral skewness).
+
+If the input is a series of peak lobes produced by `sig.peaks(…,'Extract')`, the skewness will be computed for each of these lobes separately.
