@@ -17,6 +17,7 @@ function options = initoptions
     options = sig.envelope.options;
     %options.method.default = 'Spectro';
     options.diffhwr.default = 1;
+    options.up.default = 2;
     
         mu.key = 'Mu';
         mu.type = 'Numeric';
@@ -33,11 +34,11 @@ end
 
 
 function out = main(x,option,postoption)    
-    [out,postoption,tmp] = sig.envelope.main(x,option,postoption);
+    [y,postoption,tmp] = sig.envelope.main(x,option,postoption);
     if isempty(postoption)
-        out = {out tmp};
+        out = {y tmp};
     else
-        out = {after(out,postoption) tmp};
+        out = {after(y,postoption) tmp};
     end
 end
 
