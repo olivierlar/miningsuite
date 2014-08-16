@@ -49,11 +49,20 @@ classdef data
         end
         
         function obj = deframe(obj)
-            frameidx = strcmp('frame',obj.dims);
-            if 1 %max(frameidx)
-                obj = obj.rename('sample','element');
-                obj = obj.rename('frame','sample');
+            obj = obj.rename('sample','element');
+            obj = obj.rename('frame','sample');
+        end
+        
+        function obj = zeros(obj,varargin)
+            s = size(obj.content);
+            for i = 1:length(varargin)
+                obj = obj.rename(varargin{i}{1},varargin{i}{2});
+                if length(varargin{i}) > 2
+                    d = obj.whichdim(varargin{i}{2});
+                    s(d) = varargin{i}{3};
+                end
             end
+            obj.content = zeros(s);
         end
         
         function dim = whichdim(obj,dimname)
@@ -89,7 +98,7 @@ classdef data
                 s(i) = size(obj.content,dim(i));
             end
         end
-        
+                
         function obj = concat(obj,obj2,field)
             if nargin<3
                 field = 'element';
@@ -118,6 +127,9 @@ classdef data
                 
         function obj = edit(obj,varargin)
             data = varargin{end};
+            if isa(data,'sig.data')
+                data = data.content;
+            end
             args = scanargin(obj,varargin(1:end-1));
             obj.content = subsasgn(obj.content,args,data);
             %eval(['obj.content(',args,') = content;']);
@@ -195,7 +207,8 @@ classdef data
                 if length(found) < max(found)
                     for i = 1:length(found)
                         if ~ismember(i,found)
-                            found = [found i];
+                            found(end+1) = i;
+                            obj.dims{end+1} = dims{i};
                         end
                     end
                 end
@@ -222,7 +235,11 @@ classdef data
             obj1 = obj1.bsxfun(obj2,@times);
         end
         function obj1 = divide(obj1,obj2)
-            obj1 = obj1.bsxfun(obj2,@rdivide);
+            if isa(obj2,'sig.data')
+                obj1 = obj1.bsxfun(obj2,@rdivide);
+            else
+                obj1.content = obj1.content/obj2;
+            end
         end
         
         function d = findglobal(obj,func)

@@ -13,25 +13,38 @@ classdef Spectrum < sig.signal
     end
     properties   
         Xsampling
-        powered = 0;
-        loged = 0;
-        terharded = 0;
-        resonance = '';
-        masked = 0;
+        power = 1;
+        log = 0;
+        inputlength
+        phase
     end
 %%
     methods
         function s = Spectrum(varargin)
+            i = 1;
+            il = NaN;
+            ph = [];
+            while i < length(varargin)
+                if strcmpi(varargin{i},'InputLength')
+                    varargin(i) = [];
+                    il = varargin{i};
+                    varargin(i) = [];
+                elseif strcmpi(varargin{i},'Phase')
+                    varargin(i) = [];
+                    ph = varargin{i};
+                    varargin(i) = [];
+                else
+                    i = i+1;
+                end
+            end
             s = s@sig.signal(varargin{:});
             if strcmp(s.yname,'Signal')
                 s.yname = 'Spectrum';
             end
             s.xname = 'Frequency';
             s.xunit = 'Hz';
-        end
-        %%
-        function obj = after(obj,option)
-            obj = sig.signal.aftermethod(obj,option);
+            s.inputlength = il;
+            s.phase = ph;
         end
     end
 end

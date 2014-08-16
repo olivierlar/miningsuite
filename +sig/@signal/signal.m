@@ -41,7 +41,7 @@ classdef signal
         Ssize
         
         Frate
-        Fsize
+        fnumber
         
         celllayers
         peak
@@ -101,6 +101,7 @@ classdef signal
             s.Ssize = options.ssize;
             
             s.Frate = options.frate;
+            s.fnumber = options.fnumber;
             
             s.date = date;
             s.ver = ver;
@@ -163,14 +164,14 @@ classdef signal
             if isempty(obj.faxis)
                 f = [];
             else
-                f = obj.faxis.data(obj.Ydata.size('frame')) + obj.Fsize;
+                f = obj.faxis.data(obj.Ydata.size('frame')) + obj.fnumber;
             end
         end
         function f = get.fcenters(obj)
             if isempty(obj.faxis)
                 f = [];
             else
-                f = obj.faxis.data(obj.Ydata.size('frame')) + obj.Fsize/2;
+                f = obj.faxis.data(obj.Ydata.size('frame')) + obj.fnumber/2;
             end
         end
         
@@ -287,6 +288,11 @@ function options = constructoptions
         frate.type = 'Numeric';
         frate.default = 0;
     options.frate = frate;
+        
+        fnumber.key = 'fnumber';
+        fnumber.type = 'Numeric';
+        fnumber.default = 0;
+    options.fnumber = fnumber;
 end
 
 
@@ -402,9 +408,9 @@ end
 
 
 function obj = after(obj,option)
-    if option.channel
-        obj = obj.channel(option.channel);
-    end
+    %if option.channel
+    %    obj = obj.channel(option.channel);
+    %end
     if strcmpi(option.mix,'Post')
         obj = obj.sum('channel');
     end

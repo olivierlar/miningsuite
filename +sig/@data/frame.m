@@ -3,7 +3,7 @@ function obj = frame(obj,param,sr)
 end
 
 
-function data = main(data,param,sr)
+function [data nfr] = main(data,param,sr)
     if strcmpi(param.size.unit,'s')
         l = param.size.value*sr;
     elseif strcmpi(param.size.unit,'sp')
