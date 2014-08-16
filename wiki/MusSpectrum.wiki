@@ -1,0 +1,32 @@
+#summary mus.spectrum: Spectrum decomposition into cents
+
+= mus.spectrum: Spectrum decomposition into cents =
+
+This operations is a specialisation of the general signal processing operator [SigSpectrum sig.spectrum] focused on music-theory. Frequencies are distributed along cents. Each octave is decomposed into 1200 bins equally distant in the logarithmic representation. The frequency axis is hence expressed in MIDI-cents unit: to each pitch of the equal temperament is associated the corresponding MIDI pitch standard value multiply by 100 (69*100=6900 for A4=440Hz, 70*100=7000 for B4, etc.).
+
+  https://miningsuite.googlecode.com/svn/wiki/SigSpectrum_ex4.png
+
+ It has to be noticed that this decomposition requires a frequency resolution that gets higher for lower frequencies: a cent-distribution starting from infinitely low frequency (near 0 Hz would require an infinite frequency resolution). Hence by default, the cent-decomposition is defined only for the frequency range suitable for the frequency resolution initially associated to the given spectrum representation. Two levers are available here:<p>
+   * If a minimal frequency range for the spectrum representation has been set (using the `'Min'` parameter), the frequency resolution of the spectrum is automatically set in order to meet that particular requirement.<p>
+
+  https://miningsuite.googlecode.com/svn/wiki/SigSpectrum_ex5.png
+    _sig.spectrum('ragtime','Cents','Min',100)_
+
+   * By increasing the frequency resolution of the spectrum (for instance by using the `'Res'` or `'MinRes'` parameters), the frequency range will be increased accordingly.
+
+== Flowchart Interconnections ==
+
+Same as in [SigSpectrum sig.spectrum].
+
+== Defaults Specification ==
+
+Particular default is set for the following parameter:
+  * `’Phase’` is set to 0.
+
+== Post-processing options ==
+
+  * `sig.spectrum(…,'Collapsed')` collapses the cent-spectrum into one octave. In the resulting spectrum, the abscissa contains in total 1200 bins, representing the 1200 cents of one octave, and each bin contains the energy related to one position of one octave and of all the multiple of this octave.
+
+== Accessible Output ==
+
+Same as in [SigSpectrum sig.spectrum].
