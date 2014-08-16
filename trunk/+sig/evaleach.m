@@ -21,8 +21,10 @@ end
 if nargin<6
     chunking = 0;
 end
-if nargin<7
+if nargin<7 && length(window) > 1
     nbsamples = window(2)-window(1)+1;
+else
+    1
 end
 
 if isfield(design,'fid')
@@ -98,7 +100,7 @@ if isempty(design.main)
             y = {sig.signal(data,'Xsampling',1/sr,'Name','audio',...
                             'Sstart',(window(1)-1)/sr,'Srate',sr,...
                             'Ssize',data.size('sample'),...
-                            'Frate',frate)};
+                            'Frate',frate,'fnumber',data.size('frame'))};
         else
             y = {sig.signal(data,'Name','audio',...
                             'Sstart',(window(1)-1)/sr,'Srate',sr,...
@@ -128,6 +130,7 @@ else
                 frate = sig.compute(@sig.getfrate,y{1}.Srate,frame);
                 y{1}.Ydata = y{1}.Ydata.frame(frame,y{1}.Srate);
                 y{1}.Frate = frate;
+                %y{1}.Fsize = 
             end
         else
             y = sig.evaleach(design.input,filename,window,sr,frame,1);
@@ -247,7 +250,7 @@ else
             end
 
             if isempty(design.tmpfile)
-                y = design.main(y,design.duringoptions,design.afteroptions);
+                y = design.main(y,[],design.afteroptions);
             else
                 % Final operations to be executed after the chunk decomposition
                 adr = ftell(design.tmpfile.fid);
@@ -372,7 +375,9 @@ end
 if i == 1
     res = new;
 else
-    if isstruct(old{1})
+    if iscell(old{1})
+        old{1} = old{1}{1}; % This needs to be properly studied..
+        new{1} = new{1}{1};
     end
     
     if old{1}.Frate

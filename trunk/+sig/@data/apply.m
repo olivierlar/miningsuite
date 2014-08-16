@@ -19,6 +19,8 @@ function [obj varargout] = apply(obj,func,argin,dimfunc,ndimfunc,type)
     for i = 1:length(dimfunc)
         foundim = obj.whichdim(dimfunc{i});
         if isempty(foundim)
+            %varargout = {};
+            %return
             ndimdata = ndimdata+1;
             foundim = ndimdata;
             obj.dims{foundim} = dimfunc{i};
