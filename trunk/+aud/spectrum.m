@@ -19,7 +19,7 @@ function options = initoptions
     options.phase.default = 0;
     
         band.type = 'String';
-        band.choice = {'Freq','Mel','Bark','Cents'};
+        band.choice = {'Freq','Mel','Bark'};
         band.default = 'Freq';
         band.when = 'Both';
     options.band = band;
