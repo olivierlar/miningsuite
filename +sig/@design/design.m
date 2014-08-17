@@ -74,11 +74,9 @@ classdef design
                 obj.files = input.files;
             end
         end
-        %%
-        %function f = get.files(obj)
-        %    f = getfiles(obj);
-        %end
-        %%
+        function res = istype(obj,type)
+            res = strcmp(obj.type,type);
+        end
         function out = eval(obj,arg,folder)
             if nargin<2
                 arg = obj.files;

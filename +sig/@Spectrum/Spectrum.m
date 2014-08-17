@@ -12,7 +12,7 @@ classdef Spectrum < sig.signal
         spectrumsonify = @sonifier;
     end
     properties   
-        Xsampling
+        inputsampling
         power = 1;
         log = 0;
         inputlength
@@ -24,6 +24,7 @@ classdef Spectrum < sig.signal
             i = 1;
             il = NaN;
             ph = [];
+            is = [];
             while i < length(varargin)
                 if strcmpi(varargin{i},'InputLength')
                     varargin(i) = [];
@@ -32,6 +33,10 @@ classdef Spectrum < sig.signal
                 elseif strcmpi(varargin{i},'Phase')
                     varargin(i) = [];
                     ph = varargin{i};
+                    varargin(i) = [];
+                elseif strcmpi(varargin{i},'InputSampling')
+                    varargin(i) = [];
+                    is = varargin{i};
                     varargin(i) = [];
                 else
                     i = i+1;
@@ -45,6 +50,7 @@ classdef Spectrum < sig.signal
             s.xunit = 'Hz';
             s.inputlength = il;
             s.phase = ph;
+            s.inputsampling = is;
         end
     end
 end

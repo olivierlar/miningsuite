@@ -13,7 +13,8 @@ function out = main(x,option,postoption)
         xrate = x{1}.Srate/2/d.size('element');
         out = sig.Spectrum(d,'Phase',ph,...
                          'xsampling',xrate,'Srate',x{1}.Frate,...
-                         'Sstart',0,'InputLength',x{1}.Ssize/x{1}.Srate);
+                         'Sstart',0,'InputLength',x{1}.Ssize/x{1}.Srate,...
+                         'InputSampling',x{1}.Srate);
     end
 end
 
