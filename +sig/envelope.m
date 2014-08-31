@@ -39,6 +39,9 @@ function out = main(x,option,postoption)
         %%
         d = sig.data(g,{'sample'});
         out = sig.Envelope(d,'Srate',ndivs,'Sstart',0,'Ssize',length(g));
+    elseif isempty(option)
+        out = x;
+        tmp = [];
     else
         [out,postoption,tmp] = sig.envelope.main(x,option,postoption);
     end
@@ -51,6 +54,9 @@ end
 
 
 function x = after(x,postoption)
+    if iscell(x)
+        x = x{1};
+    end
     x = sig.envelope.resample(x,postoption);
     x = sig.envelope.rescale(x,postoption);
     x = sig.envelope.upsample(x,postoption);
