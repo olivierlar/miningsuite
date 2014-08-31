@@ -1,8 +1,18 @@
 #summary mus.spectrum: Spectrum decomposition into cents
 
-= mus.spectrum: Spectrum decomposition into cents =
+= mus.spectrum: Spectrum representation based on music theory =
 
-This operations is a specialisation of the general signal processing operator [SigSpectrum sig.spectrum] focused on music-theory. Frequencies are distributed along cents. Each octave is decomposed into 1200 bins equally distant in the logarithmic representation. The frequency axis is hence expressed in MIDI-cents unit: to each pitch of the equal temperament is associated the corresponding MIDI pitch standard value multiply by 100 (69*100=6900 for A4=440Hz, 70*100=7000 for B4, etc.).
+This operations is a specialisation of the general signal processing operator [SigSpectrum sig.spectrum] focused on music-theory. 
+
+== Resonance curve ==
+
+  * `mus.spectrum(…,'Resonance',`_r_`)` multiplies the spectrum curve with a resonance curve that emphasizes pulsations that are more easily perceived. Two resonance curves are available:
+   * _r_ = `'ToiviainenSnyder'` (Toiviainen & Snyder 2003), default choice, used for onset detection (cf. SigTempo),
+   * _r_ = `'Fluctuation'` : fluctuation strength (Fastl 1982), default choice for frame-decomposed `'sig.spectrum'` objects redecomposed in 'Mel' bands (cf. SigFluctuation).<p>
+
+== Spectrum decomposition into cents ==
+
+`mus.spectrum(…,'Cents')` distribute frequencies along cents. Each octave is decomposed into 1200 bins equally distant in the logarithmic representation. The frequency axis is hence expressed in MIDI-cents unit: to each pitch of the equal temperament is associated the corresponding MIDI pitch standard value multiply by 100 (69*100=6900 for A4=440Hz, 70*100=7000 for B4, etc.).
 
   https://miningsuite.googlecode.com/svn/wiki/SigSpectrum_ex4.png
 
@@ -14,6 +24,8 @@ This operations is a specialisation of the general signal processing operator [S
 
    * By increasing the frequency resolution of the spectrum (for instance by using the `'Res'` or `'MinRes'` parameters), the frequency range will be increased accordingly.
 
+  * `mus.spectrum(…,'Collapsed')` collapses the cent-spectrum into one octave. In the resulting spectrum, the abscissa contains in total 1200 bins, representing the 1200 cents of one octave, and each bin contains the energy related to one position of one octave and of all the multiple of this octave.
+
 == Flowchart Interconnections ==
 
 Same as in [SigSpectrum sig.spectrum].
@@ -22,10 +34,6 @@ Same as in [SigSpectrum sig.spectrum].
 
 Particular default is set for the following parameter:
   * `’Phase’` is set to 0.
-
-== Post-processing options ==
-
-  * `sig.spectrum(…,'Collapsed')` collapses the cent-spectrum into one octave. In the resulting spectrum, the abscissa contains in total 1200 bins, representing the 1200 cents of one octave, and each bin contains the energy related to one position of one octave and of all the multiple of this octave.
 
 == Accessible Output ==
 
