@@ -35,7 +35,6 @@ function options = options
         
         fr.key = 'Freq';
         fr.type = 'Boolean';
-        fr.when = 'After';
         fr.default = 0;
     options.fr = fr;
 
@@ -58,7 +57,11 @@ end
 function out = main(x,option,postoption)
     x = x{1};
     if isa(x,'sig.Cepstrum')
-        out = x.modify(option,postoption);
+        if ~isempty(option)
+            out = modify(x,option,postoption);
+        else
+            out = x;
+        end
     else
         sr = x.inputsampling;
         ph = x.phase;
@@ -75,7 +78,7 @@ function out = main(x,option,postoption)
         out = sig.Cepstrum(d,'Phase',ph,...
                            'xsampling',xrate,'Xstart',start,...
                            'Srate',x.Frate,'Sstart',0,...
-                           'Freq',postoption.fr);
+                           'Freq',option.fr);
     end
     out = {out};
 end
@@ -101,4 +104,28 @@ function [m,pha] = complex_cepstrum(x,pha,len,start)
     y = y(start:len,:,:);
     m = abs(y);
     pha = unwrap(angle(y));    
+end
+
+
+function obj = modify(obj,option,postoption)
+    start = ceil(option.mi/obj.xsampling)+1;
+    idx = max(start - obj.xstart,0);
+    oldlen = obj.Ydata.size('element');
+    newlen = ceil(option.ma/obj.xsampling);
+    if idx > 0 || newlen < oldlen
+        len = newlen - obj.xstart;
+        obj.Ydata = obj.Ydata.extract('element',[idx len]);
+        obj.xstart = start;
+        obj.Xaxis.start = start;
+    end
+    if postoption.fr
+        obj.xname = 'Frequency';
+        obj.xunit = 'Hz';
+        obj.Xaxis.unit.generator = @freq;
+    end
+end
+
+
+function x = freq(unit,index)
+    x = 1./((index - 1 + unit.origin) * unit.rate);
 end
