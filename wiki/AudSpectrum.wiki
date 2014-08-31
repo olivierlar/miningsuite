@@ -13,20 +13,15 @@ Same as in [SigSpectrum sig.spectrum].
 Particular default is set for the following parameter:
   * `’Phase’` is set to 0.
 
-== Post-processing options ==
+== Outer-ear modelling ==
 
-  * `sig.spectrum(…,'Terhardt')` modulates the energy following (Terhardt, 1979) outer ear model. The function is mainly characterized by an attenuation in the lower and higher registers of the spectrum, and an emphasis around 2–5 KHz, where much of the speech information is carried. (Code based on Pampalk's MA toolbox). 
-
-  * `sig.spectrum(…,'Resonance',`_r_`)` multiplies the spectrum curve with a resonance curve that emphasizes pulsations that are more easily perceived. Two resonance curves are available:
-   * _r_ = `'ToiviainenSnyder'` (Toiviainen & Snyder 2003), default choice, used for onset detection (cf. SigTempo),
-   * _r_ = `'Fluctuation'` : fluctuation strength (Fastl 1982), default choice for frame-decomposed `'sig.spectrum'` objects redecomposed in 'Mel' bands (cf. SigFluctuation).<p>
-
+  * `aud.spectrum(…,'Terhardt')` modulates the energy following (Terhardt, 1979) outer ear model. The function is mainly characterized by an attenuation in the lower and higher registers of the spectrum, and an emphasis around 2–5 KHz, where much of the speech information is carried. (Code based on Pampalk's MA toolbox). 
 
 
 == Frequency redistribution ==
 
-  * `sig.spectrum(…,'Mel')` redistributes the frequencies along Mel bands. The Mel-scale of auditory pitch was established on the basis of listening experiments with simple tones (Stevens and Volkman, 1940). The Mel scale is now mainly used for the reason of its historical priority only. It is closely related to the Bark scale. It requires the _Auditory Toolbox_.
-    * `sig.spectrum(…,'Bands',`_b_`)` specifies the number of band in the decomposition. By default _b_ = 40.
+  * `aud.spectrum(…,'Mel')` redistributes the frequencies along Mel bands. The Mel-scale of auditory pitch was established on the basis of listening experiments with simple tones (Stevens and Volkman, 1940). The Mel scale is now mainly used for the reason of its historical priority only. It is closely related to the Bark scale. It requires the _Auditory Toolbox_.
+   * `aud.spectrum(…,'Bands',`_b_`)` specifies the number of band in the decomposition. By default _b_ = 40.
 
 In our example we obtain the following:<p>
 
@@ -34,9 +29,9 @@ In our example we obtain the following:<p>
 
 The Mel-scale transformation requires a sufficient frequency resolution of the spectrum: as the lower bands are separated with a distance of 66 Hz, the frequency resolution should be higher than 66 Hz in order to ensure that each Mel band can be associated with at least one frequency bin of the spectrum. If the `'Mel'` option is performed in the same _sig.spectrum_ command that performs the actual FFT, then the minimal frequency resolution is implicitly ensured, by forcing the minimal frequency resolution (`'MinRes'` parameter) to be equal or below 66 Hz. If on the contrary the `'Mel'` is performed in a second step, and if the frequency resolution is worse than 66 Hz, then a warning message is displayed in the Command Window.
 
-  * `sig.spectrum(…,'Bark')` redistributes the frequencies along critical band rates (in Bark). Measurement of the classical "critical bandwidth" typically involves loudness summation experiments (Zwicker et al., 1957). The critical band rate scale differs from Mel-scale mainly in that it uses the critical band as a natural scale unit. The code is based on the _MA_ toolbox.
+  * `aud.spectrum(…,'Bark')` redistributes the frequencies along critical band rates (in Bark). Measurement of the classical "critical bandwidth" typically involves loudness summation experiments (Zwicker et al., 1957). The critical band rate scale differs from Mel-scale mainly in that it uses the critical band as a natural scale unit. The code is based on the _MA_ toolbox.
 
-  * `sig.spectrum(…,'Mask')` models masking phenomena in each band: when a certain energy appears at a given frequency, lower frequencies in the same frequency region may be unheard, following particular equations. By modeling these masking effects, the unheard periodicities are removed from the spectrum. The code is based on the _MA_ toolbox. In our example this will lead to:<p>
+  * `aud.spectrum(…,'Mask')` models masking phenomena in each band: when a certain energy appears at a given frequency, lower frequencies in the same frequency region may be unheard, following particular equations. By modeling these masking effects, the unheard periodicities are removed from the spectrum. The code is based on the _MA_ toolbox. In our example this will lead to:<p>
 	
   https://miningsuite.googlecode.com/svn/wiki/SigSpectrum_ex7.png
 
