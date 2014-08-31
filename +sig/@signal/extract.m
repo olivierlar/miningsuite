@@ -9,6 +9,8 @@ function obj = extract(obj,param,dim,axis,varargin)
     end
     if strcmp(dim,'sample')
         obj.Sstart = out{i+1};
+    elseif strcmp(dim,'element')
+        obj.Xaxis.start = obj.Xaxis.start + out{i+1};
     end
 end
     
