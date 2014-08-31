@@ -1,5 +1,5 @@
 function out = main(x,option,postoption)
-    if isa(x{1},'sig.Spectrum') && ~option.alongbands
+    if isa(x{1},'sig.Spectrum') && (isempty(option) || ~option.alongbands)
         out = x;
         return
     end
