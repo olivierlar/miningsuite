@@ -161,8 +161,10 @@ function out = main(in,option,postoption)
     end
     if isnan(option.thr)
         option.thr = 0;
-    elseif option.vall
-        option.thr = 1-option.thr;
+    else
+        if option.vall
+            option.thr = 1-option.thr;
+        end
     end
     
     s = in{1};
@@ -180,9 +182,6 @@ end
 
 
 function out = routine(y,dim,option)
-    if option.vall
-        y = y.apply(@uminus,{},{dim});
-    end
     maxy = y.findglobal(@max);
     miny = y.findglobal(@min);
     y = y.minus(miny).divide(maxy-miny);
