@@ -44,6 +44,24 @@ classdef Cepstrum < sig.signal
             end
             c.phase = ph;
         end
+        
+        function obj = modify(obj,option,postoption)
+            start = ceil(option.mi/obj.xsampling)+1;
+            idx = max(start - obj.xstart,0);
+            oldlen = obj.Ydata.size('element');
+            newlen = ceil(option.ma/obj.xsampling);
+            if idx > 0 || newlen < oldlen
+                len = newlen - obj.xstart;
+                obj.Ydata = obj.Ydata.extract('element',[idx len]);
+                obj.xstart = start;
+                obj.Xaxis.start = start;
+            end
+            if postoption.fr
+                obj.xname = 'Frequency';
+                obj.xunit = 'Hz';
+                obj.Xaxis.unit.generator = @freq;
+            end
+        end
     end
 end
 
