@@ -14,8 +14,21 @@ end
 
 
 function options = initoptions
-    options = sig.spectrum.options;
-    options.phase.default = 0;
+    options = aud.spectrum.options;
+    
+        reso.key = 'Resonance';
+        reso.type = 'String';
+        reso.choice = {'ToiviainenSnyder','Fluctuation','Meter',0,'no','off'};
+        reso.default = 0;
+        reso.keydefault = 'ToiviainenSnyder';
+        reso.when = 'After';
+    options.reso = reso;
+    
+        cent.key = 'Cents';
+        cent.type = 'Boolean';
+        cent.default = 0;
+        cent.when = 'After';
+    options.cent = cent;
     
         collapsed.key = 'Collapsed';
         collapsed.type = 'Boolean';
@@ -33,19 +46,40 @@ end
 
 function out = main(x,option,postoption)
     y = sig.spectrum.main(x,option,postoption);
-    out = after(y,postoption);
+    if isempty(postoption)
+        out = {y};
+    else
+        out = after(y,postoption);
+    end
 end
 
 
 function out = after(x,postoption)
-    x = sig.spectrum.after(x,postoption);
+    x = aud.spectrum.after(x,postoption);
     if iscell(x)
         x = x{1};
     end
     f = x.xdata;
-    m = x.Ydata;
     
-    if strcmp(x.xname,'Frequency')
+    if postoption.reso
+        if strcmpi(postoption.reso,'ToiviainenSnyder') ...
+                || strcmpi(postoption.reso,'Meter')
+            w = max(0,...
+                1 - 0.25*(log2(max(1./max(f,1e-12),1e-12)/0.5)).^2);
+        elseif strcmpi(postoption.reso,'Fluctuation')
+            w1 = f / 4; % ascending part of the fluctuation curve;
+            w2 = 1 - 0.3 * (f - 4)/6; % descending part;
+            w = min(w1,w2);
+        end
+        if max(w) == 0
+            warning('The resonance curve, not defined for this range of delays, will not be applied.')
+        else
+            w = sig.data(w',{'element'});
+            x.Ydata = x.Ydata.times(w);
+        end
+    end
+    
+    if strcmp(x.xname,'Frequency') && postoption.cent
         isgood = f*(2^(1/1200)-1) >= f(2)-f(1);
         good = find(isgood);
         if isempty(good)
@@ -59,7 +93,7 @@ function out = after(x,postoption)
             display('      the correct frequency resolution will be automatically chosen.');
         end
         f = f(good);
-        m = m.extract('element',[good(1),good(end)]);
+        x.Ydata = x.Ydata.extract('element',[good(1),good(end)]);
         f2cents = 440*2.^(1/1200*(-1200*10:1200*10-1)');
             % The frequencies corresponding to the cent range
         cents = repmat((0:1199)',[20,1]);
@@ -70,7 +104,7 @@ function out = after(x,postoption)
         f2cents = f2cents(select);
         cents = cents(select);
         octaves = octaves(select);
-        x.Ydata = m.apply(@interp,{f,f2cents},{'element'});
+        x.Ydata = x.Ydata.apply(@interp,{f,f2cents},{'element'});
         x.xname = 'cents';
         x.Xaxis.unit.origin = octaves(1)*1200 + cents(1) + 6900;
         x.Xaxis.unit.rate = 1;
@@ -79,7 +113,7 @@ function out = after(x,postoption)
         x.phase = [];
     end
     
-    if postoption.collapsed
+    if strcmp(x.xname,'cents') && postoption.collapsed
         f = x.xdata;
         centclass = rem(f,1200);
         x.Ydata = x.Ydata.apply(@collapse,{centclass},{'element'});

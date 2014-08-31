@@ -375,6 +375,8 @@ if i == 1
 else
     if iscell(old{1})
         old{1} = old{1}{1}; % This needs to be properly studied..
+    end
+    if iscell(new{1})
         new{1} = new{1}{1};
     end
     
