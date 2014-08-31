@@ -43,6 +43,9 @@ end
 
 
 function x = main(x,option,postoption)
+    if isempty(option)
+        return
+    end
     if strcmpi(option.presel,'Scheirer')
         option.freq = [-Inf 200 400 800 1600 3200 Inf];
         option.filtertype = 'Manual';
