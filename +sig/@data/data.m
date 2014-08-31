@@ -53,6 +53,11 @@ classdef data
             obj = obj.rename('frame','sample');
         end
         
+        function obj = reframe(obj)
+            obj = obj.rename('sample','frame');
+            obj = obj.rename('element','sample');
+        end
+        
         function obj = zeros(obj,varargin)
             s = size(obj.content);
             for i = 1:length(varargin)
