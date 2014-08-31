@@ -48,16 +48,33 @@ function [obj varargout] = apply(obj,func,argin,dimfunc,ndimfunc,type)
         oldtype = '()';
     end
     args = recurse(data,start,ndimfunc+1,ndimdata,{},oldtype);
+    argsin = {};
+    for j = 1:length(argin)
+        if isa(argin{j},'sig.data')
+            argin{j} = argin{j}.content;
+            if iscell(argin{j})
+                oldtype = '{}';
+            else
+                oldtype = '()';
+            end
+            argsin{j} = recurse(argin{j},start,ndimfunc+1,ndimdata,{},...
+                                oldtype);
+        end
+    end
     
     for i = 1:length(args)
         olddatai = subsref(data,args{i});
         
+        argini = argin;
+        for j = 1:min(length(argin),length(argsin))
+            argini{j} = subsref(argini{j},argsin{j}{i});
+        end
+        
         f = find(strcmp('self',argin));
         if f
-            argini = argin;
             argini{f} = olddatai;
         else
-            argini = [{olddatai} argin];
+            argini = [{olddatai} argini];
         end
                 
         if nargout == 1
