@@ -1,21 +1,16 @@
 function out = main(x,option,postoption)
     if isa(x{1},'sig.Spectrum') && ~option.alongbands
         out = x;
-    else
-        if 0 %option.alongbands
-            dim = 'frame';
-        else
-            dim = 'sample';
-        end
-        d = sig.compute(@routine,x{1}.Ydata,x{1}.Srate,option,dim);
-        ph = d{2};
-        d = d{1};
-        xrate = x{1}.Srate/2/d.size('element');
-        out = sig.Spectrum(d,'Phase',ph,...
-                         'xsampling',xrate,'Srate',x{1}.Frate,...
-                         'Sstart',0,'InputLength',x{1}.Ssize/x{1}.Srate,...
-                         'InputSampling',x{1}.Srate);
+        return
     end
+    d = sig.compute(@routine,x{1}.Ydata,x{1}.Srate,option,'sample');
+    ph = d{2};
+    d = d{1};
+    xrate = x{1}.Srate/2/d.size('element');
+    out = sig.Spectrum(d,'Phase',ph,...
+                     'xsampling',xrate,'Srate',x{1}.Frate,...
+                     'Sstart',0,'InputLength',x{1}.Ssize/x{1}.Srate,...
+                     'InputSampling',x{1}.Srate);
 end
 
 

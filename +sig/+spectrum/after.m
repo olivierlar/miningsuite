@@ -15,7 +15,7 @@ function out = after(x,postoption)
         if ~isempty(range)
             x.Ydata = x.Ydata.extract('element',range([1,end]));
         end
-        x.Xaxis.start = range(1);
+        x.Xaxis.start = x.Xaxis.start + range(1);
     end
     
     if postoption.timesmooth
