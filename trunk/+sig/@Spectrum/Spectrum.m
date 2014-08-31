@@ -7,7 +7,6 @@
 % the main folder of the MiningSuite distribution.
 
 classdef Spectrum < sig.signal
-%%
     properties (Constant)
         spectrumsonify = @sonifier;
     end
@@ -18,7 +17,6 @@ classdef Spectrum < sig.signal
         inputlength
         phase
     end
-%%
     methods
         function s = Spectrum(varargin)
             i = 1;
@@ -56,6 +54,5 @@ classdef Spectrum < sig.signal
 end
 
 
-%%
 function d = sonifier(d,varargin)
 end
