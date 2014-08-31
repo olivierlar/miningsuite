@@ -23,8 +23,6 @@ if nargin<6
 end
 if nargin<7 && length(window) > 1
     nbsamples = window(2)-window(1)+1;
-else
-    1
 end
 
 if isfield(design,'fid')
@@ -222,7 +220,7 @@ else
                 end
 
                 ss = sig.evaleach(design.input,filename,window,sr,frame,...
-                                  chunking,nbsamples);
+                                  1,nbsamples);
                 if length(ss)>1 && isstruct(ss{2})
                     design.input.input = ss{2};
                     design.input.tmpfile = [];
@@ -390,18 +388,18 @@ else
             %if 0 %isframed(old{z})
             %    res(z) = combineframes(old{z},new{z});
             %else
-                %if ischar(design.combine)
+            if ischar(design.combine)
                 %if strcmpi(design.combine,'Concat')
                 %    res{z} = concatchunk(old{z},new{z},d2.ascending);
                 %elseif strcmpi(design.combine,'Sum')
-            res{z}.Ydata = old{z}.Ydata.(design.combine)(new{z}.Ydata);
+                res{z}.Ydata = old{z}.Ydata.(design.combine)(new{z}.Ydata);
                 %else
                 %    error(['SYNTAX ERROR: ',design.combine,...
                 %           ' is not a known keyword for combinechunk.']);
                 %end
-            %else
-            %    res{z} = old{z}.combinechunks(new{z});
-            %end
+            else
+                res{z} = design.combine(old{z},new{z});
+            end
         end
     end
 end
