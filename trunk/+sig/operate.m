@@ -40,7 +40,7 @@ elseif isa(arg,'sig.design')
 end
 
 if isa(arg,'sig.signal')
-    error('Evaluated objects (sig.signal) cannot be used as argument of further operations yet..');
+    %error('Evaluated objects (sig.signal) cannot be used as argument of further operations yet..');
 end
 
 [arg type] = init(arg,during,frame);
@@ -71,18 +71,14 @@ if ischar(arg) || isa(arg,'sig.design')
     else
         out = design.eval(filename);
     end
-elseif 0 %isa(arg,'sig.signal')
+elseif isa(arg,'sig.signal')
     if ~isempty(frame) && frame.toggle
         frate = sig.compute(@sig.getfrate,arg.Srate,frame);
         arg.Ydata = arg.Ydata.frame(frame,arg.Srate);
         arg.Frate = frate;
     end
         
-    if 1 %arg.design.evaluated
-        out = main({arg},during,after);
-    else
-        out = {arg.design.main({arg},during,after)};
-    end
+    out = main({arg},during,after);
     
     out{1}.design = sig.design(pack,name,arg,type,main,during,after,...
                                frame,combine,argin(2:end),[],0,0);
