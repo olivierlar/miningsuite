@@ -268,7 +268,7 @@ for j = 1:length(notes)
                                       pattern,mode,ioi);
     end
 end
-if 0 %options.segment
+if 0 %options.group
     for i = 1:length(memo)
         if ~isempty(memo{i}(1))
             mus.group(memo{i}(1),Inf,options);
@@ -389,7 +389,7 @@ while k <= length(memo{chan+1})
     end
     sks = sk;
 
-    if options.segment && k == 1
+    if options.group && k == 1
         ioi1 = sk.parameter.getfield('onset').inter.value;
             % New inter-onset interval
         [memo,mode] = mus.group(sk.from,ioi1,ioi,options,...
@@ -480,9 +480,9 @@ options.chan = chan;
     mode.type = 'Boolean';
 options.mode = mode;
 
-    segment.key = 'Segment';
-    segment.type = 'Boolean';
-options.segment = segment;
+    group.key = 'Group';
+    group.type = 'Boolean';
+options.group = group;
 
     metre.key = 'Metre';
     metre.type = 'Boolean';
