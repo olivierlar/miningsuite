@@ -1,4 +1,4 @@
-function p = param(ps,chro,letter,accident,ons,off)
+function p = param(ps,chro,letter,accident,ons,off,channel,harm)
 
 p = ps.type2val;
     
@@ -12,7 +12,21 @@ else
     dia.octave = [];
     p = p.setfield('dia',seq.paramval(ps.getfield('dia'),dia));
 end
-
+    
 p = p.setfield('onset',seq.paramval(ps.getfield('onset'),ons));
+
 p = p.setfield('offset',seq.paramval(ps.getfield('offset'),off));
-p = p.setfield('metre',seq.paramval(ps.getfield('metre'),[]));
+
+if 0
+    p = p.setfield('metre',seq.paramval(ps.getfield('metre'),[]));
+    p = p.setfield('channel',seq.paramval(ps.getfield('channel'),channel));
+
+    if nargin == 8
+        if strcmp(harm,'-')
+            harm = [];
+        end
+        p = p.setfield('harmony',seq.paramval(ps.getfield('harmony'),harm));
+    end
+end
+
+%p = p.setfield('level',ps.getfield('level'));

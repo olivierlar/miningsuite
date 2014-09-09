@@ -3,11 +3,12 @@ classdef concept < hgsetget
 		name
     end
     properties
-        timescores = []
-        currentscores = []
-        eventscores = []
-        dependent = []
-        depending = []
+        timescore = []
+        timescore2 = []
+        %currentscores = []
+        %eventscores = []
+        %dependent = []
+        %depending = []
     end
     %properties (Dependent)
     %    score

@@ -1,4 +1,4 @@
-classdef syntagm
+classdef syntagm < handle
 	properties (SetAccess = protected)
 		from
 		to
@@ -6,6 +6,8 @@ classdef syntagm
     properties
         weight
         descript
+        passing
+        processed
 	end
 	properties (Dependent)
 		parameter

@@ -9,7 +9,14 @@ classdef memostruct < pat.memory
             if iscell(obj.fields)
                 f = cell(1,length(obj.fields));
                 for i = 1:length(obj.fields)
-                    f{i} = pat.creatememory(obj.fields{i},pattern);
+                    if i == 9
+                        continue
+                    end
+                    if isempty(obj.fields{i})
+                        f{i} = [];
+                    else
+                        f{i} = pat.creatememory(obj.fields{i},pattern);
+                    end
                 end
                 obj.fields = f;
             elseif not(isempty(obj.fields))
@@ -20,7 +27,7 @@ classdef memostruct < pat.memory
                 obj.fields = f;
             end
         end
-        function obj = learn(obj,param,occ,succ,parent,specif)
+        function obj = learn(obj,param,occ,succ,parent,specif,cyclic,root)
             if 1 %isempty(parent.parent) || ...
                  %   (~isa(parent.parameter.fields{4},'seq.paramtype') && ...
                  %    ~isempty(parent.parameter.fields{4}) && ...
@@ -32,7 +39,28 @@ classdef memostruct < pat.memory
                         specifmemo{i} = specif(i).memory;
                     end
                 end
-                obj = obj.combine('fields',param,occ,succ,parent,specifmemo);
+                
+                if 1 %isempty(occ.suffix)
+                    group = '';
+                else
+                    oldinter = occ.suffix.parameter.getfield('onset').inter;
+                    if isempty(oldinter)
+                        group = '';
+                    else
+                        oldinter = oldinter.value;
+                        newinter = param.getfield('onset').inter.value;
+                        if log(newinter/oldinter) > .8
+                            group = 'close';
+                        elseif log(oldinter/newinter) > .8
+                            group = 'open';
+                        else
+                            group = 'extend';
+                        end
+                    end
+                end
+                
+                obj = obj.combine('fields',param,group,occ,succ,parent,...
+                                  specifmemo,cyclic,root);
             end
         end
         %function obj = shortcut(obj,param,child)

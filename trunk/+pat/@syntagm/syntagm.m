@@ -4,35 +4,51 @@
 % the main folder of the MiningSuite distribution.
 classdef syntagm < seq.syntagm
 	methods
-		function obj = syntagm(event1,event2)
+		function obj = syntagm(event1,event2,root,memorize)
             obj = obj@seq.syntagm(event1,event2);
+            
+            if nargin < 4
+                memorize = 1;
+            end
+            if ~memorize
+                return
+            end
+            
+            event1 = obj.from;
             occ = event1.occurrences;
+            if isempty(occ)
+                return
+            end
+            
             cyc = [];
             nocyc = [];
             for i = 1:length(occ)
-                if isempty(occ(i).cycle)
-                    nocyc = [nocyc occ(i)];
-                else
-                    cyc = [cyc occ(i)];
+                if ~isempty(occ(i).cycle)
+                %    nocyc = [nocyc occ(i)];
+                %else
+                %    cyc = [cyc occ(i)];
+                %end
+            %end
+            %for i = 1:length(cyc)
+            %    cyc(i).memorize(obj,root,[],1);
+            %end
+                    occ(i).track_cycle(obj,root);
                 end
             end
-            occ = [cyc nocyc];
-            for i = 1:length(occ)
-                %if isempty(occ(i).cycle)
-                completed = 0;
-                while ~completed
-                    for j = i+1:length(occ)
-                        if ismember(occ(j),occ(i).specific)
-                            occj = occ(j);
-                            occ(j) = occ(i);
-                            occ(i) = occj;
-                            completed = -1;
-                            break
-                        end
-                    end
-                    completed = completed+1;
+            
+            %occ = nocyc;
+            genpool{length(occ)} = [];
+            if length(occ) > 1
+                genpool{length(occ)-1} = [occ(end).pattern ...
+                                          occ(end).pattern.general];
+                for i = length(occ)-1:-1:2
+                    genpool{i-1} = union(genpool{i},...
+                                         [occ(i).pattern ...
+                                          occ(i).pattern.general]);
                 end
-                occ(i).memorize(obj);
+            end
+            for i = 1:length(occ)
+                occ(i).memorize(obj,root,genpool{i});
             end
         end
         function val = overlaps(obj1,obj2)
