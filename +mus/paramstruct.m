@@ -1,7 +1,9 @@
-function p = paramstruct
+function p = paramstruct(options)
 
 p = seq.paramstruct('music',...
-                    {'freq','chro','dia','onset','offset','metre'},1);
+            {'freq','chro','dia','onset','offset'...
+             %,'metre','channel','harmony','group'...
+             },1);
 
 %p = p.setfield('pitch',seq.paramstruct('pitch',{'freq','chro','dia'},0));
 
@@ -9,35 +11,53 @@ p = seq.paramstruct('music',...
     freq.general = seq.paramgeneral(@octave);
     freq.inter = seq.paraminter(@mrdivide);
     freq.inter.general = seq.paramgeneral(@octave);
-    freq.inter.general(2) = seq.paramgeneral(@sign);
+    if options.contour
+        freq.inter.general(2) = seq.paramgeneral(@sign);
+    end
 p = p.setfield('freq',freq);
 
     chro = seq.paramtype('chro');
-    chro.general = seq.paramgeneral(@mod12);
+    %chro.general = seq.paramgeneral(@mod12);
     chro.inter = seq.paraminter(@diff);
-    chro.inter.general = seq.paramgeneral(@mod12);
-    chro.inter.general(2) = seq.paramgeneral(@sign);
+    %chro.inter.general = seq.paramgeneral(@mod12);
+    if options.contour
+        chro.inter.general = seq.paramgeneral(@sign);
+    end
 p = p.setfield('chro',chro);
 
     dia = seq.paramtype('dia',{'letter','accident','octave'});
-    dia.general = seq.paramgeneral(@letter);
+    %dia.general = seq.paramgeneral(@letter);
     dia.inter = seq.paraminter(@interdia,{'number','quality'});
-    dia.inter.general = seq.paramgeneral(@number);
-    dia.inter.general.general = seq.paramgeneral(@mod12);
+    %dia.inter.general = seq.paramgeneral(@number);
+    %dia.inter.general.general = seq.paramgeneral(@mod12);
 p = p.setfield('dia',dia);
 
 %p = p.setfield('rhythm',seq.paramstruct('rhythm',{'onset','offset'},0));
-    
-    ons = seq.paramtype('onset');
-    %ons.general = seq.paramgeneral(@inbar);
-    ons.inter = seq.paraminter(@diff); 
-    %ons.inter.general = seq.paramgeneral(@inbar);
-p = p.setfield('onset',ons);
+        
+        ons = seq.paramtype('onset');
+        %ons.general = seq.paramgeneral(@inbar);
+        ons.inter = seq.paraminter(@diff); 
+        %ons.inter.general = seq.paramgeneral(@inbar);
+    p = p.setfield('onset',ons);
 
-p = p.setfield('offset',seq.paramtype('offset'));
+    p = p.setfield('offset',seq.paramtype('offset'));
 
-p = p.setfield('metre',seq.paramtype('metre'));
-    
+if 0
+        metre = seq.paramtype('metre',{'bar','inbar'});
+        metre.general = seq.paramgeneral(@inbar);
+    p = p.setfield('metre',metre);
+
+    p = p.setfield('channel',seq.paramtype('channel'));
+
+    p = p.setfield('harmony',seq.paramtype('harmony'));
+
+    p = p.setfield('group',seq.paramtype('group'));
+end
+
+%    level = seq.paramtype('level');
+%    level.inter = seq.paraminter(@diff);
+%p = p.setfield('level',level);
+
 
 function y = mod12(x)
 y = mod(x,12);
@@ -57,23 +77,33 @@ if isnumeric(x)
     return
 end
 
+if ~isempty(x.octave)
+    x.letter = x.letter + x.octave*7;
+end
+if ~isempty(y.octave)
+    y.letter = y.letter + y.octave*7;
+end
 z.number = x.letter - y.letter;
-z.quality = x.accident - y.accident;
-if ismember(mod(z.number,8),[1 2 5 6])
-    switch mod(z.number,8)
-        case 1
-            minor = [1 4];
-        case 2
-            minor = [0 1 3 4];
-        case 5
-            minor = [0 1 4 5];
-        case 6
-            minor = [0 1 3 4 6];
+
+z.quality = (x.accident - y.accident);
+if z.number < 0
+    z.quality = - z.quality;
+end
+if ismember(mod(abs(z.number),8),[1 2 5 6])
+    switch mod(abs(z.number),8)
+        case 1  % Secund interval
+            minor = [2 6];  % EF and BC
+        case 2  % Third interval
+            minor = [1 2 5 6];
+        case 5  % Sixth interval
+            minor = [2 5 6];
+        case 6  % Seventh interval
+            minor = [1 2 4 5 6];
     end
-    if ismember(mod(x.letter,8),minor)
+    if ismember(mod(min(x.letter,y.letter),8),minor)
         z.quality = z.quality - 1;
     else
-        z.quality = z.quality + 1;
+        %z.quality = z.quality + 1;
     end
 end
 
@@ -87,4 +117,4 @@ end
 
 
 function y = inbar(x)
-y = mod(x,8);
+y = x.inbar;

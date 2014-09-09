@@ -9,12 +9,16 @@ classdef event < hgsetget
     end
     properties
         extends
+        extension
         isprefix
         issuffix
         from
         to
         constructs
         property
+        passing
+        ornament = 0
+        closing = 0
     end
 	methods
 		function obj = event(sequence,param,prev,suffix)
@@ -46,8 +50,11 @@ classdef event < hgsetget
         %end
         function obj = extend(prefix,suffix,param)
             obj = seq.event(prefix.sequence,param,[],suffix);
+            obj = obj.extension_routine(prefix,suffix);
+        end
+        function obj = extension_routine(obj,prefix,suffix)
             obj.extends = prefix;
-            prefix.isprefix = [prefix.isprefix obj];
+            prefix.extension = [prefix.extension obj];
             suffix.issuffix = [suffix.issuffix obj];
             obj.previous = prefix.previous;
             obj.next = suffix.next;
@@ -58,14 +65,14 @@ classdef event < hgsetget
                 obj.next(i).previous = [obj.next(i).previous obj];
             end
         end
-        function l = extent(obj)
+        function l = extent(obj,idx)
             if isa(obj.suffix,'seq.event')
                 l = obj.suffix;
             else
                 l = obj;
             end
             if ~isempty(obj.isprefix)
-                l = [l obj.isprefix(1).extent];
+                l = [l obj.isprefix(idx).extent(1)];
             end
         end
     end

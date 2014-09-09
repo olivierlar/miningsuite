@@ -48,6 +48,9 @@ classdef paramstruct < seq.param
         function obj = setfield(obj,name,varargin)
             f = find(strcmp(name,obj.names));
             x = varargin{end};
+            %if isa(x,'seq.paramval') && ~isempty(x.type.general)
+            %    x.general = x.type.general.func(x.value);
+            %end
             if nargin == 3
                 if obj.iscell
                     obj.fields{f} = x;
@@ -71,16 +74,18 @@ classdef paramstruct < seq.param
             f = cell(1,length(obj1.fields));
             if iscell(obj1.fields)
                 for i = 1:length(obj1.fields)
-                    if isempty(obj1.fields{i}) || isempty(obj2.fields{i})
-                        f{i} = [];
+                    if ~isa(obj1.fields{i},'seq.paramval') || ...
+                            ~isa(obj2.fields{i},'seq.paramval')
+                        f{i} = obj2.fields{i};
                     else
                         f{i} = paraminter(obj1.fields{i},obj2.fields{i});
                     end
                 end
             else
                 for i = 1:length(obj1.fields)
-                    if isempty(obj1.fields(i)) || isempty(obj2.fields(i))
-                        f{i} = [];
+                    if ~isa(obj1.fields(i),'seq.paramval') || ...
+                            ~isa(obj2.fields(i),'seq.paramval')
+                        f{i} = obj2.fields(i);
                     else
                         f{i} = paraminter(obj1.fields(i),obj2.fields(i));
                     end
@@ -115,7 +120,7 @@ classdef paramstruct < seq.param
             %f{3} = common(obj1.fields{3},obj2.fields{3});
             %f{4} = common(obj1.fields{4},obj2.fields{4});
             for i = 1:length(obj1.fields)
-                if i ~= 4
+                if i<2 || i > 3
                     f{i} = [];
                     continue
                 end
@@ -129,60 +134,77 @@ classdef paramstruct < seq.param
                 else
                     fields2 = obj2.fields(i);
                 end
-                if isempty(fields1) || isempty(fields2)
+                if isempty(fields1) && isempty(fields2)
                     f{i} = [];
+                elseif isempty(fields1)
+                    f{i} = fields2;
+                    if isa(f{i},'seq.paramval')
+                        f{i}.value = [];
+                    end
+                elseif isempty(fields2)
+                    f{i} = fields1;
+                    if isa(f{i},'seq.paramval')
+                        f{i}.value = [];
+                    end
                 else
+                    if strcmp(fields1.name,'onset') || ... %% Comment this to add inter-onset parameter
+                         strcmp(fields1.name,'offset')
+                        f{i} = [];
+                        continue
+                    end
                     f{i} = common(fields1,fields2,varargin{:});
                 end
             end
             obj.fields = f;
         end
         function [test param] = implies(obj1,obj2,context)
+            if nargout < 2
+                if nargin > 2
+                    test = implies_fast(obj1,obj2,context);
+                else
+                    test = implies_fast(obj1,obj2);
+                end
+                return
+            end
             test = true;
             param = obj2;
-            for i = 1:length(obj1.fields)
-                %if i == 2
-                %    continue
-                %end
-                if length(obj1.fields)<i || length(obj2.fields)<i
-                    break
-                end
-                if iscell(obj1.fields)
-                    fields1 = obj1.fields{i};
+            for i = 2:3 %1:length(obj1.fields)
+                if nargin>2
+                    [testi param.fields{i}] = implies(obj1.fields{i},...
+                                                      obj2.fields{i},...
+                                                      context.fields{i});
                 else
-                    fields1 = obj1.fields(i);
-                end
-                if iscell(obj2.fields)
-                    fields2 = obj2.fields{i};
-                else
-                    fields2 = obj2.fields(i);
-                end
-                if iscell(obj2.fields)
-                    if isempty(fields1)
-                        testi = isempty(fields2) || ...
-                                isa(fields2,'seq.paramtype') || ...
-                                (isempty(fields2.value) && ...
-                                 isempty(fields2.inter));
-                    elseif nargin>2
-                        [testi param.fields{i}] = implies(fields1,fields2,...
-                                                context.fields{i});
-                    else
-                        [testi param.fields{i}] = implies(fields1,fields2);
-                    end
-                else
-                    [testi param.fields(i)] = implies(fields1,fields2);
+                    [testi param.fields{i}] = implies(obj1.fields{i},...
+                                                      obj2.fields{i});
                 end
                 test = test & testi;
             end
         end
-        function test = isequal(obj1,obj2) %,varargin)
-            if obj1.implies(obj2) && obj2.implies(obj1);
-                test = true;
-                return
+        function test = implies_fast(obj1,obj2,context)
+            test = true;
+            for i = 2:3 %1:length(obj1.fields)
+                if nargin>2
+                    test = implies_fast(obj1.fields{i},obj2.fields{i},...
+                                        context.fields{i});
+                else
+                    test = implies_fast(obj1.fields{i},obj2.fields{i});
+                end
+                if ~test
+                    break
+                end
             end
+        end
+        function test = isequal(obj1,obj2) %,varargin)
+            %if obj1.implies(obj2) && obj2.implies(obj1);
+            %    test = true;
+            %    return
+            %end
             
             test = true;
             for i = 1:length(obj1.fields)
+                if i<2 || i > 3
+                    continue
+                end
                 if iscell(obj1.fields)
                     fields1 = obj1.fields{i};
                 else
@@ -203,36 +225,34 @@ classdef paramstruct < seq.param
         end
         function test = isdefined(obj,patt)
             test = false;
-            if nargin>1
-                %if ~isempty(patt.parent) ...
-                %        && (isempty(display(patt.parameter,1)) || ...
-                %            isa(patt.parameter,'sig.paramtype')) ...
-                %        && isempty(patt.parent.parent) ...
-                %        && (isempty(patt.parent.parameter) || ...
-                %            isempty(display(patt.parent.parameter,1))) ...
-                %        && isempty(display(obj.inter,1))
-                %    return
-                %end
-        %        if ~isempty(patt.parent) && ...
-        %                (isa(patt.parameter.fields{3},'seq.paramtype') || ...
-        %                 (isempty(patt.parameter.fields{3}.value) && ...
-        %                  isempty(patt.parameter.fields{3}.inter))) && ...
-        %                isempty(obj.fields{1}.inter) && ...
-        %                isempty(obj.fields{2}) && ...
-        %                isempty(obj.fields{3}.inter)
-        %            return
-        %        end
-            end
+            intertest = false;
+            interdefine = nargin > 1 && ~isempty(patt.parent);
             for i = 1:length(obj.fields)-1
                 if iscell(obj.fields)
                     field = obj.fields{i};
                 else
                     field = obj.fields(i);
                 end
-                if ~isempty(field) && field.isdefined
-                    test = true;
-                    return
+                if ~isempty(field)
+                    if field.isdefined
+                        test = true;
+                    end
+                    if ~interdefine
+                        if test
+                            return
+                        end
+                    else
+                        if ~isempty(field.inter) && field.inter.isdefined(patt)
+                            intertest = true;
+                        end
+                        if test && intertest
+                            return
+                        end
+                    end
                 end
+            end
+            if test && interdefine && ~intertest
+                test = false;
             end
         end
         function test = isvaldefined(obj)
@@ -263,6 +283,19 @@ classdef paramstruct < seq.param
                 end
             end
         end
+        function obj = nointer(obj)
+            for i = 1:length(obj.fields)
+                if iscell(obj.fields)
+                    if isa(obj.fields{i},'seq.paramval')
+                        obj.fields{i} = obj.fields{i}.nointer;
+                    end
+                else
+                    if isa(obj.fields(i),'seq.paramval')
+                        obj.fields(i) = obj.fields(i).nointer;
+                    end
+                end
+            end
+        end
         function txt = display(obj,varargin)
             if length(obj) > 1
                 for i = 1:length(obj)
@@ -272,19 +305,37 @@ classdef paramstruct < seq.param
                 txt = '';
                 if iscell(obj.fields)
                     for i = 1:length(obj.fields)
-                        if not(isempty(obj.fields{i}))
+                        if isa(obj.fields{i},'seq.paramval')
                             txt = [txt display(obj.fields{i},1)];
                         end
                     end
                 else
                     for i = 1:length(obj.fields)
-                        if not(isempty(obj.fields(i)))
+                        if isa(obj.fields(i),'seq.paramval')
                             txt = [txt display(obj.fields(i),1)];
                         end
                     end
                 end
                 if nargin == 1 && ~isempty(txt)
                     disp(txt)
+                end
+            end
+        end
+        function tab = tabulize(obj,tab)
+            if nargin<2
+                tab = [];
+            end
+            if iscell(obj.fields)
+                for i = 1:length(obj.fields)
+                    if ~isempty(obj.fields{i})
+                        tab = obj.fields{i}.tabulize(tab);
+                    end
+                end
+            else
+                for i = 1:length(obj.fields)
+                    if ~isempty(obj.fields(i))
+                        tab = obj.fields(i).tabulize(tab);
+                    end
                 end
             end
         end
@@ -299,6 +350,17 @@ classdef paramstruct < seq.param
             f{3} = obj1.fields{3}.substract(obj2.fields{3});
             f{4} = obj1.fields{4};
             obj.fields = f;
+        end
+        function res = undefined_pitch_parameter(obj)
+        % to be checked..
+            res = isempty(obj.fields{2}.value) && ...
+                  isempty(obj.fields{2}.general) && ...
+                  (isempty(obj.fields{2}.inter) || ...
+                   isempty(obj.fields{2}.inter.value)) && ...
+                  isempty(obj.fields{3}.value) && ...
+                  isempty(obj.fields{3}.general) && ...
+                  (isempty(obj.fields{3}.inter) || ...
+                   isempty(obj.fields{3}.inter.value));
         end
     end
 end

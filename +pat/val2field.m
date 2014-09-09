@@ -2,7 +2,7 @@
 % All rights reserved.
 % License: New BSD License. See full text of the license in LICENSE.txt in
 % the main folder of the MiningSuite distribution.
-function field = val2field(value)
+function field = val2field(value,value2)
 
 if isa(value,'seq.paramval')
     field = pat.val2field(value.value);
@@ -16,7 +16,14 @@ elseif isstruct(value)
         field = [field,'val',relnum2str(value.(f{i}))];
     end
 else
-    field = ['val' relnum2str(value)];
+    if ischar(value)
+        value = double(value);
+    end
+    if nargin == 1 || isempty(value2)
+        field = ['val' relnum2str(value)];
+    else
+        field = ['val' relnum2str(value) '_' relnum2str(value2)];
+    end
 end
 
 

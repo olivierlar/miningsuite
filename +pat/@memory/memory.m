@@ -14,53 +14,65 @@ classdef memory < hgsetget
             obj.name = param.name;
             obj.fields = param.fields;
         end
-        function obj = combine(obj,field,param,occ,succ,parent,specif)
-            objfield = obj.(field);
-            paramfields = param.(field);
-            specifields = {};
+        function obj = combine(obj,field,param,group,occ,succ,parent,specif,cyclic,root)
+            if nargin < 8
+                cyclic = 0;
+            end
+            if isempty(obj.(field))
+                return 
+            end
+            specifields = {}; 
             for i = 1:length(specif)
                 if ~isempty(specif{i})
                     specifields{end+1} = specif{i}.(field);
                 end
             end
-            if ~length(paramfields)
+            if ~length(param(1).(field))
                 return
             end
-            for i = 1:length(objfield)
-                %if length(paramfields)<i
-                %    break
-                %end
-                if i ~= 4
+            for i = 1:length(obj.(field))
+                if strcmp(field,'fields') && (i < 2|| i > 3)
                     continue
                 end
                 specifieldi = [];
-                if iscell(paramfields)
-                    paramfieldi = paramfields{i};
+                if iscell(param(1).(field))
+                    paramfieldi = param(1).(field){i};
                     for j = 1:length(specifields)
                         specifieldi{j} = specifields{j}{i};
                     end
                 else
-                    paramfieldi = paramfields(i);
+                    paramfieldi = param(1).(field)(i);
                     for j = 1:length(specifields)
-                        specifieldi{j} = specifields{j}(i);
+                        if ~isempty(specifields{j})
+                            specifieldi{j} = specifields{j}(i);
+                        end
                     end
                 end
-                if iscell(objfield)
-                    [obj.(field){i} paramemo] = ...
-                        objfield{i}.learn(paramfieldi,occ,succ,parent,...
-                                          specifieldi);
+                if isempty(paramfieldi)
+                    continue
+                end
+                %if strcmp(field,'fields') && ...
+                %        isa(param.fields{9},'seq.paramval')
+                %    paramfieldi = [paramfieldi param.fields{9}];
+                %end
+                if iscell(obj.(field))
+                    if ~isempty(obj.(field){i})
+                        [obj.(field){i} paramemo] = ...
+                            obj.(field){i}.learn(paramfieldi,group,occ,succ,...
+                                                 parent,specifieldi,cyclic,root);
+                    end
                 else
                     [obj.(field)(i) paramemo] = ...
-                        objfield(i).learn(paramfieldi,occ,succ,parent,...
-                                          specifieldi);
+                        obj.(field)(i).learn(paramfieldi,group,occ,succ,...
+                                             parent,specifieldi,cyclic,root);
                 end
             end
-            if ...param.fields{2}.value && ...
-                    ~isempty(paramemo.inter) && isa(paramemo.inter.value,'pat.pattern')
-                %obj.(field){2} = obj.(field){1}.real(paramemo,varargin{:});
+            if isfield(paramemo,'inter') && ...
+                    ~isempty(paramemo.inter) && ...
+                    isa(paramemo.inter.value,'pat.pattern')
+                error(1)
                 patt = paramemo.inter.value;
                 param2 = patt.parameter;
-                %param2.fields{4}.value = param.fields{4}.value;
 
                 for i = 1:length(parent.children)
                     if parent.children{i}.parameter.implies(param2)
@@ -88,7 +100,7 @@ classdef memory < hgsetget
                 if all
                     %1
                 elseif ~isempty(memo)
-                    parent.link(memo,occ,succ,param2);
+                    parent.link(memo,occ,succ,cyclic,param2,root);
                 end
             end
         end

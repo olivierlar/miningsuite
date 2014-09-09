@@ -1,10 +1,7 @@
-% MUS.MINR
-%
 % Copyright (C) 2014, Olivier Lartillot
 % All rights reserved.
 % License: New BSD License. See full text of the license in LICENSE.txt in
 % the main folder of the MiningSuite distribution.
-
 function out = minr(arg,varargin)
 
 options = mus.options(initoptions,varargin);
@@ -22,43 +19,13 @@ else
 end
 
 if ischar(arg)
-    if strcmpi(arg,'Folder')
-        dd = dir;
-        dn = {dd.name};
-        for i = 1:length(dn)
-            out = read(out,dn{i},options,concept,1);
-        end
-    else
-        out = read(out,arg,options,concept,0);
-    end
+    out = reads(arg,options,concept);
 elseif isa(arg,'sig.design')
-    if strcmpi(arg.input,'Folder')
-        dd = dir;
-        dn = {dd.name};
-        for i = 1:length(dn)
-            in = arg.eval(dn{i});
-            p = in{1}.sdata(in{1}.peak.content{1});
-        end
-    else
-        in = arg.eval;
-        if isnumeric(in)
-            out = process_midi(out,in,arg.input,options,concept,0);
-        else
-            p = in{1}.sdata(in{1}.peak.content{1});
-            memory = [];
-            note = [];
-            ps = mus.paramstruct;
-            for i = 1:length(p)
-                param = mus.param(ps,0,NaN,NaN,p(i),p(i)+.01);
-                note = pat.event(out,param,note);
-                out = out.integrate(note);
-                if ~isempty(options)
-                    [out.concept,memory] = process(out.concept,note,...
-                                                   memory,options);
-                end
-            end
-        end
-    end
+    design = sig.design('mus','minr',arg,'mus.Sequence',...
+                        @transcribe,options,[],arg.frame,[],varargin,...
+                        arg.extract,0,arg.nochunk);
+    design.evaluate = 1;
+    out = {design};
 elseif isa(arg,'mus.Sequence')
     out = arg;
     if iscell(arg.files)
@@ -81,7 +48,7 @@ elseif isa(arg,'mus.Sequence')
                 end
             end
             memory = [];
-            if options.metre
+            if options.metre || options.motif
                 pattern = initpattern;
             else
                 pattern = [];
@@ -110,47 +77,144 @@ elseif isa(arg,'mus.Sequence')
             end
         end
         memory = [];
-        if options.metre
+        if options.metre || options.motif
             pattern = initpattern;
         else
             pattern = [];
         end
         for j = 1:length(out.content)
-            [out.concept,memory,out.content{j}] = ...
-                process(concept,out.content{j},memory,options,pattern);
+            if j == length(out.content)
+                ioi = Inf;
+            else
+                ioi = out.content{j+1}.parameter.getfield('onset').value ...
+                    - out.content{j}.parameter.getfield('onset').value;
+            end
+            [out.concept,out.content{j},memory] = ...
+                process(concept,out.content{j},memory,options,pattern,ioi);
         end
     end
+elseif isa(arg,'sig.data')
+    out = transcribe(arg);
+end
+
+
+function out = reads(arg,options,concept)
+out = mus.Sequence;
+if strcmpi(arg,'Folder')
+    d = dir;
+    dn = {d.name};
+    for i = 1:length(dn)
+        out = read(out,dn{i},options,concept,1);
+    end
+else
+    out = read(out,arg,options,concept,0);
 end
 
 
 function out = read(out,name,options,concept,folder)
 fid = fopen(name);
 if fid<0
-    e = sig.envelope(name);
-    p = sig.peak(e,'Threshold',.5);
-    out = mus.minr(p);
+    if ~folder
+        error('incorrect file');
+    end
     return
 end
 head = fread(fid,'uint8');
 fclose(fid);
-if isequal(head(1:4)',[77 84 104 100])  % MIDI format
-    [nmat options.tempo] = mus.midi2nmat(name);
-    out = process_midi(out,nmat,name,options,concept,folder);
+if 0
+    %nmat = [(0:5)',ones(6,2),[60;62;60;64;60;65],ones(6,1),(0:5)',ones(6,2)];
+    %p = [60;62;64;65];
+    %notes = struct('chro',num2cell([p;p;p;67;p;67;p;p]),...
+    %    'ons',num2cell([0 2 4 6 10 12 14 16 20 21 23 25 27 30 32 33 35 37 40 42 44 45 50 52 54 56]'),...
+    %    'dur',num2cell(ones(4*6+2,1)),'chan',num2cell(ones(4*6+2,1)));
+elseif isequal(head(1:4)',[77 84 104 100])  % MIDI format
+    nmat = mus.midi2nmat(name);
+    notes = struct('chro',num2cell(nmat(:,4)),'ons',num2cell(nmat(:,6)),...
+                   'dur',num2cell(nmat(:,7)),'chan',num2cell(nmat(:,3)));
+    out = process_notes(notes,out,name,options,concept,folder);
+elseif 1
+    fid = fopen(name,'rt');
+    if 0 % mathieu
+        C = textscan(fid,'%f %f %f %f %f %f %f %f %f %f %f %s \n');
+        notes = struct('chro',num2cell(C{1}),'ons',num2cell(C{8}),...
+                       'dur',num2cell(C{9}),'chan',num2cell(C{11}),...
+                       'harm',C{12});
+    elseif 0 % jakob
+        C = textscan(fid,'%f,%f,%f,%f\n');
+        notes = struct('chro',num2cell(C{1}),...
+                       'ons',num2cell(C{2}),...
+                       'dur',num2cell(C{3}-C{2}));
+        while ~feof(fid)
+            C = textscan(fid,'%f,%f,%f,%f\n');
+            if ~isempty(C{1})
+                notes(end+1) = struct('chro',num2cell(C{1}),...
+                                      'ons',num2cell(C{2}),...
+                                      'dur',num2cell(C{3}-C{2}));
+            end
+        end
+    elseif 1 % tom
+        C = textscan(fid,'(%s %f %f %s %f)\n');
+        C{1} = divscan(C{1});
+        C{4} = divscan(C{4});
+        notes = struct('chro',num2cell(C{2}),...
+                       'ons',num2cell(C{1}),...
+                       'dur',num2cell(C{4}),...
+                       'chan',0,...num2cell(C{5}),...
+                       'dia',num2cell(C{3}));
+    end
+    out = process_notes(notes,out,name,options,concept,folder);
+else
+    if options.t1 || options.t2
+        if isempty(options.t1)
+            options.t1 = 0;
+        end
+        if isempty(options.t2)
+            options.t2 = Inf;
+        end
+        a = miraudio('Design','Extract',options.t1,options.t2);
+    else
+        a = miraudio('Design');
+    end
+    if 1
+        p = mirpitch(a,'Frame','Enhanced',0,'Segment',...
+                       'SegPitchGap',45,'SegMinLength',2,'NoFilterBank');
+        p = mireval(p,name);
+        p = p{1};
+    else
+        e = sig.envelope(name);
+        p = sig.peak(e,'Threshold',.5);
+        p = p.eval;
+        p = p{1};
+    end
+    out = transcribe(out,p,options,concept);
 end
 
 
-function out = process_midi(out,nmat,name,options,concept,folder)
-memory = [];
-ps = mus.paramstruct;
-if options.notes
-    options.notes(options.notes > size(nmat,1)) = [];
-    nmat = nmat(options.notes,:);
+function y = divscan(x)
+y = zeros(size(x));
+for i = 1:size(x,1);
+    xi = textscan(x{i},'%f/%f');
+    if isempty(xi{2})
+        y(i) = xi{1};
+    else
+        y(i) = xi{1}/xi{2};
+    end
 end
+
+        
+function out = process_notes(notes,out,name,options,concept,folder)
 if options.t1
-    nmat(nmat(:,6) < options.t1,:) = [];
+    notes([notes.ons] < options.t1) = [];
 end
 if options.t2
-    nmat(nmat(:,6) > options.t2,:) = [];
+    notes([notes.ons] > options.t2) = [];
+end
+if ~isempty(options.chan)
+    notes(~ismember([notes.chan],options.chan)) = [];
+end
+if options.notes
+    options.notes(options.notes > length(notes)) = [];
+    notes = notes(options.notes);
 end
 note = [];
 if folder
@@ -159,22 +223,59 @@ if folder
 else
     out.files = name;
 end
-if options.metre
-    pattern = initpattern;
+if options.metre || options.motif
+    pattern = initpattern(options);
 else
     pattern = [];
 end
-for j = 1:size(nmat,1)
-    param = mus.param(ps,nmat(j,4),[],[],...
-                       nmat(j,6),nmat(j,6)+nmat(j,7));
+if options.mode
+    mode = mus.scale([]);
+else
+    mode = [];
+end
+memo = [];
+ps = mus.paramstruct(options);
+for j = 1:length(notes)
+    %j
+    if isfield(notes,'dia')
+        letter = notes(j).dia;
+    else
+        letter = [];
+    end
+    if isfield(notes,'harm')
+        harm = notes(j).harm;
+    else
+        harm = [];
+    end
+    if isfield(notes,'chan')
+        chan = notes(j).chan;
+    else
+        chan = 0;
+    end
+    param = mus.param(ps,notes(j).chro,letter,[],...
+                         notes(j).ons,notes(j).ons+notes(j).dur,...
+                         chan,harm);
     note = pat.event(out,param,note);
     note.address = j;
     out = out.integrate(note);
+    if j == length(notes)
+        ioi = Inf;
+    else
+        ioi = notes(j+1).ons - notes(j).ons;
+    end
     if ~isempty(options)
-        [concept,memory,note] = process(concept,note,memory,...
-                                        options,pattern);
+        [concept,note,memo] = process(concept,note,memo,options,...
+                                      pattern,mode,ioi);
     end
 end
+if 0 %options.segment
+    for i = 1:length(memo)
+        if ~isempty(memo{i}(1))
+            mus.group(memo{i}(1),Inf,options);
+        end
+    end
+end
+%process(concept,[],memo,options,pattern,mode,ioi);
 if folder
     out.concept{end+1} = concept;
 else
@@ -182,182 +283,171 @@ else
 end
 
 
-function [concept memory note] = process(concept,note,memory,options,pattern)
+function out = transcribe(out,in,options,concept)
+ps = mus.paramstruct;
+if isa(in,'sig.envelope')
+    p = in{1}.sdata(in{1}.peak.content{1});
+    memory = [];
+    note = [];
+    for i = 1:length(p)
+        param = mus.param(ps,0,NaN,NaN,p(i),p(i)+.01);
+        note = pat.event(out,param,note);
+        note.address = i;
+        out = out.integrate(note);
+        if ~isempty(options)
+            [out.concept,memory] = process(out.concept,note,memory,options);
+        end
+    end
+elseif isa(in,'mirpitch')
+    reso = 100;    
+    d = get(in,'Mean');
+    st = get(in,'Start');
+    en = get(in,'End');
+    stb = get(in,'Stable');
+    fp = get(in,'FramePos');
+    
+    for i = 1:length(d)
+        scal = [];
+        memory = [];
+        note = [];
+        for j = 1:length(d{i}{1}{1})
+            freq = d{i}{1}{1}(j);
+            [scal,degr] = integrate(scal,freq,reso);
+            ons = fp{i}{1}(1,st{i}{1}{1}(j));
+            off = fp{i}{1}(2,en{i}{1}{1}(j));
+            param = mus.param(ps,degr,NaN,NaN,ons,off);
+            note = pat.event(out,param,note);
+            note.address = j;
+            out = out.integrate(note);
+            if ~isempty(options)
+                [out.concept,memory] = process(concept,note,memory,options);
+            end
+        end
+    end
+end
+
+
+function [concept,note,memo] = process(concept,note,memo,options,...
+                                       pattern,mode,ioi)
 address = note.address;
 pitch = note.parameter.getfield('chro').value;
+%channel = note.parameter.getfield('channel');
+%chan = channel.value;
+if 1 %isempty(chan)
+    chan = 0;
+end
+%channel.value = [];
+%note.parameter = note.parameter.setfield('channel',channel);
+
 dia = [];
 if ~isempty(concept)
     for i = 1:length(concept.modes)
-        if isempty(concept.modes(i).eventscores) || ...
-                ~concept.modes(i).eventscores(end)
+        %if isempty(concept.modes(i).eventscores) || ...
+        %        ~concept.modes(i).eventscores(end)
             continue
-        end
+        %end
         dia = pitch2dia(concept.modes(i).origins(1));
         interdia = interpitch2interdia(pitch - concept.modes(i).origins(1),...
                                        dia.letter);
-        dia.letter = dia.letter + interdia.number;
-        dia.accident = dia.accident + interdia.quality;
+        if isempty(interdia)
+            dia = [];
+        else
+            dia.letter = dia.letter + interdia.number;
+            dia.accident = dia.accident + interdia.quality;
+        end
     end
     if isempty(dia)
         dia = pitch2dia(pitch);
     end
     note.parameter = note.parameter.setfield('dia',...
-                        seq.paramval(note.parameter.getfield('dia'),dia));
+                        seq.paramval(note.parameter.getfield('dia').type,dia));
 end
 
-if options.mode
-    found = 0;
-    concept.note.activate(pitch,0,0,address);
-    for j = 1:length(concept.modes)
-        for k = 1:min(length(concept.modes(j).origins),1) %%%%%
-            if concept.modes(j).currentscores(k) > 0
-                [is loc] = ismember(mod(pitch,12),...
-                                    mod(concept.modes(j).scale + ...
-                                        concept.modes(j).origins(k),12));
-                if is
-                    %if ispivot && ismember(loc,concept.modes(j).pivot)
-                    %    concept.modes(j).ispivot(address,k) = 1;
-                    %    ispivot = 0;
-                    %end
-                    concept.modes(j).currentdegreescores(1,loc,k) = 1;
-                    found = 1;
-                else
-                    scores = NaN(1,length(concept.modes));
-                    for l = 1:length(concept.modes)
-                        is2 = ismember(mod(pitch,12),...
-                                       mod(concept.modes(l).scale + ...
-                                           concept.modes(j).origins(k),...
-                                           12));
-                        if is2
-                            k2 = find(concept.modes(l).origins == ...
-                                      concept.modes(j).origins(k));
-                            if isempty(k2)
-                                scores(l) = 0;
-                            else
-                                scores(l) = concept.modes(l).currentscores(k2);
-                            end
-                        end
-                    end
-                    [bscore l] = max(scores);            
-                    [is2 loc2] = ismember(mod(pitch,12),...
-                                          mod(concept.modes(l).scale + ...
-                                            concept.modes(j).origins(k),...
-                                            12));
-                    if 0 %is2
-                        k2 = find(concept.modes(l).origins == ...
-                                  concept.modes(j).origins(k));
-                        if isempty(k2)
-                            concept.modes(l).origins(end+1) = ...
-                                concept.modes(j).origins(k);
-                            k2 = length(concept.modes(l).origins);
-                        end
-                        if length(concept.modes(l).currentscores) < k2 || ...
-                                ~concept.modes(l).currentscores(k2)
-                            concept.modes(l).currentdegreescores(1,:,k2) = ...
-                                concept.modes(j).currentdegreescores(1,:,k) .* ...
-                                (concept.modes(l).scale == ...
-                                 concept.modes(j).scale);
-                            concept.modes(l).currentdegreescores(1,loc2,k2) = 1;
-                            concept.modes(l).currentscores(k2) = 1;
-                        end
-                        concept.modes(j).currentdegreescores(1,loc2,k) = 0;
-                        if all(concept.modes(l).currentdegreescores(1,:,k2) >= ...
-                                concept.modes(j).currentdegreescores(1,:,k))
-                            concept.modes(j).currentdegreescores(1,:,k) = ...
-                                zeros(1,size(concept.modes(j).currentdegreescores,2));
-                            concept.modes(j).currentscores(k) = 0;
-                            concept.modes(l).eventscores(address,k2) = 1;
-                        end
-                        found = 1;
-                    end
+if options.metre
+    pos = round(note.parameter.getfield('onset').value/.15152);
+    metre = note.parameter.getfield('metre');
+    barpos = pos/6+1;
+    metre.value.bar = round(barpos);
+    metre.value.inbar = round(rem(barpos,1)*6);
+    note.parameter = note.parameter.setfield('metre',metre);
+end
+
+note.parameter
+
+if length(memo) < chan+1 
+    memo{chan+1} = [];
+end
+k = 1;
+while k <= length(memo{chan+1})
+    if k > 1
+        break
+    end
+    if ~isempty(pattern)
+        sk = pat.syntagm(memo{chan+1}(k),note,pattern.root);
+    else
+        sk = seq.syntagm(memo{chan+1}(k),note);
+    end
+    sks = sk;
+
+    if options.segment && k == 1
+        ioi1 = sk.parameter.getfield('onset').inter.value;
+            % New inter-onset interval
+        [memo,mode] = mus.group(sk.from,ioi1,ioi,options,...
+                                note,pitch,memo,chan,mode,pattern);
+    end
+
+    if options.reduce
+        t = note.parameter.getfield('onset').value;
+        p1 = sk.from.parameter.getfield('chro').value;
+        if 0 %p1 == pitch
+            meta = sk.from.extend(note,sk.from.parameter);
+            meta.parameter = meta.parameter.setfield('offset',...
+                                        note.parameter.getfield('offset'));
+            concept = process(concept,meta,[],options,pattern);
+        elseif abs(pitch - p1) < 3
+            t1 = sk.from.parameter.getfield('onset').value;
+            for j = 1:length(sk.from.to)
+                p2 = sk.from.to(j).from.parameter.getfield('chro').value;
+                t2 = sk.from.to(j).from.parameter.getfield('onset').value;
+                if sign(p2 - p1) == sign(p1 - pitch) && ...
+                        abs(p1 - p2) < 3 && ...
+                        abs(log( (t-t1) / (t1-t2) )) < .1
+                    sk.from.to(j).passing = 1;
+                    sk.passing = 1;
+                    sk.from.passing = [sk.from.to(j) sk];
                 end
             end
         end
     end
     
-    if ~found
-        best = 0;
-        scal = concept.note.heights - pitch;
-        for j = 1:length(concept.modes)
-            modscal = concept.modes(j).scale;
-            for k = 1:length(concept.modes(j).pivot)
-                modscalk = modscal - modscal(concept.modes(j).pivot(k));
-                scok = sum(ismember(scal,modscalk)) / length(scal);
-                if scok > best
-                    origin = pitch - modscal(concept.modes(j).pivot(k));
-                    f = find(concept.modes(j).origins == origin,1);
-                    if ~isempty(concept.modes(j).currentscores)
-                        concept.modes(j).currentscores = ...
-                            zeros(size(concept.timescores{j}));
-                    end
-                    if isempty(f)
-                        no = length(concept.modes(j).origins) + 1;
-                        concept.modes(j).origins(no) = origin;
-                        concept.modes(j).currentscores(no) = scok;
-                        concept.modes(j).eventscores(address,no)...
-                            = scok;
-                        concept.degreescores{j}(1,:,no) = ...
-                            ismember(modscalk,scal);
-                    else
-                        concept.modes(j).currentscores(f) = scok;
-                        if ~isempty(concept.modes(j).timescores) && ...
-                                ~concept.modes(j).timescores(address-1,f)
-                            concept.modes(j).eventscores(address,f) = scok;
-                        end
-                    end
-                    best = scok;
-                end
-            end
-        end
+    if 0 %1 %options.metre || options.motif
+        sk.memorize;
     end
+    
+    k = k + 1;
+end
+%if k == 1 % First note
+%    lvl = seq.paramval(note.parameter.getfield('level'),1);
+%    note.parameter = note.parameter.setfield('level',lvl);
+%end
 
-    for j = 1:length(concept.modes)
-        if ~isempty(concept.modes(j).currentscores)
-            concept.modes(j).eventscores(address,...
-                          1:length(concept.modes(j).currentscores)) = ...
-                concept.modes(j).currentscores;
-            if ~isempty(concept.degreescores{j})
-                concept.modes(j).degreescores(address,...
-                              1:size(concept.degreescores{j},2),...
-                              1:size(concept.degreescores{j},3)) ...
-                    = concept.degreescores{j};
-            end
-        end
-    end
+if (options.metre || options.motif) %&& isempty(note.occurrences)
+    pat.occurrence(pattern.v,[],note); % should be r
+    pattern.occ0.memorize(note,pattern.root);
 end
 
-if options.reduce
-    if isempty(memory)
-        memory(1).pitch = pitch;
-        memory(1).ioi = 0;
-        memory(1).event = note;
-    else
-        f = find(pitch == [memory.pitch],1);
-        if isempty(f)
-            memory(end+1).pitch = pitch;
-            memory(end).ioi = 0;
-            memory(end).event = note;
-        else
-            meta = memory(f).event.extend(note,memory(f).event.parameter);
-            meta.parameter.setfield('rhythm','off',...
-                                     note.parameter.getfield('rhythm','off'));
-            %memory(f) = [];
-            %[concept,memory] = analyze_note(concept,meta,memory);
-        end
-    end
+if options.mode
+    concept = mus.modal(mode,pitch,ioi,address,concept);
 end
 
-if options.metre
-    if isempty(note.previous)
-        pat.occurrence(pattern.v,[],note); % should be r
-        pattern.occ0.memorize(note);
-    else
-        pat.syntagm(note.previous,note);
-        if ~isempty(note.previous.previous)
-            pat.syntagm(note.previous.previous,note);
-        end
-    end
+if length(memo) < chan+1
+    memo{chan+1} = note;
+else
+    memo{chan+1} = [note,memo{chan+1}];
 end
+
+%channel.value = chan;
+%note.parameter = note.parameter.setfield('channel',channel);
 
 
 function options = initoptions
@@ -381,9 +471,18 @@ options.m1 = m1;
     m2.type = 'Numeric';
 options.m2 = m2;
 
+    chan.key = 'Channel';
+    chan.type = 'Numeric';
+    chan.default = [];
+options.chan = chan;
+
     mode.key = 'Mode';
     mode.type = 'Boolean';
 options.mode = mode;
+
+    segment.key = 'Segment';
+    segment.type = 'Boolean';
+options.segment = segment;
 
     metre.key = 'Metre';
     metre.type = 'Boolean';
@@ -393,13 +492,21 @@ options.metre = metre;
     reduce.type = 'Boolean';
 options.reduce = reduce;
 
+    motif.key = 'Motif';
+    motif.type = 'Boolean';
+options.motif = motif;
 
-function p = initpattern
-ps = mus.paramstruct;
-p.root = pat.pattern([],[],ps);
-p.occ0 = p.root.occurrence([],[]);
+    contour.key = 'Contour';
+    contour.type = 'Boolean';
+options.contour = contour;
 
-pat.pattern(p.root,ps);
+
+function p = initpattern(options)
+ps = mus.paramstruct(options);
+p.root = pat.pattern([],[],[],ps);
+p.occ0 = p.root.occurrence([],[]);%,[]);
+
+pat.pattern([],p.root,ps);
 p.v = p.root.children{1};
 p.v.general = p.root;
 p.root.specific = p.v;
@@ -413,8 +520,27 @@ p.root.specific = p.v;
 
 
 function c = initmode
+
 c.modes = mus.mode('minor',[0 2 3 5 7 9 11 12],1);
-c.modes(2) = mus.mode('major',[0 2 4 5 7 9 11 12],1);
+c.modes(end+1) = mus.mode('major',[0 2 4 5 7 9 11 12],1);
+
+mhayyer = mus.mode('Mhayyer Sika',[-5 0 2 3 5 7 8 10 12],[]);
+c.modes(end+1) = mhayyer;
+c.modes(end+1) = mus.mode('Mhayyer Sika',[0 2 3 5 7],[1 5]);
+c.modes(end).connect(mhayyer,2);
+c.modes(end+1) = mus.mode('Mazmoun',[0 2 4 5 7],[1 5]);
+c.modes(end).connect(mhayyer,4);
+c.modes(end+1) = mus.mode('Busalik',[0 2 3 5 7],[1 5]);
+c.modes(end).connect(mhayyer,5);
+c.modes(end+1) = mus.mode('Kurdi',[0 1 3 5],[1 4]);
+c.modes(end).connect(mhayyer,6);
+c.modes(end+1) = mus.mode('Basse',[0 5],2);
+c.modes(end).connect(mhayyer,1);
+c.modes(end+1) = mus.mode('Rast Dhil',[0 2 3 6 7],[1 5]);
+c.modes(end+1) = mus.mode('Isba''in',[0 1 4 5 7],[1 5]);
+
+c.modes(end+1) = mus.mode('Bayati',[0 1.5 3 5],[1 4]);
+
 c.timescores = cell(1,length(c.modes));
 c.degreescores = cell(1,length(c.modes));
 c.note = mus.pitch;
@@ -500,6 +626,9 @@ switch mod(interpitch,12)
     case 11
         interdia.number = 6;
         interdia.quality = 0;
+    otherwise
+        interdia = [];
+        return
 end
 switch interdia.number
     case 1
@@ -520,3 +649,42 @@ switch interdia.number
         end
 end
 interdia.interoctave = fix(interpitch/12);
+
+
+%%
+function [scal degr] = integrate(scal,freq,reso)
+if isempty(scal)
+    scal.freq = freq;
+    scal.degree = 0;
+    degr = 0;
+    return
+end
+[df best] = min(abs([scal.freq]-freq));
+if df < reso
+    best = best(1);
+    degr = scal(best).degree;
+    return
+end
+f = find(freq < [scal.freq],1);
+if isempty(f)
+    f = length(scal)+1;
+end
+
+df = Inf;
+for i = 1:length(scal)
+    rem = mod(scal(i).freq - freq,1200);
+    rem = min(rem,1200-rem);
+    if rem < df
+        df = rem;
+        best = i;
+    end
+end
+if df < reso
+    degr = scal(best).degree + round((freq - scal(best).freq)/1200)*12;
+else
+    ref = mean([scal.freq] - [scal.degree]*100);
+    degr = round((freq - ref) / reso) * reso / 100;
+end
+newdegree.freq = freq;
+newdegree.degree = degr;
+scal = [scal(1:f-1) newdegree scal(f:end)];

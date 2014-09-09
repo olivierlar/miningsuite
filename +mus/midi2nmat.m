@@ -212,7 +212,7 @@ for i=1:length(tracklist)
                  (Notes(:,8)==-1));
       
       if (length(ind)==0)
-	warning('ending non-open note?, trying ending another note instead');
+	%warning('ending non-open note?, trying ending another note instead');
     % Remove previous non-terminated of different pitch (O.Lartillot 20.9.2012)
     ind = find((Notes(:,1)==tracknum) & ...
                  (Notes(:,2)==chan) & ...

@@ -5,6 +5,7 @@
 classdef event < seq.event
 	properties
 		occurrences
+        processed
 	end
 	methods
 		function obj = event(sequence,param,prev,suffix)
@@ -20,7 +21,20 @@ classdef event < seq.event
             if isempty(obj.occurrences)
                 obj.occurrences = occ;
             else
-                obj.occurrences(end+1) = occ;
+                idx = [];
+                for i = 1:length(obj.occurrences)
+                    if ismember(occ.pattern,...
+                                obj.occurrences(i).pattern.specific)
+                        idx = i;
+                        break
+                    end
+                end
+                if isempty(idx)
+                    obj.occurrences(end+1) = occ;
+                else
+                    obj.occurrences = [obj.occurrences(1:idx-1),occ,...
+                                       obj.occurrences(idx:end)];
+                end
             end
         end
         function val = overlaps(obj1,obj2)
@@ -32,6 +46,17 @@ classdef event < seq.event
                 end
             else
                 val = isequal(obj1,obj2);
+            end
+        end
+        function obj = extend(prefix,suffix,param)
+            obj = pat.event(prefix.sequence,param,[],suffix);
+            obj = obj.extension_routine(prefix,suffix);
+        end
+        function event = first(obj)
+            if isempty(obj.extends)
+                event = obj;
+            else
+                event = obj.extends.first;
             end
         end
     end
