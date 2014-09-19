@@ -1,5 +1,5 @@
 % MiningSuite
-% Version 0.6 (Sneak Peek) 28-January-2014
+% Version 0.7 12-September-2014
 %
 % SigMinr.
 %  Signal processing.
@@ -7,7 +7,9 @@
 %   sig.rms         - Root Mean Square energy.
 %   sig.envelope    - Amplitude envelope.
 %   sig.spectrum    - FFT spectrum distribution.
+%   sig.cepstrum    - Cepstrum.
 %   sig.autocor     - Autocorrelation function.
+%   sig.filterbank  - Filterbank decomposition.
 %   sig.peak        - Peak picking.
 %
 %  Statistics.
@@ -21,11 +23,9 @@
 % AudMinr
 %  Auditory modelling.
 %   aud.brightness  - Ratio of energy above a given cut-off frequency.
-%
-%
-% VocMinr
-%  Voice analysis.
-%   in preparation..
+%   aud.envelope
+%   aud.spectrum
+%   aud.filterbank
 %
 %
 % SeqMinr
@@ -41,6 +41,8 @@
 % MusMinr
 %  Music analysis.
 %   mus.minr        - Analysis in the symbolic domain.
+%   mus.autocor
+%   mus.spectrum
 %   mus.tempo       - Tempo estimation.
 %
 % Much more operators are currently under preparation. The current
