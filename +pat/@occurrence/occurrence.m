@@ -353,17 +353,17 @@ classdef occurrence < hgsetget
             end
             objpat = obj.pattern;
             
-            %if isa(succ,'pat.syntagm')
-            %    for i = 1:length(succ.to.occurrences)
-            %        if ismember(objpat,...
-            %                    succ.to.occurrences(i).prefix.pattern.general)...
-            %                && isequal(succ.parameter,...
-            %                           succ.to.occurrences(i).pattern.parameter)
-            %            occ = [];
-            %            return
-            %        end
-            %    end
-            %end
+            if isa(succ,'pat.syntagm')
+                for i = 1:length(succ.to.occurrences)
+                    if ismember(objpat,...
+                                succ.to.occurrences(i).prefix.pattern.general)...
+                            && succ.parameter.implies(...
+                                 succ.to.occurrences(i).pattern.parameter)
+                        occ = [];
+                        return
+                    end
+                end
+            end
             
             occ = objpat.remember(obj,succ,[],cyclic,root);
             for i = 1:length(objpat.specificmodel)
