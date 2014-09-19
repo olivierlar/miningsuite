@@ -1,5 +1,5 @@
 % MiningSuite
-% Version 0.7 12-September-2014
+% Version 0.7.1 16-September-2014
 %
 % SigMinr.
 %  Signal processing.
