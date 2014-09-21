@@ -8,6 +8,7 @@ classdef pattern < hgsetget
         children
 		occurrences
 		memory
+        address
     end
     properties
         parameter
@@ -30,6 +31,17 @@ classdef pattern < hgsetget
 		function obj = pattern(root,parent,param,paramstruct,abstract)
             obj.parent = parent;
             obj.parameter = param;
+            if isempty(root)
+                if isempty(parent)
+                    obj.address = 0;
+                else
+                    obj.address = 1;
+                    parent.address = 1;
+                end
+            else
+                root.address = root.address + 1;
+                obj.address = root.address;
+            end
             if nargin > 3 && ~isempty(paramstruct)
                 obj.memory = pat.creatememory(paramstruct,obj);
             elseif ~isempty(param)
@@ -118,14 +130,14 @@ classdef pattern < hgsetget
             end
         end
         function occ2 = remember(obj,occ,succ,general,cycle,root)
-            if ismember(obj,succ.processed)
+            if ismember(obj.address,succ.processed)
                 occ2 = []; % is this output ever used?
                 return
             end
             if isempty(succ.processed)
-                succ.processed = obj;
+                succ.processed = obj.address;
             else
-                succ.processed(end+1) = obj;
+                succ.processed(end+1) = obj.address;
             end
             occ2 = [];
             if isempty(occ.suffix)
