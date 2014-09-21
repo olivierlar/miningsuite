@@ -8,7 +8,7 @@ end
 
 if nargin < 2
     concept = [];
-elseif nargin > 3
+elseif nargin > 2
     concept = seq.concept{ind};
 else
     concept = seq.concept;
@@ -294,7 +294,7 @@ end
 
 %%
 option.scheaf = 1;
-option.minlength = 12;
+option.minlength = 5;
 
 pool = {};
 t2s = [];
@@ -343,7 +343,7 @@ for i = 1:nn
                         %fprintf([desc,'\n']);
                         
                         occs = p.occurrences;
-                        for k = 1:0 %length(p.specific)
+                        for k = 1:length(p.specific)
                             for k2 = 1:length(p.specific(k).occurrences)
                                 found = 0;
                                 for k3 = 1:length(occs)
@@ -398,17 +398,19 @@ for i = 1:nn
                             %fprintf('\n');
 
                             N2 = occs(k).suffix.to.address;
+                            nk = N2;
                             
                             o = occs(k).suffix.parameter.getfield('onset');
                             t2 = o.value;
-                            point = occs(k);
-                            while ~isempty(point.pattern.parent) && ...
-                                    ~isempty(point.pattern.parent.parent)
-                                point.suffix.to.property = ...
-                                    [point.suffix.to.property f];
-                                point = point.prefix;
+                            occk = occs(k);
+                            patk = p;
+                            while ~isempty(patk.parent) && ...
+                                    ~isempty(patk.parent.parent)
+                                nk = [occk.suffix.to.address nk];
+                                occk = occk.prefix;
+                                patk = patk.parent;
                             end
-                            N1 = point.suffix;
+                            N1 = occk.suffix;
                             if isa(N1,'pat.syntagm')
                                 N1 = N1.to;
                             end
@@ -430,7 +432,7 @@ for i = 1:nn
                                 coord(end+1,:) = [N1,N2];
                             end
                             
-                            o = point.suffix.parameter.getfield('onset');
+                            o = occk.suffix.parameter.getfield('onset');
                             t1 = o.value;
                             
                             if t1 > t2
