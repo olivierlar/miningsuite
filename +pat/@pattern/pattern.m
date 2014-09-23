@@ -130,14 +130,19 @@ classdef pattern < hgsetget
             end
         end
         function occ2 = remember(obj,occ,succ,general,cycle,root)
-            if ismember(obj.address,succ.processed)
+            if isempty(obj.parent)
+                addr = 0;
+            else
+                addr = obj.address;
+            end
+            if ismember(addr,succ.processed)
                 occ2 = []; % is this output ever used?
                 return
             end
             if isempty(succ.processed)
-                succ.processed = obj.address;
+                succ.processed = addr;
             else
-                succ.processed(end+1) = obj.address;
+                succ.processed(end+1) = addr;
             end
             occ2 = [];
             if isempty(occ.suffix)
@@ -514,6 +519,10 @@ classdef pattern < hgsetget
                     obj2 = [];
                     return
                 end
+                %if isequal(memo{i}{1},pref)
+                %    obj2 = [];
+                %    return
+                %end
             end
 
             %i = 1;
