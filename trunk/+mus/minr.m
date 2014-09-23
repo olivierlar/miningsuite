@@ -139,7 +139,7 @@ elseif 1
         notes = struct('chro',num2cell(C{1}),'ons',num2cell(C{8}),...
                        'dur',num2cell(C{9}),'chan',num2cell(C{11}),...
                        'harm',C{12});
-    elseif 0 % jakob
+    elseif 1 % jakob
         C = textscan(fid,'%f,%f,%f,%f\n');
         notes = struct('chro',num2cell(C{1}),...
                        'ons',num2cell(C{2}),...
@@ -379,7 +379,9 @@ if length(memo) < chan+1
 end
 k = 1;
 while k <= length(memo{chan+1})
-    if k > 1
+    if k > 1 %&& ...
+            %memo{chan+1}(k).parameter.getfield('chro').value ~= ...
+            %    note.parameter.getfield('chro').value
         break
     end
     if ~isempty(pattern)
@@ -387,7 +389,14 @@ while k <= length(memo{chan+1})
     else
         sk = seq.syntagm(memo{chan+1}(k),note);
     end
-    sks = sk;
+    
+    if options.metapitch
+        for i = 1:length(memo{chan+1}(1).issuffix)
+            if isempty(memo{chan+1}(1).issuffix(i).property)
+                pat.syntagm(memo{chan+1}(1).issuffix(i),note,pattern.root);
+            end
+        end
+    end
 
     if options.group && k == 1
         ioi1 = sk.parameter.getfield('onset').inter.value;
@@ -399,11 +408,13 @@ while k <= length(memo{chan+1})
     if options.reduce
         t = note.parameter.getfield('onset').value;
         p1 = sk.from.parameter.getfield('chro').value;
-        if 0 %p1 == pitch
+        if options.metapitch && p1 == pitch
             meta = sk.from.extend(note,sk.from.parameter);
             meta.parameter = meta.parameter.setfield('offset',...
                                         note.parameter.getfield('offset'));
-            concept = process(concept,meta,[],options,pattern);
+            memok = memo;
+            memok{chan+1}(1) = [];
+            %concept = process(concept,meta,memok,options,pattern);
         elseif abs(pitch - p1) < 3
             t1 = sk.from.parameter.getfield('onset').value;
             for j = 1:length(sk.from.to)
@@ -499,6 +510,10 @@ options.motif = motif;
     contour.key = 'Contour';
     contour.type = 'Boolean';
 options.contour = contour;
+
+    metapitch.key = 'MetaPitch';
+    metapitch.type = 'Boolean';
+options.metapitch = metapitch;
 
 
 function p = initpattern(options)
