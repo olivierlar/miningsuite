@@ -194,6 +194,18 @@ classdef paramval < seq.param
                     param.value = [];
                 end
             end
+            if isempty(obj1) || isempty(obj1.general)
+                param.setgeneral = [];
+                if ~isempty(obj2.general)
+                    test = 0;
+                end
+            else
+                for i = 1:length(obj2.general)
+                    [testi, param.setgeneral(i)] = ...
+                                obj1.general(i).implies(obj2.general(i));
+                    test = test & testi;
+                end
+            end
             if isempty(obj1) || isempty(obj1.inter)
                 param.inter = [];
                 if ~isempty(obj2.inter)
@@ -247,6 +259,16 @@ classdef paramval < seq.param
                 else
                     test = isequal(obj1.value,obj2.value);
                 end
+                if ~test
+                    return
+                end
+            end
+            for i = 1:length(obj2.general)
+                if isempty(obj1.general)
+                    test = false;
+                    return
+                end
+                test = obj1.general(i).implies(obj2.general(i));
                 if ~test
                     return
                 end
