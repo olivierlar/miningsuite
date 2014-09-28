@@ -1,7 +1,7 @@
 function [memo,mode] = group(from,ioi1,ioi0,options,note,p1,memo,chan,...
                              mode,pattern)
 
-tolerance = .00001; %.4;
+tolerance = .4;
 
 prefix = from;
 groups = from.issuffix;
@@ -111,36 +111,82 @@ for i = 1:length(groups)
     ends = [note findstartmetanote(note)];
     % Finding the starting point of the group
     start = groups(i);
-    while ~isempty(start.extends)
-        while ~isempty(start.extends)
-            start = start.extends;
-        end
-        start = start.suffix;
+    newnote = start;
+    while isempty(newnote.address)
+        newnote = newnote.suffix;
     end
+    if options.contour
+        newcont = newnote.to(1).parameter.fields{2}.inter.general.value;
+    end
+    multi = 0;
+    while ~isempty(start.extends)
+        %justfound = 0;
+        %while ~isempty(start.extends)
+            start = start.extends;
+        %end
+        %start = start.suffix;
+        oldnote = start.suffix;
+        while isempty(oldnote.address)
+            oldnote = oldnote.suffix;
+            start = start.suffix;
+        end
+        if options.contour
+            if ~isempty(oldnote.to)
+                oldcont = oldnote.to(1).parameter.fields{2}.inter.general.value;
+                if oldcont * newcont == -1
+                    if multi
+                        if isempty(pattern)
+                            seq.syntagm(oldnote,note);
+                        else
+                            pat.syntagm(oldnote,note,pattern.root,0);
+                        end
+                        %justfound = 1;
+                    end
+                    newcont = 0;
+                end
+            end
+        end
+        multi = 1;
+    end
+    
+    if 0 %~justfound 
+        if isempty(pattern)
+            seq.syntagm(oldnote,note);
+        else
+            pat.syntagm(oldnote,note,pattern.root,0);
+        end
+    end
+    
     % Finding the previous note
-    for k = 1:length(start.to)
+    for k = 1:length(oldnote.to)
         if k > 1
             continue
         end
-        prev = start.to(k).from;
+        prev = oldnote.to(k).from;
         while ~isempty(prev.passing) && ...
-                isequal(prev.passing(2),start.to(k))
+                isequal(prev.passing(2),oldnote.to(k))
             prev = prev.passing(1).from;
         end
         for l = 1:length(ends)
-            if isempty(pattern)
-                seq.syntagm(prev,ends(l));
-            else
-                pat.syntagm(prev,ends(l),pattern.root,0);
+            if ends(l).parameter.fields{4}.value - ...
+                    prev.parameter.fields{4}.value < 10
+                if isempty(pattern)
+                    seq.syntagm(prev,ends(l));
+                else
+                    pat.syntagm(prev,ends(l),pattern.root,0);
+                end
             end
         end
         prev = findstartmetanote(prev);
         for l1 = 1:length(prev)
             for l2 = 1:length(ends)
-                if isempty(pattern)
-                    seq.syntagm(prev(l1),ends(l2));
-                else
-                    pat.syntagm(prev(l1),ends(l2),pattern.root,0);
+                if ends(l2).parameter.fields{4}.value - ...
+                        prev(l1).parameter.fields{4}.value < 10
+                    if isempty(pattern)
+                        seq.syntagm(prev(l1),ends(l2));
+                    else
+                        pat.syntagm(prev(l1),ends(l2),pattern.root,0);
+                    end
                 end
             end
         end
@@ -216,29 +262,5 @@ if p1 == p2
         end
         e = e.extend(suffix,suffix.parameter);
         e.property = [];
-    end
-end
-
-
-function ends = findstartmetanote(note,i)
-if nargin < 2
-    i = 1;
-end
-ends = [];
-for j = i:length(note.issuffix)
-    start = note.issuffix(j);
-    if isempty(start.property) && ~isempty(start.extends)
-        while ~isempty(start.extends)
-            while ~isempty(start.extends)
-                start = start.extends;
-            end
-            start = start.suffix;
-        end
-        start = [start findstartmetanote(start)];
-        if isempty(ends)
-            ends = start;
-        else
-            ends = [ends start];
-        end
     end
 end
