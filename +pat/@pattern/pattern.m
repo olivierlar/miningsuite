@@ -519,10 +519,17 @@ classdef pattern < hgsetget
                     obj2 = [];
                     return
                 end
-                %if isequal(memo{i}{1},pref)
-                %    obj2 = [];
-                %    return
-                %end
+                if isequal(memo{i}{1},pref)
+                    obj2 = [];
+                    return
+                end
+                if ~isempty(memo{i}{1}.suffix) && ...
+                        ~isempty(pref.suffix) && ...
+                        memo{i}{1}.suffix.parameter.fields{4}.value > ...
+                            pref.suffix.parameter.fields{4}.value
+                    obj2 = [];
+                    return
+                end
             end
 
             %i = 1;
@@ -905,7 +912,7 @@ classdef pattern < hgsetget
             end
             child = [];
         end
-        function t = implies(obj1,obj2)
+        function t = implies(obj1,obj2,occ1,occ2)
             if isempty(obj2) || isempty(obj2.parameter)
                 t = true;
                 return
@@ -914,7 +921,36 @@ classdef pattern < hgsetget
                 t = false;
                 return
             end
-            if ~obj1.parameter.implies(obj2.parameter)
+            par1 = obj1.parameter;
+            if nargin > 2
+                pre1 = occ1.prefix;
+                pre2 = occ2.prefix;
+                if isempty(pre1) && ~isempty(pre2)
+                    t = false;
+                    return
+                end
+                if isempty(pre2) || isempty(pre2.suffix)
+                    t = true;
+                    return
+                end
+                if ~isempty(pre1)
+                    while pre1.suffix.parameter.fields{4}.value > ...
+                            pre2.suffix.parameter.fields{4}.value
+                        par1 = par1.add(pre1.parameter);
+                        pre1 = pre1.prefix;
+                        if isempty(pre1)
+                            t = false;
+                            return
+                        end
+                    end
+                    if pre1.suffix.parameter.fields{4}.value < ...
+                            pre2.suffix.parameter.fields{4}.value
+                        t = false;
+                        return
+                    end
+                end
+            end
+            if ~par1.implies(obj2.parameter)
                 t = false;
                 return
             end
@@ -1015,19 +1051,14 @@ end
 
 function test = closuretest(pref,suff,param,parent)
     test = 1;
-    
-    %if isempty(parent.parent) || isempty(parent.parent.parent)
-    %    % To enable creation of suffixes
-    %    return
-    %end
-    
+        
     note = suff;
     if isa(note,'pat.syntagm')
         note = note.to;
     end
-    if isequal(pref.pattern,parent)
+    if 0 %isequal(pref.pattern,parent)
         for i = 1:length(note.occurrences)
-            if note.occurrences(i).parameter.implies(param)
+            if note.occurrences(i).implies(param,suff)
                 if ...~isempty(note.occurrences(i).cycle) || ...
                         (~isempty(note.occurrences(i).prefix) && ...
                          (isequal(pref.pattern,...
@@ -1042,66 +1073,10 @@ function test = closuretest(pref,suff,param,parent)
         end
     elseif pref.pattern.implies(parent)
         for i = 1:length(note.occurrences)
-            if note.occurrences(i).parameter.implies(param) && ...
-                    ~isempty(note.occurrences(i).prefix) && ...
-                    note.occurrences(i).prefix.pattern.implies(parent)
+            prefi = note.occurrences(i).implies(param,suff);
+            if ~isempty(prefi) && prefi.pattern.implies(parent,prefi,pref)
                 test = 0;
                 return
-                
-                
-                % What about prefix, like above?
-                
-                if isempty(note.occurrences(i).pattern.parent.parent)
-                    test = 0;
-                    return
-                end
-                
-                found = [];
-                os = note.occurrences(i).pattern.occurrences;
-                tos = os(1).prefix.suffix;
-                if isa(tos,'pat.syntagm')
-                    tos = tos.to;
-                end 
-                for j = 2:length(os)
-                    tosj = os(j).prefix.suffix;
-                    if isa(tosj,'pat.syntagm')
-                        tos(j) = tosj.to;
-                    else
-                        tos(j) = tosj;
-                    end
-                end
-                for j = 1:length(parent.occurrences)
-                    togj = parent.occurrences(j).suffix;
-                    if isa(togj,'pat.syntagm')
-                        togj = togj.to;
-                    end
-                    if ~ismember(togj,tos)
-                        for k = 1:length(togj.from)
-                            if togj.from(k).parameter.implies(param)
-                                found.occ = j;
-                                found.to = k;
-                            end
-                        end
-                    end
-                end
-                
-                %pi = note.occurrences(i).pattern.parent;
-                %if ~isempty(pi.parent) && isempty(pi.parent.parent)
-                %    for j = 1:length(parent.specific)
-                %        pj = parent.specific(j);
-                %        for k = 1:length(pj.children)
-                %            if pj.children{k}.parameter.implies(param) ...
-                %                    && ~pj.parameter.implies(pi.parameter)
-                %                found = 1;
-                %                break
-                %            end
-                %        end
-                %    end
-                %end
-                if isempty(found)
-                    test = 0;
-                    return
-                end
             end
         end
     end
@@ -1140,6 +1115,8 @@ function res = justcontour(obj1,pref)
           ~isempty(obj1.parameter.fields{2}.inter) && ...
           isempty(obj1.parameter.fields{2}.inter.value) && ...
           isempty(obj1.parameter.fields{1}) && ...
-          ~obj1.parameter.fields{3}.isdefined && ...
-          pref.suffix.parameter.fields{4}.inter.value < .5;
+          ~obj1.parameter.fields{3}.isdefined;
+            %&& ...
+          %~isempty(pref.suffix.parameter.fields{4}.inter) && ...
+          %pref.suffix.parameter.fields{4}.inter.value < .5;
 end
