@@ -157,6 +157,35 @@ classdef paramstruct < seq.param
             end
             obj.fields = f;
         end
+        function obj1 = add(obj1,obj2)
+            for i = 1:length(obj1.fields)
+                if isempty(obj1.fields{i}) || ...
+                        isa(obj2.fields{i}.inter,'seq.paraminter') || ...
+                        isempty(obj2.fields{i}.inter)
+                    continue
+                end
+                if isempty(obj1.fields{i}.inter.value) && ...
+                        ~isempty(obj1.fields{i}.inter.general)
+                    % obj1 is contour
+                    if ~obj2.fields{i}.inter.implies(obj1.fields{i}.inter)
+                        obj1.fields{i}.inter.setgeneral = [];
+                    end
+                elseif isempty(obj2.fields{i}.inter.value) && ...
+                        ~isempty(obj2.fields{i}.inter.general)
+                    % obj2 is contour
+                    if obj2.fields{i}.inter.implies(obj1.fields{i}.inter)
+                        obj1.fields{i}.inter.setgeneral = ...
+                            obj2.fields{i}.inter.setgeneral;
+                    else
+                        obj1.fields{i}.inter.setgeneral = [];
+                    end
+                else
+                    obj1.fields{i}.inter.value = ...
+                        obj1.fields{i}.inter.value ...
+                        + obj2.fields{i}.inter.value;
+                end
+            end
+        end
         function [test param] = implies(obj1,obj2,context)
             if nargout < 2
                 if nargin > 2

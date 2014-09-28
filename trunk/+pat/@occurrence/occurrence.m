@@ -355,12 +355,14 @@ classdef occurrence < hgsetget
             
             if isa(succ,'pat.syntagm')
                 for i = 1:length(succ.to.occurrences)
-                    if ismember(objpat,...
+                    if ~isempty(succ.to.occurrences(i).prefix) && ...
+                            ismember(objpat,...
                                 succ.to.occurrences(i).prefix.pattern.general)...
                             && succ.parameter.implies(...
                                  succ.to.occurrences(i).pattern.parameter)
-                        occ = [];
-                        return
+                        % We should only accept parameter more specific than succ.to.occurrences(i).pattern.parameter 
+                        %occ = [];
+                        %return
                     end
                 end
             end
@@ -541,6 +543,33 @@ classdef occurrence < hgsetget
                         return
                     end
                 end
+            end
+        end
+        function pre1 = implies(obj,par2,suff)
+            if isa(suff,'pat.event') || isempty(obj.pattern.parent.parent)
+                pre1 = [];
+                return
+            end
+            par1 = obj.parameter;
+            pre1 = obj.prefix;
+            if ~isempty(pre1) %?
+                while pre1.suffix.parameter.fields{4}.value > ...
+                        suff.from.parameter.fields{4}.value
+                    par1 = par1.add(pre1.parameter);
+                    pre1 = pre1.prefix;
+                    if isempty(pre1)
+                        pre1 = [];
+                        return
+                    end
+                end
+                if pre1.suffix.parameter.fields{4}.value < ...
+                        suff.from.parameter.fields{4}.value
+                    pre1 = [];
+                    return
+                end
+            end
+            if ~par1.implies(par2)
+                pre1 = [];
             end
         end
 	end
