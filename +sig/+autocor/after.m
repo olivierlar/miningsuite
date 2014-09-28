@@ -33,7 +33,7 @@ function out = after(x,postoption)
            strcmpi(postoption.normwin,'No') || ...
            strcmpi(postoption.normwin,'Off') || ...
            x.normalized)
-        x = x.normalize(postoption.normwin);
+        x = x.normalize;
     end
     if postoption.hwr
         x = x.hwr;

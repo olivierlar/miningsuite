@@ -1,4 +1,4 @@
-function obj = normalize(obj,win)
+function obj = normalize(obj)
     res = sig.compute(@main,obj.Ydata,obj.window);
     obj.Ydata = res{1};
 end
