@@ -30,7 +30,11 @@ function out = main(x,option,postoption)
             option.min.unit = 's';
         end
         if isempty(option.max)
-            option.max.value = 0.05;
+            if isa(x{1},'sig.Envelope')
+                option.max.value = 2;
+            else
+                option.max.value = 0.05;
+            end
             option.max.unit = 's';
         end
     end
@@ -40,14 +44,15 @@ function out = main(x,option,postoption)
         x{1}.Frate = x{1}.Srate;
         x{1}.Srate = x{1}.xsampling;
         option.normwin = 0;
-        option.win = 0;
-        postoption.normwin = 0;
+        %option.win = 0;
+        %postoption.normwin = 0;
         warning('Work in progress')
     elseif isa(x{1},'sig.Envelope')
-        option.normwin = 0;
-        option.win = 0;
-        postoption.normwin = 0;
-    elseif isnan(option.win) 
+        option.normwin = 'Rectangular';
+        %option.win = 0;
+        %postoption.normwin = 0;
+    end
+    if isnan(option.win) 
         if isequal(option.normwin,0) || ...
                    strcmpi(option.normwin,'Off') || ...
                    strcmpi(option.normwin,'No')
