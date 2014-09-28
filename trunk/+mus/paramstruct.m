@@ -17,9 +17,13 @@ p = seq.paramstruct('music',...
 p = p.setfield('freq',freq);
 
     chro = seq.paramtype('chro');
-    %chro.general = seq.paramgeneral(@mod12);
+    if options.mod12
+        chro.general = seq.paramgeneral(@mod12);
+    end
     chro.inter = seq.paraminter(@diff);
-    %chro.inter.general = seq.paramgeneral(@mod12);
+    if options.mod12
+        chro.inter.general = seq.paramgeneral(@mod12);
+    end
     if options.contour
         chro.inter.general = seq.paramgeneral(@sign);
     end
