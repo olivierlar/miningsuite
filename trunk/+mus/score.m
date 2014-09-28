@@ -294,7 +294,7 @@ end
 
 %%
 option.scheaf = 1;
-option.minlength = 5;
+option.minlength = 8;
 
 pool = {};
 t2s = [];
@@ -400,6 +400,10 @@ for i = 1:nn
                             N2 = occs(k).suffix.to.address;
                             nk = N2;
                             
+                            if isempty(N2)
+                                continue
+                            end
+                            
                             o = occs(k).suffix.parameter.getfield('onset');
                             t2 = o.value;
                             occk = occs(k);
@@ -417,6 +421,10 @@ for i = 1:nn
                             N1 = N1.address;
                             if isempty(pool{end}.start)
                                 pool{end}.start = N1;
+                            end
+                            
+                            if isempty(N1)
+                                continue
                             end
                             
                             found = 0;
