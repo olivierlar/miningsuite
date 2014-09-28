@@ -75,6 +75,26 @@ classdef event < hgsetget
                 l = [l obj.isprefix(idx).extent(1)];
             end
         end
+        function ends = findstartmetanote(note)
+            ends = [];
+            for j = 1:length(note.issuffix)
+                start = note.issuffix(j);
+                if isempty(start.property) && ~isempty(start.extends)
+                    while ~isempty(start.extends)
+                        while ~isempty(start.extends)
+                            start = start.extends;
+                        end
+                        start = start.suffix;
+                    end
+                    start = [start findstartmetanote(start)];
+                    if isempty(ends)
+                        ends = start;
+                    else
+                        ends = [ends start];
+                    end
+                end
+            end
+        end
     end
 end
 
