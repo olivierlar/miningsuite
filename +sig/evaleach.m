@@ -25,30 +25,31 @@ if nargin<7 && length(window) > 1
     nbsamples = window(2)-window(1)+1;
 end
 
-if isfield(design,'fid')
+if isstruct(design.tmpfile) && isfield(design.tmpfile,'fid') ...
+        && design.tmpfile.fid
     % The input can be read from the temporary file
-    y = {design.data};
+    y = {design.tmpfile.data};
     channels = y{1}.fbchannels;
     if isempty(channels)
         channels = 1;
     else
         channels = length(channels);
     end
-    current = ftell(design.fid);
+    current = ftell(design.tmpfile.fid);
     origin = current-nbsamples*channels*8;
     if origin < 0
         nbsamples = nbsamples + origin/channels/8;
         origin = 0;
     end
-    fseek(design.fid,origin,'bof');
-    [data count] = fread(design.fid,[nbsamples,channels],'double');
+    fseek(design.tmpfile.fid,origin,'bof');
+    [data count] = fread(design.tmpfile.fid,[nbsamples,channels],'double');
     data = reshape(data,[nbsamples,1,channels]);
-    fseek(design.fid,current-nbsamples*channels*8,'bof');
+    fseek(design.tmpfile.fid,current-nbsamples*channels*8,'bof');
     y{1}.Ydata.content = data;
     %a.Sstart = 
     if window(3)
-        fclose(design.fid);
-        delete(design.filename);
+        fclose(design.tmpfile.fid);
+        delete(design.tmpfile.filename);
     end
     %argin{i} = a;
     return
@@ -122,7 +123,7 @@ else
     if chunking ...Already in a chunk decomposition process
             || design.nochunk % && isempty(d.tmpfile)
         if design.extensive
-            y = sig.evaleach(design.input,filename,window,sr,[],1);
+            y = sig.evaleach(design.input,filename,window,sr,[],chunking);
             y = design.main(y,design.duringoptions,design.afteroptions);
             if ~isempty(frame) && frame.toggle
                 frate = sig.compute(@sig.getfrate,y{1}.Srate,frame);
@@ -131,7 +132,7 @@ else
                 %y{1}.Fsize = 
             end
         else
-            y = sig.evaleach(design.input,filename,window,sr,frame,1);
+            y = sig.evaleach(design.input,filename,window,sr,frame,chunking);
             switch chunking 
                 case 1
                     after = design.afteroptions;
@@ -171,6 +172,9 @@ else
                 % When applicable, a new temporary file is created.
                 tmpname = [design.files '.sig.tmp'];
                 design.tmpfile.fid = fopen(tmpname,'w');
+                if design.tmpfile.fid == -1
+                    error('Error in SigMinr: Cannot write a temporary file on the Current Directory. Please select a Current Directory with write access.');
+                end
                 chunks = fliplr(chunks);
             end
 
@@ -220,11 +224,11 @@ else
                 end
 
                 ss = sig.evaleach(design.input,filename,window,sr,frame,...
-                                  1,nbsamples);
+                                  chunking,nbsamples);
                 if length(ss)>1 && isstruct(ss{2})
-                    design.input.input = ss{2};
-                    design.input.tmpfile = [];
+                    design.input.tmpfile = ss{2};
                     chunking = 2;
+                    nbsamples = chunks(2,end)-chunks(1,end)+1;
                 end
                               
                 ss = design.main(ss,options,[]);
