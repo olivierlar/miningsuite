@@ -384,10 +384,34 @@ while k <= length(memo{chan+1})
             %    note.parameter.getfield('chro').value
         break
     end
+    prev = memo{chan+1}(k);
     if ~isempty(pattern)
-        sk = pat.syntagm(memo{chan+1}(k),note,pattern.root);
+        sk = pat.syntagm(prev,note,pattern.root);
     else
-        sk = seq.syntagm(memo{chan+1}(k),note);
+        sk = seq.syntagm(prev,note);
+    end
+    
+    for i = length(prev.issuffix):-1:1
+        if prev.issuffix(i).closing
+            suffix = prev.issuffix(i);
+            while ~isempty(suffix.extends)
+                while ~isempty(suffix.extends)
+                    suffix = suffix.extends;
+                end
+                if ~isempty(suffix.suffix)
+                    suffix = suffix.suffix;
+                end
+            end
+            if note.parameter.fields{4}.value - ...
+                    suffix.parameter.fields{4}.value < 10
+                if ~isempty(pattern)
+                    pat.syntagm(suffix,note,pattern.root);
+                else
+                    seq.syntagm(suffix,note);
+                end
+            end
+            break
+        end
     end
     
     if options.metapitch
@@ -514,6 +538,10 @@ options.contour = contour;
     metapitch.key = 'MetaPitch';
     metapitch.type = 'Boolean';
 options.metapitch = metapitch;
+
+    mod12.key = 'Octave';
+    mod12.type = 'Boolean';
+options.mod12 = mod12;
 
 
 function p = initpattern(options)
