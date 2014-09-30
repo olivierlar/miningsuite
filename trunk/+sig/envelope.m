@@ -13,7 +13,8 @@
 
 function varargout = envelope(varargin)
     varargout = sig.operate('sig','envelope',sig.envelope.options,...
-                            @sig.envelope.init,@main,varargin,'concat'); %,'extensive');
+                            @sig.envelope.init,@main,varargin,'concat',...
+                            'extensive');
 end
 
 

@@ -122,7 +122,7 @@ else
     end    
     if chunking ...Already in a chunk decomposition process
             || design.nochunk % && isempty(d.tmpfile)
-        if design.extensive
+        if design.nochunk
             y = sig.evaleach(design.input,filename,window,sr,[],chunking);
             y = design.main(y,design.duringoptions,design.afteroptions);
             if ~isempty(frame) && frame.toggle

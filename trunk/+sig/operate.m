@@ -49,7 +49,7 @@ if ischar(arg) || isa(arg,'sig.design')
     if isempty(extract) && ~ischar(arg)
         extract = arg.extract;
     end
-    if extensive
+    if ~extensive && arg.extensive
         nochunk = 1;
     %elseif ischar(arg)
     %    nochunk = 0;
