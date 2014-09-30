@@ -7,15 +7,15 @@
 % License: New BSD License. See full text of the license in LICENSE.txt in
 % the main folder of the MiningSuite distribution.
 
-function varargout = spectrum(varargin)
+function varargout = autocor(varargin)
     varargout = sig.operate('mus','autocor',initoptions,...
                             @init,@main,varargin,...
-                            sig.autocor.combinechunks);
+                            @sig.autocor.combinechunks,'extensive');
 end
 
 
 function options = initoptions
-    options = aud.spectrum.options;
+    options = sig.autocor.options;
     
         reso.key = 'Resonance';
         reso.type = 'String';
