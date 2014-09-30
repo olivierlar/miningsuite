@@ -48,7 +48,7 @@ end
 %%
 function [x type] = init(x,option,frame)
     if ~x.istype('sig.Cepstrum')
-        x = sig.spectrum(x);
+        x = sig.spectrum(x,'FrameConfig',frame);
     end
     type = 'sig.Cepstrum';
 end
@@ -77,7 +77,7 @@ function out = main(x,option,postoption)
         xrate = 1/sr;
         out = sig.Cepstrum(d,'Phase',ph,...
                            'xsampling',xrate,'Xstart',start,...
-                           'Srate',x.Frate,'Sstart',0,...
+                           'Srate',x.Srate,'Sstart',0,...
                            'Freq',option.fr);
     end
     out = {out};
