@@ -217,6 +217,8 @@ while i <= length(args)
             elseif strcmpi(field,'fhop')
                 frame.hop = optionvalue;
                 frame.toggle = 1;
+            elseif strcmpi(field,'frameconfig')
+                frame = optionvalue;
             else
                 if isfield(options.(field),'when') ...
                         && (strcmpi(options.(field).when,'After') || ...
