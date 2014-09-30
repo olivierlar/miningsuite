@@ -158,9 +158,10 @@ function out = routine(in,sampling,option)
         end
     else
         c = compute_gen(x,mint,maxt,option.gener);
-        if ~isempty(w)
-            w = compute_gen(w,mint,maxt,option.gener);
-        end
+        w = [];
+        %if ~isempty(w)
+        %    w = compute_gen(w,mint,maxt,option.gener);
+        %end
     end
     
     out = {c w mint};
