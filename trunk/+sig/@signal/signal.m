@@ -389,6 +389,10 @@ end
         fhop.default.value = hop;
         fhop.unit = {'s','sp','Hz','/1'};
     options.fhop = fhop;
+    
+        frameconfig.key = 'FrameConfig';
+        frameconfig.type = 'Other';
+    options.frameconfig = frameconfig;
 end
     
 
