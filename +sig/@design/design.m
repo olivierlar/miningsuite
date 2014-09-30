@@ -311,31 +311,41 @@ function [sz,ch,sr] = fileinfo(file,folder)
     ch = [];
     sr = [];
     try
-        [sz,ch,sr] = audioread(@wavread,file);
-    catch
-        err.wav = lasterr;
+        info = audioinfo(file);
+        sz = info.TotalSamples;
+        ch = info.NumChannels;
+        sr = info.SampleRate;
+    catch thiserror
+        warning('Did you specify the file extension? This will be required in future versions of Matlab.');
+        display('If you did not specify a file extension, you can ignore the other warning messages below:');
+        err.audioread = thiserror.message;
         try
-           [sz,ch,sr] = audioread(@auread,file);
-        catch
-            err.au = lasterr;
+            [sz,ch,sr] = audioreader(@wavread,file);
+        catch thiserror
+            err.wav = thiserror.message;
             try
-                [sz,ch,sr] = audioread(@mp3read,file);
-            catch
-                err.mp3 = lasterr;
+               [sz,ch,sr] = audioreader(@auread,file);
+            catch thiserror
+                err.au = thiserror.message;
                 try
-                    [sz,ch,sr] = audioread(@aiffread,file);
-                catch
-                    err.aiff = lasterr;
+                    [sz,ch,sr] = audioreader(@mp3read,file);
+                catch thiserror
+                    err.mp3 = thiserror.message;
                     try
-                        ch = midiread(file);
-                        sr = 0;
-                        sz = [];
-                        if ~ch
-                            error;
-                        end
-                    catch
-                        if not(strcmp(err.wav(1:11),'Error using') && folder)
-                            misread(file, err);
+                        [sz,ch,sr] = audioreader(@aiffread,file);
+                    catch thiserror
+                        err.aiff = thiserror.message;
+                        try
+                            ch = midiread(file);
+                            sr = 0;
+                            sz = [];
+                            if ~ch
+                                error;
+                            end
+                        catch
+                            if not(strcmp(err.wav(1:11),'Error using') && folder)
+                                misread(file, err);
+                            end
                         end
                     end
                 end
@@ -345,7 +355,7 @@ function [sz,ch,sr] = fileinfo(file,folder)
 end
 
 
-function [sz,ch,sr] = audioread(reader,file)
+function [sz,ch,sr] = audioreader(reader,file)
     [unused,sr] = reader(file,1);
     dsize = reader(file,'size');
     sz = dsize(1);
