@@ -37,7 +37,7 @@ classdef design
         date
         ver
         
-        extensive
+        extensive = 0
         nochunk = 0
         tmpfile
     %end
@@ -49,7 +49,7 @@ classdef design
         function obj = design(pack,name,input,type,main,during,after,...
                               frame,combine,argin,extract,extensive,nochunk)
             if nargin<10
-                extract = [];
+                extract = 0;
             end
             
             obj.package = pack;
