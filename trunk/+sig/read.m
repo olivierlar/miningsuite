@@ -13,26 +13,31 @@
 
 function [data sr] = read(file,extract)
 try
-    [d,sr] = audioread(extract,@wavread,file);
-catch
-    err.wav = lasterr;
+    [d,sr] = audioread(file,extract');
+catch thiserror
+    err.wav = thiserror.message;
     try
-       [d,sr] = audioread(extract,@auread,file);
-    catch
-        err.au = lasterr;
+        [d,sr] = audioreader(extract,@wavread,file);
+    catch thiserror
+        err.wav = thiserror.message;
         try
-            [d,sr] = audioread(extract,@mp3read,file);
-        catch
-            err.mp3 = lasterr;
+           [d,sr] = audioreader(extract,@auread,file);
+        catch thiserror
+            err.au = thiserror.message;
             try
-                [d,sr] = audioread(extract,@aiffread,file);
-            catch
-                err.aiff = lasterr;
+                [d,sr] = audioreader(extract,@mp3read,file);
+            catch thiserror
+                err.mp3 = thiserror.message;
                 try
-                    data = midiread(file);
-                    sr = 0;
-                catch
-                    misread(file, err);
+                    [d,sr] = audioreader(extract,@aiffread,file);
+                catch thiserror
+                    err.aiff = thiserror.message;
+                    try
+                        data = midiread(file);
+                        sr = 0;
+                    catch
+                        misread(file, err);
+                    end
                 end
             end
         end
@@ -43,7 +48,7 @@ if sr
 end
 
 
-function [data,sr] = audioread(extract,reader,file)
+function [data,sr] = audioreader(extract,reader,file)
 if isempty(extract)
     [data,sr] = reader(file);
 else
