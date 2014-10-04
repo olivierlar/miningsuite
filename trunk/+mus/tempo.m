@@ -36,7 +36,7 @@ function [x type] = init(x,option,frame)
     elseif strcmpi(option.method,'Pattern')
         x = mus.minr(x,'Metre');
     end
-    type = 'sig.Signal';
+    type = 'sig.signal';
 end
 
 
