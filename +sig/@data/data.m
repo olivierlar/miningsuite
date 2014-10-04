@@ -49,6 +49,7 @@ classdef data
         end
         
         function obj = deframe(obj)
+            obj = obj.rename('element','nothing');
             obj = obj.rename('sample','element');
             obj = obj.rename('frame','sample');
         end
