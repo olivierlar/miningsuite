@@ -25,7 +25,7 @@ end
 %%
 function [x type] = init(x,option,frame)
     x = sig.spectrum(x);
-    type = 'sig.Signal';
+    type = 'sig.signal';
 end
 
 
