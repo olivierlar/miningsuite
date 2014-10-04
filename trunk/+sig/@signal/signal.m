@@ -208,6 +208,9 @@ classdef signal
             p = sig.compute(@peakpos,obj.peak,obj.xdata);%,obj.peakdim);
             p = p{1};
         end
+        function b = istype(obj,type)
+            b = strcmp(class(obj),type);
+        end
         %%
         
         obj = sum(obj,dim)
