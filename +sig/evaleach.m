@@ -223,6 +223,7 @@ else
                    end
                 end
 
+                chunking = 1;
                 ss = sig.evaleach(design.input,filename,window,sr,frame,...
                                   chunking,nbsamples);
                 if length(ss)>1 && isstruct(ss{2})
