@@ -173,7 +173,9 @@ classdef data
             m = obj.mean(field);
             obj.content = bsxfun(@minus,obj.content,m.content);
         end
-        
+        function obj = hwr(obj)
+            obj.content = (obj.content + abs(obj.content)) / 2;
+        end
         function obj = max(obj,field)
             if nargin<2
                 field = 'element';
@@ -259,5 +261,7 @@ classdef data
         obj = select(obj,pos,dim,type)
         
         obj = frame(obj,param,sr)
+        
+        obj = median(obj,field,order,offset)
     end
 end
