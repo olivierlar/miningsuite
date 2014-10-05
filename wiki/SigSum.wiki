@@ -4,7 +4,7 @@
 
 Once an audio waveform is decomposed into channels using a filterbank:
 {{{
-f=sig.filterbank(a)
+f=aud.filterbank(a)
 }}}
 
 https://miningsuite.googlecode.com/svn/wiki/SigSum_ex1.png
@@ -22,11 +22,6 @@ s=sig.sum(e)
 }}}
 
 https://miningsuite.googlecode.com/svn/wiki/SigSum_ex3.png
-
-The summation can be centered using the command:
-{{{
-s=sig,sum(…,'Center')
-}}}
 
 The summation can be divided by the number of channels using the command:
 {{{
