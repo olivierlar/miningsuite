@@ -215,6 +215,8 @@ classdef signal
         
         obj = sum(obj,dim)
         obj = center(obj,dim)
+        obj = halfwave(obj)
+        obj = median(obj,field,order,offset)
         
         obj = resample(obj,sampling)
         obj = extract(obj,param,dim,finder,varargin)
@@ -365,6 +367,12 @@ function options = classoptions(fsize,fhop)
         trimthreshold.default = .06;
         trimthreshold.when = 'After';
     options.trimthreshold = trimthreshold;
+
+        halfwave.key = {'Halfwave'};
+        halfwave.type = 'Boolean';
+        halfwave.default = 0;
+        halfwave.when = 'After';
+    options.halfwave = halfwave;
 end
 
 
@@ -433,6 +441,13 @@ function obj = after(obj,option)
     end
     if option.trim
         obj = obj.trim(option.trimwhere,option.trimthreshold);
+    end
+    if option.median
+        order = round(option.median(1) * obj.sampling);
+        obj = obj.median('sample',order,option.median(2));
+    end
+    if option.halfwave
+        obj = obj.halfwave;
     end
 end
 
