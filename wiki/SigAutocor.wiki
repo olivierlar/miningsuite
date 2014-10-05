@@ -100,6 +100,12 @@ See the figure below for an example of enhanced autocorrelation when computing t
   * Fig 7: Resulting autocorrelation curve in the frequency domain and peak picking_
 
 <br>
+
+== Music-theory based model ==
+
+Music-theory representation of autocorrelation function is available in [MusAutocor mus.autocor].
+
+<br> 
 == Accessible Output ==
 cf. §5.2 for an explanation of the use of the `'get'` method. Specific fields:
   * `'Coeff'`: the autocorrelation coefficients (same as `'Data'`),<p>
