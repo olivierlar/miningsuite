@@ -114,7 +114,3 @@ cf. §5.2 for an explanation of the use of the `'get'` method. Specific fields:
   * `'OfSpectrum'`: whether the input is a temporal signal (0), or a spectrum (1),<p>
   * `'Window'`: contains the complete envelope signal used for the windowing,<p>
   * `'Resonance': indicates the resonance curve that has been applied, or empty string if no resonance curve has been applied.
-
-<br>
-== Combining representations ==
-It is also possible to multiple points by points diverse spectral representations and autocorrelation functions, the latter being automatically translated to the spectrum domain (Peeters, 2006). Curves are half-wave rectified before multiplication.
