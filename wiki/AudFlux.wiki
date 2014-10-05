@@ -26,8 +26,8 @@ aud.flux(…,'SubBand','Frame',.025)
 The authors found that fluctuations in the lower channels, around 50 Hz ~ 200 Hz (sub-bands 2 and 3) represent perceived “Fullness”, and those around 1600 ~ 6400 Hz (sub-Bands 7 and 8) represent perceived “Activity”.
 
 Alternatively, other filterbanks proposed in SigFilterbank can be specified, using the syntax:
-  * aud.flux(…,'SubBand','Gammatone')`<p>
-  * aud.flux(…,'SubBand','2Channels')`
+  * `aud.flux(…,'SubBand','Gammatone')`<p>
+  * `aud.flux(…,'SubBand','2Channels')`
 
 == Accessible Output ==
 
