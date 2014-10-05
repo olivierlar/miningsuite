@@ -56,14 +56,6 @@ Hence when the lag _j_ corresponds to a period of the signal, the signal is shif
    * `sig.autocor(…,'NormalWindow',`_w_`)` specifies the window to be used, which can be any window available in the Signal Processing Toolbox. Besides w = 'rectangular' will not perform any particular windowing (corresponding to a rectangular (“invisible”) window), but the normalization of the autocorrelation by the autocorrelation of the invisible window will be performed nonetheless. The default value is _w_ = `'hanning'`. 
    * `sig.autocor(…,'NormalWindow','off')` toggles off this normalization (which is `'on'` by default).
 
-  * `sig.autocor(…,'Resonance',`_r_`)` multiplies the autocorrelation curve with a resonance curve that emphasizes pulsations that are more easily perceived. Two resonance curves are proposed:
-   * _r_ = `'ToiviainenSnyder'` (Toiviainen & Snyder 2003) (default value if `'Resonance'` option toggled on),
-   * _r_ = `'vanNoorden'` (van Noorden & Moelants, 1999).<p>
-   This option should be used only when the input of the `sig.autocor` function is an amplitude envelope, i.e., a `´sig.envelope´` object.<p>
-   * `sig.autocor(…,'Center',`_c_`)` assigns the center value of the resonance curve, in seconds. Works mainly with `'ToiviainenSnyder'` option. Default value: _c_ = 0.5.<p>
-https://miningsuite.googlecode.com/svn/wiki/SigAutocor_Toiviainen.png
-https://miningsuite.googlecode.com/svn/wiki/SigAutocor_vanNoorden.png<p> 
-   _Resonance curves `'ToiviainenSnyder'` (left) and `'vanNoorden'` (right)_<p>
    * `sig.autocor(…,'Halfwave')` performs a half-wave rectification on the result, in order to just show the positive autocorrelation coefficients.
 
 <br>
