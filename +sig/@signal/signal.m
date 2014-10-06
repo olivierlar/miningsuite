@@ -45,8 +45,12 @@ classdef signal
         
         celllayers
         peak
+        peakprecisepos
+        peakpreciseval
         peakdim
         fbchannels
+        
+        interpolable = 1
         
         date
         ver
