@@ -68,8 +68,12 @@ function out = main(x,option,postoption)
         len = ceil(option.ma*sr);
         start = ceil(option.mi*sr)+1;
         if option.complex
-            [d,ph] = x.Ydata.apply(@complex_cepstrum,...
+            out = x.Ydata.apply(@complex_cepstrum,...
                                     {ph.content,len,start},{'element'});
+            d = out;
+            d.content = d.content{1};
+            ph = out;
+            ph.content = ph.content{2};
         else
             d = x.Ydata.apply(@real_cepstrum,{len,start},{'element'});
             ph = [];
@@ -94,7 +98,7 @@ function y = real_cepstrum(x,len,start)
 end
 
 
-function [m,pha] = complex_cepstrum(x,pha,len,start)
+function out = complex_cepstrum(x,pha,len,start)
     x = x.*exp(1i*pha);
     x = [x(1:end-1,:) ; conj(flipud(x))];
         % Reconstitution of the complete FFT
@@ -102,8 +106,7 @@ function [m,pha] = complex_cepstrum(x,pha,len,start)
     y = fft(y);
     len = min(len,floor(size(y,1)/2));
     y = y(start:len,:,:);
-    m = abs(y);
-    pha = unwrap(angle(y));    
+    out = {abs(y), unwrap(angle(y))};    
 end
 
 
