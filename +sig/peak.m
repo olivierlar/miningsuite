@@ -1,6 +1,6 @@
 function varargout = peak(varargin)
-
-    varargout = sig.operate('sig','peak',initoptions,@init,@main,varargin);
+    varargout = sig.operate('sig','peak',initoptions,...
+                            @init,@main,varargin,'nochunk');
 end
 
 
@@ -164,6 +164,9 @@ function out = main(in,option,postoption)
     elseif option.vall
         option.thr = 1-option.thr;
     end
+    if isnan(option.first)
+        option.first = option.cthr / 2;
+    end
     
     s = in{1};
     if length(s.xdata) == 1
@@ -172,14 +175,22 @@ function out = main(in,option,postoption)
         s.peakdim = 'element';
     end
     
-    res = sig.compute(@routine,s.Ydata,s.peakdim,option);
-    s.peak = res{1}; %sig.position(res{1});
+    interpol = s.interpolable && not(isempty(option.interpol)) && ...
+        ((isnumeric(option.interpol) && option.interpol) || ...
+        (ischar(option.interpol) && ...
+            not(strcmpi(option.interpol,'No')) && ...
+            not(strcmpi(option.interpol,'Off'))));
+    
+    out = sig.compute(@routine,s.Ydata,s.xdata,s.peakdim,option,interpol);
+    s.peak = out{1};
+    s.peakprecisepos = out{2};
+    s.peakpreciseval = out{3};
     
     out = {s};
 end
 
 
-function out = routine(y,dim,option)
+function out = routine(y,x,dim,option,interpol)
     if option.vall
         y = y.apply(@uminus,{},{dim});
     end
@@ -187,58 +198,77 @@ function out = routine(y,dim,option)
     miny = y.findglobal(@min);
     y = y.minus(miny).divide(maxy-miny);
     
-    res = y.apply(@search,{option},{dim},1,'{}');
-    out = {res};
+    out = y.apply(@search,{x,option,interpol},{dim},1,'{}');
+    p = out;
+    p.content = p.content{1};
+    pp = out;
+    pp.content = pp.content{2};
+    pv = out;
+    pv.content = pv.content{3};
+    out = {p pp pv};
 end
 
 
-function m = search(y,option)
+function out = search(y,x,option,interpol)
+    pp = [];
+    pv = [];
+
     dy = diff(y);
     % Let's find the local maxima
-    m = find(y(2:end-1) >= option.cthr & y(2:end-1) >= option.thr & ...     
+    p = find(y(2:end-1) >= max(option.cthr,option.thr) & ...     
              dy(1:end-1) > 0 & dy(2:end) <= 0);
-    m = m+1;
-    if isempty(m)
+    p = p+1;
+    
+    if ~option.nobegin && y(1) >= max(option.cthr,option.thr) && ...
+            dy(1) < 0
+        p = [1; p];
+    end
+    
+    if ~option.noend && y(end) >= max(option.cthr,option.thr) && ...
+            dy(end) > 0
+        p(end+1) = length(y);
+    end
+    
+    if isempty(p)
+        out = {p pp pv};
         return
     end
          
     if option.cthr
         finalm = [];
-        if ~isempty(m)
-            wait = 0;
-            if length(m)>5000
-                wait = waitbar(0,['Selecting peaks... (0 out of 0)']);
-            end
+        wait = 0;
+        if length(p)>5000
+            wait = waitbar(0,['Selecting peaks... (0 out of 0)']);
         end
         j = 1;  % Scans the peaks from begin to end.
-        mj = m(1); % The current peak
+        mj = p(1); % The current peak
         jj = j+1;
         bufmin = Inf;
         bufmax = y(mj);
-        oldbufmin = min(y(1:m(1)-1));
-        while jj <= length(m)
+        oldbufmin = min(y(1:p(1)-1));
+        while jj <= length(p)
             if wait && not(mod(jj,5000))
-                waitbar(jj/length(m),wait,['Selecting peaks... (',...
+                waitbar(jj/length(p),wait,['Selecting peaks... (',...
                                             num2str(length(finalm)),...
                                             ' out of ',num2str(jj),')']);
             end
-            bufmin = min(bufmin,min(y(m(jj-1)+1:m(jj)-1)));
+            bufmin = min(bufmin,min(y(p(jj-1)+1:p(jj)-1)));
             if bufmax - bufmin < option.cthr
                 % There is no contrastive notch
-                if y(m(jj)) > bufmax && ...
-                        (y(m(jj)) - bufmax > option.first ...
+                if y(p(jj)) > bufmax && ...
+                        (y(p(jj)) - bufmax > option.first ...
                         || (bufmax - oldbufmin < option.cthr))
                     % If the new peak is significantly
                     % higher than the previous one,
                     % The peak is transfered to the new
                     % position
                     j = jj;
-                    mj = m(j); % The current peak
+                    mj = p(j); % The current peak
                     bufmax = y(mj);
                     oldbufmin = min(oldbufmin,bufmin);
                     bufmin = Inf;
-                elseif y(m(jj)) - bufmax <= option.first
-                    bufmax = max(bufmax,y(m(jj)));
+                elseif y(p(jj)) - bufmax <= option.first
+                    bufmax = max(bufmax,y(p(jj)));
                     oldbufmin = min(oldbufmin,bufmin);
                 end
             else
@@ -254,29 +284,60 @@ function m = search(y,option)
                     finalm(end+1) = mj;
                     oldbufmin = bufmin;
                 end
-                bufmax = y(m(jj));
+                bufmax = y(p(jj));
                 j = jj;
-                mj = m(j); % The current peak
+                mj = p(j); % The current peak
                 bufmin = Inf;
             end
             jj = jj+1;
         end
         if bufmax - oldbufmin >= option.cthr && ...
-                bufmax - min(y(m(j)+1:end)) >= option.cthr
+                (p(j) == length(y) || ...
+                 bufmax - min(y(p(j)+1:end)) >= option.cthr)
             % The last peak candidate is OK and stored
-            finalm(end+1) = m(j);
+            finalm(end+1) = p(j);
         end
         if wait
             waitbar(1,wait);
             close(wait);
             drawnow
         end
-        m = finalm;
+        p = finalm;
     end
     
-    if length(m) > option.m
-        [unused,idx] = sort(y(m),'descend');
+    if length(p) > option.m
+        [unused,idx] = sort(y(p),'descend');
         idx = idx(1:option.m);
-        m = m(idx);
+        p = p(idx);
     end
+    if strcmpi(option.order,'Abscissa')
+        p = sort(p);
+    else
+        [unused,idx] = sort(y(p),'descend');
+        p = p(idx);
+    end
+    
+    if interpol
+        pv = zeros(1,length(p));
+        pp = zeros(1,length(p));
+        for i = 1:length(p)
+            if p(i) > 2 && p(i) < length(y)
+                % More precise peak position
+                y0 = y(p(i));
+                ym = y(p(i)-1);
+                yp = y(p(i)+1);
+                r = (yp-ym)/(2*(2*y0-yp-ym));
+                pv(i) = y0 - 0.25*(ym-yp)*r;
+                if r >= 0
+                    pp(i) = (1-r)*x(p(i))+r*x(p(i)+1);
+                elseif r < 0
+                    pp(i) = (1+r)*x(p(i))-r*x(p(i)-1);
+                end
+            else
+                pv(i) = y(p(i));
+                pp(i) = x(p(i));
+            end
+        end
+    end
+    out = {p pp pv};
 end
