@@ -44,13 +44,17 @@ function out = routine(d)
     else
         dim = 'sample';
     end
-    [n xout] = d.apply(@algo,{},{dim},1);
-    n = n.deframe;
+    out = d.apply(@algo,{},{dim},1);
+    n = out;
+    n.content = n.content{1}.deframe;
+    xout = out;
+    xout.content = xout.content{2};
     out = {n xout};
 end
 
 
-function [n xout] = algo(x)
+function out = algo(x)
     [n xout] = hist(x);
     n = n';
+    out = {n xout};
 end
