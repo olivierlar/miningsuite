@@ -19,6 +19,8 @@ function out = operate(pack,name,options,init,main,argin,combine,extensive)
 arg = argin{1};
 if nargin<7
     combine = [];
+else
+    nochunk = strcmpi(combine,'nochunk');
 end
 if nargin<8
     extensive = 0;
@@ -49,7 +51,7 @@ if ischar(arg) || isa(arg,'sig.design')
     if isempty(extract) && ~ischar(arg)
         extract = arg.extract;
     end
-    if ~extensive && arg.extensive
+    if (~extensive && arg.extensive) || nochunk
         nochunk = 1;
     %elseif ischar(arg)
     %    nochunk = 0;
