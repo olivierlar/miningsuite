@@ -88,10 +88,18 @@ function [obj varargout] = apply(obj,func,argin,dimfunc,ndimfunc,type)
             if strcmp(type,'{}')
                 dimdata(~dimdata) = 1;
                 newdata = cell(dimdata);
-                for i = 1:ndimfunc
-                    start{i} = 1;
+                for j = 1:ndimfunc
+                    start{j} = 1;
                 end
                 newargs = recurse(data,start,ndimfunc+1,ndimdata,{},'{}');
+                
+                if iscell(newdatai)
+                    maindata = newdata;
+                    newdata = cell(1,length(newdatai));
+                    for j = 1:length(newdatai)
+                        newdata{j} = maindata;
+                    end
+                end
                 
             elseif ~isequal(size(olddatai),size(newdatai)) && ndimdata>ndimfunc
                 extradims = sortedim((ndimfunc+1:ndimdata)-ndimfunc);
@@ -106,12 +114,26 @@ function [obj varargout] = apply(obj,func,argin,dimfunc,ndimfunc,type)
                 newdata = newdatai; %data;
                 newargs = args;
             end
+            
+            
         end
         
-        newdata = subsasgn(newdata,newargs{i},newdatai);
+        if iscell(newdatai)
+            for j = 1:length(newdatai)
+                newdata{j} = subsasgn(newdata{j},newargs{i},newdatai{j});
+            end
+        else
+            newdata = subsasgn(newdata,newargs{i},newdatai);
+        end
     end
 
-    newdata = ipermute(newdata,ordim);
+    if iscell(newdatai)
+        for j = 1:length(newdatai)
+            newdata{j} = ipermute(newdata{j},ordim);
+        end
+    else
+        newdata = ipermute(newdata,ordim);
+    end
     obj.content = newdata;
 end
 
