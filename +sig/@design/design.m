@@ -210,6 +210,8 @@ classdef design
                 arg = obj.argin{i};
                 if isnumeric(arg)
                     arg = num2str(arg);
+                elseif isstruct(arg)
+                    arg = '(frame config)';
                 else
                     arg = ['''',arg,''''];
                 end
