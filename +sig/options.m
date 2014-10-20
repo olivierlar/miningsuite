@@ -27,7 +27,7 @@ else
 end
 
 if isa(options,'function_handle')
-    options = options();
+    options = options(.05,.5);
 end
 fields = fieldnames(options);
 for i = 1:length(fields)
@@ -130,7 +130,8 @@ while i <= length(args)
                         optionvalue = 1;
                     end
                 elseif strcmpi(type,'Numeric') || strcmpi(type,'Unit')
-                    if length(args) > i && isnumeric(args{i+1})
+                    if length(args) > i && (isnumeric(args{i+1}) || ...
+                                            iscell(args{i+1}))
                         i = i+1;
                         optionvalue = args{i};
                     elseif isfield(options.(field),'keydefault')
@@ -207,6 +208,9 @@ while i <= length(args)
                     optionvalue = arg;
                 end
             end
+        elseif i == 2
+            match = 1;
+            optionvalue = arg;
         end    
         if match
             if strcmpi(field,'frame')
