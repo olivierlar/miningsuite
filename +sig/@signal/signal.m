@@ -110,7 +110,9 @@ classdef signal
             s.date = date;
             s.ver = ver;
             
-            %s = after(s,post);
+            if ~isempty(options.deframe)
+                s = s.deframe(options.deframe);
+            end
         end
         
         function d = getdata(obj)
@@ -147,7 +149,11 @@ classdef signal
             s = sig.axis('time',obj.Sstart*obj.Srate+1,'s',0,1/obj.Srate);
         end
         function s = get.sdata(obj)
-            s = obj.saxis.data(obj.Ydata.size('sample'));
+            if ~obj.Srate
+                s = obj.xdata(1);
+            else
+                s = obj.saxis.data(obj.Ydata.size('sample'));
+            end
         end
         
         function f = get.faxis(obj)
@@ -217,6 +223,24 @@ classdef signal
         end
         %%
         
+        function obj = deframe(obj,in)
+            obj.Srate = in.Frate;
+            
+            if iscell(in.sdata)
+                Sstart = zeros(1,length(in.sdata));
+                Ssize = zeros(1,length(in.sdata));
+                for i = 1:length(in.sdata)
+                    Sstart(i) = in.sdata{i}(1);
+                    Ssize(i) = size(in.Ydata.content{i},1);
+                end
+            else
+                Sstart = in.sdata(1);
+                Ssize = size(in.Ydata.content,1);
+            end
+            obj.Sstart = Sstart;
+            obj.Ssize = Ssize / in.Srate;
+        end
+                    
         obj = sum(obj,dim)
         obj = center(obj,dim)
         obj = halfwave(obj)
@@ -302,6 +326,10 @@ function options = constructoptions
         fnumber.type = 'Numeric';
         fnumber.default = 0;
     options.fnumber = fnumber;
+    
+        deframe.key = 'Deframe';
+        deframe.default = [];
+    options.deframe = deframe;
 end
 
 
@@ -446,10 +474,10 @@ function obj = after(obj,option)
     if option.trim
         obj = obj.trim(option.trimwhere,option.trimthreshold);
     end
-    if option.median
-        order = round(option.median(1) * obj.sampling);
-        obj = obj.median('sample',order,option.median(2));
-    end
+    %if option.median
+    %    order = round(option.median(1) * obj.sampling);
+    %    obj = obj.median('sample',order,option.median(2));
+    %end
     if option.halfwave
         obj = obj.halfwave;
     end
