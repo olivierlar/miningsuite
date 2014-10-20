@@ -20,13 +20,11 @@ function [out,postoption,tmp] = main(x,option,postoption)
         option.decim = 0;
     end
 
-    d = sig.compute(@routine,x{1}.Ydata,x{1}.Srate,option);
+    [d tmp] = sig.compute(@routine,x{1}.Ydata,x{1}.Srate,option);
 
-    out = sig.Envelope(d{1},'Srate',x{1}.Srate,...
+    out = sig.Envelope(d,'Srate',x{1}.Srate,...
                        'Sstart',x{1}.Sstart,'Ssize',x{1}.Ssize,...
-                       'Method',option.method);
-    tmp = d{2};
-    
+                       'Method',option.method);    
 end
 
 

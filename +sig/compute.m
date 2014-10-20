@@ -11,8 +11,8 @@
 % + pattern mining + ...", AES 53RD INTERNATIONAL CONFERENCE, London, UK,
 % 2014
 
-function argouts = compute(algo,varargin)
-argouts = recurse(algo,varargin,nargout);
+function varargout = compute(algo,varargin)
+varargout = recurse(algo,varargin,nargout);
 
 
 function argouts = recurse(algo,argins,nout)
@@ -64,4 +64,7 @@ if iscell(arg1)
     end
 else
     argouts = algo(argins{:});
+    if ~iscell(argouts)
+        argouts = {argouts};
+    end
 end
