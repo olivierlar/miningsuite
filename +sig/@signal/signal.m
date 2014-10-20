@@ -215,8 +215,13 @@ classdef signal
             end
         end    
         function p = get.peakpos(obj)
-            p = sig.compute(@peakpos,obj.peak,obj.xdata);%,obj.peakdim);
-            p = p{1};
+            if strcmp(obj.peakdim,'sample')
+                data = obj.sdata;
+            else
+                data = obj.xdata;
+            end
+            p = sig.compute(@peakpos,obj.peak,data);
+            %p = p{1};
         end
         function b = istype(obj,type)
             b = strcmp(class(obj),type);
