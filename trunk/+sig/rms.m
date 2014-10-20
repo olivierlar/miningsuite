@@ -1,13 +1,6 @@
 function varargout = rms(varargin)
-
-    if isnumeric(varargin{1})
-        [options post] = sig.options(initoptions,varargin,'sig.rms');
-        varargout = {sig.signal(varargin{1},'Name','RMS')};
-    else
-        
-        varargout = sig.operate('sig','rms',...
-                                initoptions,@init,@main,varargin,'plus');
-    end
+    varargout = sig.operate('sig','rms',...
+                            initoptions,@init,@main,varargin,'plus');
 end
 
 
@@ -31,8 +24,8 @@ end
 function out = main(in,option,postoption)
     x = in{1};
     if ~strcmpi(x.yname,'RMS energy')
-        res = sig.compute(@routine,x.Ydata);
-        x = sig.signal(res{1},'Name','RMS energy',...
+        d = sig.compute(@routine,x.Ydata);
+        x = sig.signal(d,'Name','RMS energy',...
                        'Srate',x.Frate,'Ssize',x.Ssize);
     end
     if ~isempty(postoption) && isstruct(postoption) && ...
@@ -66,7 +59,12 @@ function x = after(x)
     else
         dim = 'sample';
     end
-    x.Ydata = x.Ydata.apply(@afternorm,{x.Ssize},{dim},Inf);
+    x.Ydata = sig.compute(@routine_norm,x.Ydata,x.Ssize,dim);
+end
+
+
+function d = routine_norm(d,Ssize,dim)
+    d = d.apply(@afternorm,{Ssize},{dim},Inf);
 end
 
 
