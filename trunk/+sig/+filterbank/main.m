@@ -8,11 +8,9 @@
 % the main folder of the MiningSuite distribution.
 
 function x = main(x,option,filterspecif)
-    out = sig.compute(@routine,x{1}.Ydata,x{1}.Srate,x{1}.fbchannels,...
-                      option,filterspecif);
-    x{1}.Ydata = out{1};
-    x{1}.fbchannels = out{3};
-    x{2} = out{2};
+    [x{1}.Ydata x{1}.fbchannels x{2}] = ...
+        sig.compute(@routine,x{1}.Ydata,x{1}.Srate,x{1}.fbchannels,...
+                    option,filterspecif);
 end
 
 

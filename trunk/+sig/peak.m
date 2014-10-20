@@ -181,10 +181,8 @@ function out = main(in,option,postoption)
             not(strcmpi(option.interpol,'No')) && ...
             not(strcmpi(option.interpol,'Off'))));
     
-    out = sig.compute(@routine,s.Ydata,s.xdata,s.peakdim,option,interpol);
-    s.peak = out{1};
-    s.peakprecisepos = out{2};
-    s.peakpreciseval = out{3};
+    [s.peak s.peakprecisepos s.peakpreciseval] = ...
+        sig.compute(@routine,s.Ydata,s.xdata,s.peakdim,option,interpol);
     
     out = {s};
 end
