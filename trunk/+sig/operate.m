@@ -18,7 +18,8 @@
 function out = operate(pack,name,options,init,main,argin,combine,extensive)
 arg = argin{1};
 if nargin<7
-    combine = [];
+    combine = [];    
+    nochunk = 0;
 else
     nochunk = strcmpi(combine,'nochunk');
 end
