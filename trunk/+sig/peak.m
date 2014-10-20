@@ -169,10 +169,12 @@ function out = main(in,option,postoption)
     end
     
     s = in{1};
-    if length(s.xdata) == 1
+    if length(s.xdata) < 2
         s.peakdim = 'sample';
+        x = s.sdata;
     else
         s.peakdim = 'element';
+        x = s.xdata;
     end
     
     interpol = s.interpolable && not(isempty(option.interpol)) && ...
@@ -182,7 +184,7 @@ function out = main(in,option,postoption)
             not(strcmpi(option.interpol,'Off'))));
     
     [s.peak s.peakprecisepos s.peakpreciseval] = ...
-        sig.compute(@routine,s.Ydata,s.xdata,s.peakdim,option,interpol);
+        sig.compute(@routine,s.Ydata,x,s.peakdim,option,interpol);
     
     out = {s};
 end
