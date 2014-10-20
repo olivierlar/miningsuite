@@ -36,6 +36,7 @@ function options = options
         fr.key = 'Freq';
         fr.type = 'Boolean';
         fr.default = 0;
+        fr.when = 'After';
     options.fr = fr;
 
         complex.key = 'Complex';
@@ -68,33 +69,36 @@ function out = main(x,option,postoption)
         len = ceil(option.ma*sr);
         start = ceil(option.mi*sr)+1;
         if option.complex
-            out = x.Ydata.apply(@complex_cepstrum,...
-                                    {ph.content,len,start},{'element'});
+            out = sig.compute(@routine_complex,x.Ydata,ph,len,start);
+            
             d = out;
-            d.content = d.content{1};
             ph = out;
-            ph.content = ph.content{2};
+            if iscell(d.content{1})
+                for i = 1:length(out.content)
+                    d.content{i} = out.content{i}{1};
+                    ph.content{i} = out.content{i}{2};
+                end
+            else
+                d.content = out.content{1};
+                ph.content = out.content{2};
+            end
         else
-            d = x.Ydata.apply(@real_cepstrum,{len,start},{'element'});
+            d = sig.compute(@routine_real,x.Ydata,len,start);
             ph = [];
         end
         xrate = 1/sr;
         out = sig.Cepstrum(d,'Phase',ph,...
                            'xsampling',xrate,'Xstart',start,...
-                           'Srate',x.Srate,'Sstart',0,...
-                           'Freq',option.fr);
+                           'Srate',x.Srate,'Sstart',x.Sstart,...
+                           'Ssize',x.Ssize,'Freq',option.fr);
     end
     out = {out};
 end
 
 
-function y = real_cepstrum(x,len,start)
-    x = [x(1:end-1,:) ; flipud(x)];
-        % Reconstitution of the complete abs(FFT)
-    y = log(x + 1e-12);
-    y = fft(y);
-    len = min(len,floor(size(y,1)/2));
-    y = abs(y(start:len,:,:));
+%%
+function out = routine_complex(d,ph,len,start)
+    out = d.apply(@complex_cepstrum,{ph.content,len,start},{'element'});
 end
 
 
@@ -110,21 +114,46 @@ function out = complex_cepstrum(x,pha,len,start)
 end
 
 
+%%
+function d = routine_real(d,len,start)
+    d = d.apply(@real_cepstrum,{len,start},{'element'});
+end
+
+
+function y = real_cepstrum(x,len,start)
+    x = [x(1:end-1,:) ; flipud(x)];
+        % Reconstitution of the complete abs(FFT)
+    y = log(x + 1e-12);
+    y = fft(y);
+    len = min(len,floor(size(y,1)/2));
+    y = abs(y(start:len,:,:));
+end
+
+
+%%
 function obj = modify(obj,option,postoption)
     start = ceil(option.mi/obj.xsampling)+1;
     idx = max(start - obj.xstart,0);
-    oldlen = obj.Ydata.size('element');
-    newlen = ceil(option.ma/obj.xsampling);
-    if idx > 0 || newlen < oldlen
-        len = newlen - obj.xstart;
-        obj.Ydata = obj.Ydata.extract('element',[idx len]);
+    if idx > 0
         obj.xstart = start;
         obj.Xaxis.start = start;
     end
+    newlen = ceil(option.ma/obj.xsampling);
+    obj.Ydata = sig.compute(@extract,obj.Ydata,newlen,obj.xstart,idx);
+    
     if postoption.fr
         obj.xname = 'Frequency';
         obj.xunit = 'Hz';
         obj.Xaxis.unit.generator = @freq;
+    end
+end
+
+
+function d = extract(d,newlen,xstart,idx)
+    oldlen = d.size('element');
+    if idx > 0 || newlen < oldlen
+        len = newlen - xstart;
+        d = d.extract('element',[max(idx,1) len]);
     end
 end
 

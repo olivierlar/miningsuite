@@ -1,13 +1,17 @@
 function e = rescale(e,postoption)
-
     if postoption.log && ~e.log
-        e.Ydata = e.Ydata.apply(@log10,{},{'sample'});
+        e.Ydata = sig.compute(@main,e.Ydata,@log10);
         e.log = 1;
     end
         
     if postoption.power
-        e.Ydata = e.Ydata.apply(@square,{},{'sample'});
+        e.Ydata = sig.compute(@main,e.Ydata,@square);
     end
+end
+
+
+function d = main(d,func)
+    d = d.apply(func,{},{'sample'});
 end
 
 

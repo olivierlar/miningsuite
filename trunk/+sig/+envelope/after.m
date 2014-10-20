@@ -1,39 +1,41 @@
 function e = after(e,postoption)
+    e.Ydata = sig.compute(@main,e.Ydata,postoption,e.log);
+end
 
+
+function d = main(d,postoption,elog)
     if postoption.aver
-        e.Ydata = e.Ydata.apply(@smooth,{postoption.aver},{'sample'},1);
+        d = d.apply(@smooth,{postoption.aver},{'sample'},1);
     end
     
     if postoption.gauss
         sigma = postoption.gauss;
         gauss = 1/sigma/2/pi*exp(- (-4*sigma:4*sigma).^2 /2/sigma^2);
-        e.Ydata = e.Ydata.apply(@gausssmooth,{sigma,gauss},{'sample'},1);
+        d = d.apply(@gausssmooth,{sigma,gauss},{'sample'},1);
     end
     
     if postoption.chwr
-        e.Ydata = e.Ydata.center('sample');
-        e.Ydata = e.Ydata.apply(@hwr,{},{'sample'});
+        d = d.center('sample');
+        d = d.apply(@hwr,{},{'sample'});
     end
     
     if postoption.hwr
-        e.Ydata = e.Ydata.apply(@hwr,{},{'sample'});
+        d = d.apply(@hwr,{},{'sample'});
     end
     
     if postoption.center
-        e.Ydata = e.Ydata.center('sample');
+        d = d.center('sample');
     end
     
-    if e.log
+    if elog
         if postoption.minlog
-            e.Ydata = e.Ydata.apply(@minlog,{postoption.minlog},{'sample'});
+            d = d.apply(@minlog,{postoption.minlog},{'sample'});
         end
-    else
-        if postoption.norm == 1
-            e.Ydata = e.Ydata.apply(@norm,{},{'sample'});
-        elseif ischar(postoption.norm) && ...
-                strcmpi(postoption.norm,'AcrossSegments')
-            d{k}{i} = d{k}{i}./repmat(mdk,[size(d{k}{i},1),1,1]);
-        end
+    elseif postoption.norm == 1
+            d = d.apply(@norm,{},{'sample'});
+    elseif ischar(postoption.norm) && ...
+            strcmpi(postoption.norm,'AcrossSegments')
+        d = d./repmat(mdk,[size(d,1),1,1]); % not ready yet!
     end
 end
 

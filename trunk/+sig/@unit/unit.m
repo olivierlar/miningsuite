@@ -34,15 +34,27 @@ classdef unit
                 end
             end
         end
-        function x = generate(obj,index)
-            x = obj.generator(obj,index);
+        function x = generate(obj,index,segment)
+            if nargin < 3
+                x = obj.generator(obj,index);
+            else
+                x = obj.generator(obj,index,segment);
+            end
         end
     end
 end
 
 
-function x = defaultval(unit,index)
-    x = (index - 1 + unit.origin) * unit.rate;
+function x = defaultval(unit,index,segment)
+    if nargin < 2
+        segment = 1;
+    end
+    if length(unit.rate) == 1
+        rate = unit.rate;
+    else
+        rate = unit.rate(segment);
+    end
+    x = (index - 1 + unit.origin) * rate;
 end
 
 

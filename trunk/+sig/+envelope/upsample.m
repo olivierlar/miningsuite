@@ -3,9 +3,14 @@ function e = upsample(e,postoption)
         [z,p,gain] = butter(6,10/e.Srate/postoption.up*2,'low');
         [sos,g] = zp2sos(z,p,gain);
         Hd = dfilt.df2tsos(sos,g);
-        e.Ydata = e.Ydata.apply(@routine,{Hd,postoption.up},{'sample'},1);
+        e.Ydata = sig.compute(@main,e.Ydata,Hd,postoption.up);
         e.Srate = e.Srate*postoption.up;
     end
+end
+
+
+function d = main(d,Hd,N)
+    d = d.apply(@routine,{Hd,N},{'sample'},1);
 end
 
 

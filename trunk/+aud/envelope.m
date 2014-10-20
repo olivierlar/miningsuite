@@ -47,7 +47,7 @@ function x = after(x,postoption)
     x = sig.envelope.resample(x,postoption);
     
     if postoption.mu
-        x.Ydata = x.Ydata.apply(@rescale,{postoption.mu},{'sample'});
+        x.Ydata = sig.compute(@routine_rescale,x.Ydata,postoption.mu);
     end
     x = sig.envelope.rescale(x,postoption);
     
@@ -58,11 +58,17 @@ function x = after(x,postoption)
             postoption.lambda = 1;
         end
         d = sig.envelope.diff(x,postoption);
-        x.Ydata = x.Ydata.times(1-postoption.lambda)...
-                  .plus(d.times(postoption.lambda*x.Srate/10));
+        
+        x.Ydata = sig.compute(@routine_lambda,x.Ydata,...
+                              postoption.lambda,x.Srate);
     end
     
     x = sig.envelope.after(x,postoption);
+end
+
+
+function d = routine_rescale(d,mu)
+    d = d.apply(@rescale,{mu},{'sample'});
 end
 
 
@@ -70,4 +76,9 @@ function x = rescale(x,mu)
     x = max(0,x);
     x = log(1+mu*x)/log(1+mu);
     x(~isfinite(x)) = NaN;
+end
+
+
+function d = routine_lambda(d,lambda,Srate)
+    d = d.times(1-lambda).plus(d.times(lambda*Srate/10));
 end
