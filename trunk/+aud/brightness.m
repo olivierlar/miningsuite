@@ -1,19 +1,12 @@
 function varargout = brightness(varargin)
-
-    if 0 %isnumeric(varargin{1})
-        [options post] = sig.options(initoptions,varargin,'sig.rms');
-        varargout = {sig.signal(varargin{1},'Name','RMS')};
-    else
-        
-        varargout = sig.operate('audi','brightness',...
-                                initoptions,@init,@main,varargin,'plus');
-    end
+    varargout = sig.operate('aud','brightness',...
+                            initoptions,@init,@main,varargin,'plus');
 end
 
 
 %%
 function options = initoptions
-    options = sig.signal.frameoptions(.05,.5);
+    options = sig.signal.signaloptions(.05,.5);
     
         cutoff.key = 'CutOff';
         cutoff.type = 'Numeric';
