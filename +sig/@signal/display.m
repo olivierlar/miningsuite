@@ -13,14 +13,14 @@ function display(obj)
             textual(obj.yname,obj.Ydata.content);
             return
         end
-        iscurve = 1;
         abscissa = 'xdata';
         Xaxis = obj.Xaxis;
         ydata = obj.Ydata;
+        iscurve = (length(obj.Sstart) == 1);  
         
     elseif isempty(obj.xdata) ... % Variable number of data points per sample
-            || length(obj.xdata) == 1   % Always one data point per sample
-        if length(obj.xdata) == 1
+            || length(obj.xdata) < 2   % Always one data point per sample
+        if length(obj.xdata) < 2
             iscurve = 1;
         else
             iscurve = -1;
@@ -32,7 +32,7 @@ function display(obj)
     else
         iscurve = 0;
         f = obj.sdata;
-        t = [f 2*f(end)-f(end-1)];
+        t = [f 2*f(end)-f(end-1)]; %% Caution: does not work with frames longer than input
         x = obj.xdata';
         x = [ 1.5*x(1) - 0.5*x(2); ...
               (x(1:end-1) + x(2:end)) / 2; ...
@@ -43,6 +43,7 @@ function display(obj)
 
     %%
     figure
+    hold on
     
     nchans = obj.Ydata.size('fb_channel');
     for i = 1:nchans
@@ -75,14 +76,30 @@ function display(obj)
                     ydatai.content = d;
                 end
             end
-            plot(obj.(abscissa),squeeze(ydatai.content))
+            if iscell(ydatai.content)
+                if strcmp(abscissa,'sdata')
+                    sdata = obj.sdata;
+                    for j = 1:length(ydata.content)
+                        plot(sdata{j},squeeze(ydatai.content{j}));
+                    end
+                else
+                    
+                end
+            else
+                plot(obj.(abscissa),squeeze(ydatai.content));
+            end
+        elseif iscell(ydatai.content)
+            for j = 1:length(ydatai.content)
+                x = obj.Sstart(j) + [0, obj.Ssize(j)];
+                y = obj.xdata{j}';
+                y(end+1) = 2 * y(end) - y(end-1);
+                surfplot(x,y,ydatai.content{j});
+            end
         else
             surfplot(t,x,ydatai.content)
             set(gca,'YDir','normal');
         end
-        
-        hold on
-        
+                
         if ~isempty(obj.peak)
             if nchans == 1
                 p = obj.peak;
@@ -95,6 +112,28 @@ function display(obj)
                 px = Xaxis.unit.generate(pi);
                 py = ydatai.content(pi);
                 plot(px,squeeze(py),'or');
+            elseif iscell(ydatai.content)
+                for k = 1:length(ydatai.content)
+                    pk = p;
+                    pk.content = p.content{k};
+                    if pk.size('sample') == 1
+                        pk = pk.content{1};
+                        if ~isempty(pk)
+                            py = obj.Xaxis.unit.generate(pk+.5);
+                            px = obj.Sstart(k) + obj.Ssize(k) / 2;
+                            plot(px,py,'+k');
+                        end
+                    else
+                        for j = 1:pk.size('sample')
+                            pj = pk.view('sample',j);
+                            if ~isempty(pj{1})
+                                px = obj.saxis.unit.generate(j+.5);
+                                py = obj.Xaxis.unit.generate(pj{1});
+                                plot(px,py,'+k');
+                            end
+                        end
+                    end
+                end
             else
                 for j = 1:obj.peak.size('sample')
                     pj = p.view('sample',j);
@@ -114,7 +153,11 @@ function display(obj)
         
         title(obj.yname);
     end
-    disp(['The ' obj.yname ' is displayed in Figure ',num2str(gcf),'.']);
+    fig = gcf;
+    if isa(fig,'matlab.ui.Figure')
+        fig = fig.Number;
+    end
+    disp(['The ' obj.yname ' is displayed in Figure ',num2str(fig),'.']);
 end
 
 
