@@ -3,14 +3,19 @@ function out = main(x,option,postoption)
         out = x;
         return
     end
-    d = sig.compute(@routine,x{1}.Ydata,x{1}.Srate,option,'sample');
-    ph = d{2};
-    d = d{1};
-    xrate = x{1}.Srate/2/d.size('element');
-    out = sig.Spectrum(d,'Phase',ph,...
-                     'xsampling',xrate,'Srate',x{1}.Frate,...
-                     'Sstart',0,'InputLength',x{1}.Ssize/x{1}.Srate,...
-                     'InputSampling',x{1}.Srate);
+    [d,ph] = sig.compute(@routine,x{1}.Ydata,x{1}.Srate,option,'sample');
+
+    dsize = d.size('element');
+    if iscell(dsize)
+        xrate = zeros(1,length(dsize));
+        for i = 1:length(xrate)
+            xrate(i) = x{1}.Srate/2/dsize{i};
+        end
+    else
+        xrate = x{1}.Srate/2/dsize;
+    end
+    out = sig.Spectrum(d,'Phase',ph,'xsampling',xrate,'Deframe',x{1},...
+                        'InputSampling',x{1}.Srate);
 end
 
 

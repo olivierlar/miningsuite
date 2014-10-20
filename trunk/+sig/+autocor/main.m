@@ -66,17 +66,15 @@ function out = main(x,option,postoption)
         end
     end
 
-    res = sig.compute(@routine,x{1}.Ydata,x{1}.Srate,option);
-    d = res{1};
-    w = res{2};
-    xstart = res{3};
+    [d w xstart] = sig.compute(@routine,x{1}.Ydata,x{1}.Srate,option);
 
     if option.freq
         xname = 'Frequency';
     else
         xname = 'Time';
     end
-    out = sig.Autocor(d,'xsampling',1/x{1}.Srate,'Srate',x{1}.Frate);
+    
+    out = sig.Autocor(d,'xsampling',1/x{1}.Srate,'Deframe',x{1});
     out.window = w;
     out.Xaxis.start = xstart;
 end
