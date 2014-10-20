@@ -139,7 +139,7 @@ elseif 1
         notes = struct('chro',num2cell(C{1}),'ons',num2cell(C{8}),...
                        'dur',num2cell(C{9}),'chan',num2cell(C{11}),...
                        'harm',C{12});
-    elseif 1 % jakob
+    elseif 0 % jakob
         C = textscan(fid,'%f,%f,%f,%f\n');
         notes = struct('chro',num2cell(C{1}),...
                        'ons',num2cell(C{2}),...
@@ -182,7 +182,7 @@ else
         p = p{1};
     else
         e = sig.envelope(name);
-        p = sig.peak(e,'Threshold',.5);
+        p = sig.peaks(e,'Threshold',.5);
         p = p.eval;
         p = p{1};
     end
@@ -471,7 +471,7 @@ if (options.metre || options.motif) %&& isempty(note.occurrences)
     pattern.occ0.memorize(note,pattern.root);
 end
 
-if options.mode
+if 0 %options.mode
     concept = mus.modal(mode,pitch,ioi,address,concept);
 end
 
@@ -567,22 +567,24 @@ function c = initmode
 c.modes = mus.mode('minor',[0 2 3 5 7 9 11 12],1);
 c.modes(end+1) = mus.mode('major',[0 2 4 5 7 9 11 12],1);
 
-mhayyer = mus.mode('Mhayyer Sika',[-5 0 2 3 5 7 8 10 12],[]);
-c.modes(end+1) = mhayyer;
-c.modes(end+1) = mus.mode('Mhayyer Sika',[0 2 3 5 7],[1 5]);
-c.modes(end).connect(mhayyer,2);
-c.modes(end+1) = mus.mode('Mazmoun',[0 2 4 5 7],[1 5]);
-c.modes(end).connect(mhayyer,4);
-c.modes(end+1) = mus.mode('Busalik',[0 2 3 5 7],[1 5]);
-c.modes(end).connect(mhayyer,5);
-c.modes(end+1) = mus.mode('Kurdi',[0 1 3 5],[1 4]);
-c.modes(end).connect(mhayyer,6);
-c.modes(end+1) = mus.mode('Basse',[0 5],2);
-c.modes(end).connect(mhayyer,1);
-c.modes(end+1) = mus.mode('Rast Dhil',[0 2 3 6 7],[1 5]);
-c.modes(end+1) = mus.mode('Isba''in',[0 1 4 5 7],[1 5]);
+if 0
+    mhayyer = mus.mode('Mhayyer Sika',[-5 0 2 3 5 7 8 10 12],[]);
+    c.modes(end+1) = mhayyer;
+    c.modes(end+1) = mus.mode('Mhayyer Sika',[0 2 3 5 7],[1 5]);
+    c.modes(end).connect(mhayyer,2);
+    c.modes(end+1) = mus.mode('Mazmoun',[0 2 4 5 7],[1 5]);
+    c.modes(end).connect(mhayyer,4);
+    c.modes(end+1) = mus.mode('Busalik',[0 2 3 5 7],[1 5]);
+    c.modes(end).connect(mhayyer,5);
+    c.modes(end+1) = mus.mode('Kurdi',[0 1 3 5],[1 4]);
+    c.modes(end).connect(mhayyer,6);
+    c.modes(end+1) = mus.mode('Basse',[0 5],2);
+    c.modes(end).connect(mhayyer,1);
+    c.modes(end+1) = mus.mode('Rast Dhil',[0 2 3 6 7],[1 5]);
+    c.modes(end+1) = mus.mode('Isba''in',[0 1 4 5 7],[1 5]);
 
-c.modes(end+1) = mus.mode('Bayati',[0 1.5 3 5],[1 4]);
+    c.modes(end+1) = mus.mode('Bayati',[0 1.5 3 5],[1 4]);
+end
 
 c.timescores = cell(1,length(c.modes));
 c.degreescores = cell(1,length(c.modes));

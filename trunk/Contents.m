@@ -10,7 +10,7 @@
 %   sig.cepstrum    - Cepstrum.
 %   sig.autocor     - Autocorrelation function.
 %   sig.filterbank  - Filterbank decomposition.
-%   sig.peak        - Peak picking.
+%   sig.peaks       - Peak picking.
 %
 %  Statistics.
 %   sig.hist        - Histogram.
