@@ -48,5 +48,4 @@ https://miningsuite.googlecode.com/svn/wiki/SigRms_ex2.png
 <br>
 == Options ==
 
-  * `sig.rms(…,'Median')` replaces the mean by the median, corresponding to what could be called a “root-median-square”.<p>
   * `sig.rms(…,'Warning',0)` toggles off the warning message, explained above, i.e., when the input is a vectorial data that is not a `sig.input` object.
