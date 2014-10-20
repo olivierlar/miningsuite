@@ -99,9 +99,19 @@ classdef data
                 s = 1;
                 return
             end
-            s = zeros(1,length(dim));
-            for i = 1:length(dim)
-                s(i) = size(obj.content,dim(i));
+            if iscell(obj.content)
+                s = cell(1,length(obj.content));
+                for j = 1:length(obj.content)
+                    s{j} = zeros(1,length(dim));
+                    for i = 1:length(dim)
+                        s{j}(i) = size(obj.content{j},dim(i));
+                    end
+                end
+            else
+                s = zeros(1,length(dim));
+                for i = 1:length(dim)
+                    s(i) = size(obj.content,dim(i));
+                end
             end
         end
                 

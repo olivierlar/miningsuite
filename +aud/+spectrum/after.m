@@ -3,8 +3,29 @@ function out = after(x,postoption)
     if iscell(x)
         x = x{1};
     end
-    f = x.xdata;
     
+    [x.Ydata, meth] = sig.compute(@routine,x.xdata,x.Ydata,x.xname,postoption);
+    
+    if iscell(meth)
+        meth = meth{1};
+    end
+    if ~isempty(meth)
+        x.xname = [meth, ' bands'];
+        x.Xaxis.unit.origin = 1;
+        x.Xaxis.unit.rate = 1;
+        x.yname = [meth, '-Spectrum'];
+        %x.Ydata = x.Ydata.rename('element','channels');
+        x.phase = [];
+    end
+    
+    out = {x};
+end
+
+
+%%
+function out = routine(f,d,xname,postoption)
+    meth = '';
+
     if postoption.terhardt && isa(x,'sig.Spectrum')
     % Code taken from Pampalk's MA Toolbox
         W_Adb = zeros(size(f));
@@ -13,11 +34,12 @@ function out = after(x,postoption)
                        - 0.001*(f(2:end)/1000).^4)/20);
         W_Adb = W_Adb.^2;
         W_Adb = sig.data(W_Adb',{'element'});
-        x.Ydata = x.Ydata.times(W_Adb);
+        d = d.times(W_Adb);
     end
         
-    if strcmp(x.xname,'Frequency')
+    if strcmp(xname,'Frequency')
         if strcmpi(postoption.band,'Mel') 
+            meth = 'Mel';
             % Computing Mel-frequency spectral representation
             %%
             % The following is largely based on the source code from Auditory Toolbox 
@@ -65,15 +87,10 @@ function out = after(x,postoption)
                 display('Recommended frequency resolution: at least 66 Hz.')
             end
             
-            x.Ydata = x.Ydata.apply(@matprod,{weights},{'element'},2);
+            d = d.apply(@matprod,{weights},{'element'},2);
             
-            x.xname = 'Mel bands';
-            x.Xaxis.unit.origin = 1;
-            x.Xaxis.unit.rate = 1;
-            x.yname = 'Mel-Spectrum';
-            %x.Ydata = x.Ydata.rename('element','channels');
-            x.phase = [];
         elseif strcmpi(postoption.band,'Bark')   
+            meth = 'Bark';
             %% Code inspired by Pampalk's MA Toolbox.
             % zwicker & fastl: psychoacoustics 1999, page 159
             bark_upper = [10 20 30 40 51 63 77 92 108 127 148 172 200 232 270 315 370 440 530 640 770 950 1200 1550]*10; %% Hz
@@ -92,40 +109,33 @@ function out = after(x,postoption)
                 k = max(idx)+1;
             end
             
-            x.Ydata = x.Ydata.apply(@matprod,{weights},{'element'},2);
-            
-            x.xname = 'Bark bands';
-            x.Xaxis.unit.origin = 1;
-            x.Xaxis.unit.rate = 1;
-            x.yname = 'Bark-Spectrum';
-            %x.Ydata = x.Ydata.rename('element','channels');
-            x.phase = [];
+            d = d.apply(@matprod,{weights},{'element'},2);            
         end
     end
     
     if postoption.mask
-        if strcmp(x.xname,'Frequency')
+        if strcmp(xname,'Frequency')
             warning('WARNING IN AUD.SPECTRUM: ''Mask'' option available only for Mel-spectrum and Bark-spectrum.');
             disp('''Mask'' option ignored');
         else
             %% Code inspired by Pampalk's MA Toolbox.
             % spreading function: schroeder et al., 1979, JASA, optimizing
             % digital speech coders by exploiting masking properties of the human ear
-            cb = x.Ydata.size('element');  % Number of bands.
+            cb = d.size('element');  % Number of bands.
             spread = zeros(cb);
             for i = 1:cb, 
                 spread(i,:) = 10.^((15.81+7.5*((i-(1:cb))+0.474) ...
                                     -17.5*(1+((i-(1:cb))+0.474).^2) ...
                                     .^0.5)/10);
             end
-            x.Ydata = x.Ydata.apply(@matprod,{spread},{'element'},2);
+            d = d.apply(@matprod,{weights},{'element'},2);            
         end
     end
     
-    out = {x};
+    out = {d, meth};
 end
 
-    
+
 function y = matprod(x,weights)
     y = weights * x + 1e-16;
 end

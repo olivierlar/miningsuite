@@ -22,13 +22,13 @@ function e = resample(e,postoption)
             if sr ~= round(sr)
                 error('Error in sig.envelope: The ''Sampling'' postoption cannot be used after using the ''Down'' postoption.');
             end
-            e.Ydata = e.Ydata.apply(@resample,{newsr,sr},{'sample'});
+            e.Ydata = sig.compute(@routine_resample,e.Ydata,newsr,sr);
         end
     elseif postoption.ds>1
         if postoption.ds ~= round(postoption.ds)
             error('Error in sig.envelope: The ''Down'' sampling rate should be an integer.');
         end
-        e.Ydata = e.Ydata.apply(@downsample,{postoption.ds},{'sample'});
+        e.Ydata = sig.compute(@routine_downsample,e.Ydata,postoption.ds);
     end
     e.Srate = newsr;
 
@@ -37,4 +37,14 @@ function e = resample(e,postoption)
         d{k}{i}(1:tdk,:,:) = repmat(d{k}{i}(tdk,:,:),[tdk,1,1]); 
         d{k}{i}(end-tdk+1:end,:,:) = repmat(d{k}{i}(end-tdk,:,:),[tdk,1,1]);
     end
+end
+
+
+function d = routine_resample(d,newsr,sr)
+    d = d.apply(@resample,{newsr,sr},{'sample'});
+end
+
+
+function d = routine_downsample(d,ds)
+    d = d.apply(@downsample,{ds},{'sample'});
 end

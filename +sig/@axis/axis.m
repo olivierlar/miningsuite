@@ -31,12 +31,30 @@ classdef axis
             end
         end
         %%
-        function x = index(obj,sd)
-            x = obj.start + (1:sd)-1;
+        function x = index(obj,sd,segment)
+            x = obj.start;
+            if length(x) > 1
+                if iscell(x)
+                    x = x{segment};
+                else
+                    x = x(segment);
+                end
+            end
+            x = x + (1:sd)-1;
         end
         
-        function x = data(obj,sd)
-            x = obj.unit.generate(obj.index(sd));
+        function x = data(obj,sd,segment)
+            if iscell(sd)
+                x = cell(1,length(sd));
+                for i = 1:length(sd)
+                    x{i} = data(obj,sd{i},i);
+                end
+                return
+            end
+            if nargin < 3
+                segment = 1;
+            end
+            x = obj.unit.generate(obj.index(sd,segment),segment);
             if ~isempty(obj.subunit) && ...
                     strcmpi(obj.name,obj.subunit.dimname)
                 x = obj.subunit.converter(x);

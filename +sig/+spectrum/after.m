@@ -10,90 +10,112 @@ function out = after(x,postoption)
     end
         
     if postoption.min || postoption.max < Inf
-        d = x.xdata;
-        range = find(d >= postoption.min & d <= postoption.max);
-        if ~isempty(range)
-            x.Ydata = x.Ydata.extract('element',range([1,end]));
-        end
-        x.Xaxis.start = x.Xaxis.start + range(1);
+        [x.Ydata, x.Xaxis.start] = ...
+            sig.compute(@extract,x.Ydata,x.xdata,x.Xaxis.start,postoption);
+        
     end
     
     if postoption.timesmooth
-        [d tmp] = x.Ydata.apply(@timesmooth,{postoption.timesmooth,tmp},...
-                                {'sample'});
-        x.Ydata = d;
+        [x.Ydata, tmp] = ...
+            sig.compute(@routine_timesmooth,x.Ydata,...
+                        postoption.timesmooth,tmp);
     end
     
     if x.power == 1 && (postoption.pow || any(postoption.mprod) ...
                         || any(postoption.msum)) 
                 % mprod could be tried without power?
-        x.Ydata = x.Ydata.apply(@square,{},{'sample'});
+        x.Ydata = sig.compute(@routine_square,x.Ydata);
         x.power = 2;
         x.yname = ['Power ',x.yname];
     end
     
     if any(postoption.mprod)
-        x.Ydata = x.Ydata.apply(@mprodsum,{postoption.mprod,@times},...
-                                {'element'},1);
+        x.Ydata = sig.compute(@routine_mprodsum,x.Ydata,...
+                              postoption.mprod,@times);
         x.yname = 'Spectral product';
     end
     
     if any(postoption.mprod)
-        x.Ydata = x.Ydata.apply(@mprodsum,{postoption.msum,@sum},...
-                                {'element'},1);
+        x.Ydata = sig.compute(@routine_mprodsum,x.Ydata,...
+                              postoption.msum,@sum);
         x.yname = 'Spectral sum';
     end
     
     if postoption.norm
-        nx = x.Ydata.apply(@norm,{},{'element'});
-        x.Ydata = x.Ydata.divide(nx);
+        x.Ydata = sig.compute(@routine_norm,x.Ydata);
     end
     
     if postoption.nl
-        x.Ydata = x.Ydata.divide(x.inputlength);
+        x.Ydata = sig.compute(@divide,x.Ydata,x.inputlength);
     end
     
     if postoption.log || postoption.db
         if ~x.log
-            x.Ydata = x.Ydata.sum(1e-16).apply(@log10,{},{'element'});
+            x.Ydata = sig.compute(@routine_log,x.Ydata);
             x.log = 1;
         end
         if postoption.db && x.log == 1
-            x.Ydata = x.Ydata.times(10);
-            if x.power == 1
-                x.Ydata = x.Ydata.times(2);
-            end
+            x.Ydata = sig.compute(@routine_db,x.Ydata,x.power);
             x.log = 10;
             x.power = 2;
         end
         if postoption.db>0 && postoption.db < Inf
-            x.Ydata = x.Ydata.apply(@crop,{postoption.db},{'element'},1);
+            x.Ydata = sig.compute(@routine_crop,x.Ydata,postoption.db);
         end
         x.phase = [];
     end
     
     if postoption.aver
-        x.Ydata = x.Ydata.apply(@smooth,{postoption.aver},{'element'},1);
+        x.Ydata = sig.compute(@routine_smooth,x.Ydata,postoption.aver);
     end
 
     if postoption.gauss
         sigma = postoption.gauss;
         gauss = 1/sigma/2/pi*exp(- (-4*sigma:4*sigma).^2 /2/sigma^2);
-        x.Ydata = x.Ydata.apply(@gausssmooth,{sigma,gauss},{'element'},1);
+        x.Ydata = sig.compute(@routine_gausssmooth,x.Ydata,sigma,gauss);
     end
     
     out = {x,tmp};
 end
 
 
-function [x tmp] = timesmooth(x,N,tmp)
-    B = ones(1,N)/N;
-    [x tmp] = filter(B,1,x,tmp);
+%%
+function out = extract(d,x,start,postoption)
+    range = find(x >= postoption.min & x <= postoption.max);
+    if ~isempty(range)
+        d = d.extract('element',range([1,end]));
+    end
+    start = start + range(1);
+    out = {d,start};
 end
 
 
+%%
+function out = routine_timesmooth(d,N,tmp)
+    [d, tmp] = d.apply(@timesmooth,{N,tmp},{'sample'});
+    out = {d,tmp};
+end
+
+
+function [d, tmp] = timesmooth(d,N,tmp)
+    B = ones(1,N)/N;
+    [d, tmp] = filter(B,1,d,tmp);
+end
+
+
+%%
+function d = routine_square(d)
+    d = d.apply(@square,{},{'sample'});
+end
+
 function x = square(x)
     x = x.^2;
+end
+
+
+%%
+function d = routine_mprodsum(d,coefs,func)
+    d = d.apply(@mprodsum,{coefs,func},{'element'},1);
 end
 
 
@@ -110,14 +132,60 @@ function y = mprodsum(x,coefs,func)
 end
 
 
-function x = crop(x,N)
-    x = x - max(x);
-    x = max(x,-N) + N;
+%%
+function d = routine_norm(d)
+    n = d.apply(@norm,{},{'element'});
+    d = d.divide(n);
 end
 
 
-function x = smooth(x,n)
-    x = filter(ones(1,n),1,x);
+%%
+function d = divide(d,N)
+    d = d.divide(N);
+end
+
+
+%%
+function d = routine_log(d)
+    d = d.sum(1e-16).apply(@log10,{},{'element'});
+end
+
+
+%%
+function d = routine_db(d,power)
+    d = d.times(10);
+    if power == 1
+        d = d.times(2);
+    end
+end
+
+
+%%
+function d = routine_crop(d,N)
+    d = d.apply(@crop,{N},{'element'},1);
+end
+
+
+function d = crop(d,N)
+    d = d - max(d);
+    d = max(d,-N) + N;
+end
+
+
+%%
+function d = routine_smooth(d,N)
+    d = d.apply(@smooth,{N},{'element'},1);
+end
+
+
+function d = smooth(d,N)
+    d = filter(ones(1,N),1,d);
+end
+
+
+%%
+function d = routine_gausssmooth(d,sigma,gauss)
+    d = d.apply(@gausssmooth,{sigma,gauss},{'element'},1);
 end
 
 

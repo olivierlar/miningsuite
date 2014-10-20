@@ -59,26 +59,11 @@ function out = after(x,postoption)
     if iscell(x)
         x = x{1};
     end
-    f = x.xdata;
     
     if postoption.reso
-        if strcmpi(postoption.reso,'ToiviainenSnyder') ...
-                || strcmpi(postoption.reso,'Meter')
-            w = max(0,...
-                1 - 0.25*(log2(max(1./max(f,1e-12),1e-12)/0.5)).^2);
-        elseif strcmpi(postoption.reso,'Fluctuation')
-            w1 = f / 4; % ascending part of the fluctuation curve;
-            w2 = 1 - 0.3 * (f - 4)/6; % descending part;
-            w = min(w1,w2);
-        end
-        if max(w) == 0
-            warning('The resonance curve, not defined for this range of delays, will not be applied.')
-        else
-            w = sig.data(w',{'element'});
-            x.Ydata = x.Ydata.times(w);
-        end
+        x.Ydata = sig.compute(@resonance,x.Ydata,x.xdata,postoption.reso);
     end
-    
+        
     if strcmp(x.xname,'Frequency') && postoption.cent
         isgood = f*(2^(1/1200)-1) >= f(2)-f(1);
         good = find(isgood);
@@ -135,5 +120,22 @@ function y = collapse(x,cc)
     y = NaN(1200,size(x,2),size(x,3));
     for k = 0:1199
         y(k+1,:,:) = sum(x(find(cc==k),:,:),1);
+    end
+end
+
+
+function d = resonance(d,f,type)
+    if strcmpi(type,'ToiviainenSnyder') || strcmpi(type,'Meter')
+        w = max(0, 1 - 0.25*(log2(max(1./max(f,1e-12),1e-12)/0.5)).^2);
+    elseif strcmpi(type,'Fluctuation')
+        w1 = f / 4; % ascending part of the fluctuation curve;
+        w2 = 1 - 0.3 * (f - 4)/6; % descending part;
+        w = min(w1,w2);
+    end
+    if max(w) == 0
+        warning('The resonance curve, not defined for this range of delays, will not be applied.')
+    else
+        w = sig.data(w',{'element'});
+        d = d.times(w);
     end
 end
