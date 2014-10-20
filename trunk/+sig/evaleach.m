@@ -115,31 +115,27 @@ if isempty(design.main)
     %y = set(y,'AcrossChunks',get(d,'AcrossChunks'));
     
 else
-    if isempty(frame) || ~frame.toggle ...|| ...
-            ...(frame.inner && ~isempty(design.frame) && ...
-            ...design.frame.toggle && ~design.frame.inner)
+    if isempty(frame) || ~frame.toggle
+        % Not already in a frame decomposition process
         frame = design.frame;
     end    
-    if chunking ...Already in a chunk decomposition process
-            || design.nochunk % && isempty(d.tmpfile)
-        if design.nochunk
-            y = sig.evaleach(design.input,filename,window,sr,[],chunking);
-            y = design.main(y,design.duringoptions,design.afteroptions);
-            if ~isempty(frame) && frame.toggle
-                frate = sig.compute(@sig.getfrate,y{1}.Srate,frame);
-                y{1}.Ydata = y{1}.Ydata.frame(frame,y{1}.Srate);
-                y{1}.Frate = frate;
-                %y{1}.Fsize = 
-            end
-        else
-            y = sig.evaleach(design.input,filename,window,sr,frame,chunking);
-            switch chunking 
-                case 1
-                    after = design.afteroptions;
-                case 2
-                    after = [];
-            end
-            y = design.main(y,design.duringoptions,after);
+    if chunking % Already in a chunk decomposition process
+        y = sig.evaleach(design.input,filename,window,sr,frame,chunking);
+        switch chunking 
+            case 1
+                after = design.afteroptions;
+            case 2
+                after = [];
+        end
+        y = design.main(y,design.duringoptions,after);
+    elseif design.nochunk % && isempty(d.tmpfile)
+        y = sig.evaleach(design.input,filename,window,sr,[],chunking);
+        y = design.main(y,design.duringoptions,design.afteroptions);
+        if ~isempty(frame) && frame.toggle
+            frate = sig.compute(@sig.getfrate,y{1}.Srate,frame);
+            y{1}.Ydata = y{1}.Ydata.frame(frame,y{1}.Srate);
+            y{1}.Frate = frate;
+            %y{1}.Fsize = 
         end
     else
         meth = 'Chunk ';
