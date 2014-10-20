@@ -55,18 +55,3 @@ function out = main(in,option,postoption)
     x.Sstart = Sstart;
     out = {x};
 end
-
-
-function out = routine(d,f,f0)
-    e = d.apply(@algo,{f,f0},{'element'},3);
-    out = {e};
-end
-
-
-function y = algo(m,f,f0)
-    y = sum(m(f > f0,:,:)) ./ sum(m);
-end
-
-
-function x = after(x)
-end
