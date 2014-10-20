@@ -1,7 +1,7 @@
 function obj = enhance(obj,e)
-    p = sig.peak(obj,'NoBegin','NoEnd','Contrast',.01,...
+    p = sig.peaks(obj,'NoBegin','NoEnd','Contrast',.01,...
                   'Normalize','Local');
-    v = sig.peak(obj,'Valleys','Contrast',.01,'Normalize','Local');
+    v = sig.peaks(obj,'Valleys','Contrast',.01,'Normalize','Local');
     res = sig.compute(@main,obj.Ydata,p.peakpos,v.peakpos,e,obj.xdata);
     obj.Ydata = res{1};
 end

@@ -32,7 +32,7 @@ function [x type] = init(x,option,frame)
             x = sig.envelope(x);
         end
         x = sig.autocor(x,'Max',5);
-        x = sig.peak(x,'Total',1);
+        x = sig.peaks(x,'Total',1);
     elseif strcmpi(option.method,'Pattern')
         x = mus.minr(x,'Metre');
     end
