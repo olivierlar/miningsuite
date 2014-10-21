@@ -15,10 +15,10 @@ end
 
 
 function out = routine(in,sampling,ch,option,filterspecif)
-    if in.size('fb_channel') > 1
+    if in.size('freqband') > 1
         %warning('WARNING IN SIG.FILTERBANK: The input data is already decomposed into channels. No more channel decomposition.');
         if option.Ch
-            in = in.extract('fb_channel',option.Ch);
+            in = in.extract('freqband',option.Ch);
             out = {in [] option.Ch};
         else
             out = {in [] ch};
@@ -40,7 +40,7 @@ function out = routine(in,sampling,ch,option,filterspecif)
         end
         
         [out{1},out{2}] = in.apply(@subroutine,{Hd},...
-                                   {'sample','fb_channel'},Inf);
+                                   {'sample','freqband'},Inf);
         out{3} = ch;
     end
 end
