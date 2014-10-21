@@ -15,7 +15,7 @@ function out = main(x,option,postoption)
         xrate = x{1}.Srate/2/dsize;
     end
     out = sig.Spectrum(d,'Phase',ph,'xsampling',xrate,'Deframe',x{1},...
-                        'InputSampling',x{1}.Srate);
+                        'InputSampling',x{1}.Srate); %,'InputLength',1);
 end
 
 
@@ -123,7 +123,7 @@ function [out phase] = routine(in,sampling,option,dim)
             end
             out = out.apply(@abs,{},{'element'});
         else
-            out = out.rename('element','channel');
+            out = out.rename('element','freqband');
             out = out.rename('sample','element');
             phase = [];
             out = out.apply(@abs,{},{'element'});
