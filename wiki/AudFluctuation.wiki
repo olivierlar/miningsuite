@@ -1,0 +1,57 @@
+#summary aud.fluctuation: Rhythmic periodicity along auditory channels
+
+= aud.fluctuation: Rhythmic periodicity along auditory channels =
+
+One way of estimating the rhythmic is based on spectrogram computation transformed by auditory modeling and then a spectrum estimation in each band (Pampalk et al., 2002).
+The implementation proposed in MiningSuite includes a subset of the series of operations proposed in Pampalk et al.:
+
+*1. First a power spectrogram is computed*
+
+  * on frames of 23 ms with a hop rate _hr_, set by default to 80 Hz, but is automatically raised to the double of the maximum fluctuation frequency range _m_, used in step 2.<p>
+  * The Terhardt outer ear modeling is computed.<p>
+  * A multi-band redistribution of the energy is performed along the 'Bark' bands decomposition. 
+   * `aud.fluctuation(…,'Mel')`  performs a decomposition into 40 Mel bands instead of 20 Bark bands.<p>
+  * Masking effects are estimated on the multi-band distribution.<p>
+  * Finally the amplitudes are represented in dB scale.
+
+This is summarized in one MiningSuite command line:
+{{{
+s=aud.spectrum(…,'Frame',.023,'s',hr,'Hz',…
+  'Power','Terhardt',b,'Mask','dB')
+}}}
+
+where _b_ is either `'Bark'` or `'Mel`'.
+
+<br>
+*2. Then a FFT is computed on each band:*
+  * Frequencies range from 0 to m Hz, where m is set by default to 10 Hz can be controlled by a `'Max'` option:<br>`aud.fluctuation(…,'Max',`_m_`)`<p>
+  * The frequency resolution of the FFT mr is set by default to .01 Hz and can also be controlled by a `'MinRes'` option:<br>`aud.fluctuation(…,'MinRes',`_mr_`)`<p>
+  * The amplitude modulation coefficients are weighted based on the psychoacoustic model of the fluctuation strength (Fastl, 1982).
+
+This is summarized in one MiningSuite command line:
+{{{
+f=aud.spectrum(s,'AlongBands','Max',m,'MinRes',mr,'Window',0,…
+  'Resonance','Fluctuation','NormalLength')
+}}}
+
+We can see in the matrix the rhythmic periodicities for each different Bark band.
+
+<br>
+*3. `aud.fluctuation(…,'Summary')`* subsequently sums the resulting spectrum across bands, leading to a spectrum summary, showing the global repartition of rhythmic periodicities:
+{{{
+sig.sum(f)
+}}}
+
+<br>
+== Flowchart Interconnections ==
+
+`aud.fluctuation` accepts as input data type either:<p>
+  * `sig.Spectrum` frame-decomposed objects (i.e., spectrograms),<p>
+  * `sig.signal` objects, where the audio waveform can be segmented (using `sig.segment`). The audio waveform is decomposed into frames if it was not decomposed yet.<p>
+  * file name(s) or the `'Folder'` keyword: same behavior than for `sig.signal` objects.
+
+<br>
+== Frame decomposition ==
+
+  * `aud.fluctuation(…,'InnerFrame',`_l_`,`_r_`)` specifies the spectrogram frame length _l_ (in second), and, optionally, the frame rate _r_ (in Hertz), with by default a frame length of 23 ms and a frame rate of 80 Hz.<p>
+  * `aud.fluctuation(…,'OuterFrame',`_l_`,`_h_`)` computes fluctuation using a window moving along the spectrogram, whose length _l_ (in second) and frame rate _r_ (in Hertz) can be specified as well, with by default a frame length of 1 s and a frame rate of 10 Hz.
