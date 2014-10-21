@@ -20,6 +20,12 @@ function options = options
         mean.type = 'Boolean';
         mean.default = 0;
     options.mean = mean;
+    
+        type.key = 'Type';
+        type.type = 'String';
+        type.choice = {'channel','freqband'};
+        type.default = 'freqband';
+    options.type = type;
 end
 
 
@@ -40,14 +46,14 @@ function res = main(x,option,postoption)
     else
         norm = 1;
     end
-    x.Ydata = sig.compute(@routine,x.Ydata,norm);
+    x.Ydata = sig.compute(@routine,x.Ydata,norm,option.type);
     x.fbchannels = 1;
     res = {x};
 end
 
 
-function out = routine(in,norm)
-    out = in.sum('fb_channel');
+function out = routine(in,norm,type)
+    out = in.sum(type);
     if norm ~= 1
         out.content = out.content / norm;
     end
