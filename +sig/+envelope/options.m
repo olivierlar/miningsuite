@@ -32,20 +32,12 @@ function options = options
     
         zp.key = 'ZeroPhase'; % internal use: for manual filtfilt
         zp.type = 'Number';
-        if 1 %isamir(orig,'mirenvelope')
-            zp.default = NaN;
-        else
-            zp.default = NaN;
-        end
+        zp.default = NaN;
     options.zp = zp;
 
         ds.key = {'Down','PostDecim'};
         ds.type = 'Integer';
-        %if isamir(orig,'mirenvelope')
-        %    ds.default = 1;
-        %else
-            ds.default = NaN; % 0 if 'PreDecim' is used, else 16
-        %end
+        ds.default = NaN; % 0 if 'PreDecim' is used, else 16
         ds.when = 'After';
         ds.chunkcombine = 'During';
     options.ds = ds;
@@ -91,6 +83,12 @@ function options = options
         terhardt.type = 'Boolean';
         terhardt.default = 0;
     options.terhardt = terhardt;
+
+        innerframe.key = 'Frame';
+        innerframe.type = 'Integer';
+        innerframe.number = 2;
+        innerframe.default = [.1 .1];
+    options.innerframe = innerframe;
     
 %% Options related to all methods:
     

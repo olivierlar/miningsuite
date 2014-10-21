@@ -1,34 +1,41 @@
 function [out,postoption,tmp] = main(x,option,postoption)
+    x = x{1};
 
-    if isfield(postoption,'ds') && isnan(postoption.ds)
-        if option.decim
-            postoption.ds = 0;
-        else
-            postoption.ds = 16;
+    if strcmpi(option.method,'Spectro')
+        d = x.Ydata.rename('element','channel');
+        tmp = [];
+        postoption.trim = 0;
+        postoption.ds = 0;
+        
+    elseif strcmpi(option.method,'Filter')
+        if isnan(option.zp)
+            if strcmpi(option.filter,'IIR')
+                option.zp = 1;
+            else
+                option.zp = 0;
+            end
+        end
+        if option.zp == 1
+            option.decim = 0;
+        end
+
+        [d tmp] = sig.compute(@routine_filter,x.Ydata,x.Srate,option);
+        
+        if isfield(postoption,'ds') && isnan(postoption.ds)
+            if option.decim
+                postoption.ds = 0;
+            else
+                postoption.ds = 16;
+            end
         end
     end
-
-    % 'Envelope'
-    if isnan(option.zp)
-        if strcmpi(option.filter,'IIR')
-            option.zp = 1;
-        else
-            option.zp = 0;
-        end
-    end
-    if option.zp == 1
-        option.decim = 0;
-    end
-
-    [d tmp] = sig.compute(@routine,x{1}.Ydata,x{1}.Srate,option);
-
-    out = sig.Envelope(d,'Srate',x{1}.Srate,...
-                       'Sstart',x{1}.Sstart,'Ssize',x{1}.Ssize,...
+    out = sig.Envelope(d,'Srate',x.Srate,...
+                       'Sstart',x.Sstart,'Ssize',x.Ssize,...
                        'Method',option.method);    
 end
 
 
-function out = routine(in,sampling,option)
+function out = routine_filter(in,sampling,option)
     if isfield(option,'tmp')
         tmp = option.tmp;
     else
