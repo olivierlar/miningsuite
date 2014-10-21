@@ -9,7 +9,7 @@
 function varargout = autocor(varargin)
     varargout = sig.operate('sig','autocor',sig.autocor.options,...
                             @init,@main,varargin,...
-                            @sig.autocor.combinechunks);%,'extensive');
+                            @sig.autocor.combinechunks);
 end
 
 
