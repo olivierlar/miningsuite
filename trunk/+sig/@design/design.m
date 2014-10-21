@@ -137,24 +137,6 @@ classdef design
             else
                 out = out{1};
             end
-            
-            if 0
-            out = sig.analysis;
-            if nfiles == 1
-                out.data = sig.evaleach(obj,files{1},w,sr);
-            else
-                out.layers{1} = 'files';
-                out.data = cell(1,nfiles);
-                for i = 1:nfiles
-                    out.data{i} = sig.evaleach(obj,files{i},w,sr(i));
-                end
-                %if isempty(obj.input.main)
-                %    out{1}.Ydata.design.input = files;
-                %end
-                out.data{i} = combineaudiofile(files,out{:});
-            end
-            end
-            
         end
         %%
         function out = display(obj,recurs)
