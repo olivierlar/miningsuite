@@ -51,5 +51,5 @@ function out = main(d,param,dim,axis,fields)
         fields{i} = fields{i}.extract(dim,[x1,x2]);
     end
     
-    out = {d fields{:} x1};
+    out = {{d fields{:} x1}};
 end
