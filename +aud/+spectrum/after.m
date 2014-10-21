@@ -26,7 +26,7 @@ end
 function out = routine(f,d,xname,postoption)
     meth = '';
 
-    if postoption.terhardt && isa(x,'sig.Spectrum')
+    if postoption.terhardt
     % Code taken from Pampalk's MA Toolbox
         W_Adb = zeros(size(f));
         W_Adb(2:end) = + 10.^((-3.64*(f(2:end)/1000).^-0.8 ...
@@ -114,7 +114,7 @@ function out = routine(f,d,xname,postoption)
     end
     
     if postoption.mask
-        if strcmp(xname,'Frequency')
+        if isempty(meth) && strcmp(xname,'Frequency')
             warning('WARNING IN AUD.SPECTRUM: ''Mask'' option available only for Mel-spectrum and Bark-spectrum.');
             disp('''Mask'' option ignored');
         else
@@ -128,7 +128,7 @@ function out = routine(f,d,xname,postoption)
                                     -17.5*(1+((i-(1:cb))+0.474).^2) ...
                                     .^0.5)/10);
             end
-            d = d.apply(@matprod,{weights},{'element'},2);            
+            d = d.apply(@matprod,{spread},{'element'},2);            
         end
     end
     
