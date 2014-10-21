@@ -60,9 +60,9 @@ function out = after(x,postoption)
         x = x{1};
     end
     
-    if postoption.reso
-        x.Ydata = sig.compute(@resonance,x.Ydata,x.xdata,postoption.reso);
-    end
+    %if postoption.reso
+    %    x.Ydata = sig.compute(@resonance,x.Ydata,x.xdata,postoption.reso);
+    %end
         
     if strcmp(x.xname,'Frequency') && postoption.cent
         isgood = f*(2^(1/1200)-1) >= f(2)-f(1);
@@ -131,6 +131,7 @@ function d = resonance(d,f,type)
         w1 = f / 4; % ascending part of the fluctuation curve;
         w2 = 1 - 0.3 * (f - 4)/6; % descending part;
         w = min(w1,w2);
+        w = max(0,w);
     end
     if max(w) == 0
         warning('The resonance curve, not defined for this range of delays, will not be applied.')
