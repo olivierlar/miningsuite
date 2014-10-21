@@ -45,11 +45,11 @@ function display(obj)
     figure
     hold on
     
-    nchans = obj.Ydata.size('fb_channel');
+    nchans = obj.Ydata.size('freqband');
     for i = 1:nchans
         if nchans > 1
             subplot(nchans,1,nchans-i+1,'align');
-            ydatai = ydata.extract('fb_channel',i);
+            ydatai = ydata.extract('freqband',i);
         else
             ydatai = ydata;
         end
@@ -104,7 +104,7 @@ function display(obj)
             if nchans == 1
                 p = obj.peak;
             else
-                p = obj.peak.extract('fb_channel',i);
+                p = obj.peak.extract('freqband',i);
             end
             
             if iscurve
