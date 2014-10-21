@@ -32,7 +32,7 @@ function [x type] = init(x,option,frame)
             x = sig.envelope(x);
         end
         x = sig.autocor(x,'Max',5);
-        x = sig.peaks(x,'Total',1);
+        x = sig.peaks(x,'Total',1,'NoBegin');
     elseif strcmpi(option.method,'Pattern')
         x = mus.minr(x,'Metre');
     end
@@ -57,9 +57,11 @@ function out = main(in,option,postoption)
         t = sig.signal(d,'Name','Tempo','Srate',1);
     else
         x = in{1};
-        if ~strcmpi(x.yname,'Tempo')
+        if strcmpi(x.yname,'Tempo')
+            t = x;
+        else
             p = sig.compute(@routine,x.peakpos);
-            t = sig.signal(p{1},'Name','Tempo','Srate',in{1}.Srate);
+            t = sig.signal(p,'Name','Tempo','Srate',in{1}.Srate);
         end
     end
     out = {t};
