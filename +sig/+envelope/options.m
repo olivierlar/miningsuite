@@ -1,5 +1,5 @@
 function options = options
-    options = sig.signal.signaloptions(); %(.1,.1);
+    options = sig.signal.signaloptions(.1,.1);
     
         method.type = 'String';
         method.choice = {'Filter','Spectro'};
