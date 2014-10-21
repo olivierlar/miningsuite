@@ -1,6 +1,6 @@
 function varargout = peaks(varargin)
     varargout = sig.operate('sig','peaks',initoptions,...
-                            @init,@main,varargin,'nochunk');
+                            @init,@main,varargin);
 end
 
 
