@@ -15,6 +15,8 @@
 % 2014
 
 function y = evaleach(design,filename,window,sr,frame,chunking,nbsamples) %,single,name
+% The last three arguments are not used when sig.evaleach is called for the
+% first time, by sig.design.eval.
 if nargin<5
     frame = [];
 end
@@ -131,14 +133,7 @@ else
     elseif design.nochunk % && isempty(d.tmpfile)
         y = sig.evaleach(design.input,filename,window,sr,[],chunking);
         y = design.main(y,design.duringoptions,design.afteroptions);
-        if ~isempty(frame) && frame.toggle
-            frate = sig.compute(@sig.getfrate,y{1}.Srate,frame);
-            y{1}.Ydata = y{1}.Ydata.frame(frame,y{1}.Srate);
-            y{1}.Frate = frate;
-            %y{1}.Fsize = 
-        end
     else
-        meth = 'Chunk ';
         %frnochunk = isfield(d.frame,'dontchunk');
         %frchunkbefore = isfield(d.frame,'chunkbefore');
         if ~isempty(frame) && frame.toggle % && ~frame.inner
@@ -162,7 +157,7 @@ else
             if 1%mirwaitbar
                 h = waitbar(0,['Computing ' design.name]);
             else
-                h = 0;
+                h = [];
             end
             if not(isempty(design.tmpfile)) && design.tmpfile.fid == 0
                 % When applicable, a new temporary file is created.
@@ -203,7 +198,7 @@ else
             options = design.duringoptions;
             options.tmp = [];
             for i = 1:size(chunks,2)
-                disp([meth,num2str(i),'/',num2str(nch),'...'])
+                disp(['Chunk ',num2str(i),'/',num2str(nch),'...'])
                 window = [chunks(1,i) chunks(2,i) (i == size(chunks,2))];
 
                 if 0 %not(ischar(specif.eachchunk) && ...
@@ -237,7 +232,7 @@ else
                 y = combinechunks(y,ss,i,design,chunks);
 
                 clear ss
-                if h
+                if ~isempty(h)
                     if 0 %not(d.ascending)
                         close(h)
                         h = waitbar((chunks(1,i)-chunks(1,end))/chunks(2,1),...
@@ -266,7 +261,7 @@ else
                     (isempty(d.frame) || isfield(d.frame,'dontchunk'))
                 y = evalbranches(d,y);
             end
-            if h
+            if ~isempty(h)
                 close(h)
             end
             drawnow
@@ -274,9 +269,11 @@ else
         else 
             % No chunk decomposition
             if design.extensive
-                frame = [];
+                innerframe = [];
+            else
+                innerframe = frame;
             end
-            y = sig.evaleach(design.input,filename,window,sr,frame);
+            y = sig.evaleach(design.input,filename,window,sr,innerframe);
             design.afteroptions.extract = [];
             y = design.main(y,design.duringoptions,design.afteroptions);
             if 0 %isa(d,'mirstruct') && isfield(d.frame,'dontchunk')
@@ -284,7 +281,15 @@ else
             end
         end    
     end
+    if design.nochunk && ...
+            ~isempty(frame) && frame.toggle
+        frate = sig.compute(@sig.getfrate,y{1}.Srate,frame);
+        y{1}.Ydata = y{1}.Ydata.frame(frame,y{1}.Srate);
+        y{1}.Frate = frate;
+    end
 end
+
+
 
 if iscell(y)
     for i = 1:length(y)
