@@ -26,7 +26,7 @@ function out = main(in,option,postoption)
     x = in{1};
     if ~strcmpi(x.yname,'Brightness')
         res = sig.compute(@routine,x.Ydata,x.xdata,option.cutoff);
-        x = sig.signal(res{1},'Name','Brightness',...
+        x = sig.signal(res,'Name','Brightness',...
                        'Srate',x.Srate,'Ssize',x.Ssize);
     end
     out = {x};
