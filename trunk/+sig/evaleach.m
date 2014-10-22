@@ -14,16 +14,16 @@
 % + pattern mining + ...", AES 53RD INTERNATIONAL CONFERENCE, London, UK,
 % 2014
 
-function y = evaleach(design,filename,window,sr,frame,chunking,nbsamples) %,single,name
+function y = evaleach(design,filename,window,sr,nargout,frame,chunking,nbsamples) %,single,name
 % The last three arguments are not used when sig.evaleach is called for the
 % first time, by sig.design.eval.
-if nargin<5
+if nargin<6
     frame = [];
 end
-if nargin<6
+if nargin<7
     chunking = 0;
 end
-if nargin<7 && length(window) > 1
+if nargin<8 && length(window) > 1
     nbsamples = window(2)-window(1)+1;
 end
 
@@ -122,7 +122,7 @@ else
         frame = design.frame;
     end    
     if chunking % Already in a chunk decomposition process
-        y = sig.evaleach(design.input,filename,window,sr,frame,chunking);
+        y = sig.evaleach(design.input,filename,window,sr,1,frame,chunking);
         switch chunking 
             case 1
                 after = design.afteroptions;
@@ -131,7 +131,7 @@ else
         end
         y = design.main(y,design.duringoptions,after);
     elseif design.nochunk % && isempty(d.tmpfile)
-        y = sig.evaleach(design.input,filename,window,sr,[],chunking);
+        y = sig.evaleach(design.input,filename,window,sr,1,[],chunking);
         y = design.main(y,design.duringoptions,design.afteroptions);
     else
         %frnochunk = isfield(d.frame,'dontchunk');
@@ -215,8 +215,8 @@ else
                 end
 
                 chunking = 1;
-                ss = sig.evaleach(design.input,filename,window,sr,frame,...
-                                  chunking,nbsamples);
+                ss = sig.evaleach(design.input,filename,window,sr,1,...
+                                  frame,chunking,nbsamples);
                 if length(ss)>1 && isstruct(ss{2})
                     design.input.tmpfile = ss{2};
                     chunking = 2;
@@ -229,7 +229,7 @@ else
                     options.tmp = ss{2};
                 end
 
-                y = combinechunks(y,ss,i,design,chunks);
+                y = combinechunks(y,ss,i,design,chunks,nargout);
 
                 clear ss
                 if ~isempty(h)
@@ -273,7 +273,7 @@ else
             else
                 innerframe = frame;
             end
-            y = sig.evaleach(design.input,filename,window,sr,innerframe);
+            y = sig.evaleach(design.input,filename,window,sr,1,innerframe);
             design.afteroptions.extract = [];
             y = design.main(y,design.duringoptions,design.afteroptions);
             if 0 %isa(d,'mirstruct') && isfield(d.frame,'dontchunk')
@@ -367,7 +367,7 @@ end
 
 
 %%
-function res = combinechunks(old,new,i,design,chunks) %,sg,single)
+function res = combinechunks(old,new,i,design,chunks,nargout) %,sg,single)
 if ~isempty(design.tmpfile) && design.tmpfile.fid > 0
     if i < size(chunks,2)
         fwrite(design.tmpfile.fid,new{1}.Ydata.content,'double');
@@ -389,7 +389,7 @@ else
     if old{1}.Frate
         res = combineframes(old,new);
     elseif old{1}.Srate
-        res = combinesamples(old,new);
+        res = combinesamples(old,new,nargout);
     else
         res = old;
         for z = 1:length(old)
@@ -414,21 +414,20 @@ end
 
 
 function old = combineframes(old,new)
-for var = 1:length(new)
-    old{1}.Ydata = old{1}.Ydata.concat(new{1}.Ydata,'frame');
-    if ~isempty(old{1}.peak)
-        old{1}.peak = old{1}.peak.concat(new{1}.peak,'frame');
-    end
+old{1}.Ydata = old{1}.Ydata.concat(new{1}.Ydata,'frame');
+if ~isempty(old{1}.peak)
+    old{1}.peak = old{1}.peak.concat(new{1}.peak,'frame');
 end
 
 
-function old = combinesamples(old,new)
+function old = combinesamples(old,new,nargout)
+% We can use the nargout parameter to avoid concatenating unused output
 for i = 1:length(new)
     if ~isa(old{i},'sig.signal')
         continue
     end
     old{i}.Ydata = old{i}.Ydata.concat(new{i}.Ydata,'sample');
-    if ~isempty(old{1}.peak)
+    if ~isempty(old{i}.peak)
         old{i}.peak = old{i}.peak.concat(new{i}.peak,'sample');
     end
 end
