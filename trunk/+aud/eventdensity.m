@@ -13,6 +13,8 @@ end
 
 %%
 function options = initoptions
+    options = sig.signal.signaloptions();
+
         frame.key = 'Frame';
         frame.type = 'Boolean';
         frame.default = 1;
@@ -36,6 +38,10 @@ end
 
 %%
 function [x type] = init(x,option,frame)
+    if isa(x,'sig.design')
+        x = x.eval;
+        x = x{1};
+    end
     if ~isa(x,'aud.Sequence')
         x = aud.minr(x);
     end
@@ -44,32 +50,39 @@ end
 
 
 function out = main(in,option,frame)
-    in.content;
-    
     fsize = frame.size.value;
     fhop = frame.hop.value; % Check unit..
     fhop = fsize * fhop;
-
-    t1 = in.content{1}.parameter.getfield('onset').value;
-    tend = in.content{end}.parameter.getfield('onset').value;
-    nbframes = ceil((tend - t1) / fhop);
     
-    t = zeros(1,nbframes);
-    ed = zeros(1,nbframes);
-    i1 = 1;
-    i2 = 1;
-    for i = 1:nbframes
-        t(i) = t1 + (i-1) * fhop;
-        while in.content{i2}.parameter.getfield('onset').value < t(i)+fhop
-            i2 = i2+1;
-            if i2 > length(in.content)
-                break
+    if isempty(in.content)
+        d = sig.data([],{'sample'});
+    else
+        t1 = in.content{1}.parameter.getfield('onset').value;
+        tend = in.content{end}.parameter.getfield('onset').value;
+        nbframes = ceil((tend - t1) / fhop);
+
+        t = zeros(1,nbframes);
+        ed = zeros(1,nbframes);
+        i1 = 1;
+        for i = 1:nbframes
+            t(i) = t1 + (i-1) * fhop;
+            i2 = i1;
+            while in.content{i2}.parameter.getfield('onset').value < t(i)+fsize
+                i2 = i2+1;
+                if i2 > length(in.content)
+                    break
+                end
+            end
+            ed(i) = i2 - i1;
+            while in.content{i1}.parameter.getfield('onset').value < t(i)+fhop
+                i1 = i1+1;
+                if i1 > length(in.content)
+                    break
+                end
             end
         end
-        ed(i) = i2 - i1;
+        d = sig.data(ed',{'sample'});
     end
-        
-    d = sig.data(ed',{'sample'});
     ed = sig.signal(d,'Name','Event density','Srate',1/fhop);
     out = {ed};
 end
