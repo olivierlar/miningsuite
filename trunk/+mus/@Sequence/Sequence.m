@@ -1,4 +1,4 @@
-classdef Sequence < seq.Sequence
+classdef Sequence < aud.Sequence
 %%
     properties
         scale
@@ -7,7 +7,7 @@ classdef Sequence < seq.Sequence
 %%
     methods
         function obj = Sequence(varargin)
-            obj = obj@seq.Sequence(varargin{:});
+            obj = obj@aud.Sequence(varargin{:});
         end
 %         function res = get(obj,param)
 %             c = obj.content;
