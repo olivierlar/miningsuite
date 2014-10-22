@@ -77,11 +77,14 @@ classdef design
         function res = istype(obj,type)
             res = strcmp(obj.type,type);
         end
-        function out = eval(obj,arg,folder)
+        function out = eval(obj,arg,nargout,folder)
             if nargin<2
                 arg = obj.files;
             end
             if nargin<3
+                nargout = 1;
+            end
+            if nargin<4
                 folder = 0;
             end
             if strcmpi(arg,'Folder') || strcmpi(arg,'Folders') % When is this used?
@@ -126,7 +129,7 @@ classdef design
             end
             out = cell(1,nfiles);
             for i = 1:nfiles
-                out{i} = sig.evaleach(obj,files{i},w(:,i),sr(i));
+                out{i} = sig.evaleach(obj,files{i},w(:,i),sr(i),nargout);
             end
             %if isempty(obj.input.main)
             %    out{1}.Ydata.design.input = files;
@@ -151,13 +154,13 @@ classdef design
                         return
                     end
                     for i = 1:length(files)
-                        out = obj.eval(files{i},1);
+                        out = obj.eval(files{i},1,1);
                         if ~isempty(out) && isa(out{1},'sig.signal')
                             out{1}.display;
                         end
                     end
                 else
-                    out = obj.eval(obj.files,0);
+                    out = obj.eval(obj.files,1,0);
                     if isa(out{1},'sig.signal')
                         out{1}.display;
                     end
