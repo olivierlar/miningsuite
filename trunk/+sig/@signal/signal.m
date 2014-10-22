@@ -152,7 +152,7 @@ classdef signal
             if ~obj.Srate
                 s = obj.xdata(1);
             else
-                s = obj.saxis.data(obj.Ydata.size('sample'));
+                s = obj.saxis.data(obj.Ydata.size('sample',1));
             end
         end
         

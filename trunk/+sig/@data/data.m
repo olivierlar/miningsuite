@@ -90,16 +90,19 @@ classdef data
             end
         end
         
-        function s = size(obj,field)
+        function s = size(obj,field,option)
             if nargin<2
                 field = 'element';
+            end
+            if nargin<3
+                option = 0;
             end
             dim = obj.whichdim(field);
             if isempty(dim)
                 s = 1;
                 return
             end
-            if iscell(obj.content)
+            if option && iscell(obj.content)
                 s = cell(1,length(obj.content));
                 for j = 1:length(obj.content)
                     s{j} = zeros(1,length(dim));
