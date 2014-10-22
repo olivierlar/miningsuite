@@ -1,6 +1,7 @@
-#summary sig.onsets: Estimation of notes onset time
+#summary Obsolete page
 
-= sig.onsets: Estimation of notes onset time =
+ sig.onsets: Estimation of notes onset time
+= Not valid anymore! Replaced by sig.envelope and aud.minr =
 
 Another way of determining the tempo is based on first the computation of an onset detection curve, showing the successive bursts of energy corresponding to the successive pulses. A peak picking is automatically performed on the onset detection curve, in order to show the estimated positions of the notes.
 
