@@ -112,70 +112,30 @@ end
 
 
 function out = read(out,name,options,concept,folder)
-fid = fopen(name);
-if fid<0
-    if ~folder
-        error('incorrect file');
-    end
-    return
+try
+    info = audioinfo(name);
+    
+    type = 'audio';
+catch
+    type = 'symbolic';
 end
-head = fread(fid,'uint8');
-fclose(fid);
-if 0
-    %nmat = [(0:5)',ones(6,2),[60;62;60;64;60;65],ones(6,1),(0:5)',ones(6,2)];
-    %p = [60;62;64;65];
-    %notes = struct('chro',num2cell([p;p;p;67;p;67;p;p]),...
-    %    'ons',num2cell([0 2 4 6 10 12 14 16 20 21 23 25 27 30 32 33 35 37 40 42 44 45 50 52 54 56]'),...
-    %    'dur',num2cell(ones(4*6+2,1)),'chan',num2cell(ones(4*6+2,1)));
-elseif isequal(head(1:4)',[77 84 104 100])  % MIDI format
-    nmat = mus.midi2nmat(name);
-    notes = struct('chro',num2cell(nmat(:,4)),'ons',num2cell(nmat(:,6)),...
-                   'dur',num2cell(nmat(:,7)),'chan',num2cell(nmat(:,3)));
-    out = process_notes(notes,out,name,options,concept,folder);
-elseif 1
-    fid = fopen(name,'rt');
-    if 0 % mathieu
-        C = textscan(fid,'%f %f %f %f %f %f %f %f %f %f %f %s \n');
-        notes = struct('chro',num2cell(C{1}),'ons',num2cell(C{8}),...
-                       'dur',num2cell(C{9}),'chan',num2cell(C{11}),...
-                       'harm',C{12});
-    elseif 0 % jakob
-        C = textscan(fid,'%f,%f,%f,%f\n');
-        notes = struct('chro',num2cell(C{1}),...
-                       'ons',num2cell(C{2}),...
-                       'dur',num2cell(C{3}-C{2}));
-        while ~feof(fid)
-            C = textscan(fid,'%f,%f,%f,%f\n');
-            if ~isempty(C{1})
-                notes(end+1) = struct('chro',num2cell(C{1}),...
-                                      'ons',num2cell(C{2}),...
-                                      'dur',num2cell(C{3}-C{2}));
-            end
-        end
-    elseif 1 % tom
-        C = textscan(fid,'(%s %f %f %s %f)\n');
-        C{1} = divscan(C{1});
-        C{4} = divscan(C{4});
-        notes = struct('chro',num2cell(C{2}),...
-                       'ons',num2cell(C{1}),...
-                       'dur',num2cell(C{4}),...
-                       'chan',0,...num2cell(C{5}),...
-                       'dia',num2cell(C{3}));
-    end
-    out = process_notes(notes,out,name,options,concept,folder);
-else
-    if options.t1 || options.t2
-        if isempty(options.t1)
-            options.t1 = 0;
-        end
-        if isempty(options.t2)
-            options.t2 = Inf;
-        end
-        a = miraudio('Design','Extract',options.t1,options.t2);
-    else
-        a = miraudio('Design');
-    end
-    if 1
+
+if strcmp(type,'audio')
+    
+    % Audio input
+    
+%     if options.t1 || options.t2
+%         if isempty(options.t1)
+%             options.t1 = 0;
+%         end
+%         if isempty(options.t2)
+%             options.t2 = Inf;
+%         end
+%         a = miraudio('Design','Extract',options.t1,options.t2);
+%     else
+%         a = miraudio('Design');
+%     end
+    if 0
         p = mirpitch(a,'Frame','Enhanced',0,'Segment',...
                        'SegPitchGap',45,'SegMinLength',2,'NoFilterBank');
         p = mireval(p,name);
@@ -187,6 +147,60 @@ else
         p = p{1};
     end
     out = transcribe(out,p,options,concept);
+else
+    % Symbolic input
+    fid = fopen(name);
+    if fid<0
+        if ~folder
+            error('incorrect file');
+        end
+        return
+    end
+    head = fread(fid,'uint8');
+    fclose(fid);
+    if 0
+        %nmat = [(0:5)',ones(6,2),[60;62;60;64;60;65],ones(6,1),(0:5)',ones(6,2)];
+        %p = [60;62;64;65];
+        %notes = struct('chro',num2cell([p;p;p;67;p;67;p;p]),...
+        %    'ons',num2cell([0 2 4 6 10 12 14 16 20 21 23 25 27 30 32 33 35 37 40 42 44 45 50 52 54 56]'),...
+        %    'dur',num2cell(ones(4*6+2,1)),'chan',num2cell(ones(4*6+2,1)));
+    elseif isequal(head(1:4)',[77 84 104 100])  % MIDI format
+        nmat = mus.midi2nmat(name);
+        notes = struct('chro',num2cell(nmat(:,4)),'ons',num2cell(nmat(:,6)),...
+                       'dur',num2cell(nmat(:,7)),'chan',num2cell(nmat(:,3)));
+        out = process_notes(notes,out,name,options,concept,folder);
+    elseif 1
+        fid = fopen(name,'rt');
+        if 0 % mathieu
+            C = textscan(fid,'%f %f %f %f %f %f %f %f %f %f %f %s \n');
+            notes = struct('chro',num2cell(C{1}),'ons',num2cell(C{8}),...
+                           'dur',num2cell(C{9}),'chan',num2cell(C{11}),...
+                           'harm',C{12});
+        elseif 0 % jakob
+            C = textscan(fid,'%f,%f,%f,%f\n');
+            notes = struct('chro',num2cell(C{1}),...
+                           'ons',num2cell(C{2}),...
+                           'dur',num2cell(C{3}-C{2}));
+            while ~feof(fid)
+                C = textscan(fid,'%f,%f,%f,%f\n');
+                if ~isempty(C{1})
+                    notes(end+1) = struct('chro',num2cell(C{1}),...
+                                          'ons',num2cell(C{2}),...
+                                          'dur',num2cell(C{3}-C{2}));
+                end
+            end
+        elseif 1 % tom
+            C = textscan(fid,'(%s %f %f %s %f)\n');
+            C{1} = divscan(C{1});
+            C{4} = divscan(C{4});
+            notes = struct('chro',num2cell(C{2}),...
+                           'ons',num2cell(C{1}),...
+                           'dur',num2cell(C{4}),...
+                           'chan',0,...num2cell(C{5}),...
+                           'dia',num2cell(C{3}));
+        end
+        out = process_notes(notes,out,name,options,concept,folder);
+    end
 end
 
 
@@ -284,9 +298,9 @@ end
 
 
 function out = transcribe(out,in,options,concept)
-ps = mus.paramstruct;
-if isa(in,'sig.envelope')
-    p = in{1}.sdata(in{1}.peak.content{1});
+ps = mus.paramstruct(options);
+if isa(in,'sig.Envelope')
+    p = sort(in.peakpos.content{1});
     memory = [];
     note = [];
     for i = 1:length(p)
@@ -295,7 +309,7 @@ if isa(in,'sig.envelope')
         note.address = i;
         out = out.integrate(note);
         if ~isempty(options)
-            [out.concept,memory] = process(out.concept,note,memory,options);
+            [out.concept,note,memory] = process(out.concept,note,memory,options);
         end
     end
 elseif isa(in,'mirpitch')
@@ -329,6 +343,9 @@ end
 
 function [concept,note,memo] = process(concept,note,memo,options,...
                                        pattern,mode,ioi)
+if nargin < 5
+   pattern = [];
+end
 address = note.address;
 pitch = note.parameter.getfield('chro').value;
 %channel = note.parameter.getfield('channel');
