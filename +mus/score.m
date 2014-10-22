@@ -17,14 +17,18 @@ if ~isempty(concept)
     mode = concept.modes;
 end
 
+nn = length(notes);
+if ~nn
+    warning('Warning in MUS.SCORE: The score is empty.')
+    return
+end
+
 if nargin < 3 || isempty(h)
     figure
 else
     axes(h);
 end
 hold on
-
-nn = length(notes);
 
 range.chr = [];
 range.let = [];
