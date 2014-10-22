@@ -13,7 +13,7 @@ end
 
 %%
 function options = initoptions
-    options = sig.signal.signaloptions(5,.2);
+    options = sig.signal.signaloptions(3,.1);
     
         method.type = 'String';
         method.choice = {'Autocor','Pattern'};
@@ -26,17 +26,18 @@ end
 function [x type] = init(x,option,frame)
     if strcmpi(option.method,'Autocor')
         if frame.toggle
-            x = sig.envelope(x,'FrameSize',frame.size.value,frame.size.unit,...
+            x = sig.envelope(x,'Halfwave','Diff',1,'Lambda',1,...
+                                'FrameSize',frame.size.value,frame.size.unit,...
                                'FrameHop',frame.hop.value,frame.hop.unit);
         else
-            x = sig.envelope(x);
+            x = sig.envelope(x,'Halfwave','Diff',1,'Lambda',1);
         end
         x = sig.autocor(x,'Max',5);
         x = sig.peaks(x,'Total',1,'NoBegin');
     elseif strcmpi(option.method,'Pattern')
         x = mus.minr(x,'Metre');
     end
-    type = 'sig.signal';
+    type = {'sig.signal','sig.Autocor'};
 end
 
 
@@ -55,16 +56,25 @@ function out = main(in,option,postoption)
         end
         d = sig.data(tp,{'sample'});
         t = sig.signal(d,'Name','Tempo','Srate',1);
+        out = {t};
     else
         x = in{1};
         if strcmpi(x.yname,'Tempo')
-            t = x;
+            out = in;
         else
             p = sig.compute(@routine,x.peakpos);
-            t = sig.signal(p,'Name','Tempo','Srate',in{1}.Srate);
+            pc = zeros(1,length(p.content));
+            for i = 1:length(p.content)
+                if isempty(p.content{i})
+                    pc(i) = NaN;
+                else
+                    pc(i) = p.content{i};
+                end
+            end
+            t = sig.signal(pc','Name','Tempo','Srate',in{1}.Srate);
+            out = {t in{1}};
         end
     end
-    out = {t};
 end
 
 
