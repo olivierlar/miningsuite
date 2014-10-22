@@ -4,7 +4,7 @@
 % the main folder of the MiningSuite distribution.
 function out = minr(arg,varargin)
 
-options = mus.options(initoptions,varargin);
+options = seq.options(initoptions,varargin);
 
 if isa(arg,'mus.Sequence')
     out = arg;
