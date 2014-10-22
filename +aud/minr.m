@@ -78,6 +78,10 @@ elseif isa(arg,'aud.Sequence')
     end
 elseif isa(arg,'sig.data')
     out = transcribe(arg);
+elseif isa(arg,'sig.signal')
+    e = sig.envelope(arg);
+    p = sig.peaks(e,'Threshold',.5);
+    out = transcribe(out,p,options);
 end
 
 
