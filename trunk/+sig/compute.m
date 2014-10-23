@@ -12,15 +12,18 @@
 % 2014
 
 function varargout = compute(algo,varargin)
-varargout = recurse(algo,varargin,nargout);
+varargout = recurse(algo,varargin,nargout,1);
 
 
-function argouts = recurse(algo,argins,nout)
+function argouts = recurse(algo,argins,nout,layer)
 arg1 = argins{1};
 if isa(arg1,'sig.data')
+    nblayers = arg1.layers;
     arg1 = arg1.content;
+else
+    nblayers = 1;
 end
-if iscell(arg1)
+if nblayers > layer
     l = length(arg1);
     argouts = cell(1,nout);
     for i = 1:l
@@ -45,7 +48,7 @@ if iscell(arg1)
                 end
             end
         end
-        y = recurse(algo,argi,nout);
+        y = recurse(algo,argi,nout,layer+1);
         if ~iscell(y)
             y = {y};
         end
