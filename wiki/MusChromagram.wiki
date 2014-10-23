@@ -1,0 +1,91 @@
+#summary mus.chromagram: Energy distribution along pitches
+
+= mus.chromagram: Energy distribution along pitches =
+
+The chromagram, also called Harmonic Pitch Class Profile, shows the distribution of energy along the pitches or pitch classes.
+<br><br>
+  * First the spectrum is computed in the logarithmic scale, with selection of, by default, the 20 highest dB, and restriction to a certain frequency range that covers an integer number of octaves, and normalization of the audio waveform before computation of the FFT.
+{{{
+s=sig.spectrum(…,'dB',20,'Min',fmin,'Max',fmax,'NormalInput','MinRes',r,'OctaveRatio',.85)
+}}}
+   * The minimal frequency _fmin_ is specified by the `'Min'` option (cf. below).
+   * The maximal frequency _fmax_ is at least equal to the `'Max'` option, but the frequency range is extended if necessary in order to obtain an integer number of octaves.
+   * The minimal frequency resolution of the spectrum is chosen such that even lowest chromas will be segregated from the spectrum. It is based on the number of chromas per octave _r_ (`'Res'` option , cf. below). Lowest frequencies are ignored if they do not meet this resolution constraint, and a warning message is sent by `sig.spectrum` (cf. `'OctaveRatio'` keyword).<p>
+   https://miningsuite.googlecode.com/svn/wiki/SigChromagram_ex1.png
+  * ￼The chromagram is a redistribution of the spectrum energy along the different pitches (i.e., “chromas”):
+{{{
+c=mus.chromagram(s,'Wrap','no')
+}}}
+
+https://miningsuite.googlecode.com/svn/wiki/SigChromagram_ex2.png
+
+  * If the `'Wrap'` option is selected, the representation is wrapped along the 12 pitch classes:
+{{{
+c=mus.chromagram(c,'Wrap','yes')
+}}}
+
+https://miningsuite.googlecode.com/svn/wiki/SigChromagram_ex3.png
+<br>
+
+
+== Flowchart Interconnections ==
+
+The `'Min'` and `'Max'` range used in sig.spectrum can be tuned directly in `mus.chromagram`, as well as the `'dB'` threshold (that can be written `'Threshold'` as well). These parameters are set by default to _Min_ = 100 Hz, _Max_ = 5000 Hz (Gómez, 2006) and _Threshold_ = 20 dB. However, it seems that the spectrum should span as closely as possible an integer number of octaves, in order to avoid emphasizing particular pitches covered more often than others. Hence the higher limit of the frequency range of the spectrum computation is increased accordingly. Hence for the default parameters value (_Min_ = 100 Hz, _Max_ = 5000 Hz), the actual maximum frequency _fmax_ is set to 6400 Hz. The `'MinRes'` value corresponds to the `'Res'` chromagram resolution parameter, as explained in the option section below.
+
+`mus.chromagram` accepts either:
+
+  * `sig.spectrum` objects,<p>
+  * `sig.input` objects , where the audio waveform can be segmented (using `sig.segment`), decomposed into channels (using `sig.filterbank`), and/or decomposed into frames (using `sig.frame` or the `'Frame'` option, with by default a frame length of 200 ms and a hop factor of .05),<p>
+  * file name(s) or the `'Folder'` keyword.
+<br>
+
+
+== Frame decomposition ==
+
+`mus.chromagram(…,'Frame',…)` performs first a frame decomposition, with by default a frame length of 200 ms and a hop factor of 5% (10 ms). For the specification of other frame configuration using additional parameters, cf. the previous SigFrame vs. 'Frame' section.
+<br><br>
+
+
+== Options ==
+
+  * `c = mus.chromagram(…,'Tuning',`_t_`)` specifies the frequency (in Hz.) associated to  chroma C. Default value, _t_ = 261.6256 Hz.<p>
+  * `c = mus.chromagram(…,'Triangle')` weights the contribution of each frequency with respect to the distance with the actual frequency of the corresponding chroma.<p>
+  * `c = mus.chromagram(…,'Weight',`_o_`)` specifies the relative radius of the weighting window, with respect to the distance between frequencies of successive chromas.
+   * _o_ = `1`: each window begins at the centers of the previous one.
+   * _o_ = `.5`: each window begins at the end of the previous one. (default value)<p>
+  * `c = mus.chromagram(…,'Res',`_r_`)` indicates the resolution of the chromagram in number of bins per octave. Default value, _r_ = 12.
+<br>
+
+
+== Post-processing operations ==
+
+  * `c = mus.chromagram(…,'Wrap',`_w_`)` specifies whether the chromagram is wrapped or not.
+   * _w_ = `'yes'`: groups all the pitches belonging to same pitch classes (default value)
+   * _w_ = `'no'`: pitches are considered as absolute values.<p>
+  * `c = mus.chromagram(…,'Center')` centers the result.<p>
+  * `c = mus.chromagram(…,'Normal',`_n_`)` normalizes the result, using the n-norm. The default value is _n_ = Inf, corresponding to a normalization by the maximum value. _n_ = 0 toggles off the normalization. Alternative keyword: `'Norm'`.<p>
+  * `c = mus.chromagram(…,'Pitch',`_p_`)` specifies how to label chromas in the figures.
+   * _p_ = `'yes'`: chromas are labeled using pitch names (default)
+   * _p_ = `'no'`: chromas are labeled using MIDI pitch numbers.
+
+
+
+== Example ==
+{{{
+mus.chromagram('ragtime','Frame')
+}}}
+
+https://miningsuite.googlecode.com/svn/wiki/SigChromagram_ex4.png
+
+<br>
+
+
+== ￼Accessible Output ==
+cf. §5.2 for an explanation of the use of the `'get'` method. Specific fields:
+  * `'Magnitude'`: same as `'Data'`,<p>
+  * `'Chroma'`: the chroma related to each magnitude (same as `'Pos'`),<p>
+  * `'ChromaClass'`: the chroma class (`'A'`, `'A#'`, `'B'`, etc.) related to each chroma,<p>
+  * `'ChromaFreq'`: the central frequency of each chroma, in the unwrapped representation,<p>
+  * `'Register'`: the octave position,<p>
+  * `'PitchLabel'`: whether the chroma are represented as simple numeric positions (0), or as couples (ChromaClass, Register) (1).<p>
+  * `'Wrap'`: whether the chromagram is represented along all possible chromas (0), or along the 12 chroma-classes only (1).
