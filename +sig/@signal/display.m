@@ -18,13 +18,14 @@ function display(obj)
         ydata = obj.Ydata;
         iscurve = (length(obj.Sstart) == 1);  
         
-    elseif isempty(obj.xdata) ... % Variable number of data points per sample
-            || length(obj.xdata) < 2   % Always one data point per sample
-        if length(obj.xdata) < 2
-            iscurve = 1;
-        else
-            iscurve = -1;
-        end
+    elseif length(obj.xdata) < 2   
+        switch length(obj.xdata)
+            case 0
+                % Variable number of data points per sample
+                iscurve = -1;
+            case 1
+                iscurve = 1;
+        end            
         abscissa = 'sdata';
         Xaxis = obj.saxis;
         ydata = obj.Ydata;
@@ -46,6 +47,9 @@ function display(obj)
     hold on
     
     nchans = obj.Ydata.size('freqband');
+    if iscell(nchans)
+        nchans = nchans{1};
+    end
     for i = 1:nchans
         if nchans > 1
             subplot(nchans,1,nchans-i+1,'align');
@@ -79,8 +83,14 @@ function display(obj)
             if iscell(ydatai.content)
                 if strcmp(abscissa,'sdata')
                     sdata = obj.sdata;
-                    for j = 1:length(ydata.content)
-                        plot(sdata{j},squeeze(ydatai.content{j}));
+                    if iscell(sdata)
+                        for j = 1:length(ydata.content)
+                            plot(sdata{j},squeeze(ydatai.content{j}));
+                        end
+                    else
+                        for j = 1:length(ydata.content)
+                            plot(sdata(j),squeeze(ydatai.content{j}),'+');
+                        end
                     end
                 else
                     
