@@ -9,13 +9,13 @@ function options = options
         min.key = 'Min';
         min.type = 'Numeric';
         min.default = 0;
-        min.when = 'After';
+        min.when = 'Both';
     options.min = min;
     
         max.key = 'Max';
         max.type = 'Numeric';
         max.default = Inf;
-        max.when = 'After';
+        max.when = 'Both';
     options.max = max;
     
         mr.key = 'MinRes';
