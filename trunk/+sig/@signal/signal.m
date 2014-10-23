@@ -77,6 +77,7 @@ classdef signal
         files
         
         peakpos
+        peakval
     end
 %%
     methods
@@ -216,12 +217,14 @@ classdef signal
         end    
         function p = get.peakpos(obj)
             if strcmp(obj.peakdim,'sample')
-                data = obj.sdata;
+                pos = obj.sdata;
             else
-                data = obj.xdata;
+                pos = obj.xdata;
             end
-            p = sig.compute(@peakpos,obj.peak,data);
-            %p = p{1};
+            p = sig.compute(@peakpos,obj.peak,pos);
+        end
+        function p = get.peakval(obj)
+            p = sig.compute(@peakval,obj.peak,obj.Ydata);
         end
         function b = istype(obj,type)
             b = strcmp(class(obj),type);
@@ -493,8 +496,19 @@ function d = sonifier(d,varargin)
 end
 
 
-function out = peakpos(d,p) %,peakdim)
-    d.content = p(d.content);
-    %e = d.select(peakdim,p,'{}');
+function out = peakpos(d,p)
+    d = d.apply(@peakroutine,{p},{'element'},1,'{}');
     out = {d};
+end
+
+
+function out = peakval(d,v)
+    d = d.apply(@peakroutine,{v},{'element'},1,'{}');
+    out = {d};
+end
+
+
+function d = peakroutine(d,v)
+    d = v(d);
+    d = d(:);
 end
