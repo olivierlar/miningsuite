@@ -142,11 +142,19 @@ if strcmp(type,'audio')
         p = p{1};
     else
         e = sig.envelope(name);
-        p = sig.peaks(e,'Threshold',.5);
-        p = p.eval;
-        p = p{1};
+        t = sig.peaks(e,'Threshold',.5);
+        s = sig.segment(name,t);
+        t = t.eval;
+        t = t{1};
+        
+        p = aud.pitch(s,'Total',1);
+        p = p.Ydata.content;
+        pp = zeros(1,length(p));
+        for i = 1:length(p)
+            pp(i) = p{i}{1};
+        end
     end
-    out = transcribe(out,p,options,concept);
+    out = transcribe(out,{t,pp},options,concept);
 else
     % Symbolic input
     fid = fopen(name);
@@ -299,12 +307,26 @@ end
 
 function out = transcribe(out,in,options,concept)
 ps = mus.paramstruct(options);
-if isa(in,'sig.Envelope')
-    p = sort(in.peakpos.content{1});
+if iscell(in)
+    t = sort(in{1}.peakpos.content{1});
+    p = in{2};
     memory = [];
     note = [];
-    for i = 1:length(p)
-        param = mus.param(ps,0,NaN,NaN,p(i),p(i)+.01);
+    for i = 1:length(t)
+        param = mus.param(ps,p(i),NaN,NaN,t(i),t(i)+.01);
+        note = pat.event(out,param,note);
+        note.address = i;
+        out = out.integrate(note);
+        if ~isempty(options)
+            [out.concept,note,memory] = process(out.concept,note,memory,options);
+        end
+    end
+elseif isa(in,'sig.Envelope')
+    t = sort(in.peakpos.content{1});
+    memory = [];
+    note = [];
+    for i = 1:length(t)
+        param = mus.param(ps,0,NaN,NaN,t(i),t(i)+.01);
         note = pat.event(out,param,note);
         note.address = i;
         out = out.integrate(note);
@@ -345,6 +367,12 @@ function [concept,note,memo] = process(concept,note,memo,options,...
                                        pattern,mode,ioi)
 if nargin < 5
    pattern = [];
+end
+if nargin < 6
+    mode = [];
+end
+if nargin < 7
+    ioi = [];
 end
 address = note.address;
 pitch = note.parameter.getfield('chro').value;
