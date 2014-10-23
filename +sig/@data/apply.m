@@ -7,6 +7,7 @@ function [obj varargout] = apply(obj,func,argin,dimfunc,ndimfunc,type)
         type = '()';
     end
     
+    multioutput = 0;
     data = obj.content;
     if isempty(data)
         return
@@ -97,6 +98,7 @@ function [obj varargout] = apply(obj,func,argin,dimfunc,ndimfunc,type)
                 if iscell(newdatai)
                     maindata = newdata;
                     newdata = cell(1,length(newdatai));
+                    multioutput = 1;
                     for j = 1:length(newdatai)
                         newdata{j} = maindata;
                     end
@@ -144,6 +146,7 @@ function [obj varargout] = apply(obj,func,argin,dimfunc,ndimfunc,type)
         newdata = ipermute(newdata,ordim);
     end
     obj.content = newdata;
+    obj.multioutput = multioutput;
 end
 
 
