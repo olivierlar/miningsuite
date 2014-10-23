@@ -83,7 +83,17 @@ function [obj varargout] = apply(obj,func,argin,dimfunc,ndimfunc,type)
             newdatai = func(argini{:});
         elseif nargout == 2
             [newdatai varargout{1}] = func(argini{:});
-            % Full reconstruction not implemented yet.
+        elseif nargout == 3
+            [newdatai varargout{1} varargout{2}] = ...
+                func(argini{:});
+        elseif nargout == 4
+            [newdatai varargout{1} varargout{2} varargout{3}] = ...
+                func(argini{:});
+        elseif nargout == 5
+            [newdatai varargout{1} varargout{2} varargout{3} ...
+                varargout{4}] = func(argini{:});
+        else
+            error('sig.data.apply: Full reconstruction not implemented yet.');
         end
 
         if i == 1

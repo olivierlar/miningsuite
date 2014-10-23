@@ -66,7 +66,7 @@ classdef axis
                 index = param.value;
             else
                 if ~isempty(obj.subunit) && ...
-                    strcmpi(param.unit,obj.subunit.unitname)
+                        strcmpi(param.unit,obj.subunit.unitname)
                     param.value = obj.subunit.converter(param.value);
                     param.value = param.value(end:-1:1);
                     %param.unit = obj.unit.name;
