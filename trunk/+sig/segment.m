@@ -5,9 +5,13 @@
 % License: New BSD License. See full text of the license in LICENSE.txt in
 % the main folder of the MiningSuite distribution.
 
-function varargout = segment(varargin)
-    varargout = sig.operate('sig','segment',initoptions,...
-                            @init,@main,varargin,'concat_sample');
+function s = segment(varargin)
+    s = sig.operate('sig','segment',initoptions,...
+                     @init,@main,varargin,'concat_sample');
+    if isa(s{1},'sig.design')
+        s = s{1}.eval;
+        s = s{1};
+    end
 end
                     
                     
@@ -79,6 +83,7 @@ function out = main(in,option,postoption)
         end
 %    end
     x.Ydata.content = s;
+    x.Ydata.layers = 2;
     x.Sstart = Sstart;
     out = {x};
 end
