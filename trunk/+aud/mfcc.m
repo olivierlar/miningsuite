@@ -47,7 +47,7 @@ function [x type] = init(x,option,frame)
     if ~x.istype('aud.mfcc')
         x = aud.spectrum(x,'Mel','log','Bands',option.nbbands);
     end
-    type = 'aud.mfcc';
+    type = {'aud.mfcc','sig.Spectrum'};
 end
 
 
@@ -55,12 +55,13 @@ function out = main(in,option,postoption)
     x = in{1};
     if isa(x,'aud.mfcc')
         % Not done yet.
+        out = in;
     else
         res = sig.compute(@routine,x.Ydata,option.rank);
         x = aud.Mfcc(res,'Srate',x.Srate,'Ssize',x.Ssize);
+        x = after(x,postoption);
+        out = {x in{1}};
     end
-    x = after(x,postoption);
-    out = {x};
 end
 
 
