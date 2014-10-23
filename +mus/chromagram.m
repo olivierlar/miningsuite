@@ -1,5 +1,4 @@
 % MUS.CHROMAGRAM
-% music-theoretical representation of autocorrelation function
 %
 % Copyright (C) 2014, Olivier Lartillot
 %
@@ -7,7 +6,7 @@
 % License: New BSD License. See full text of the license in LICENSE.txt in
 % the main folder of the MiningSuite distribution.
 
-function varargout = autocor(varargin)
+function varargout = chromagram(varargin)
     varargout = sig.operate('mus','chromagram',initoptions,...
                             @init,@main,varargin);
 end
@@ -64,6 +63,7 @@ function options = initoptions
         res.key = 'Res';
         res.type = 'Numeric';
         res.default = 12;
+        res.when = 'Both';
     options.res = res;
 
         origin.key = 'Tuning';
@@ -169,11 +169,6 @@ function m = algo(m,mat,fz)
 end
 
 
-function out = after(x,postoption)
-    out = x;
-end
-
-
 function c = freq2chro(f,res,origin)
     c = round(res*log2(f/origin));
 end
@@ -184,10 +179,22 @@ function f = chro2freq(c,res,origin)
 end
 
 
-function y = vectnorm(x,p)
-    if isinf(p)
-        y = max(x);
-    else
-        y = sum(abs(x).^p).^(1/p);
+%%
+function x = after(x,postoption)
+    if postoption.wrp && ~x.wrap
+        x.Ydata = sig.compute(@wrap,x.Ydata,x.chromaclass,postoption.res);
+    end
+end
+
+
+function x = wrap(x,cc,res)
+    x = x.apply(@wrap_algo,{cc,res},{'element'},1);
+end
+
+
+function m2 = wrap_algo(m,cc,res)
+    m2 = zeros(res,1);
+    for i = 1:length(m)
+        m2(cc(i)+1) = m2(cc(i)+1) + m(i);
     end
 end
