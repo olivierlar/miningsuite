@@ -52,6 +52,7 @@ function [obj varargout] = apply(obj,func,argin,dimfunc,ndimfunc,type)
     for j = 1:length(argin)
         if isa(argin{j},'sig.data')
             argin{j} = argin{j}.content;
+            argin{j} = permute(argin{j},ordim);
             if iscell(argin{j})
                 oldtype = '{}';
             else
@@ -108,11 +109,19 @@ function [obj varargout] = apply(obj,func,argin,dimfunc,ndimfunc,type)
                 else
                     newdata = zeros([size(newdatai),extradims]);
                 end
-                newargs = args;
+                if strcmp(type,args{1}.type)
+                    newargs = args;
+                else
+                    newargs = recurse(data,start,ndimfunc+1,ndimdata,{},type);
+                end                
                 
             else
                 newdata = newdatai; %data;
-                newargs = args;
+                if strcmp(type,args{1}.type)
+                    newargs = args;
+                else
+                    newargs = recurse(data,start,ndimfunc+1,ndimdata,{},type);
+                end   
             end
             
             
