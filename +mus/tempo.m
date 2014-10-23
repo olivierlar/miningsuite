@@ -25,14 +25,16 @@ end
 %%
 function [x type] = init(x,option,frame)
     if strcmpi(option.method,'Autocor')
-        if frame.toggle
-            x = sig.envelope(x,'Halfwave','Diff',1,'Lambda',1,...
-                                'FrameSize',frame.size.value,frame.size.unit,...
-                               'FrameHop',frame.hop.value,frame.hop.unit);
-        else
-            x = sig.envelope(x,'Halfwave','Diff',1,'Lambda',1);
+        if ~x.istype('sig.autocor')
+            if frame.toggle
+                x = sig.envelope(x,'Halfwave','Diff',1,'Lambda',1,...
+                                    'FrameSize',frame.size.value,frame.size.unit,...
+                                   'FrameHop',frame.hop.value,frame.hop.unit);
+            else
+                x = sig.envelope(x,'Halfwave','Diff',1,'Lambda',1);
+            end
+            x = sig.autocor(x,'Max',5);
         end
-        x = sig.autocor(x,'Max',5);
         x = sig.peaks(x,'Total',1,'NoBegin');
     elseif strcmpi(option.method,'Pattern')
         x = mus.minr(x,'Metre');
