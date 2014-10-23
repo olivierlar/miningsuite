@@ -1,6 +1,6 @@
 function varargout = brightness(varargin)
     varargout = sig.operate('aud','brightness',...
-                            initoptions,@init,@main,varargin,'plus');
+                            initoptions,@init,@main,varargin);
 end
 
 
@@ -41,8 +41,4 @@ end
 
 function y = algo(m,f,f0)
     y = sum(m(f > f0,:,:)) ./ sum(m);
-end
-
-
-function x = after(x)
 end
