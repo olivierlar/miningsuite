@@ -26,14 +26,14 @@ function out = after(x,postoption)
         end
         param.value = [postoption.min.value,postoption.max.value];
         param.unit = postoption.min.unit;
-        x = x.extract(param,'element','Xaxis','Ydata','window');
+        x = x.extract(param,'element','Xaxis','Ydata'); %,'window');
     end
 
     if not(isequal(postoption.normwin,0) || ...
            strcmpi(postoption.normwin,'No') || ...
            strcmpi(postoption.normwin,'Off') || ...
            x.normalized)
-        x = x.normalize;
+        %x = x.normalize;
     end
     if postoption.hwr
         x = x.hwr;
