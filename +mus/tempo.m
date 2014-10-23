@@ -67,10 +67,10 @@ function out = main(in,option,postoption)
             p = sig.compute(@routine,x.peakpos);
             pc = zeros(1,length(p.content));
             for i = 1:length(p.content)
-                if isempty(p.content{i})
+                if isempty(p.content(i))
                     pc(i) = NaN;
                 else
-                    pc(i) = p.content{i};
+                    pc(i) = p.content(i);
                 end
             end
             t = sig.signal(pc','Name','Tempo','Srate',in{1}.Srate);
