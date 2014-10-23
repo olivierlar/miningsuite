@@ -140,7 +140,7 @@ classdef signal
         %end
         function x = get.xdata(obj)
             if ~obj.xsampling
-                x = []; %obj.xstart;
+                x = obj.xstart;
             else
                 x = obj.Xaxis.data(obj.Ydata.size('element'));
             end
