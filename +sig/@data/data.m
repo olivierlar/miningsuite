@@ -19,9 +19,8 @@ classdef data
 %%
     properties
         content
-        %design
         dims
-        %layers
+        layers = 1
     end
 %%
     methods
