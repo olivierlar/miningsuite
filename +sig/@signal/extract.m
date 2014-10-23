@@ -3,14 +3,28 @@ function obj = extract(obj,param,dim,axis,varargin)
     for i = 1:length(varargin)
         argins{i} = obj.(varargin{i});
     end
-    out = sig.compute(@main,argins{1},param,dim,obj.(axis),argins(2:end));
-    for i = 1:length(varargin)
-        obj.(varargin{i}) = out{i};
+    switch length(varargin)
+        case 1
+            [obj.(varargin{1}) start] = ...
+                sig.compute(@main,argins{1},param,dim,...
+                            obj.(axis),argins(2:end));
+        case 2
+            [obj.(varargin{1}) obj.(varargin{2}) start] =...
+                sig.compute(@main,argins{1},param,dim,...
+                            obj.(axis),argins(2:end));
+        otherwise
+            error('Not implemented yet');
     end
     if strcmp(dim,'sample')
-        obj.Sstart = out{i+1};
+        obj.Sstart = start;
     elseif strcmp(dim,'element')
-        obj.Xaxis.start = obj.Xaxis.start + out{i+1};
+        if iscell(start)
+            for i = 1:length(start)
+                obj.Xaxis.start{i} = obj.Xaxis.start{i} + start{i};
+            end
+        else
+            obj.Xaxis.start = obj.Xaxis.start + start;
+        end
     end
 end
     
@@ -51,5 +65,5 @@ function out = main(d,param,dim,axis,fields)
         fields{i} = fields{i}.extract(dim,[x1,x2]);
     end
     
-    out = {{d fields{:} x1}};
+    out = {d fields{:} x1};
 end
