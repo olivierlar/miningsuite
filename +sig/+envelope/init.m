@@ -1,6 +1,6 @@
 function [x type] = init(x,option,frame)
     type = 'sig.Envelope';
-    if isa(x,'sig.Envelope') %cf. isamir
+    if x.istype('sig.Envelope')
         return
     end
     if strcmpi(option.method,'Filter')
