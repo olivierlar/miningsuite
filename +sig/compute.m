@@ -38,6 +38,8 @@ if nblayers > layer
                         argi{j}.content = argj(i);
                     end
                 end
+            elseif isa(argi{j},'sig.axis')
+                argi{j}.start = argi{j}.start{i};
             else
                 if length(argi{j}) == l
                     if iscell(argi{j})
