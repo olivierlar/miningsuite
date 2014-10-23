@@ -21,6 +21,7 @@ classdef data
         content
         dims
         layers = 1
+        multioutput = 0;
     end
 %%
     methods
@@ -101,7 +102,8 @@ classdef data
                 s = 1;
                 return
             end
-            if option && iscell(obj.content)
+            if (option && obj.multioutput) || ...
+                    (obj.layers == 2 && iscell(obj.content))
                 s = cell(1,length(obj.content));
                 for j = 1:length(obj.content)
                     s{j} = zeros(1,length(dim));
