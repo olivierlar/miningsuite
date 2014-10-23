@@ -1,3 +1,13 @@
+% AUD.SPECTRUM
+% auditory modeling of spectrum decomposition
+%
+% Copyright (C) 2014, Olivier Lartillot
+% Copyright (C) 1998, Malcolm Slaney, Interval Research Corporation
+%
+% All rights reserved.
+% License: New BSD License. See full text of the license in LICENSE.txt in
+% the main folder of the MiningSuite distribution.
+
 function out = after(x,postoption)
     x = sig.spectrum.after(x,postoption);
     if iscell(x)
