@@ -40,7 +40,7 @@
 %
 % MusMinr
 %  Music analysis.
-%   mus.minr        - Analysis in the symbolic domain.
+%   mus.score        - Analysis in the symbolic domain.
 %   mus.autocor
 %   mus.spectrum
 %   mus.tempo       - Tempo estimation.

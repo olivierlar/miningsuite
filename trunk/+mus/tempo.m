@@ -37,7 +37,7 @@ function [x type] = init(x,option,frame)
         end
         x = sig.peaks(x,'Total',1,'NoBegin');
     elseif strcmpi(option.method,'Pattern')
-        x = mus.minr(x,'Metre');
+        x = mus.score(x,'Metre');
     end
     type = {'sig.signal','sig.Autocor'};
 end
