@@ -183,6 +183,18 @@ classdef design
             end
             sig.ans(out);
         end
+        function d = getdata(obj)
+            v = obj.eval;
+            d = v{1}.getdata;
+        end
+        function p = getpeakpos(obj)
+            v = obj.eval;
+            p = v{1}.getpeakpos;
+        end
+        function v = getpeakval(obj)
+            v = obj.eval;
+            v = v{1}.getpeakval;
+        end
         function show(obj,varargin)
             if isempty(obj.input)
                 return
