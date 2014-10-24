@@ -43,7 +43,7 @@ function [x type] = init(x,option,frame)
         x = x{1};
     end
     if ~isa(x,'aud.Sequence')
-        x = aud.minr(x);
+        x = aud.score(x);
     end
     type = 'sig.signal';
 end
