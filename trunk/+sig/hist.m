@@ -22,7 +22,7 @@ end
 function out = main(in,option,postoption)
     x = in{1};
     if ~strcmpi(x.yname,'Histogram')
-        res = sig.compute(@routine,x.Ydata);
+        res = sig.compute(@routine,x.Ydata,option.n);
         x = sig.signal(res,'Name','Histogram',...
                        'Xsampling',1,'Xstart',1,...res{2},...
                        'Srate',x.Frate,'Ssize',x.Ssize);
@@ -31,20 +31,20 @@ function out = main(in,option,postoption)
 end
 
 
-function out = routine(d)
+function out = routine(d,nbins)
     if find(strcmp('element',d.dims))
         dim = 'element';
     else
         dim = 'sample';
     end
-    out = d.apply(@algo,{},{dim},1);
+    out = d.apply(@algo,{nbins},{dim},1);
     if strcmp(dim,'sample')
         out = out.deframe;
     end
 end
 
 
-function [n, xout] = algo(x)
-    [n xout] = hist(x);
+function [n, xout] = algo(x,nbins)
+    [n xout] = hist(x,nbins);
     n = n';
 end
