@@ -123,11 +123,11 @@ classdef signal
                 return
             end
             if ~iscell(d)
-                return
+                d = {d};
             end
             if isa(d{1},'sig.data')
                 for i = 1:length(d)
-                    d{i} = d{i}.content;
+                    d{i} = squeeze(d{i}.content);
                 end
             end
             if length(d) == 1
@@ -225,6 +225,36 @@ classdef signal
         end
         function p = get.peakval(obj)
             p = sig.compute(@peakval,obj.peak,obj.Ydata);
+        end
+        function p = getpeakpos(obj)
+            p = obj.peakpos;
+            if isempty(p)
+                p = [];
+                return
+            end
+            if isa(p,'sig.data')
+                for i = 1:length(p)
+                    p = squeeze(p.content);
+                end
+            end
+            if length(p) == 1
+                p = p{1};
+            end
+        end
+        function v = getpeakval(obj)
+            v = obj.peakval;
+            if isempty(v)
+                v = [];
+                return
+            end
+            if isa(v,'sig.data')
+                for i = 1:length(v)
+                    v = squeeze(v.content);
+                end
+            end
+            if length(v) == 1
+                v = v{1};
+            end
         end
         function b = istype(obj,type)
             b = strcmp(class(obj),type);
