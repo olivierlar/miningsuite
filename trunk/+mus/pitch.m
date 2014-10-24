@@ -14,6 +14,11 @@ end
 %%
 function options = initoptions
     options = sig.signal.signaloptions(3,.1);
+    
+        inter.key = 'Inter';
+        inter.type = 'Boolean';
+        inter.default = 0;
+    options.inter = inter;    
 end
 
 
@@ -38,8 +43,15 @@ function out = main(in,option)
             p(i) = in.content{i}.parameter.getfield('chro').value;
             t(i) = in.content{i}.parameter.getfield('onset').value;
         end
+        if option.inter
+            p = diff(p);
+            t(end) = [];
+            nam = 'Inter-Pitch';
+        else
+            nam = 'Pitch';
+        end
         d = sig.data(p,{'sample'});
-        out = {sig.signal(d,'Name','Pitch','Xdata',t,'Srate',0)};
+        out = {sig.signal(d,'Name',nam,'Xdata',t,'Srate',0)};
     end
 end
 
