@@ -32,10 +32,10 @@ classdef Sequence < aud.Sequence
             disp(obj.name)
             if iscell(obj.files)
                 for i = 1:length(obj.content)
-                    mus.score(obj,h,i);
+                    mus.display(obj,h,i);
                 end
             else
-                mus.score(obj,h);
+                mus.display(obj,h);
             end
         end
         function save(obj,name)
