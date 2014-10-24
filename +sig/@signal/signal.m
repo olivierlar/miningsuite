@@ -35,6 +35,7 @@ classdef signal
         xstart
         xunit
         xsampling
+        xunsampled
                 
         Sstart
         Srate
@@ -101,6 +102,8 @@ classdef signal
             s.xunit = options.xunit;
             s.xsampling = options.xsampling;
             
+            s.xunsampled = options.xdata;
+            
             s.Sstart = options.sstart;
             s.Srate = options.srate;
             s.Ssize = options.ssize;
@@ -139,7 +142,9 @@ classdef signal
         %    x = sig.axis(obj.xname,obj.xstart,obj.xunit,0,obj.xsampling);
         %end
         function x = get.xdata(obj)
-            if ~obj.xsampling
+            if ~isempty(obj.xunsampled)
+                x = obj.xunsampled;
+            elseif ~obj.xsampling
                 x = obj.xstart;
             else
                 x = obj.Xaxis.data(obj.Ydata.size('element'));
@@ -334,6 +339,11 @@ function options = constructoptions
         xstart.type = 'Numeric';
         xstart.default = 1;
     options.xstart = xstart;
+    
+        xdata.key = 'Xdata';
+        xdata.type = 'Numeric';
+        xdata.default = [];
+    options.xdata = xdata;
     
         xsampling.key = 'Xsampling';
         xsampling.type = 'Numeric';

@@ -34,7 +34,7 @@ function display(obj)
         iscurve = 0;
         f = obj.sdata;
         t = [f 2*f(end)-f(end-1)]; %% Caution: does not work with frames longer than input
-        x = obj.xdata';
+        x = obj.xdata(:);
         x = [ 1.5*x(1) - 0.5*x(2); ...
               (x(1:end-1) + x(2:end)) / 2; ...
               1.5*x(end) - 0.5*x(end-1) ];
