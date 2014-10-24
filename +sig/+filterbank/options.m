@@ -22,7 +22,7 @@ function options = options
     
         freq.key = 'CutOff';
         freq.type = 'Integer';
-        %freq.default = NaN;
+        freq.default = [-Inf 1000 Inf];
     options.freq = freq;
     
         overlap.key = 'Hop';
