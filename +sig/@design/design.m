@@ -111,9 +111,15 @@ classdef design
                 end
             else
                 [sz,ch,sr] = fileinfo(arg,folder);
-                if ~sz
-                    out = [];
-                    return
+                if isempty(sz)
+                    if strcmp(obj.package,'mus')
+                        x = mus.score(arg);
+                        out = obj.main(x,obj.duringoptions);
+                        return
+                    else
+                        out = [];
+                        return
+                    end
                 end
                 if isempty(obj.extract)
                     w = [1;sz];
