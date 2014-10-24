@@ -149,7 +149,7 @@ while i <= length(args)
                     elseif isfield(options.(field),'keydefault')
                         optionvalue = optionspec.(field).keydefault(1);
                     else
-                        error(['SYNTAX ERROR IN MUS.MINR: ',...
+                        error(['SYNTAX ERROR IN MUS.SCORE: ',...
                             'Data should follow the key ',arg'.']);
                     end
                 end
@@ -175,7 +175,7 @@ while i <= length(args)
         if isnumeric(arg) || islogical(arg)
             arg = num2str(arg);
         end
-        error(['SYNTAX ERROR IN MUS.MINR: Unknown parameter ',arg'.']);
+        error(['SYNTAX ERROR IN MUS.SCORE: Unknown parameter ',arg'.']);
     end
     i = i+1;
 end
