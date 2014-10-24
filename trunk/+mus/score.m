@@ -633,7 +633,7 @@ end
 
 c.timescores = cell(1,length(c.modes));
 c.degreescores = cell(1,length(c.modes));
-c.note = mus.pitch;
+c.note = mus.Pitch;
 
 
 function dia = pitch2dia(pitch)

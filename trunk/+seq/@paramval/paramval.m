@@ -508,7 +508,7 @@ function [head txt] = displayval(head,val,inter)
     if nargin < 3
         inter = 0;
     end
-    if isa(val,'mus.pitch')
+    if isa(val,'mus.Pitch')
         val = mean(val.height);
     end
     if isstruct(val)
