@@ -11,10 +11,10 @@ classdef Sequence < seq.Sequence
             disp(obj.name)
             if iscell(obj.files)
                 for i = 1:length(obj.content)
-                    aud.score(obj,h,i);
+                    aud.display(obj,h,i);
                 end
             else
-                aud.score(obj,h);
+                aud.display(obj,h);
             end
         end
     end
