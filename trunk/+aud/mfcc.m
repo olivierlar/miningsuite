@@ -85,8 +85,7 @@ end
 
 function x = after(x,option)
     if option.delta
-        d = sig.compute(@delta,x.Ydata,option.delta,option.radius);
-        x.Ydata = d;
+        x.Ydata = sig.compute(@delta,x.Ydata,option.delta,option.radius);
         x.yname = ['Delta-',x.yname];
     end
 end
