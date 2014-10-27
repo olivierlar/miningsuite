@@ -36,7 +36,6 @@ function options = options
         fr.key = 'Freq';
         fr.type = 'Boolean';
         fr.default = 0;
-        fr.when = 'After';
     options.fr = fr;
 
         complex.key = 'Complex';
