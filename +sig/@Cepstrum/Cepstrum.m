@@ -48,6 +48,6 @@ classdef Cepstrum < sig.signal
 end
 
 
-function x = freq(unit,index)
+function x = freq(unit,index,segment)
     x = 1./((index - 1 + unit.origin) * unit.rate);
 end
