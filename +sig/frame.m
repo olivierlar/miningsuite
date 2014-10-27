@@ -12,6 +12,8 @@ end
 
 
 function options = options
+    options = sig.signal.signaloptions();
+
         frame.key = 'Frame';
         frame.type = 'Boolean';
         frame.default = 0;
