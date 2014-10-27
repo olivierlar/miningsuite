@@ -17,7 +17,7 @@ function options = initoptions
 
         frame.key = 'Frame';
         frame.type = 'Boolean';
-        frame.default = 1;
+        frame.default = 0;
     options.frame = frame;
     
         fsize.key = 'FrameSize';
