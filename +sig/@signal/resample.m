@@ -1,6 +1,5 @@
 function obj = resample(obj,newrate)
-    res = sig.compute(@main,obj.Ydata,obj.Srate,newrate);
-    obj.Ydata = res{1};
+    obj.Ydata = sig.compute(@main,obj.Ydata,obj.Srate,newrate);
     obj.Srate = repmat(newrate,size(obj.Srate));
 end
     

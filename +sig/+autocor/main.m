@@ -30,7 +30,7 @@ function out = main(x,option,postoption)
             option.min.unit = 's';
         end
         if isempty(option.max)
-            if isa(x{1},'sig.Envelope')
+            if isa(x{1},'sig.Envelope') %% should find another way..
                 option.max.value = 2;
             else
                 option.max.value = 0.05;

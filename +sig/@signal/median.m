@@ -1,7 +1,6 @@
 function obj = median(obj,field,order,offset)
     order = round(order * obj.Srate);
-    res = sig.compute(@main,obj.Ydata,field,order,offset);
-    obj.Ydata = res{1};
+    obj.Ydata = sig.compute(@main,obj.Ydata,field,order,offset);
 end
     
    
