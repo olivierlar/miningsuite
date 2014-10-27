@@ -92,5 +92,8 @@ classdef Sequence < aud.Sequence
             end
             soundsc(y,Fs);%/2);
         end
+        function b = istype(obj,type)
+            b = strcmp(class(obj),type);
+        end
     end
 end
