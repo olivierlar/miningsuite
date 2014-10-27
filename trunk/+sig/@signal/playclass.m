@@ -4,7 +4,7 @@ function playclass(obj,options)
     else
         filenames = obj.design.files;
     end
-    sig.compute(@main,obj.Ydata,filenames,obj.Srate,sig.Signal.sonify);
+    sig.compute(@main,obj.Ydata,filenames,obj.Srate,sig.signal.sonify);
 end
     
    

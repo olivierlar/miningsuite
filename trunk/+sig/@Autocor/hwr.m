@@ -1,6 +1,5 @@
 function obj = hwr(obj)
-    res = sig.compute(@main,obj.Ydata);
-    obj.Ydata = res{1};
+    obj.Ydata = sig.compute(@main,obj.Ydata);
 end
 
 

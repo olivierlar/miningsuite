@@ -1,7 +1,5 @@
 function obj = trim(obj,where,threshold)
-    res = sig.compute(@main,obj.Ydata,obj.sdata,where,threshold);
-    obj.Ydata  = res{1};
-    obj.Sstart = res{2};
+    [obj.Ydata obj.Sstart] = sig.compute(@main,obj.Ydata,obj.sdata,where,threshold);
 end
     
    
