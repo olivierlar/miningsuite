@@ -68,7 +68,7 @@ options.burst = burst;
 varargout = sig.operate('sig','play',options,@init,@main,varargin);
 
 
-function [x type] = init(x,option)
+function [x type] = init(x,option,frame)
 type = '?';
 
 
