@@ -64,6 +64,8 @@ function out = after(x,postoption)
     %    x.Ydata = sig.compute(@resonance,x.Ydata,x.xdata,postoption.reso);
     %end
         
+    f = x.xdata;
+    
     if strcmp(x.xname,'Frequency') && postoption.cent
         isgood = f*(2^(1/1200)-1) >= f(2)-f(1);
         good = find(isgood);
