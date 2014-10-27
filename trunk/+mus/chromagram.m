@@ -38,6 +38,7 @@ function options = initoptions
         wrp.key = 'Wrap';
         wrp.type = 'Boolean';
         wrp.default = 1;
+        wrp.when = 'After';
     options.wrp = wrp;
     
         plabel.key = 'Pitch';
@@ -96,7 +97,7 @@ end
 function out = main(orig,option,postoption)
     orig = orig{1};
     if isempty(option)
-        out = {after(orig,option)};
+        out = {after(orig,postoption)};
     else
         if option.res == 12
             chromascale = {'C','C#','D','D#','E','F','F#','G','G#','A','A#','B'};
@@ -109,7 +110,9 @@ function out = main(orig,option,postoption)
                            'ChromaFreq',fc,'Register',o,...
                            'Srate',orig.Srate,'Ssize',orig.Ssize);
         chro.Xaxis.unit.rate = 1;
-        chro = after(chro,option);
+        if ~isempty(postoption)
+            chro = after(chro,postoption);
+        end
         out = {chro orig};
     end
 end
