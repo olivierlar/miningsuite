@@ -86,6 +86,8 @@ elseif isa(arg,'sig.signal')
     out{1}.design = sig.design(pack,name,arg,type,main,during,after,...
                                frame,combine,argin(2:end),[],0,0);
     out{1}.design.evaluated = 1;
+elseif isa(arg,'mus.Sequence')
+    out = main(arg,during);
 elseif isa(arg,'aud.Sequence')
     out = main(arg,during,frame);
 else
