@@ -19,6 +19,11 @@ function options = initoptions
         inter.type = 'Boolean';
         inter.default = 0;
     options.inter = inter;    
+    
+        sampling.key = 'Sampling';
+        sampling.type = 'Numeric';
+        sampling.default = 0;
+    options.sampling = sampling;    
 end
 
 
@@ -26,7 +31,7 @@ end
 function [x type] = init(x,option,frame)
     if istype(x,'sig.signal')
         x = aud.pitch(x);
-    else
+    elseif ~istype(x,'mus.Sequence')
         x = mus.score(x);
     end
     type = {'sig.signal'};
@@ -50,8 +55,18 @@ function out = main(in,option)
         else
             nam = 'Pitch';
         end
+        if option.sampling
+            t2 = t(1):option.sampling:t(end);
+            p = interp1(t,p,t2,'previous');
+            t = t2;
+        end
         d = sig.data(p,{'sample'});
-        out = {sig.signal(d,'Name',nam,'Xdata',t,'Srate',0)};
+        if option.sampling
+            d.content = d.content';
+            out = {sig.signal(d,'Name',nam,'Srate',1/option.sampling)};
+        else
+            out = {sig.signal(d,'Name',nam,'Xdata',t,'Srate',0)};
+        end
     end
 end
 
