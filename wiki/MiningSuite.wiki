@@ -9,4 +9,6 @@ As the internal representation of signals integrates various types of decomposit
 
 Audio and symbolic representations and processes are tightly interconnected: The same type of symbolic representation is used to represent discrete constructions inferred from audio representation (such as peaks, segments, onset locations) as well as actual symbolic sequences (such as scores and MIDI sequences). Operators dedicated to high-level musical features extraction (key estimation, tempo, etc.) integrate signal processing, statistical and symbolic-based methods, and can be applied to both symbolic input and audio input (adding automated transcription steps wherever necessary).
 
+The integration of expertise developed in separate areas of study into common modules encourages further reuse of these individual methods and their intermingling into a common framework.
+
 <g:plusone size="medium"></g:plusone>
