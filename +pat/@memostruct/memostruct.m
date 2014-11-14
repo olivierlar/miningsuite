@@ -39,27 +39,8 @@ classdef memostruct < pat.memory
                         specifmemo{i} = specif(i).memory;
                     end
                 end
-                
-                if 1 %isempty(occ.suffix)
-                    group = '';
-                else
-                    oldinter = occ.suffix.parameter.getfield('onset').inter;
-                    if isempty(oldinter)
-                        group = '';
-                    else
-                        oldinter = oldinter.value;
-                        newinter = param.getfield('onset').inter.value;
-                        if log(newinter/oldinter) > .8
-                            group = 'close';
-                        elseif log(oldinter/newinter) > .8
-                            group = 'open';
-                        else
-                            group = 'extend';
-                        end
-                    end
-                end
-                
-                obj = obj.combine('fields',param,group,occ,succ,parent,...
+                                
+                obj = obj.combine('fields',param,occ,succ,parent,...
                                   specifmemo,cyclic,root);
             end
         end
