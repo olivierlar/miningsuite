@@ -30,10 +30,14 @@ classdef memoparam < pat.memory
                 end
             end
         end
-        function [idx memo value] = find(obj,param,group,specif)
+        function [idx, memo, value] = find(obj,param,specif)
+            % Output:
+            %   memo: the content in the retrieved memory
+            %   idx: the index of the retrieved parameter in the memory 
+            %   value: the parameter value. In case of approximate
+            %       matching, value output the similar value already stored.
             idx = [];
             if isa(param,'seq.paramtype')
-                %field = [];
                 memo = [];
                 value = [];
                 return
@@ -51,66 +55,38 @@ classdef memoparam < pat.memory
                     value = value.inbar;
                 end
             end
-            %if length(param) > 1
-            %    value2 = param(2).value;
-            %else
-            %    value2 = [];
-            %end
             if isempty(value)
-                %field = [];
                 memo = [];
                 return
             end
                         
-            if isempty(obj.values) || length(obj.values) < group
-                dist = [];
-            else
-                [dist idx] = min(abs(value - obj.values{group}));
-            end
+            [dist, idx] = min(abs(value - obj.values));
             if ~isempty(dist) && dist < .02
-                value = obj.values{group}(idx);
-                %field = pat.val2field(value);
-                memo = obj.content{group}{idx};
+                value = obj.values(idx);
+                memo = obj.content{idx};
             else
                 memo = [];
+                idx = [];
                 for i = 1:length(specif)
-                    if isempty(specif{i}) || ...
-                            length(specif{i}.values) < group
+                    if isempty(specif{i})
                         continue
                     end
-                    [dist idx1] = min(abs(value - specif{i}.values{group}));
+                    [dist, idx1] = min(abs(value - specif{i}.values));
                     if ~isempty(dist) && dist < .02
-                        value = specif{i}.values{group}(idx1);
-                        %field = pat.val2field(value,value2);
-                        memo = specif{i}.content{group}{idx1};
+                        value = specif{i}.values(idx1);
+                        memo = specif{i}.content{idx1};
                         break
                     end
                 end
-                %if isempty(memo)
-                %    field = pat.val2field(value);%,value2);
-                %end
             end
         end
-        function [obj paramemo] = learn(obj,param,group,occ,succ,parent,specif,cyclic,root)
+        function [obj, paramemo] = learn(obj,param,occ,succ,parent,specif,cyclic,root)
             paramemo = param;
             if isa(param,'seq.paramtype')
                 return
             end
             
-            if 1 %isempty(group)
-                group = 1;
-            else
-                switch group
-                    case 'open'
-                        group = 1;
-                    case 'close'
-                        group = 2;
-                    case 'extend'
-                        group = 3;
-                end
-            end
-
-            [idx memo value] = obj.find(param,group,specif);
+            [idx, memo, value] = obj.find(param,specif);
             if ~isempty(value)
                 if ~isempty(memo)
                     if iscell(memo)
@@ -119,31 +95,32 @@ classdef memoparam < pat.memory
                                 ~isequal(memo{1}{1},occ)) || ...
                                 (isa(memo{1}{2},'pat.event') && ...
                                 ~isequal(succ,memo{1}{2}))
-                            newpat = parent.link(memo,occ,succ,cyclic,...
-                                                 group,root);
-                            if 1 %isempty(newpat)
+                            parent.link(memo,occ,succ,cyclic,root);
+                            if 1 %isempty(newpat) %% Should we turn back to previous version?
                                 if isempty(idx)
-                                    if length(obj.values) < group
-                                        obj.values{group} = value;
-                                        obj.content{group} = {{{occ,succ}}};
+                                    if 0 %length(obj.values) < group
+                                        obj.values = value;
+                                        obj.content = {{{occ,succ}}};
                                     else
-                                        obj.values{group}(end+1) = value;
-                                        obj.content{group}{end+1} = {{occ,succ}};
+                                        obj.values(end+1) = value;
+                                        obj.content{end+1} = {{occ,succ}};
                                     end
-                                elseif iscell(obj.content{group}{idx})
-                                    obj.content{group}{idx}{end+1} = {occ,succ};
+                                elseif iscell(obj.content{idx}) && ...
+                                        ~isequal(succ,...
+                                                 obj.content{idx}{end}{2})
+                                    obj.content{idx}{end+1} = {occ,succ};
                                 end
                             else
                                 if isempty(idx)
-                                    if length(obj.values) < group
+                                    if 0 %length(obj.values) < group
                                         obj.values{group} = value;
                                         obj.content{group} = {newpat};
                                     else
-                                        obj.values{group}(end+1) = value;
-                                        obj.content{group}{end+1} = newpat;
+                                        obj.values(end+1) = value;
+                                        obj.content{end+1} = newpat;
                                     end
                                 else
-                                    obj.content{group}{idx} = newpat;
+                                    obj.content{idx} = newpat;
                                     memo = newpat;
                                 end
                             end
@@ -163,18 +140,28 @@ classdef memoparam < pat.memory
                             if newparam.isdefined(parent)
                                 newpat = pat.pattern(root,parent,newparam,...
                                                      parent.memory);
-                                obj.content{group}{idx} = newpat;
+                                if isempty(idx)
+                                    if 0 %length(obj.values) < group
+                                        obj.values{group} = value;
+                                        obj.content{group} = {newpat.parameter};
+                                    else
+                                        obj.values(end+1) = value;
+                                        obj.content{end+1} = newpat.parameter;
+                                    end
+                                else
+                                     obj.content{idx} = newpat.parameter;
+                                end
                                 newpat.occurrence(occ,succ)
                             end
                         end
                     end
                 else
-                    if length(obj.values) < group
+                    if 0 %length(obj.values) < group
                         obj.values{group} = value;
                         obj.content{group} = {{{occ,succ}}};
                     else
-                        obj.values{group}(end+1) = value;
-                        obj.content{group}{end+1} = {{occ,succ}};
+                        obj.values(end+1) = value;
+                        obj.content{end+1} = {{occ,succ}};
                     end
                     %if length(param) > 1
                     %    value(end+1) = param(2).value;
@@ -198,13 +185,13 @@ classdef memoparam < pat.memory
                         inter = [param(1).inter param(2)];
                     end
                     [obj.inter paramemo(1).inter] = ...
-                        obj.inter.learn(inter,group,occ,succ,...
+                        obj.inter.learn(inter,occ,succ,...
                                         parent,specifi,cyclic,root);
                     obj.inter = obj.inter.combine('general',...
-                                        inter,group,occ,succ,...
+                                        inter,occ,succ,...
                                         parent,specifi,cyclic,root);
                 end
-                obj = obj.combine('general',param,group,occ,succ,...
+                obj = obj.combine('general',param,occ,succ,...
                                   parent,specif,cyclic,root);
             end
         end

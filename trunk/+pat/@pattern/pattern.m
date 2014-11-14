@@ -412,27 +412,6 @@ classdef pattern < hgsetget
                     continue
                 end
                 
-                if 0 %child.length > 3
-                    oldgroup = child.parameter.getfield('group');
-                    if isnumeric(oldgroup)
-                        oldinter = occ.suffix.parameter.getfield('onset').inter;
-                        if ~isempty(oldinter)
-                            oldinter = oldinter.value;
-                            newinter = succ.parameter.getfield('onset').inter.value;
-                            if log(newinter/oldinter) > .8
-                                newgroup = 2; %'close';
-                            elseif log(oldinter/newinter) > .8
-                                newgroup = 1; %'open';
-                            else
-                                newgroup = 3; %'extend';
-                            end
-                            if oldgroup ~= newgroup
-                                continue
-                            end
-                        end
-                    end
-                end
-                
                 occ2 = child.occurrence(occ,succ);
                 if isempty(newchild) && child.closed == 1
                     child.closed = 2;
@@ -499,7 +478,7 @@ classdef pattern < hgsetget
             %end
         end
         %%
-        function obj2 = link(obj1,memo,pref,suff,cyclic,group,root)
+        function obj2 = link(obj1,memo,pref,suff,cyclic,root)
             if isa(suff,'pat.syntagm') && isa(memo{1}{2},'pat.event')
                 suff = suff.to;
             end

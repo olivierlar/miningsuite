@@ -14,7 +14,7 @@ classdef memory < hgsetget
             obj.name = param.name;
             obj.fields = param.fields;
         end
-        function obj = combine(obj,field,param,group,occ,succ,parent,specif,cyclic,root)
+        function obj = combine(obj,field,param,occ,succ,parent,specif,cyclic,root)
             if nargin < 8
                 cyclic = 0;
             end
@@ -58,12 +58,12 @@ classdef memory < hgsetget
                 if iscell(obj.(field))
                     if ~isempty(obj.(field){i})
                         [obj.(field){i} paramemo] = ...
-                            obj.(field){i}.learn(paramfieldi,group,occ,succ,...
+                            obj.(field){i}.learn(paramfieldi,occ,succ,...
                                                  parent,specifieldi,cyclic,root);
                     end
                 else
                     [obj.(field)(i) paramemo] = ...
-                        obj.(field)(i).learn(paramfieldi,group,occ,succ,...
+                        obj.(field)(i).learn(paramfieldi,occ,succ,...
                                              parent,specifieldi,cyclic,root);
                 end
             end
