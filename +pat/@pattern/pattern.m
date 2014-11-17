@@ -523,17 +523,19 @@ classdef pattern < hgsetget
             %    obj2 = [];
             %    return
             %end
-
-            %if ~isempty(pref.first.suffix) && ...
-            %        memo{1}{2}.parameter.getfield('onset').value > ...
-            %        pref.first.suffix.parameter.getfield('onset').value && ...
-            %        isequal(memo{1}{2}.parameter...
-            %                    .getfield('channel').value,...
-            %                pref.first.suffix.parameter...
-            %                    .getfield('channel').value)
-            %    obj2 = [];
-            %    return
-            %end
+            
+            % Forbidding overlap
+            if ~isempty(pref.first.suffix) && ...
+                    memo{1}{2}.parameter.getfield('onset').value > ...
+                    pref.first.suffix.parameter.getfield('onset').value && ...
+                    (isempty(memo{1}{2}.parameter.getfield('channel')) || ...
+                     isequal(memo{1}{2}.parameter...
+                                .getfield('channel').value,...
+                             pref.first.suffix.parameter...
+                                .getfield('channel').value))
+                obj2 = [];
+                return
+            end
 
             param = suff.parameter;
             if isempty(obj1.parent)
@@ -603,7 +605,8 @@ classdef pattern < hgsetget
             %    end
             %end
 
-            if ~closuretest(pref,suff,param,obj1)
+            nboccs = length(memo) + 1;
+            if ~closuretest(pref,suff,param,obj1,nboccs)
                 obj2 = [];
                 return
             end
@@ -670,7 +673,7 @@ classdef pattern < hgsetget
             %end
             
             obj2 = pat.pattern(root,obj1,param,obj1.memory);
-            
+                       
             if 1 %toggled off for ismir paper!
                 for i = 1:length(obj1.general)
                     if ~isempty(obj1.general(i).abstract)
@@ -692,6 +695,17 @@ classdef pattern < hgsetget
                                       obj2.specificmodel,0,root);
                 end
             end
+            
+            %if isa(memo{1}{2},'pat.syntagm')
+            %    oldocc = memo{1}{2}.to.occurrences;
+            %    for i = 1:length(oldocc)
+            %        if ~isequal(oldocc(i).pattern,obj2) && ...
+            %                ~isempty(oldocc(i).pattern.parent.parent) && ...
+            %                oldocc(i).parameter.implies(param)
+            %            oldocc(i)
+            %        end
+            %    end
+            %end
             
             new = obj2.occurrence(pref,suff,1);
             obj2.revelation = new;
@@ -1028,7 +1042,7 @@ function cyclize(patt,occ)
 end
 
 
-function test = closuretest(pref,suff,param,parent)
+function test = closuretest(pref,suff,param,parent,nboccs)
     test = 1;
         
     note = suff;
@@ -1053,7 +1067,10 @@ function test = closuretest(pref,suff,param,parent)
     elseif pref.pattern.implies(parent)
         for i = 1:length(note.occurrences)
             prefi = note.occurrences(i).implies(param,suff);
-            if ~isempty(prefi) && prefi.pattern.implies(parent,prefi,pref)
+            if ~isempty(prefi) && ...
+                    prefi.pattern.implies(parent,prefi,pref) && ...
+                    length(note.occurrences(i).pattern.occurrences) ...
+                        == nboccs
                 test = 0;
                 return
             end
