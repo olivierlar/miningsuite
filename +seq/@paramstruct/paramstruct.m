@@ -36,6 +36,10 @@ classdef paramstruct < seq.param
         end
         function y = getfield(obj,name,varargin)
             f = find(strcmp(name,obj.names));
+            if isempty(f)
+                y = [];
+                return
+            end
             if obj.iscell
                 y = obj.fields{f};
             else
