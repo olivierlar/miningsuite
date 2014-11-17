@@ -184,7 +184,20 @@ else
             notes = struct('chro',num2cell(C{1}),'ons',num2cell(C{8}),...
                            'dur',num2cell(C{9}),'chan',num2cell(C{11}),...
                            'harm',C{12});
-        elseif 0 % jakob
+        elseif 1 % françois
+            C = textscan(fid,'%f,%f,%f\n');
+            notes = struct('chro',num2cell(C{1}),...
+                           'ons',num2cell(C{2}),...
+                           'dur',num2cell(C{3}));
+            while ~feof(fid)
+                C = textscan(fid,'%f,%f,%f\n');
+                if ~isempty(C{1})
+                    notes(end+1) = struct('chro',num2cell(C{1}),...
+                                          'ons',num2cell(C{2}),...
+                                          'dur',num2cell(C{3}));
+                end
+            end
+        elseif 1 % jakob
             C = textscan(fid,'%f,%f,%f,%f\n');
             notes = struct('chro',num2cell(C{1}),...
                            'ons',num2cell(C{2}),...
@@ -237,6 +250,9 @@ end
 if options.notes
     options.notes(options.notes > length(notes)) = [];
     notes = notes(options.notes);
+end
+for i = 1:length(notes)-1
+    notes(i).dur = notes(i+1).ons - notes(i).ons;
 end
 note = [];
 if folder
@@ -436,33 +452,37 @@ while k <= length(memo{chan+1})
         sk = seq.syntagm(prev,note);
     end
     
-    for i = length(prev.issuffix):-1:1
-        if prev.issuffix(i).closing
-            suffix = prev.issuffix(i);
-            while ~isempty(suffix.extends)
+    if 0
+        % Connecting successive grouping's starting notes
+        for i = length(prev.issuffix):-1:1
+            if prev.issuffix(i).closing
+                suffix = prev.issuffix(i);
                 while ~isempty(suffix.extends)
-                    suffix = suffix.extends;
+                    while ~isempty(suffix.extends)
+                        suffix = suffix.extends;
+                    end
+                    if ~isempty(suffix.suffix)
+                        suffix = suffix.suffix;
+                    end
                 end
-                if ~isempty(suffix.suffix)
-                    suffix = suffix.suffix;
+                if note.parameter.getfield('onset').value - ...
+                        suffix.parameter.getfield('onset').value < 10
+                    if ~isempty(pattern)
+                        pat.syntagm(suffix,note,pattern.root);
+                    else
+                        seq.syntagm(suffix,note);
+                    end
                 end
+                break
             end
-            if note.parameter.fields{4}.value - ...
-                    suffix.parameter.fields{4}.value < 10
-                if ~isempty(pattern)
-                    pat.syntagm(suffix,note,pattern.root);
-                else
-                    seq.syntagm(suffix,note);
-                end
-            end
-            break
         end
     end
     
     if options.metapitch
         for i = 1:length(memo{chan+1}(1).issuffix)
             if isempty(memo{chan+1}(1).issuffix(i).property)
-                pat.syntagm(memo{chan+1}(1).issuffix(i),note,pattern.root);
+                pat.syntagm(memo{chan+1}(1).issuffix(i).extends,...
+                            note,pattern.root);
             end
         end
     end
