@@ -1,4 +1,4 @@
-function score(seq,h,ind)
+function display(seq,h,ind)
 
 if nargin < 3
     notes = seq.content;
@@ -298,7 +298,7 @@ end
 
 %%
 option.scheaf = 1;
-option.minlength = 8;
+option.minlength = 5;
 
 pool = {};
 t2s = [];
@@ -460,7 +460,7 @@ for i = 1:nn
                             end
                             if 1 %isempty(p.occurrences(k).cycle)
                                 line([t1 t2],[y y],'Marker','+','Color',col,...
-                                     'LineWidth',lw);
+                                     'LineWidth',lw,'MarkerSize',8);
                                 %line([t2 t2],[min(chr) max(chr)],'LineStyle',':');
                             elseif isempty(p.occurrences(k).cycle(1).parent.parent)
                                 line([t1 t2],[y y],'LineStyle','--','Marker','+',...
