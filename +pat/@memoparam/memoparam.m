@@ -80,7 +80,8 @@ classdef memoparam < pat.memory
                 end
             end
         end
-        function [obj, paramemo] = learn(obj,param,occ,succ,parent,specif,cyclic,root)
+        function [obj, paramemo] = learn(obj,param,occ,succ,parent,...
+                                         specif,cyclic,root,options)
             paramemo = param;
             if isa(param,'seq.paramtype')
                 return
@@ -95,7 +96,7 @@ classdef memoparam < pat.memory
                                 ~isequal(memo{1}{1},occ)) || ...
                                 (isa(memo{1}{2},'pat.event') && ...
                                 ~isequal(succ,memo{1}{2}))
-                            parent.link(memo,occ,succ,cyclic,root);
+                            parent.link(memo,occ,succ,cyclic,root,options);
                             if 1 %isempty(newpat) %% Should we turn back to previous version?
                                 if isempty(idx)
                                     if 0 %length(obj.values) < group
@@ -186,10 +187,12 @@ classdef memoparam < pat.memory
                     end
                     [obj.inter paramemo(1).inter] = ...
                         obj.inter.learn(inter,occ,succ,...
-                                        parent,specifi,cyclic,root);
+                                        parent,specifi,cyclic,root,...
+                                        options);
                     obj.inter = obj.inter.combine('general',...
                                         inter,occ,succ,...
-                                        parent,specifi,cyclic,root);
+                                        parent,specifi,cyclic,root,...
+                                        options);
                 end
                 obj = obj.combine('general',param,occ,succ,...
                                   parent,specif,cyclic,root);

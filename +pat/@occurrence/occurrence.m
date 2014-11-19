@@ -344,13 +344,11 @@ classdef occurrence < hgsetget
                 display(occ2);
             end
         end
-        function occ = memorize(obj,succ,root,occs,cyclic)
-            if nargin < 4
+        function occ = memorize(obj,succ,root,options,occs)
+            if nargin < 5
                 occs = [];
             end
-            if nargin < 5
-                cyclic = 0;
-            end
+            cyclic = 0;
             objpat = obj.pattern;
             
             if isa(succ,'pat.syntagm')
@@ -368,12 +366,12 @@ classdef occurrence < hgsetget
             end
             
             occ = objpat.remember(obj,succ,[],cyclic,root);
-            for i = 1:length(objpat.specific)
+            for i = 1:length(objpat.specificmodel)
                 %if ~(   (~isa(obj.pattern.parameter.fields{2},'seq.paramval') || ...
                 %         isempty(obj.pattern.parameter.fields{2}.value) || ...
                 %         ~obj.pattern.parameter.fields{2}.value) && ...
                 %        succ.parameter.fields{2}.value)
-                    occ = objpat.specific(i).remember(obj,succ,...
+                    occ = objpat.specificmodel(i).remember(obj,succ,...
                                                       objpat,cyclic,root);
                 %else
                 %    1
@@ -429,7 +427,7 @@ classdef occurrence < hgsetget
             end
             
             objpat.memory.learn(succ.parameter,obj,succ,objpat,...
-                                objpat.specificmodel,cyclic,root);
+                                objpat.specificmodel,cyclic,root,options);
         
             for i = 1:length(objpat.general)
                 if ismember(objpat.general(i),occs) || ...
@@ -440,7 +438,7 @@ classdef occurrence < hgsetget
                                                obj,succ,...
                                                objpat.general(i),...
                                                objpat.general(i).specificmodel,...
-                                               cyclic,root);
+                                               cyclic,root,options);
             end
             %if isempty(obj.cycle)
             %    for i = 1:length(obj.pattern.potentialcycles)

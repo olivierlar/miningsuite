@@ -27,7 +27,8 @@ classdef memostruct < pat.memory
                 obj.fields = f;
             end
         end
-        function obj = learn(obj,param,occ,succ,parent,specif,cyclic,root)
+        function obj = learn(obj,param,occ,succ,parent,specif,cyclic,...
+                             root,options)
             if 1 %isempty(parent.parent) || ...
                  %   (~isa(parent.parameter.fields{4},'seq.paramtype') && ...
                  %    ~isempty(parent.parameter.fields{4}) && ...
@@ -41,7 +42,7 @@ classdef memostruct < pat.memory
                 end
                                 
                 obj = obj.combine('fields',param,occ,succ,parent,...
-                                  specifmemo,cyclic,root);
+                                  specifmemo,cyclic,root,options);
             end
         end
         %function obj = shortcut(obj,param,child)

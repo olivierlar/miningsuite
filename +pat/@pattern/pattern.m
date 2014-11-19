@@ -151,10 +151,10 @@ classdef pattern < hgsetget
                 return
             end
             
-            if justcontour(obj,occ)
-                occ2 = [];
-                return
-            end
+            %if justcontour(obj,occ)
+            %    occ2 = [];
+            %    return
+            %end
             
             for i = 1:length(obj.children)
                 child = obj.children{i};
@@ -478,7 +478,7 @@ classdef pattern < hgsetget
             %end
         end
         %%
-        function obj2 = link(obj1,memo,pref,suff,cyclic,root)
+        function obj2 = link(obj1,memo,pref,suff,cyclic,root,options)
             if isa(suff,'pat.syntagm') && isa(memo{1}{2},'pat.event')
                 suff = suff.to;
             end
@@ -542,7 +542,7 @@ classdef pattern < hgsetget
                 param = param.nointer;
             end
             for i = 1:length(memo)
-                param = memo{i}{2}.parameter.common(param);
+                param = memo{i}{2}.parameter.common(param,options);
             end
 
             if ~param.isdefined(obj1)
@@ -563,23 +563,47 @@ classdef pattern < hgsetget
                 return
             end
             
-            if undefined_pitch_parameter(param)
-                obj2 = [];
-                return
-            end
+            %if undefined_pitch_parameter(param)
+            %    obj2 = [];
+            %    return
+            %end
 
-            if justcontour(obj1,pref)
+            %if justcontour(obj1,pref)
 
                         %isempty(param.fields{2}.value) && ...
                         %isempty(param.fields{2}.inter.value)
                         % Two successive contours
                     
-                obj2 = [];
-                return
-            end
-
+            %    obj2 = [];
+            %    return
+            %end
+            
             if isempty(obj1.parameter) || obj1.parameter.isvaldefined
                 if ~(param.isvaldefined || param.isinterdefined)
+                    obj2 = [];
+                    return
+                end
+            end
+            
+            if ~isempty(obj1.parameter)
+                undef = 0;
+                for i = 1:length(obj1.parameter.fields)
+                    if isempty(obj1.parameter.fields{i}) || ...
+                            isa(obj1.parameter.fields{i},'seq.paramtype') || ...
+                            isempty(obj1.parameter.fields{i}.inter) || ...
+                            isempty(obj1.parameter.fields{i}.inter.value)
+                        continue
+                    end
+                    if ~isempty(param.fields{i}) && ...
+                            ~isa(param.fields{i},'seq.paramtype') && ...
+                            ~isempty(param.fields{i}.inter) && ...
+                            ~isempty(param.fields{i}.inter.value)
+                        undef = 0;
+                        break
+                    end
+                    undef = 1;
+                end
+                if undef
                     obj2 = [];
                     return
                 end
@@ -692,7 +716,7 @@ classdef pattern < hgsetget
                 for j = 1:length(last1{i}.from)
                     oldsucc = last1{i}.from(j);
                     obj2.memory.learn(oldsucc.parameter,old,oldsucc,obj2,...
-                                      obj2.specificmodel,0,root);
+                                      obj2.specificmodel,0,root,options);
                 end
             end
             

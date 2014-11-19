@@ -4,7 +4,7 @@
 % the main folder of the MiningSuite distribution.
 classdef syntagm < seq.syntagm
 	methods
-		function obj = syntagm(event1,event2,root,memorize)
+		function obj = syntagm(event1,event2,root,memorize,options)
             obj = obj@seq.syntagm(event1,event2);
             
             if nargin < 4
@@ -48,7 +48,7 @@ classdef syntagm < seq.syntagm
                 end
             end
             for i = 1:length(occ)
-                occ(i).memorize(obj,root,genpool{i});
+                occ(i).memorize(obj,root,options,genpool{i});
             end
         end
         function val = overlaps(obj1,obj2)
