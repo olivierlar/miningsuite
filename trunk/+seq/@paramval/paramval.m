@@ -56,13 +56,10 @@ classdef paramval < seq.param
                 obj.inter.type.general = general;
             end
         end
-        function obj = common(obj1,obj2,pos)
+        function obj = common(obj1,obj2,options)
             if isempty(obj2)
                 obj = obj2;
                 return
-            end
-            if nargin<3
-                pos = '';
             end
             if isempty(obj1.value) || isempty(obj2.value)
                 val = [];
@@ -106,43 +103,41 @@ classdef paramval < seq.param
                 end
             end
             obj = seq.paramval(obj1.type,val);
-            if isempty(pos)
-                if isstruct(obj1.inter)
-                    fields = fieldnames(obj1.inter);
-                    for i = 1:length(fields)
-                        if isequal(obj1.inter.(fields{i}),...
-                                   obj1.inter.(fields{i}))
-                            val.(fields{i}) = obj1.inter.(fields{i});
-                        else
-                            val.(fields{i}) = [];
-                        end
-                    end
-                elseif isa(obj1.inter,'seq.paramval')
-                    val = common(obj1.inter,obj2.inter);
-                elseif isequal(obj1.inter,obj2.inter)
-                    val = obj1.inter;
-                else
-                    val = [];
-                end
-                if 0 %~isempty(val) && strcmp(obj.name,'onset')
-                    return
-                    obj.name = 'rhythm';
-                    obj.type.name = 'rhythm';
-                    obj.value = 1;
-                else
-                    obj.inter = val;
-                end
-                if 1 %isempty(val)
-                    if obj2.nogeneral
-                        obj.setgeneral = [];
+            if isstruct(obj1.inter)
+                fields = fieldnames(obj1.inter);
+                for i = 1:length(fields)
+                    if isequal(obj1.inter.(fields{i}),...
+                               obj1.inter.(fields{i}))
+                        val.(fields{i}) = obj1.inter.(fields{i});
                     else
-                        g1 = obj1.general;
-                        g2 = obj2.general;
-                        obj.setgeneral = g1;
-                        for i = 1:length(g1)
-                            if isa(g1(i),'seq.paramval')
-                                obj.setgeneral(i) = common(g1(i),g2(i));
-                            end
+                        val.(fields{i}) = [];
+                    end
+                end
+            elseif isa(obj1.inter,'seq.paramval')
+                val = common(obj1.inter,obj2.inter);
+            elseif isequal(obj1.inter,obj2.inter)
+                val = obj1.inter;
+            else
+                val = [];
+            end
+            if 0 %~isempty(val) && strcmp(obj.name,'onset')
+                return
+                obj.name = 'rhythm';
+                obj.type.name = 'rhythm';
+                obj.value = 1;
+            else
+                obj.inter = val;
+            end
+            if 1 %isempty(val)
+                if obj2.nogeneral
+                    obj.setgeneral = [];
+                else
+                    g1 = obj1.general;
+                    g2 = obj2.general;
+                    obj.setgeneral = g1;
+                    for i = 1:length(g1)
+                        if isa(g1(i),'seq.paramval')
+                            obj.setgeneral(i) = common(g1(i),g2(i));
                         end
                     end
                 end

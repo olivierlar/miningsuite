@@ -14,7 +14,8 @@ classdef memory < hgsetget
             obj.name = param.name;
             obj.fields = param.fields;
         end
-        function obj = combine(obj,field,param,occ,succ,parent,specif,cyclic,root)
+        function obj = combine(obj,field,param,occ,succ,parent,specif,...
+                               cyclic,root,options)
             if nargin < 8
                 cyclic = 0;
             end
@@ -30,8 +31,13 @@ classdef memory < hgsetget
             if ~length(param(1).(field))
                 return
             end
+            paramemo = [];
             for i = 1:length(obj.(field))
-                if strcmp(field,'fields') && (i < 2|| i > 3)
+                if strcmp(field,'fields') && ...
+                        (i < 2 || i > 4 || ...
+                         (i == 2 && ~options.chro) || ...
+                         (i == 3 && ~options.dia) || ...
+                         (i == 4 && ~options.onset))
                     continue
                 end
                 specifieldi = [];
@@ -59,12 +65,14 @@ classdef memory < hgsetget
                     if ~isempty(obj.(field){i})
                         [obj.(field){i} paramemo] = ...
                             obj.(field){i}.learn(paramfieldi,occ,succ,...
-                                                 parent,specifieldi,cyclic,root);
+                                                 parent,specifieldi,...
+                                                 cyclic,root,options);
                     end
                 else
                     [obj.(field)(i) paramemo] = ...
                         obj.(field)(i).learn(paramfieldi,occ,succ,...
-                                             parent,specifieldi,cyclic,root);
+                                             parent,specifieldi,cyclic,...
+                                             root,options);
                 end
             end
             if isfield(paramemo,'inter') && ...

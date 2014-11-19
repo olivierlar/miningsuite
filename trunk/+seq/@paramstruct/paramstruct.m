@@ -111,7 +111,7 @@ classdef paramstruct < seq.param
             end
             obj2.fields = f;
         end
-        function obj = common(obj1,obj2,varargin)
+        function obj = common(obj1,obj2,options)
             obj = obj1;
             f = obj1.fields;
             %if obj1.fields{1}.common(obj2.fields{1}).isdefined
@@ -124,7 +124,9 @@ classdef paramstruct < seq.param
             %f{3} = common(obj1.fields{3},obj2.fields{3});
             %f{4} = common(obj1.fields{4},obj2.fields{4});
             for i = 1:length(obj1.fields)
-                if i<2 || i > 3
+                if i < 2 || i > 4 || (i == 2 && ~options.chro) || ...
+                        (i == 3 && ~options.dia) || ...
+                        (i == 4 && ~options.onset)
                     f{i} = [];
                     continue
                 end
@@ -151,12 +153,7 @@ classdef paramstruct < seq.param
                         f{i}.value = [];
                     end
                 else
-                    if strcmp(fields1.name,'onset') || ... %% Comment this to add inter-onset parameter
-                         strcmp(fields1.name,'offset')
-                        f{i} = [];
-                        continue
-                    end
-                    f{i} = common(fields1,fields2,varargin{:});
+                    f{i} = common(fields1,fields2,options);
                 end
             end
             obj.fields = f;
@@ -201,7 +198,10 @@ classdef paramstruct < seq.param
             end
             test = true;
             param = obj2;
-            for i = 2:3 %1:length(obj1.fields)
+            for i = 1:length(obj1.fields)
+                if isempty(obj2.fields{i})
+                    continue
+                end
                 if nargin>2
                     [testi param.fields{i}] = implies(obj1.fields{i},...
                                                       obj2.fields{i},...
@@ -215,7 +215,10 @@ classdef paramstruct < seq.param
         end
         function test = implies_fast(obj1,obj2,context)
             test = true;
-            for i = 2:3 %1:length(obj1.fields)
+            for i = 1:length(obj1.fields)
+                if isempty(obj2.fields{i})
+                    continue
+                end
                 if nargin>2
                     test = implies_fast(obj1.fields{i},obj2.fields{i},...
                                         context.fields{i});
@@ -390,10 +393,11 @@ classdef paramstruct < seq.param
                   isempty(obj.fields{2}.general) && ...
                   (isempty(obj.fields{2}.inter) || ...
                    isempty(obj.fields{2}.inter.value)) && ...
-                  isempty(obj.fields{3}.value) && ...
-                  isempty(obj.fields{3}.general) && ...
-                  (isempty(obj.fields{3}.inter) || ...
-                   isempty(obj.fields{3}.inter.value));
+                  (isempty(obj.fields{3}) || ...
+                   (isempty(obj.fields{3}.value) && ...
+                    isempty(obj.fields{3}.general) && ...
+                    (isempty(obj.fields{3}.inter) || ...
+                     isempty(obj.fields{3}.inter.value))));
         end
     end
 end

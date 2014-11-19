@@ -447,7 +447,7 @@ while k <= length(memo{chan+1})
     end
     prev = memo{chan+1}(k);
     if ~isempty(pattern)
-        sk = pat.syntagm(prev,note,pattern.root);
+        sk = pat.syntagm(prev,note,pattern.root,1,options);
     else
         sk = seq.syntagm(prev,note);
     end
@@ -482,7 +482,7 @@ while k <= length(memo{chan+1})
         for i = 1:length(memo{chan+1}(1).issuffix)
             if isempty(memo{chan+1}(1).issuffix(i).property)
                 pat.syntagm(memo{chan+1}(1).issuffix(i).extends,...
-                            note,pattern.root);
+                            note,pattern.root,1,options);
             end
         end
     end
@@ -533,7 +533,7 @@ end
 
 if (options.metre || options.motif) %&& isempty(note.occurrences)
     pat.occurrence(pattern.v,[],note); % should be r
-    pattern.occ0.memorize(note,pattern.root);
+    pattern.occ0.memorize(note,pattern.root,options);
 end
 
 if 0 %options.mode
@@ -607,6 +607,19 @@ options.metapitch = metapitch;
     mod12.key = 'Octave';
     mod12.type = 'Boolean';
 options.mod12 = mod12;
+
+    chro.key = 'Chro';
+    chro.type = 'Boolean';
+    chro.default = 1;
+options.chro = chro;
+
+    dia.key = 'Dia';
+    dia.type = 'Boolean';
+options.dia = dia;
+
+    onset.key = 'Onset';
+    onset.type = 'Boolean';
+options.onset = onset;
 
 
 function p = initpattern(options)
