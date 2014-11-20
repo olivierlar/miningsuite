@@ -32,7 +32,7 @@ classdef syntagm < seq.syntagm
             %for i = 1:length(cyc)
             %    cyc(i).memorize(obj,root,[],1);
             %end
-                    occ(i).track_cycle(obj,root);
+                    occ(i).track_cycle(obj,root,options);
                 end
             end
             

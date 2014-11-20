@@ -129,7 +129,7 @@ classdef pattern < hgsetget
                 obj.parent.closed = 0;
             end
         end
-        function occ2 = remember(obj,occ,succ,general,cycle,root)
+        function occ2 = remember(obj,occ,succ,general,cycle,root,options)
             if isempty(obj.parent)
                 addr = 0;
             else
@@ -318,7 +318,7 @@ classdef pattern < hgsetget
                     end
                     stop = 0;
                     for j = 1:length(patt.children)
-                        if patt.children{j}.parameter.isequal(param)
+                        if patt.children{j}.parameter.isequal(param,options)
                             stop = 1;
                             break
                         end
@@ -388,8 +388,9 @@ classdef pattern < hgsetget
                             pat.pattern(root,general.general(j),param)
                         end
                     end
-                elseif ~isequal(param,child.parameter)
-                    [newchild found] = child.generalize(param,root);
+                elseif ~isequal(param,child.parameter,options)
+                    [newchild found] = child.generalize(param,root,0,...
+                                                        options);
                     if isempty(newchild)
                         continue
                     end
@@ -427,11 +428,14 @@ classdef pattern < hgsetget
                 end
                 
                 if pat.cyclic
-                    found = occ2.newcycle(root);
+                    found = occ2.newcycle(root,occ2.pattern,...
+                                          succ.parameter,options);
                     if ~found
                         for j = 1:length(occ2.pattern.isogeneral)
                             f = occ2.newcycle(root,occ2.pattern...
-                                                        .isogeneral(j));
+                                                        .isogeneral(j),...
+                                                        succ.parameter,...
+                                                        options);
                             if f
                                 found = 1;
                             end
@@ -551,7 +555,7 @@ classdef pattern < hgsetget
             end
             
             for i = 1:length(obj1.children)
-                if obj1.children{i}.parameter.isequal(param)
+                if obj1.children{i}.parameter.isequal(param,options)
                     obj2 = [];
                     return
                 end
@@ -703,10 +707,12 @@ classdef pattern < hgsetget
                     if ~isempty(obj1.general(i).abstract)
                         for j = 1:length(obj1.general(i).abstract)
                             extendgeneral(obj1.general(i),param,root,...
-                                          obj1.general(i).abstract{j});
+                                          obj1.general(i).abstract{j},...
+                                          options);
                         end
                     else
-                        extendgeneral(obj1.general(i),param,root);
+                        extendgeneral(obj1.general(i),param,root,...
+                                      obj1.general(i),options);
                     end
                 end
             end
@@ -739,9 +745,10 @@ classdef pattern < hgsetget
             end
             
             if pat.cyclic && ~isempty(pref)
-                if ~new.newcycle(root)
+                if ~new.newcycle(root,new.pattern,suff.parameter,options)
                     for g = 1:length(new.pattern.isogeneral)
-                        new.newcycle(root,new.pattern.isogeneral(g));
+                        new.newcycle(root,new.pattern.isogeneral(g),...
+                                     suff.parameter,options);
                     end
                 end
             elseif 0 % old version
@@ -768,20 +775,20 @@ classdef pattern < hgsetget
                 end
             end
         end
-        function [obj2 found] = generalize(obj1,param,root,recurs)
+        function [obj2 found] = generalize(obj1,param,root,recurs,options)
             if nargin < 4
                 recurs = 0;
             end
             parent = obj1.parent;
-            param = obj1.parameter.common(param);
+            param = obj1.parameter.common(param,options);
             if ~param.isdefined
-                if isequal(obj1.parameter,param) %elementary note pattern
+                if isequal(obj1.parameter,param,options) %elementary note pattern
                     obj2 = obj1;
                     found = 1;
                     return
                 end
                 found = [];
-                obj2 = [];
+                obj2 = root.children{end};  %elementary note pattern?
                 return
             end
             if isa(param.fields{2},'seq.paramtype')
@@ -794,12 +801,12 @@ classdef pattern < hgsetget
                 obj2 = [];
                 return
             end
-            found = parent.findchild(param);
+            found = parent.findchild(param,options);
             if isempty(found)
                 obj2 = pat.pattern(root,parent,param,obj1.memory);
                 for i = 1:length(obj1.general)
                     if ~isempty(obj1.general(i).parent)
-                        obj1.general(i).generalize(param,root,1);
+                        obj1.general(i).generalize(param,root,1,options);
                     end
                 end
             else
@@ -920,9 +927,9 @@ classdef pattern < hgsetget
                 f = obj.parent.first;
             end
         end
-        function child = findchild(obj,param)
+        function child = findchild(obj,param,options)
             for i = 1:length(obj.children)
-                if isequal(obj.children{i}.parameter,param)
+                if isequal(obj.children{i}.parameter,param,options)
                     child = obj.children{i};
                     return
                 end
@@ -1092,9 +1099,9 @@ function test = closuretest(pref,suff,param,parent,nboccs)
         for i = 1:length(note.occurrences)
             prefi = note.occurrences(i).implies(param,suff);
             if ~isempty(prefi) && ...
-                    prefi.pattern.implies(parent,prefi,pref) && ...
-                    length(note.occurrences(i).pattern.occurrences) ...
-                        == nboccs
+                    prefi.pattern.implies(parent,prefi,pref) %&& ...
+                    %length(note.occurrences(i).pattern.occurrences) ...
+                    %    >= nboccs
                 test = 0;
                 return
             end
@@ -1103,9 +1110,9 @@ function test = closuretest(pref,suff,param,parent,nboccs)
 end
 
 
-function extendgeneral(parent,param,root,abstract)
+function extendgeneral(parent,param,root,abstract,options)
     for j = 1:length(parent.children)
-        if parent.children{j}.parameter.isequal(param)
+        if parent.children{j}.parameter.isequal(param,options)
             return
         end
     end

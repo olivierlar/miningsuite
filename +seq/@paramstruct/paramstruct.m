@@ -160,9 +160,13 @@ classdef paramstruct < seq.param
         end
         function obj1 = add(obj1,obj2)
             for i = 1:length(obj1.fields)
-                if isempty(obj1.fields{i}) || ...
-                        isa(obj2.fields{i}.inter,'seq.paraminter') || ...
+                if isempty(obj2.fields{i}) || ...
+                        isa(obj2.fields{i},'seq.paramtype') || ...
                         isempty(obj2.fields{i}.inter)
+                    continue
+                end
+                if isa(obj1.fields{i},'seq.paramtype')
+                    obj1.fields{i} = obj2.fields{i};
                     continue
                 end
                 if isempty(obj1.fields{i}.inter.value) && ...
@@ -230,7 +234,7 @@ classdef paramstruct < seq.param
                 end
             end
         end
-        function test = isequal(obj1,obj2) %,varargin)
+        function test = isequal(obj1,obj2,options) %,varargin)
             %if obj1.implies(obj2) && obj2.implies(obj1);
             %    test = true;
             %    return
@@ -238,7 +242,10 @@ classdef paramstruct < seq.param
             
             test = true;
             for i = 1:length(obj1.fields)
-                if i<2 || i > 3
+                if i < 2 || i > 4 || (i == 2 && ~options.chro) || ...
+                        (i == 3 && ~options.dia) || ...
+                        (i == 4 && ~options.onset)
+                    f{i} = [];
                     continue
                 end
                 if iscell(obj1.fields)

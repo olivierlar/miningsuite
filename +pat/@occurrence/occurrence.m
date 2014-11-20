@@ -47,7 +47,7 @@ classdef occurrence < hgsetget
                     if length(cycl) == 1
                         cycl = patt.list;
                         cycl(1) = [];
-                        %patt = generalize(cycl(1),patt.parameter);
+                        patt = cycl(1); %generalize(cycl(1),patt.parameter);
                         obj.phase = 0;
                     end
                     %cycl(end).addcycle(obj,obj.phase);
@@ -202,7 +202,7 @@ classdef occurrence < hgsetget
                 to.occurrence(obj);
             end
         end
-        function found = newcycle(obj,root,patt)
+        function found = newcycle(obj,root,patt,param,options)
             found = 0;
             if nargin < 3
                 patt = obj.pattern;
@@ -257,9 +257,12 @@ classdef occurrence < hgsetget
                 end
                 obj.cycle = cycl;
                 obj.phase = 0;
-                %obj.pattern = cycl(1);
-                    % Previously: occ.pattern = generalize(cycl(1),patt.parameter);
-                    % But only the note (not the interval) should be generalized.
+                if param.implies(cycl(1).parameter)
+                    obj.pattern = cycl(1);
+                else
+                    common = param.common(cycl(1).parameter,options);
+                    obj.pattern = cycl(1).generalize(common,root,0,options);
+                end
                 obj.round = 2;
                 % should we incorporate the first cycle?
                 if pat.verbose
@@ -304,34 +307,51 @@ classdef occurrence < hgsetget
                 end
             end
         end
-        function occ2 = track_cycle(occ,succ,root)
-            child = occ.cycle(2);
-            param = child.parameter;
-            [test common] = succ.parameter.implies(param,...
-                                                   occ.suffix.parameter);
-            if ~test
-                if ~common.isdefined(occ.pattern)
-                    occ2 = [];
-                    return
+        function occ2 = track_cycle(occ,succ,root,options)
+            modelchild = occ.cycle(2);
+            param = modelchild.parameter;
+            if ~isequal(modelchild.parent,occ.pattern)
+                child = [];
+                newchild = []; % Check this
+                for i = 1:length(occ.pattern.children)
+                    if isequal(occ.pattern.children{i}.parameter,param,...
+                               options)
+                        child = occ.pattern.children{i};
+                        break
+                    end
                 end
-                if undefined_pitch_parameter(common)
-                    occ2 = [];
-                    return
+                if isempty(child)
+                    child = pat.pattern(root,occ.pattern,param);
                 end
-
-                param = common;
-                [newchild found] = child.generalize(param,root);
-                if isempty(newchild)
-                    occ2 = [];
-                    return
-                end
-                newchild.specificmodel = [child.specificmodel child];
-                if isempty(found)
-                    newchild.occurrences = child.occurrences; % This might be avoided in order to get specific classes
-                end
-                child = newchild;
             else
-                newchild = [];
+                [test, common] = succ.parameter.implies(param,...
+                                                       occ.suffix.parameter);
+                if ~test
+                    if ~common.isdefined(occ.pattern)
+                        occ2 = [];
+                        return
+                    end
+                    if undefined_pitch_parameter(common)
+                        occ2 = [];
+                        return
+                    end
+
+                    param = common;
+                    [newchild, newchild] = modelchild.generalize(param,root);
+                    if isempty(newchild)
+                        occ2 = [];
+                        return
+                    end
+                    newchild.specificmodel = [modelchild.specificmodel, ... 
+                                              modelchild];
+                    if isempty(newchild)
+                        newchild.occurrences = modelchild.occurrences; % This might be avoided in order to get specific classes
+                    end
+                    child = newchild;
+                else
+                    child = modelchild;
+                    newchild = [];
+                end
             end
             occ2 = child.occurrence(occ,succ);
             if isempty(newchild) && child.closed == 1
@@ -365,14 +385,15 @@ classdef occurrence < hgsetget
                 end
             end
             
-            occ = objpat.remember(obj,succ,[],cyclic,root);
+            occ = objpat.remember(obj,succ,[],cyclic,root,options);
             for i = 1:length(objpat.specificmodel)
                 %if ~(   (~isa(obj.pattern.parameter.fields{2},'seq.paramval') || ...
                 %         isempty(obj.pattern.parameter.fields{2}.value) || ...
                 %         ~obj.pattern.parameter.fields{2}.value) && ...
                 %        succ.parameter.fields{2}.value)
                     occ = objpat.specificmodel(i).remember(obj,succ,...
-                                                      objpat,cyclic,root);
+                                                      objpat,cyclic,...
+                                                      root,options);
                 %else
                 %    1
                 %    %pat = obj.pattern.specific(i).remember(obj,succ,obj.pattern);
@@ -410,7 +431,8 @@ classdef occurrence < hgsetget
                         continue
                     end
                 end
-                occ = objpat.general(i).remember(obj,succ,[],cyclic,root);
+                occ = objpat.general(i).remember(obj,succ,[],cyclic,...
+                                                 root,options);
                 if ~isempty(obj.cycle) && ~isempty(occ)
                     %return
                 end
@@ -427,9 +449,10 @@ classdef occurrence < hgsetget
             end
             
             objpat.memory.learn(succ.parameter,obj,succ,objpat,...
-                                objpat.specificmodel,cyclic,root,options);
+                                objpat.specific,cyclic,root,options);
         
             for i = 1:length(objpat.general)
+                %% WARNING: Redundant info in objpat.general!!
                 if ismember(objpat.general(i),occs) || ...
                         obj.incompatible(objpat.general(i))
                     continue
