@@ -342,7 +342,7 @@ for i = 1:nn
                         if p.length < 1
                             continue
                         end
-                        y = y-.2;
+                        y = y-.4;
                         desc = p.display; %(0);
                         %fprintf([desc,'\n']);
                         
@@ -460,7 +460,7 @@ for i = 1:nn
                             end
                             if 1 %isempty(p.occurrences(k).cycle)
                                 line([t1 t2],[y y],'Marker','+','Color',col,...
-                                     'LineWidth',lw,'MarkerSize',8);
+                                     'LineWidth',lw,'MarkerSize',6);
                                 %line([t2 t2],[min(chr) max(chr)],'LineStyle',':');
                             elseif isempty(p.occurrences(k).cycle(1).parent.parent)
                                 line([t1 t2],[y y],'LineStyle','--','Marker','+',...
