@@ -19,7 +19,7 @@ classdef paramtype < seq.param
         function obj = type2val(obj) %necessary?
             obj = [];
         end
-        function obj = common(obj1,obj2)
+        function obj = common(obj1,obj2,options)
             obj = obj1;
         end
         function [test param] = implies(obj1,obj2,varargin)
