@@ -478,7 +478,7 @@ while k <= length(memo{chan+1})
         end
     end
     
-    if options.metapitch
+    if ~isempty(pattern) && options.metapitch
         for i = 1:length(memo{chan+1}(1).issuffix)
             if isempty(memo{chan+1}(1).issuffix(i).property)
                 pat.syntagm(memo{chan+1}(1).issuffix(i).extends,...
