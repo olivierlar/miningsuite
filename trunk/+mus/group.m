@@ -1,7 +1,7 @@
 function [memo,mode] = group(from,ioi1,ioi0,options,note,p1,memo,chan,...
                              mode,pattern)
 
-tolerance = .4;
+tolerance = .2;
 
 prefix = from;
 groups = from.issuffix;
@@ -168,8 +168,9 @@ for i = 1:length(groups)
             prev = prev.passing(1).from;
         end
         for l = 1:length(ends)
-            if ends(l).parameter.fields{4}.value - ...
-                    prev.parameter.fields{4}.value < 10
+            dt = ends(l).parameter.fields{4}.value - ...
+                 prev.parameter.fields{4}.value;
+            if dt > 0 && dt < 10
                 if isempty(pattern)
                     seq.syntagm(prev,ends(l));
                 else
@@ -180,8 +181,9 @@ for i = 1:length(groups)
         prev = findstartmetanote(prev);
         for l1 = 1:length(prev)
             for l2 = 1:length(ends)
-                if ends(l2).parameter.fields{4}.value - ...
-                        prev(l1).parameter.fields{4}.value < 10
+                dt = ends(l2).parameter.fields{4}.value - ...
+                     prev(l1).parameter.fields{4}.value;
+                if dt > 0 && dt < 10
                     if isempty(pattern)
                         seq.syntagm(prev(l1),ends(l2));
                     else
