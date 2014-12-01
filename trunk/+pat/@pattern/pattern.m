@@ -196,9 +196,9 @@ classdef pattern < hgsetget
                     %    continue
                     %end
                     
-                    if undefined_pitch_parameter(common)
-                        continue
-                    end
+                    %if undefined_pitch_parameter(common)
+                    %    continue
+                    %end
                     
                     generalized = true;
                     param = common;
@@ -336,7 +336,8 @@ classdef pattern < hgsetget
                     %    continue
                     %end
                     for j = 1:length(general.children)
-                        if isequal(general.children{j}.parameter,param)
+                        if isequal(general.children{j}.parameter,param,...
+                                   options)
                             return
                         end
                     end
@@ -796,11 +797,11 @@ classdef pattern < hgsetget
                 obj2 = obj1;
                 return
             end
-            if undefined_pitch_parameter(param)
-                found = [];
-                obj2 = [];
-                return
-            end
+            %if undefined_pitch_parameter(param)
+            %    found = [];
+            %    obj2 = [];
+            %    return
+            %end
             found = parent.findchild(param,options);
             if isempty(found)
                 obj2 = pat.pattern(root,parent,param,obj1.memory);
@@ -942,6 +943,7 @@ classdef pattern < hgsetget
                 return
             end
             if isempty(obj1) || isempty(obj1.parameter)
+                % does this ever happen?
                 t = false;
                 return
             end
@@ -1099,8 +1101,8 @@ function test = closuretest(pref,suff,param,parent,nboccs)
         for i = 1:length(note.occurrences)
             prefi = note.occurrences(i).implies(param,suff);
             if ~isempty(prefi) && ...
-                    prefi.pattern.implies(parent,prefi,pref) %&& ...
-                    %length(note.occurrences(i).pattern.occurrences) ...
+                    prefi.pattern.implies(parent,prefi,pref)
+                    %&& length(note.occurrences(i).pattern.occurrences) ...
                     %    >= nboccs
                 test = 0;
                 return
