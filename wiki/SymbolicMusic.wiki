@@ -1,0 +1,49 @@
+#summary One-sentence summary of this page.
+
+= Guided Tour: Symbolic music analysis =
+
+This is a part of the MiningSuite GuidedTour.
+
+"Symbolic" music analysis here means the analysis of either MIDI files or text representations of scores.
+
+== Representing scores ==
+
+{{{
+mus.score('laksin.mid')
+}}}
+Loads and displays a MIDI file.
+
+{{{
+m = mus.score('laksin.mid','Notes',1:10)
+}}}
+Loads only the first ten notes of the MIDI file.
+
+{{{
+m = mus.score('laksin.mid','EndTime',5)
+}}}
+Loads only the first five seconds of the MIDI file.
+
+== Local grouping ==
+
+{{{
+m = mus.score('laksin.mid','Group')
+}}}
+cf. MusGroup for more information.
+
+== Ornamentation reduction ==
+
+{{{
+m = mus.score('laksin.mid','Reduce')
+}}}
+cf. MusReduce for more information.
+
+== Motivic analysis ==
+
+{{{
+m = mus.score('laksin.mid','Motif')
+}}}
+cf. MusMotif for more information.
+
+== To be continued... ==
+
+You can go back to the MiningSuite GuidedTour.
