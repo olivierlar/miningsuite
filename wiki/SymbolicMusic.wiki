@@ -1,4 +1,4 @@
-#summary One-sentence summary of this page.
+#summary Guided Tour: Symbolic music analysis
 
 = Guided Tour: Symbolic music analysis =
 
