@@ -22,4 +22,8 @@ Would you like to analyse audio recordings of music or "symbolic" representation
 
 === Audio-based music analysis ===
 
+AudioMusic (not open yet)
+
 === Symbolic music analysis ===
+
+SymbolicMusic
