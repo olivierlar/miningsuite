@@ -331,13 +331,13 @@ classdef occurrence < hgsetget
                         occ2 = [];
                         return
                     end
-                    if undefined_pitch_parameter(common)
-                        occ2 = [];
-                        return
-                    end
+                    %if undefined_pitch_parameter(common)
+                    %    occ2 = [];
+                    %    return
+                    %end
 
                     param = common;
-                    [newchild, newchild] = modelchild.generalize(param,root);
+                    [newchild, found] = modelchild.generalize(param,root,0,options);
                     if isempty(newchild)
                         occ2 = [];
                         return
