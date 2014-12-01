@@ -3,7 +3,9 @@
 
 = How to use the _MiningSuite_? =
 
-For the moment, the _MiningSuite_ being on a alpha development phase, there is no direct Download button. To download the code, you need to check out the Subversion repository. A new version 0.8 will be released at the end of October 2014, with a direct Download button.
+Download the latest public version of MiningSuite, available at the project home page:
+https://code.google.com/p/miningsuite/
+under the paragraph "Releases".
 
 The _MiningSuite_ requires _Matlab_ 7.6 (r2008a) or newer versions. However version 8.2 (r2013b) or newer is strongly recommended, because _MiningSuite_ easily crashes on previous versions.
 
