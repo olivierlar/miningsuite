@@ -11,9 +11,13 @@ For the moment, only local grouping in the time domain have been conceived and i
 
 In the time domain, local grouping aggregate in a purely hierarchical fashion. Each group is characterized by the maximal temporal distance between successive notes. Smaller groups are related to short temporal distances while larger group that contains other groups are related to longer temporal distances.
 
-In this example below, the piece starts with four eighth-notes followed by a fourth-note. These first 5 notes (with successive pitches C,C,C,D,E) form a local group related to the rhythmic value of eighth-note. This 5-note local group is followed by an isolated fourth-note (D) and a second 5-note local group (C,E,D,D,C). Since these 11 notes end with a half-note, they form altogether a higher-level local group related to the rhythmic value of fourth-note.
+Let's analyse this French folk song, called "Au clair de la lune":
+https://miningsuite.googlecode.com/svn/wiki/auclairdelalune_score.png
 
-https://miningsuite.googlecode.com/svn/wiki/auclairdelalune_score.png <p>
-https://miningsuite.googlecode.com/svn/wiki/auclairdelalune.png <p>
+Below is the local grouping, obtained using the command:
+{{{
+mus.score('auclairdelalune.mid','Group','Spell')
+}}}
+https://miningsuite.googlecode.com/svn/wiki/auclair_group.png
 
-To be continued..
+The piece starts with four eighth-notes followed by a fourth-note. These first 5 notes (with successive pitches C,C,C,D,E) form a local group related to the rhythmic value of eighth-note. This 5-note local group is followed by an isolated fourth-note (D) and a second 5-note local group (C,E,D,D,C). Since these 11 notes end with a half-note, they form altogether a higher-level local group related to the rhythmic value of fourth-note. The grouping is the same for the three other phrases, as they present the same rhythmic configuration.
