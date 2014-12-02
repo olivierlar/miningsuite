@@ -55,6 +55,16 @@ When subordinate events in a local group have same pitch than the final note of 
 
 For instance, in the figure, the second 5-note local group (C,E,D,D,C) ends with pitch C, which already appears at the beginning of the group, thus the two occurrences of pitch C form a meta-note, which is highlighted by a red rectangle. The local group develops a broderie around that main note C.
 
+== Syntagmatic network == 
+
+Melodic “reduction” is commonly understood as a process of eliminating the ornamentation (here, the subordinate elements) from the music surface in order to keep the deeper structure (on various hierarchical levels) made of the more important notes. Our conception of melodic reduction, however, does not impose such reduction of information, but on the contrary, integrates the deeper structure information within the music surface. More precisely, the surface is formalized as a chain of connections between successive notes, i.e., a chain of syntagmatic connections, or a syntagmatic chain, following Saussure (1916)'s terminology. The deeper structure can be represented by adding new syntagmatic connections between successive elements in the deeper hierarchical levels. We obtain hence a syntagmatic network presenting a set of possible alternative syntagmatic chains. Formalized heuristics rule this construction of syntagmatic chains, as shown below.
+
+The head of any local group is syntagmatically connected to the most recent note preceding the group that is not a passing note, as well as to the head of any local group closed by that note. For instance, in the figure, the first 3 notes are C#, D and C#. The second and third notes form a local group, with head C#. This head is then syntagmatically connected to the previous note, i.e., the first C#. Similarly, the head of any local group is syntagmatically connected to the note succeeding the group.
+
+In a series of passing note, there is a direct syntagmatic connection between the notes just before and after that series. For instance in Figure 3, in the longer descending movement around time 12 seconds (D,C,B,A,G), there is a direct connection between the start (D) and ending (G) notes of this line.
+
+A syntagmatic chain of notes of same pitch form a single meta-note whose time onset is set at the first note. This meta-note can be syntagmatically connected to any note following the meta-note. For instance, in the figure, we mentioned the syntagmatic connection between the first and third note. Having same pitch, these two notes form a single meta-note. This formalizes the cambiata around pitch C# materialized by the first 3 notes.
+
 == Reference ==
 
 More details about the model in this paper:
