@@ -293,7 +293,16 @@ if ~isempty(range.oct)
         end
         %    line([t(1) t(end)],[range.chr(i) range.chr(i)],'LineStyle',':');
     end
-    set(gca,'YTickLabel',labels);
+    found = 0;
+    for i = 1:length(labels)
+        if ~isempty(labels{i})
+            found = 1;
+            break
+        end
+    end
+    if found
+        set(gca,'YTickLabel',labels);
+    end
 end
 
 %%
