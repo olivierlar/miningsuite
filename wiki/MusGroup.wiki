@@ -34,6 +34,27 @@ Local group head is shown with a red line that spans from the attack of the note
 
 For instance, in the example above, the first 5-note local group (C,C,C,D,E) terminates with the longer note E, becoming the head of the group.
 
+== Passing notes ==
+
+Within a local group, all notes do not have the same importance. A monotonous and uniform conjunct melodic motion is a series of notes such that:
+ * inter-pitch intervals between success notes are all of 1 or 2 semi-tones and in the same direction (up or down),
+ * inter-onset intervals between successive notes are very similar,
+ * no note is particularly accentuated.
+In such configuration, the intermediary notes form passing notes: these subordinate elements play mainly a role of filling the interval gap between the starting and ending points of the line. For that reason, these intermediary notes are generally not perceived as note that play a more global role outside that particular melodic line. 
+
+Intermediary notes are shown in grey in the graphical representation. For the example below, in the first local group, in the ascending movement (C,D,E), note D plays a simple role of passing note between notes C and E. The longer descending movement around time 12 seconds (D,C,B,A,G) features a series of passing notes.
+
+{{{
+mus.score('auclairdelalune.mid','Group','Passing','Spell')
+}}}
+https://miningsuite.googlecode.com/svn/wiki/auclair_passing.png
+
+== "Broderies" ==
+
+When subordinate events in a local group have same pitch than the final note of the group, they all form a single note – a “meta-note", which becomes the actual head of the group. The subordinate events of the groups can be considered as forming an ornament – such as a cambiata or a trill – of the group's head.
+
+For instance, in the figure, the second 5-note local group (C,E,D,D,C) ends with pitch C, which already appears at the beginning of the group, thus the two occurrences of pitch C form a meta-note, which is highlighted by a red rectangle. The local group develops a broderie around that main note C.
+
 == Reference ==
 
 More details about the model in this paper:
