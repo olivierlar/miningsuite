@@ -35,14 +35,18 @@ Find the diatonic pitch representation (for each note: its letter and accident) 
 {{{
 m = mus.score('laksin.mid','Spell','Group')
 }}}
+Local grouping based on temporal proximity, shown in blue rectangles.
+
 cf. MusGroup for more information.
 
-== Ornamentation reduction ==
+== Ornamentation Reduction ==
 
 {{{
-m = mus.score('laksin.mid','Spell','Group','Reduce')
+m = mus.score('laksin.mid','Spell','Group','Broderie','Passing')
 }}}
-cf. MusReduce for more information.
+Also showing broderies (in red rectangles) and passing notes (in grey).
+
+cf. MusGroup for more information.
 
 == Motivic analysis ==
 
