@@ -2,7 +2,7 @@
 % All rights reserved.
 % License: New BSD License. See full text of the license in LICENSE.txt in
 % the main folder of the MiningSuite distribution.
-function out = minr(arg,varargin)
+function out = score(arg,varargin)
 
 options = seq.options(initoptions,varargin);
 
@@ -417,11 +417,12 @@ if ~isempty(concept)
             dia.accident = dia.accident + interdia.quality;
         end
     end
-    if isempty(dia)
-        dia = pitch2dia(pitch);
-    end
     note.parameter = note.parameter.setfield('dia',...
-                        seq.paramval(note.parameter.getfield('dia').type,dia));
+                    seq.paramval(note.parameter.getfield('dia').type,dia));
+elseif options.spell
+    dia = pitch2dia(pitch);
+    note.parameter = note.parameter.setfield('dia',...
+                    seq.paramval(note.parameter.getfield('dia').type,dia));
 end
 
 if options.metre
@@ -579,6 +580,10 @@ options.chan = chan;
     mode.key = 'Mode';
     mode.type = 'Boolean';
 options.mode = mode;
+
+    spell.key = 'Spell';
+    spell.type = 'Boolean';
+options.spell = spell;
 
     group.key = 'Group';
     group.type = 'Boolean';
