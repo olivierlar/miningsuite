@@ -49,7 +49,7 @@ elseif isa(arg,'mus.Sequence')
             end
             memory = [];
             if options.metre || options.motif
-                pattern = initpattern;
+                pattern = initpattern(options);
             else
                 pattern = [];
             end
@@ -78,7 +78,7 @@ elseif isa(arg,'mus.Sequence')
         end
         memory = [];
         if options.metre || options.motif
-            pattern = initpattern;
+            pattern = initpattern(options);
         else
             pattern = [];
         end
