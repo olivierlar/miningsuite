@@ -2,6 +2,8 @@
 
 = Local grouping =
 
+|| *If you use this program for research purposes, please cite the following reference in your resulting publications:*  Olivier Lartillot, An integrative computational modelling of music structure apprehension. Proceedings, ICMPC-APSCOM 2014 Joint Conference: International Conference on Music Perception and Cognition. ed. / Moo Kyoung Song. Yonsei University, 2014. p. 80-86. http://vbn.aau.dk/en/persons/olivier-lartillot(2aa5961a-82e1-4e8e-8676-7ec8bf240f54)/publications.html ||
+
 {{{
 mus.score(...,'Group')
 }}}
@@ -21,3 +23,6 @@ mus.score('auclairdelalune.mid','Group','Spell')
 https://miningsuite.googlecode.com/svn/wiki/auclair_group.png
 
 The piece starts with four eighth-notes followed by a fourth-note. These first 5 notes (with successive pitches C,C,C,D,E) form a local group related to the rhythmic value of eighth-note. This 5-note local group is followed by an isolated fourth-note (D) and a second 5-note local group (C,E,D,D,C). Since these 11 notes end with a half-note, they form altogether a higher-level local group related to the rhythmic value of fourth-note. The grouping is the same for the three other phrases, as they present the same rhythmic configuration.
+
+More details about the model in this paper:
+Olivier Lartillot, An integrative computational modelling of music structure apprehension. Proceedings, ICMPC-APSCOM 2014 Joint Conference: International Conference on Music Perception and Cognition. ed. / Moo Kyoung Song. Yonsei University, 2014. p. 80-86. http://vbn.aau.dk/en/persons/olivier-lartillot(2aa5961a-82e1-4e8e-8676-7ec8bf240f54)/publications.html
