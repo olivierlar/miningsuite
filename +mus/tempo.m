@@ -47,8 +47,8 @@ function out = main(in,option,postoption)
     if isa(in,'mus.Sequence')
         o = [];
         for i = 1:length(in.content)
-            v = in.content{i}.parameter.getfield('metre').value;
-            if ~isempty(v)
+            v = in.content{i}.parameter.getfield('metre');
+            if ~isempty(v) && ~isempty(v.value)
                 o(end+1) = in.content{i}.parameter.getfield('onset').value;
             end
         end
