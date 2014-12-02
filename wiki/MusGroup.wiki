@@ -65,6 +65,8 @@ In a series of passing note, there is a direct syntagmatic connection between th
 
 A syntagmatic chain of notes of same pitch form a single meta-note whose time onset is set at the first note. This meta-note can be syntagmatically connected to any note following the meta-note. For instance, in the figure, we mentioned the syntagmatic connection between the first and third note. Having same pitch, these two notes form a single meta-note. This formalizes the cambiata around pitch C# materialized by the first 3 notes.
 
+The syntagmatic network is graphically represented in yellow.
+
 == Reference ==
 
 More details about the model in this paper:
