@@ -495,17 +495,20 @@ while k <= length(memo{chan+1})
                                 note,pitch,memo,chan,mode,pattern);
     end
 
-    if options.reduce
-        t = note.parameter.getfield('onset').value;
-        p1 = sk.from.parameter.getfield('chro').value;
-        if options.metapitch && p1 == pitch
+    p1 = sk.from.parameter.getfield('chro').value;
+    if options.fuserepeat
+        if p1 == pitch
             meta = sk.from.extend(note,sk.from.parameter);
             meta.parameter = meta.parameter.setfield('offset',...
                                         note.parameter.getfield('offset'));
             memok = memo;
             memok{chan+1}(1) = [];
             %concept = process(concept,meta,memok,options,pattern);
-        elseif abs(pitch - p1) < 3
+        end
+    end
+    if options.passing
+        if abs(pitch - p1) < 3
+            t = note.parameter.getfield('onset').value;
             t1 = sk.from.parameter.getfield('onset').value;
             for j = 1:length(sk.from.to)
                 p2 = sk.from.to(j).from.parameter.getfield('chro').value;
@@ -589,13 +592,17 @@ options.spell = spell;
     group.type = 'Boolean';
 options.group = group;
 
-    metre.key = 'Metre';
-    metre.type = 'Boolean';
-options.metre = metre;
+    fuserepeat.key = 'FuseRepeat';
+    fuserepeat.type = 'Boolean';
+options.fuserepeat = fuserepeat;
 
-    reduce.key = 'Reduce';
-    reduce.type = 'Boolean';
-options.reduce = reduce;
+    broderie.key = 'Broderie';
+    broderie.type = 'Boolean';
+options.broderie = broderie;
+
+    passing.key = 'Passing';
+    passing.type = 'Boolean';
+options.passing = passing;
 
     motif.key = 'Motif';
     motif.type = 'Boolean';
@@ -604,10 +611,6 @@ options.motif = motif;
     contour.key = 'Contour';
     contour.type = 'Boolean';
 options.contour = contour;
-
-    metapitch.key = 'MetaPitch';
-    metapitch.type = 'Boolean';
-options.metapitch = metapitch;
 
     mod12.key = 'Octave';
     mod12.type = 'Boolean';
@@ -625,6 +628,10 @@ options.dia = dia;
     onset.key = 'Onset';
     onset.type = 'Boolean';
 options.onset = onset;
+
+    metre.key = 'Metre';
+    metre.type = 'Boolean';
+options.metre = metre;
 
 
 function p = initpattern(options)
