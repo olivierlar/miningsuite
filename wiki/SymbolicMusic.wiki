@@ -23,17 +23,24 @@ m = mus.score('laksin.mid','EndTime',5)
 }}}
 Loads only the first five seconds of the MIDI file.
 
+== Pitch spelling ==
+
+{{{
+m = mus.score('laksin.mid','Spell')
+}}}
+Find the diatonic pitch representation (for each note: its letter and accident) corresponding to the MIDI sequence.
+
 == Local grouping ==
 
 {{{
-m = mus.score('laksin.mid','Group')
+m = mus.score('laksin.mid','Spell','Group')
 }}}
 cf. MusGroup for more information.
 
 == Ornamentation reduction ==
 
 {{{
-m = mus.score('laksin.mid','Reduce')
+m = mus.score('laksin.mid','Spell','Group','Reduce')
 }}}
 cf. MusReduce for more information.
 
