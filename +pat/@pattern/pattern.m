@@ -125,7 +125,9 @@ classdef pattern < hgsetget
         function occ = occurrence(obj,varargin)
             occ = pat.occurrence(obj,varargin{:});
             obj.occurrences = [obj.occurrences occ];
-            if ~isempty(obj.parent) && obj.parent.closed < 2
+            if ~isempty(obj.parent) && ...
+                    length(obj.parent.occurrences) == length(obj.occurrences)
+                    %&& obj.parent.closed < 2
                 obj.parent.closed = 0;
             end
         end
@@ -416,7 +418,7 @@ classdef pattern < hgsetget
                 
                 occ2 = child.occurrence(occ,succ);
                 if isempty(newchild) && child.closed == 1
-                    child.closed = 2;
+                    %child.closed = 2;
                 end
                 %child.closed = 1;
                 %if length(obj.children) == 1 && ...
