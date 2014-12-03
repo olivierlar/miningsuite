@@ -11,4 +11,6 @@ Audio and symbolic representations and processes are tightly interconnected: The
 
 The integration of expertise developed in separate areas of study into common modules encourages further reuse of these individual methods and their intermingling into a common framework.
 
+The GuidedTour offers a panorama of the capabilities offered in the MiningSuite.
+
 <g:plusone size="medium"></g:plusone>
