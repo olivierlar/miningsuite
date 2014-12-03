@@ -309,6 +309,7 @@ classdef occurrence < hgsetget
         end
         function occ2 = track_cycle(occ,succ,root,options)
             modelchild = occ.cycle(2);
+            
             param = modelchild.parameter;
             [test, common] = succ.parameter.implies(param,...
                                                     occ.suffix.parameter);
@@ -316,11 +317,24 @@ classdef occurrence < hgsetget
                 occ2 = [];
                 return
             end
+            
+            generalcycle = [];
+            endofcycle = (length(occ.cycle) == 2);
+            if endofcycle
+                prefixes = list(modelchild);
+                prefix = prefixes(2);
+                [test2, common2] = succ.parameter.implies(prefix.parameter,...
+                                                          occ.suffix.parameter);
+                if ~test2
+                    generalcycle = common2;
+                end
+            end
+            
             if ~isequal(modelchild.parent,occ.pattern)
                 child = [];
                 newchild = []; % Check this
                 for i = 1:length(occ.pattern.children)
-                    if isequal(occ.pattern.children{i}.parameter,param,...
+                    if isequal(occ.pattern.children{i}.parameter,common,...
                                options)
                         child = occ.pattern.children{i};
                         break
@@ -329,35 +343,37 @@ classdef occurrence < hgsetget
                 if isempty(child)
                     child = pat.pattern(root,occ.pattern,common);
                 end
-            else
-                if ~test
-                    %if undefined_pitch_parameter(common)
-                    %    occ2 = [];
-                    %    return
-                    %end
+            elseif ~test
+                %if undefined_pitch_parameter(common)
+                %    occ2 = [];
+                %    return
+                %end
 
-                    param = common;
-                    [newchild, found] = modelchild.generalize(param,root,0,options);
-                    if isempty(newchild)
-                        occ2 = [];
-                        return
-                    end
-                    newchild.specificmodel = [modelchild.specificmodel, ... 
-                                              modelchild];
-                    if isempty(newchild)
-                        newchild.occurrences = modelchild.occurrences; % This might be avoided in order to get specific classes
-                    end
-                    child = newchild;
-                else
-                    child = modelchild;
-                    newchild = [];
+                param = common;
+                [newchild, found] = modelchild.generalize(param,root,0,options);
+                if isempty(newchild)
+                    occ2 = [];
+                    return
                 end
+                newchild.specificmodel = [modelchild.specificmodel, ... 
+                                          modelchild];
+                if isempty(newchild)
+                    newchild.occurrences = modelchild.occurrences; % This might be avoided in order to get specific classes
+                end
+                child = newchild;
+            else
+                child = modelchild;
+                newchild = [];
             end
             occ2 = child.occurrence(occ,succ);
+            if ~isempty(generalcycle)
+                occ2.pattern = occ2.pattern.generalize(generalcycle,...
+                                                       root,0,options);
+            end
             if isempty(newchild) && child.closed == 1
                 child.closed = 2;
             end
-            if length(occ.cycle) == 2
+            if endofcycle
                 occ2.round = occ2.round + 1;
             end
             if pat.verbose
@@ -567,7 +583,9 @@ classdef occurrence < hgsetget
             end
         end
         function pre1 = implies(obj,par2,suff)
-            if isa(suff,'pat.event') || isempty(obj.pattern.parent.parent)
+            if isa(suff,'pat.event') || ...
+                    (isempty(obj.cycle) && ...
+                     isempty(obj.pattern.parent.parent))
                 pre1 = [];
                 return
             end
