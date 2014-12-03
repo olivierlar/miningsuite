@@ -310,6 +310,12 @@ classdef occurrence < hgsetget
         function occ2 = track_cycle(occ,succ,root,options)
             modelchild = occ.cycle(2);
             param = modelchild.parameter;
+            [test, common] = succ.parameter.implies(param,...
+                                                    occ.suffix.parameter);
+            if ~test && ~common.isdefined(occ.pattern)
+                occ2 = [];
+                return
+            end
             if ~isequal(modelchild.parent,occ.pattern)
                 child = [];
                 newchild = []; % Check this
@@ -321,16 +327,10 @@ classdef occurrence < hgsetget
                     end
                 end
                 if isempty(child)
-                    child = pat.pattern(root,occ.pattern,param);
+                    child = pat.pattern(root,occ.pattern,common);
                 end
             else
-                [test, common] = succ.parameter.implies(param,...
-                                                       occ.suffix.parameter);
                 if ~test
-                    if ~common.isdefined(occ.pattern)
-                        occ2 = [];
-                        return
-                    end
                     %if undefined_pitch_parameter(common)
                     %    occ2 = [];
                     %    return
