@@ -233,8 +233,9 @@ for i = 1:nn
                           'EdgeColor',ec,'LineWidth',lw,'LineStyle',ls);
                 if ~isempty(sf.property)
                     pk = sf.parameter.getfield('chro').value;
-                    rectangle('Position',[t2-.02,pk-.2,.04,.4],...
-                            'EdgeColor','r','LineWidth',2,'Curvature',1);
+                    plot([t2,t2e-dx],[pk,pk],'r','LineWidth',5);
+                    %rectangle('Position',[t2-.02,pk-.2,.04,.4],...
+                    %        'EdgeColor','r','LineWidth',2,'Curvature',1);
                 end
             end
             if isempty(sf.isprefix)
