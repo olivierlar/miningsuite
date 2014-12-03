@@ -623,6 +623,7 @@ options.chro = chro;
 
     dia.key = 'Dia';
     dia.type = 'Boolean';
+    dia.default = 1;
 options.dia = dia;
 
     onset.key = 'Onset';
