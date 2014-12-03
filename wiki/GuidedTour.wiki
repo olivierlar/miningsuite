@@ -1,4 +1,5 @@
 #summary Guided Tour showing the capabilities of MiningSuite (under construction)
+#labels Featured
 
 = Guided Tour =
 
