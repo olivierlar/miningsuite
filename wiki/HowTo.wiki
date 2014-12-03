@@ -15,4 +15,4 @@ To use the toolbox, simply add the folder `miningsuite` to your _Matlab_ path.
 
 The list of operators available in the _MiningSuite_, stored in file `Contents.m`, can also be displayed by typing *`help miningsuite`* in _Matlab_.
 
-Examples of what you can try for the moment can be found in the wikipage UsageTxt.
+The GuidedTour offers a panorama of the capabilities offered in the _MiningSuite_.
