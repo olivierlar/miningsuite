@@ -1,0 +1,24 @@
+#summary Guided Tour: Audio-based music analysis
+
+= Guided Tour: Audio-based music analysis =
+
+This is a part of the MiningSuite GuidedTour.
+
+{{{
+t = mus.tempo('ragtime.wav')
+t.getdata
+}}}
+Estimates tempo.
+
+{{{
+t = mus.tempo('ragtime.wav','FrameSize',2)
+}}}
+
+{{{
+mus.tempo('laksin.mid')
+}}}
+Estimates tempo from a MIDI file, using the same audio-based method as for the audio file.
+
+== To be continued... ==
+
+You can go back to the MiningSuite GuidedTour.
