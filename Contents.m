@@ -1,5 +1,5 @@
 % MiningSuite
-% Version 0.8 (Alpha version) 27-October-2014
+% Version 0.8.1 (Alpha version) 3-December-2014
 %
 % It is still in development stage, so the results cannot be trusted for the moment..
 %
