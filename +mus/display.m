@@ -308,7 +308,7 @@ end
 
 %%
 option.scheaf = 1;
-option.minlength = 5;
+option.minlength = 3;
 
 pool = {};
 t2s = [];
@@ -349,7 +349,7 @@ for i = 1:nn
                 
                     for h = 1:length(s.closedbranches)
                         p = s.closedbranches(h);
-                        if p.length < 1
+                        if p.length < 4
                             continue
                         end
                         y = y-.4;

@@ -537,7 +537,7 @@ end
 
 if (options.metre || options.motif) %&& isempty(note.occurrences)
     pat.occurrence(pattern.v,[],note); % should be r
-    pattern.occ0.memorize(note,pattern.root,options);
+    pattern.occ0.memorize(note,pattern.root,options,[],1);
 end
 
 if 0 %options.mode

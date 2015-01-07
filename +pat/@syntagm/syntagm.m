@@ -48,7 +48,7 @@ classdef syntagm < seq.syntagm
                 end
             end
             for i = 1:length(occ)
-                occ(i).memorize(obj,root,options,genpool{i});
+                occ(i).memorize(obj,root,options,genpool{i},1);
             end
         end
         function val = overlaps(obj1,obj2)

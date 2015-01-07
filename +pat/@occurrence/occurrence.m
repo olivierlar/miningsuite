@@ -271,6 +271,10 @@ classdef occurrence < hgsetget
             end
         end
         function g = generalize(obj,patt)
+            if isequal(obj.pattern,patt)
+                g = obj;
+                return
+            end
             g = patt.occurrence(obj.prefix,obj.suffix);
             g.specific = obj.specific;
             %g.general
@@ -380,7 +384,7 @@ classdef occurrence < hgsetget
                 display(occ2);
             end
         end
-        function occ = memorize(obj,succ,root,options,occs)
+        function occ = memorize(obj,succ,root,options,occs,detect)
             if nargin < 5
                 occs = [];
             end
@@ -465,7 +469,8 @@ classdef occurrence < hgsetget
             end
             
             objpat.memory.learn(succ.parameter,obj,succ,objpat,...
-                                objpat.specific,cyclic,root,options);
+                                objpat.specific,cyclic,root,options,...
+                                detect);
         
             for i = 1:length(objpat.general)
                 %% WARNING: Redundant info in objpat.general!!
@@ -477,7 +482,8 @@ classdef occurrence < hgsetget
                                                obj,succ,...
                                                objpat.general(i),...
                                                objpat.general(i).specificmodel,...
-                                               cyclic,root,options);
+                                               cyclic,root,options,...
+                                               detect);
             end
             %if isempty(obj.cycle)
             %    for i = 1:length(obj.pattern.potentialcycles)

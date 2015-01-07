@@ -496,7 +496,8 @@ classdef pattern < hgsetget
                 last2 = suff.to;
             end
             last1 = cell(1,length(memo));
-            for i = 1:length(memo)
+            i = 1;
+            while i <= length(memo)
                 last1{i} = memo{i}{2};
                 if ~isa(last1{i},'pat.event')
                     last1{i} = last1{i}.to;
@@ -509,6 +510,14 @@ classdef pattern < hgsetget
                     obj2 = [];
                     return
                 end
+                if ~isempty(memo{i}{1}.cycle)
+                    memo(i) = [];
+                    if isempty(memo)
+                        obj2 = [];
+                        return
+                    end
+                    continue
+                end
                 if ~isempty(memo{i}{1}.suffix) && ...
                         ~isempty(pref.suffix) && ...
                         memo{i}{1}.suffix.parameter.fields{4}.value > ...
@@ -516,6 +525,7 @@ classdef pattern < hgsetget
                     obj2 = [];
                     return
                 end
+                i = i+1;
             end
 
             %i = 1;
@@ -725,7 +735,7 @@ classdef pattern < hgsetget
                 for j = 1:length(last1{i}.from)
                     oldsucc = last1{i}.from(j);
                     obj2.memory.learn(oldsucc.parameter,old,oldsucc,obj2,...
-                                      obj2.specificmodel,0,root,options);
+                                      obj2.specificmodel,0,root,options,0);
                 end
             end
             
@@ -1103,9 +1113,11 @@ function test = closuretest(pref,suff,param,parent,nboccs)
         for i = 1:length(note.occurrences)
             prefi = note.occurrences(i).implies(param,suff);
             if ~isempty(prefi) && ...
-                    prefi.pattern.implies(parent,prefi,pref)
-                    %&& length(note.occurrences(i).pattern.occurrences) ...
-                    %    >= nboccs
+                    prefi.pattern.implies(parent,prefi,pref) && ...
+                    length(note.occurrences(i).pattern.occurrences) ...
+                        >= nboccs
+                    % It is necessary to compare number of occurrences,
+                    % because of phenomenon of the type ABCDabcdCD
                 test = 0;
                 return
             end
