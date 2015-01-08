@@ -98,7 +98,7 @@ end
 
 for i = 1:nn
     for j = 1:length(notes{i}.to)
-        if notes{i}.to(j).passing
+        if ~isempty(notes{i}.to(j).passing)
             lw = 2;
         else
             lw = .5;

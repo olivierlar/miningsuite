@@ -453,42 +453,40 @@ while k <= length(memo{chan+1})
         sk = seq.syntagm(prev,note);
     end
     
-    if 0
-        % Connecting successive grouping's starting notes
-        for i = length(prev.issuffix):-1:1
-            if prev.issuffix(i).closing
-                suffix = prev.issuffix(i);
-                while ~isempty(suffix.extends)
-                    while ~isempty(suffix.extends)
-                        suffix = suffix.extends;
-                    end
-                    if ~isempty(suffix.suffix)
-                        suffix = suffix.suffix;
-                    end
-                end
-                if note.parameter.getfield('onset').value - ...
-                        suffix.parameter.getfield('onset').value < 10
-                    if ~isempty(pattern)
-                        pat.syntagm(suffix,note,pattern.root);
-                    else
-                        seq.syntagm(suffix,note);
-                    end
-                end
-                break
-            end
-        end
-    end
+%         % Connecting successive grouping's starting notes
+%         for i = length(prev.issuffix):-1:1
+%             if prev.issuffix(i).closing
+%                 suffix = prev.issuffix(i);
+%                 while ~isempty(suffix.extends)
+%                     while ~isempty(suffix.extends)
+%                         suffix = suffix.extends;
+%                     end
+%                     if ~isempty(suffix.suffix)
+%                         suffix = suffix.suffix;
+%                     end
+%                 end
+%                 if note.parameter.getfield('onset').value - ...
+%                         suffix.parameter.getfield('onset').value < 10
+%                     if ~isempty(pattern)
+%                         pat.syntagm(suffix,note,pattern.root);
+%                     else
+%                         seq.syntagm(suffix,note);
+%                     end
+%                 end
+%                 break
+%             end
+%         end
     
     if ~isempty(pattern) && (options.fuserepeat || options.broderie)
         for i = 1:length(memo{chan+1}(1).issuffix)
             if isempty(memo{chan+1}(1).issuffix(i).property)
-                pat.syntagm(memo{chan+1}(1).issuffix(i).extends,...
-                            note,pattern.root,1,options);
+%                 pat.syntagm(memo{chan+1}(1).issuffix(i).extends,...
+%                             note,pattern.root,1,options);
             end
         end
     end
 
-    if options.group && k == 1
+    if options.group %&& k == 1
         ioi1 = sk.parameter.getfield('onset').inter.value;
             % New inter-onset interval
         [memo,mode] = mus.group(sk.from,ioi1,ioi,options,...
@@ -516,9 +514,12 @@ while k <= length(memo{chan+1})
                 if sign(p2 - p1) == sign(p1 - pitch) && ...
                         abs(p1 - p2) < 3 && ...
                         abs(log( (t-t1) / (t1-t2) )) < .1
-                    sk.from.to(j).passing = 1;
-                    sk.passing = 1;
+                    if isempty(sk.from.to(j).passing)
+                        sk.from.to(j).passing = sk.from.to(j).from;
+                    end
+                    sk.passing = sk.from.to(j).passing;
                     sk.from.passing = [sk.from.to(j) sk];
+                    pat.syntagm(sk.passing,note,pattern.root,1,options);
                 end
             end
         end
