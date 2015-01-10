@@ -96,7 +96,7 @@ for i = 1:length(groups)
     prefix = groups(i);
     prefix.closing = 1;
 
-    if options.broderie
+    if options.broderie && i == 1
         lowprefix = prefix;
         recurs_extend(lowprefix,p1);
         while isempty(lowprefix.suffix.address)
@@ -174,24 +174,26 @@ for i = 1:length(groups)
                 if isempty(pattern)
                     seq.syntagm(prev,ends(l));
                 else
-                    pat.syntagm(prev,ends(l),pattern.root,0);
+                    pat.syntagm(prev,ends(l),pattern.root,0,options);
                 end
             end
+            break
         end
-        prev = findstartmetanote(prev);
-        for l1 = 1:length(prev)
-            for l2 = 1:length(ends)
-                dt = ends(l2).parameter.fields{4}.value - ...
-                     prev(l1).parameter.fields{4}.value;
-                if dt > 0 && dt < 10
-                    if isempty(pattern)
-                        seq.syntagm(prev(l1),ends(l2));
-                    else
-                        pat.syntagm(prev(l1),ends(l2),pattern.root,0);
-                    end
-                end
-            end
-        end
+%         prev = findstartmetanote(prev);
+%         for l1 = 1:length(prev)
+%             for l2 = 1:length(ends)
+%                 dt = ends(l2).parameter.fields{4}.value - ...
+%                      prev(l1).parameter.fields{4}.value;
+%                 if dt > 0 && dt < 10
+%                     if isempty(pattern)
+%                         seq.syntagm(prev(l1),ends(l2));
+%                     else
+%                         pat.syntagm(prev(l1),ends(l2),pattern.root,0,...
+%                                     options);
+%                     end
+%                 end
+%             end
+%         end
     end
 
     if 0 %~isempty(i) && abs(log(ioi1/ioi2)) > tolerance %% RECHECK ALL THIS
@@ -241,7 +243,10 @@ if isempty(prefix)
     return
 end
 p1 = prefix.parameter.getfield('chro').value;
+
 e = recurs_extend(prefix.extends,p2);
+    % Checking all the notes in the group recursively
+    
 if p1 == p2
     if isempty(e)
         e = prefix;
@@ -252,15 +257,6 @@ if p1 == p2
         suffix = prefix.suffix;
         while ~isempty(suffix.suffix)
             suffix = suffix.suffix;
-        end
-        if isempty(e.suffix)
-            first = e;
-            e = pat.event(e.sequence,e.parameter,[],e);
-            if isempty(first.isprefix)
-                first.isprefix = e;
-            else
-                first.isprefix(end+1) = e;
-            end
         end
         e = e.extend(suffix,suffix.parameter);
         e.property = [];

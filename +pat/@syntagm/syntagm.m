@@ -7,6 +7,15 @@ classdef syntagm < seq.syntagm
 		function obj = syntagm(event1,event2,root,memorize,options)
             obj = obj@seq.syntagm(event1,event2);
             
+            if options.fuserepeat
+                if event1.parameter.getfield('chro').value == ...
+                        event2.parameter.getfield('chro').value
+                    meta = event1.extend(event2,event1.parameter);
+                    meta.parameter = meta.parameter.setfield('offset',...
+                                     event2.parameter.getfield('offset'));
+                end
+            end
+            
             if nargin < 4
                 memorize = 1;
             end

@@ -441,9 +441,7 @@ if length(memo) < chan+1
 end
 k = 1;
 while k <= length(memo{chan+1})
-    if k > 1 %&& ...
-            %memo{chan+1}(k).parameter.getfield('chro').value ~= ...
-            %    note.parameter.getfield('chro').value
+    if k > 1
         break
     end
     prev = memo{chan+1}(k);
@@ -492,18 +490,26 @@ while k <= length(memo{chan+1})
         [memo,mode] = mus.group(sk.from,ioi1,ioi,options,...
                                 note,pitch,memo,chan,mode,pattern);
     end
+    
+    if ~isnan(options.metricanchor) && ...
+            mod(sk.parameter.getfield('onset').value,...
+                options.metricanchor) == 1
+            1
+    end
 
     p1 = sk.from.parameter.getfield('chro').value;
-    if options.fuserepeat
-        if p1 == pitch
-            meta = sk.from.extend(note,sk.from.parameter);
-            meta.parameter = meta.parameter.setfield('offset',...
-                                        note.parameter.getfield('offset'));
-            memok = memo;
-            memok{chan+1}(1) = [];
-            %concept = process(concept,meta,memok,options,pattern);
-        end
-    end
+     
+%     if options.fuserepeat
+%         if p1 == pitch
+%             meta = sk.from.extend(note,sk.from.parameter);
+%             meta.parameter = meta.parameter.setfield('offset',...
+%                                         note.parameter.getfield('offset'));
+%             %memok = memo;
+%             %memok{chan+1}(1) = [];
+%             %concept = process(concept,meta,memok,options,pattern);
+%         end
+%     end
+
     if options.passing
         if abs(pitch - p1) < 3
             t = note.parameter.getfield('onset').value;
@@ -604,6 +610,11 @@ options.broderie = broderie;
     passing.key = 'Passing';
     passing.type = 'Boolean';
 options.passing = passing;
+
+    metricanchor.key = 'MetricAnchor';
+    metricanchor.type = 'Integer';
+    metricanchor.default = NaN;
+options.metricanchor = metricanchor;
 
     motif.key = 'Motif';
     motif.type = 'Boolean';
