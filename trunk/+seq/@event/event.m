@@ -84,7 +84,9 @@ classdef event < hgsetget
                         while ~isempty(start.extends)
                             start = start.extends;
                         end
-                        start = start.suffix;
+                        while ~isempty(start.suffix) %Should not be necessary?
+                            start = start.suffix;
+                        end
                     end
                     start = [start findstartmetanote(start)];
                     if isempty(ends)

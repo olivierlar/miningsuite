@@ -49,6 +49,16 @@ classdef event < seq.event
             end
         end
         function obj = extend(prefix,suffix,param)
+            if isempty(prefix.suffix)
+                first = prefix;
+                prefix = pat.event(prefix.sequence,prefix.parameter,[],...
+                                   prefix);
+                if isempty(first.isprefix)
+                    first.isprefix = prefix;
+                else
+                    first.isprefix(end+1) = prefix;
+                end
+            end
             obj = pat.event(prefix.sequence,param,[],suffix);
             obj = obj.extension_routine(prefix,suffix);
         end
