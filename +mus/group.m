@@ -121,14 +121,10 @@ for i = 1:length(groups)
     multi = 0;
     while ~isempty(start.extends)
         %justfound = 0;
-        %while ~isempty(start.extends)
-            start = start.extends;
-        %end
-        %start = start.suffix;
+        start = start.extends;
         oldnote = start.suffix;
         while isempty(oldnote.address)
             oldnote = oldnote.suffix;
-            start = start.suffix;
         end
         if options.contour
             if ~isempty(oldnote.to)
@@ -138,7 +134,7 @@ for i = 1:length(groups)
                         if isempty(pattern)
                             seq.syntagm(oldnote,note);
                         else
-                            pat.syntagm(oldnote,note,pattern.root,0);
+                            oldnote.syntagm(note,pattern.root,0);
                         end
                         %justfound = 1;
                     end
@@ -147,17 +143,30 @@ for i = 1:length(groups)
             end
         end
         multi = 1;
+        [is id] = ismember(oldnote,memo);
+        if is
+            memo(id) = [];
+        end
     end
+    
+    while ~isempty(start.suffix)
+        start = start.suffix;
+        while ~isempty(start.extends)
+            start = start.extends;
+        end
+    end
+    oldnote = start;
     
     if 0 %~justfound 
         if isempty(pattern)
             seq.syntagm(oldnote,note);
         else
-            pat.syntagm(oldnote,note,pattern.root,0);
+            oldnote.syntagm(note,pattern.root,0);
         end
     end
     
     % Finding the previous note
+    
     for k = 1:length(oldnote.to)
         if k > 1
             continue
@@ -174,7 +183,13 @@ for i = 1:length(groups)
                 if isempty(pattern)
                     seq.syntagm(prev,ends(l));
                 else
-                    pat.syntagm(prev,ends(l),pattern.root,0,options);
+                    [s del] = prev.syntagm(ends(l),pattern.root,0,options);
+                    if del
+                        [is id] = ismember(prev,memo);
+                        if is
+                            memo(id) = [];
+                        end
+                    end
                 end
             end
             break
@@ -188,8 +203,8 @@ for i = 1:length(groups)
 %                     if isempty(pattern)
 %                         seq.syntagm(prev(l1),ends(l2));
 %                     else
-%                         pat.syntagm(prev(l1),ends(l2),pattern.root,0,...
-%                                     options);
+%                         prev(l1).syntagm(ends(l2),pattern.root,0,...
+%                                          options);
 %                     end
 %                 end
 %             end

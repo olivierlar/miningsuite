@@ -37,6 +37,19 @@ classdef event < seq.event
                 end
             end
         end
+        function [obj del] = syntagm(prev,next,root,memorize,options)
+            obj = pat.syntagm(prev,next,root,memorize,options);
+            del = 0;
+            if options.fuserepeat
+                if prev.parameter.getfield('chro').value == ...
+                        next.parameter.getfield('chro').value
+                    meta = prev.extend(next,prev.parameter);
+                    meta.parameter = meta.parameter.setfield('offset',...
+                                     next.parameter.getfield('offset'));
+                    del = 1;
+                end
+            end
+        end
         function val = overlaps(obj1,obj2)
             if isa(obj2,'pat.occurrence')
                 if isempty(obj2.prefix)
