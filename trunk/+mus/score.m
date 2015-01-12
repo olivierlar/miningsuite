@@ -441,54 +441,28 @@ if length(memo) < chan+1
 end
 k = 1;
 while k <= length(memo{chan+1})
-    if k > 1
-        break
-    end
     prev = memo{chan+1}(k);
+    del = 0;
     if ~isempty(pattern)
-        sk = pat.syntagm(prev,note,pattern.root,1,options);
+        [sk del] = prev.syntagm(note,pattern.root,1,options);
+        if del == 1 || (del == 2 && k > 1)
+            memo{chan+1}(k) = [];
+            break
+        end
     else
         sk = seq.syntagm(prev,note);
     end
     
-%         % Connecting successive grouping's starting notes
-%         for i = length(prev.issuffix):-1:1
-%             if prev.issuffix(i).closing
-%                 suffix = prev.issuffix(i);
-%                 while ~isempty(suffix.extends)
-%                     while ~isempty(suffix.extends)
-%                         suffix = suffix.extends;
-%                     end
-%                     if ~isempty(suffix.suffix)
-%                         suffix = suffix.suffix;
-%                     end
-%                 end
-%                 if note.parameter.getfield('onset').value - ...
-%                         suffix.parameter.getfield('onset').value < 10
-%                     if ~isempty(pattern)
-%                         pat.syntagm(suffix,note,pattern.root);
-%                     else
-%                         seq.syntagm(suffix,note);
-%                     end
-%                 end
-%                 break
-%             end
-%         end
-    
-    if ~isempty(pattern) && (options.fuserepeat || options.broderie)
-        for i = 1:length(memo{chan+1}(1).issuffix)
-            if isempty(memo{chan+1}(1).issuffix(i).property)
-%                 pat.syntagm(memo{chan+1}(1).issuffix(i).extends,...
-%                             note,pattern.root,1,options);
-            end
-        end
+    if k > 1
+        k = k+1;
+        continue
     end
-
-    if options.group %&& k == 1
+        
+    if options.group
         ioi1 = sk.parameter.getfield('onset').inter.value;
             % New inter-onset interval
-        [memo,mode] = mus.group(sk.from,ioi1,ioi,options,...
-                                note,pitch,memo,chan,mode,pattern);
+        [memo{chan+1},mode] = mus.group(sk.from,ioi1,ioi,options,...
+                                note,pitch,memo{chan+1},chan,mode,pattern);
     end
     
     if ~isnan(options.metricanchor) && ...
@@ -499,18 +473,7 @@ while k <= length(memo{chan+1})
 
     p1 = sk.from.parameter.getfield('chro').value;
      
-%     if options.fuserepeat
-%         if p1 == pitch
-%             meta = sk.from.extend(note,sk.from.parameter);
-%             meta.parameter = meta.parameter.setfield('offset',...
-%                                         note.parameter.getfield('offset'));
-%             %memok = memo;
-%             %memok{chan+1}(1) = [];
-%             %concept = process(concept,meta,memok,options,pattern);
-%         end
-%     end
-
-    if options.passing
+    if options.passing 
         if abs(pitch - p1) < 3
             t = note.parameter.getfield('onset').value;
             t1 = sk.from.parameter.getfield('onset').value;
@@ -525,22 +488,17 @@ while k <= length(memo{chan+1})
                     end
                     sk.passing = sk.from.to(j).passing;
                     sk.from.passing = [sk.from.to(j) sk];
-                    pat.syntagm(sk.passing,note,pattern.root,1,options);
+                    sk.passing.syntagm(note,pattern.root,1,options);
                 end
             end
         end
     end
-    
-    if 0 %1 %options.metre || options.motif
-        sk.memorize;
+    if options.retention
+        k = k+1;
+    else
+        break
     end
-    
-    k = k + 1;
 end
-%if k == 1 % First note
-%    lvl = seq.paramval(note.parameter.getfield('level'),1);
-%    note.parameter = note.parameter.setfield('level',lvl);
-%end
 
 if (options.metre || options.motif) %&& isempty(note.occurrences)
     pat.occurrence(pattern.v,[],note); % should be r
@@ -610,6 +568,10 @@ options.broderie = broderie;
     passing.key = 'Passing';
     passing.type = 'Boolean';
 options.passing = passing;
+
+    retention.key = 'Retention';
+    retention.type = 'Boolean';
+options.retention = retention;
 
     metricanchor.key = 'MetricAnchor';
     metricanchor.type = 'Integer';
