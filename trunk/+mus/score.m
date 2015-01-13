@@ -439,6 +439,7 @@ note.parameter
 if length(memo) < chan+1 
     memo{chan+1} = [];
 end
+
 k = 1;
 while k <= length(memo{chan+1})
     prev = memo{chan+1}(k);
@@ -453,18 +454,14 @@ while k <= length(memo{chan+1})
         sk = seq.syntagm(prev,note);
     end
     
-    if k > 1
+    if k == 1
+        prev1 = prev;
+        sk1 = sk;
+    else
         k = k+1;
         continue
     end
-        
-    if options.group
-        ioi1 = sk.parameter.getfield('onset').inter.value;
-            % New inter-onset interval
-        [memo{chan+1},mode] = mus.group(sk.from,ioi1,ioi,options,...
-                                note,pitch,memo{chan+1},chan,mode,pattern);
-    end
-    
+            
     if ~isnan(options.metricanchor) && ...
             mod(sk.parameter.getfield('onset').value,...
                 options.metricanchor) == 1
@@ -498,6 +495,13 @@ while k <= length(memo{chan+1})
     else
         break
     end
+end
+
+if options.group && ~isempty(memo{chan+1})
+    ioi1 = sk1.parameter.getfield('onset').inter.value;
+        % New inter-onset interval
+    [memo{chan+1},mode] = mus.group(prev1,ioi1,ioi,options,...
+                            note,pitch,memo{chan+1},chan,mode,pattern);
 end
 
 if (options.metre || options.motif) %&& isempty(note.occurrences)
