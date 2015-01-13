@@ -96,7 +96,7 @@ for i = 1:length(groups)
     prefix = groups(i);
     prefix.closing = 1;
 
-    if options.broderie && i == 1
+    if options.broderie %&& i == 1
         lowprefix = prefix;
         recurs_extend(lowprefix,p1);
         while isempty(lowprefix.suffix.address)
