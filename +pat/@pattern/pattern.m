@@ -243,7 +243,9 @@ classdef pattern < hgsetget
                                 continue
                             end
                         else
-                            occ.cycle = [];
+                            %occ.cycle = []; % We should not destroy the
+                            %existing cycle. Maybe create a duplicate
+                            %acyclic pattern??
                         end
                     end
                 end
