@@ -13,15 +13,15 @@ to be continued…
 
 == How it works ==
 
-=== `mus.minr`:`Process_notes`===
+=== `mus.score`:`Process_notes`===
 
 Each note:
 
  {{{
-mus.minr:Process note
+mus.score:Process note
 }}}
 
-=== `mus.minr`:`Process` note ===
+=== `mus.score`:`Process` note ===
 
 Each previous note syntagmatically leading to the note:
 
