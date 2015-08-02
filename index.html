@@ -1,76 +1,97 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
   <head>
-    <meta charset='utf-8'>
+    <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="chrome=1">
-    <link href='https://fonts.googleapis.com/css?family=Chivo:900' rel='stylesheet' type='text/css'>
-    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
-    <link rel="stylesheet" type="text/css" href="stylesheets/github-dark.css" media="screen">
-    <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print">
-    <!--[if lt IE 9]>
-    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
     <title>Miningsuite by olivierlar</title>
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/github-dark.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+    <script src="javascripts/main.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
   </head>
-
   <body>
-    <div id="container">
-      <div class="inner">
 
-        <header>
-          <h1>Miningsuite</h1>
-          <h2>Automatically exported from code.google.com/p/miningsuite</h2>
-        </header>
+      <header>
+        <h1>Miningsuite</h1>
+        <p>A comprehensive Matlab framework for signal, audio and music analysis, articulating audio and symbolic approaches</p>
+      </header>
 
-        <section id="downloads" class="clearfix">
-          <a href="https://github.com/olivierlar/miningsuite/zipball/master" id="download-zip" class="button"><span>Download .zip</span></a>
-          <a href="https://github.com/olivierlar/miningsuite/tarball/master" id="download-tar-gz" class="button"><span>Download .tar.gz</span></a>
-          <a href="https://github.com/olivierlar/miningsuite" id="view-on-github" class="button"><span>View on GitHub</span></a>
-        </section>
+      <div id="banner">
+        <span id="logo"></span>
 
-        <hr>
+        <a href="https://github.com/olivierlar/miningsuite" class="button fork"><strong>View On GitHub</strong></a>
+        <div class="downloads">
+          <span>Downloads:</span>
+          <ul>
+            <li><a href="https://github.com/olivierlar/miningsuite/zipball/master" class="button">ZIP</a></li>
+            <li><a href="https://github.com/olivierlar/miningsuite/tarball/master" class="button">TAR</a></li>
+          </ul>
+        </div>
+      </div><!-- end banner -->
 
-        <section id="main_content">
-          <h3>
-<a id="welcome-to-miningsuite" class="anchor" href="#welcome-to-miningsuite" aria-hidden="true"><span class="octicon octicon-link"></span></a>Welcome to MiningSuite</h3>
+    <div class="wrapper">
+      <nav>
+        <ul></ul>
+      </nav>
+      <section>
+        <h2>
+<a id="what-is-the-miningsuite" class="anchor" href="#what-is-the-miningsuite" aria-hidden="true"><span class="octicon octicon-link"></span></a>What is the <em>MiningSuite</em>?</h2>
 
-<p>This automatic page generator is the easiest way to create beautiful pages for all of your projects. Author your page content here using GitHub Flavored Markdown, select a template crafted by a designer, and publish. After your page is generated, you can check out the new branch:</p>
+<p><em>MiningSuite</em> is a comprehensive Matlab framework for signal, audio and music analysis, articulating audio and symbolic approaches.</p>
 
-<pre><code>$ cd your_repo_root/repo_name
-$ git fetch origin
-$ git checkout gh-pages
-</code></pre>
+<p>This framework is a continuation of the <a href=""><em>MIRtoolbox</em></a> project, going further into the design of an innovative environment offering a large range of audio and music analysis tools that can be freely articulated via a highly adaptive syntactic layer on top of Matlab. The <em>MiningSuite</em> is a substantial step forward for several reasons:</p>
 
-<p>If you're using the GitHub for Mac, simply sync your repository and you'll see the new branch.</p>
+<ul>
+<li>Audio and symbolic analyses are unified into a single framework.</li>
+<li>Exhaustive pattern mining capabilities allow detailed motivic and metrical analyses.</li>
+<li>The <em>MiningSuite</em> features an innovative and integrative set of symbolic-based musicological tools.</li>
+<li>The code and architecture has been entirely rebuilt, in order to foster computational efficiency, code readability, organisation and generality. The project has migrated to an open-source collaborative environment open to all contributors.</li>
+</ul>
 
-<h3>
-<a id="designer-templates" class="anchor" href="#designer-templates" aria-hidden="true"><span class="octicon octicon-link"></span></a>Designer Templates</h3>
+<p>A more complete description of the <em>MiningSuite</em> can be found on <a href="https://github.com/olivierlar/miningsuite/wiki/MiningSuite">this page</a>.</p>
 
-<p>We've crafted some handsome templates for you to use. Go ahead and continue to layouts to browse through them. You can easily go back to edit your page before publishing. After publishing your page, you can revisit the page generator and switch to another theme. Your Page content will be preserved if it remained markdown format.</p>
+<h2>
+<a id="releases" class="anchor" href="#releases" aria-hidden="true"><span class="octicon octicon-link"></span></a>Releases</h2>
 
-<h3>
-<a id="rather-drive-stick" class="anchor" href="#rather-drive-stick" aria-hidden="true"><span class="octicon octicon-link"></span></a>Rather Drive Stick?</h3>
+<p>The following release is available for download:</p>
 
-<p>If you prefer to not use the automatic generator, push a branch named <code>gh-pages</code> to your repository to create a page manually. In addition to supporting regular HTML content, GitHub Pages support Jekyll, a simple, blog aware static site generator written by our own Tom Preston-Werner. Jekyll makes it easy to create site-wide headers and footers without having to copy them across every page. It also offers intelligent blog support and other advanced templating features.</p>
+<ul>
+<li>MiningSuite 0.8.1 (new alpha version): <a href="http://goo.gl/I1ADmJ">http://goo.gl/I1ADmJ</a>
+</li>
+<li>MiningSuite 0.8 (alpha version for ISMIR 2014 tutorial): <a href="http://goo.gl/tTM1Ae">http://goo.gl/tTM1Ae</a>
+</li>
+</ul>
 
-<h3>
-<a id="authors-and-contributors" class="anchor" href="#authors-and-contributors" aria-hidden="true"><span class="octicon octicon-link"></span></a>Authors and Contributors</h3>
+<h2>
+<a id="miningsuite-users-manual" class="anchor" href="#miningsuite-users-manual" aria-hidden="true"><span class="octicon octicon-link"></span></a><em>MiningSuite</em> User's Manual</h2>
 
-<p>You can <a href="https://github.com/blog/821" class="user-mention">@mention</a> a GitHub username to generate a link to their profile. The resulting <code>&lt;a&gt;</code> element will link to the contributor's GitHub Profile. For example: In 2007, Chris Wanstrath (<a href="https://github.com/defunkt" class="user-mention">@defunkt</a>), PJ Hyett (<a href="https://github.com/pjhyett" class="user-mention">@pjhyett</a>), and Tom Preston-Werner (<a href="https://github.com/mojombo" class="user-mention">@mojombo</a>) founded GitHub.</p>
+<p>The whole user's manual will be made progressively available online on this site through a wiki environment. First pages to read are the following:</p>
 
-<h3>
-<a id="support-or-contact" class="anchor" href="#support-or-contact" aria-hidden="true"><span class="octicon octicon-link"></span></a>Support or Contact</h3>
+<ul>
+<li><a href="https://github.com/olivierlar/miningsuite/wiki/MiningSuite">further description of the <em>MiningSuite</em></a></li>
+<li><a href="https://github.com/olivierlar/miningsuite/wiki/How-to-start-using-the-MiningSuite%3F">how to install and use the <em>MiningSuite</em></a></li>
+<li>GuidedTour: Guided Tour showing the capabilities of the <em>MiningSuite</em>
+</li>
+<li>More wiki pages are accessible, from the sidebar at the right of this page.</li>
+</ul>
 
-<p>Having trouble with Pages? Check out the documentation at <a href="https://help.github.com/pages">https://help.github.com/pages</a> or contact <a href="mailto:support@github.com">support@github.com</a> and we’ll help you sort it out.</p>
-        </section>
+<h2>
+<a id="project-development-history" class="anchor" href="#project-development-history" aria-hidden="true"><span class="octicon octicon-link"></span></a>Project development history</h2>
 
-        <footer>
-          Miningsuite is maintained by <a href="https://github.com/olivierlar">olivierlar</a><br>
-          This page was generated by <a href="https://pages.github.com">GitHub Pages</a>. Tactile theme by <a href="https://twitter.com/jasonlong">Jason Long</a>.
-        </footer>
-
-        
-      </div>
+<p>The first version 0.6 committed in the repository in January 2014 was a very limited sneak peek showing some of the capabilities of the framework.
+Alpha version 0.8 released at the end of October 2014.</p>
+      </section>
+      <footer>
+        <p>Project maintained by <a href="https://github.com/olivierlar">olivierlar</a></p>
+        <p><small>Hosted on GitHub Pages &mdash; Theme by <a href="https://twitter.com/michigangraham">mattgraham</a></small></p>
+      </footer>
     </div>
+    <!--[if !IE]><script>fixScale(document);</script><![endif]-->
+    
   </body>
 </html>
