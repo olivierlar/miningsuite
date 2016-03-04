@@ -2,13 +2,13 @@ MiningSuite
 
 Version 0.8.1 (Alpha version) released on December 3 2014.
 
-It is still in development stage, so the results cannot be trusted for the moment..
+It is still in development stage, so the results cannot be trusted for the moment.
 
 MiningSuite is a framework developed within the Matlab environment. It is organized into packages related to signal (SigMinr), auditory (AudMinr), music (MusMinr) domains, with further modules dedicated to symbolic sequence processing (SeqMinr) and pattern mining (PatMinr). The MiningSuite features simpler ways of building audio and music analysis processes, using modules that can be thoroughly controlled, with all the model parameters recorded in the output data. A new layer of syntax improves the readability of the modules’ code. Audio and symbolic analyses are unified into a single framework.
 
 The MiningSuite until version 0.8.1 was designed and developed by Olivier Lartillot.
 
-Open-source project hosted in http://code.google.com/p/miningsuite
+Open-source project hosted at http://code.google.com/p/miningsuite
 
 Copyright (C) 2014, Olivier Lartillot
 All rights reserved.
@@ -22,4 +22,4 @@ To use the toolbox, simply add the folder "miningsuite" to your Matlab path.
 The list of operators available in the MiningSuite, stored in file Contents.m, can also be displayed by typing "help miningsuite" in Matlab.
 
 A documentation is available in the wiki of the Google Code site of the MiningSuite.
-https://code.google.com/p/miningsuite/wiki/MiningSuite
+https://github.com/olivierlar/miningsuite/wiki/MiningSuite
