@@ -15,7 +15,7 @@ function [data sr] = read(file,extract)
 try
     [d,sr] = audioread(file,extract');
 catch thiserror
-    err.wav = thiserror.message;
+    err.audioread = thiserror.message;
     try
         [d,sr] = audioreader(extract,@wavread,file);
     catch thiserror
@@ -77,6 +77,7 @@ nmat = mus.midi2nmat(name);
 
 function misread(file,err)
 display('Here are the error message returned by each reader:');
+display(err.audioread);
 display(err.wav);
 display(err.au);
 display(err.mp3);
