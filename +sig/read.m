@@ -13,7 +13,7 @@
 
 function [data sr] = read(file,extract)
 try
-    [d,sr] = audioread(file,extract');
+    [d,sr] = audioread(file,[extract(1) extract(2)]);
 catch thiserror
     err.audioread = thiserror.message;
     try
