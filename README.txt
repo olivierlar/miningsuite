@@ -10,7 +10,7 @@ The MiningSuite until version 0.8.1 was designed and developed by Olivier Lartil
 
 Open-source project hosted at http://code.google.com/p/miningsuite
 
-Copyright (C) 2014, Olivier Lartillot
+Copyright (C) 2017, Olivier Lartillot
 All rights reserved.
 License: New BSD License. See full text of the license in LICENSE.txt.
 
@@ -21,5 +21,5 @@ The MiningSuite also requires that the Signal Processing Toolbox, one of the opt
 To use the toolbox, simply add the folder "miningsuite" to your Matlab path.
 The list of operators available in the MiningSuite, stored in file Contents.m, can also be displayed by typing "help miningsuite" in Matlab.
 
-A documentation is available in the wiki of the Google Code site of the MiningSuite.
+A documentation is available in the wiki of the GitHub site of the MiningSuite.
 https://github.com/olivierlar/miningsuite/wiki/MiningSuite
