@@ -348,7 +348,7 @@ function [sz,ch,sr] = fileinfo(file,folder)
                                 error;
                             end
                         catch
-                            if not(strcmp(err.wav(1:11),'Error using') && folder)
+                            if ~folder
                                 misread(file, err);
                             end
                         end
@@ -524,7 +524,11 @@ end
 
 function d2 = sortnames(d,d2,n)
     if length(n) == 1
-        d2(end+1) = d(1);
+        if isempty(d2)
+            d2 = d(1);
+        else
+            d2(end+1) = d(1);
+        end
         return
     end
     first = zeros(1,length(n));
@@ -547,7 +551,11 @@ function d2 = sortnames(d,d2,n)
     while i<length(n)
         i = i+1;
         if isempty(n{i})
-            d2(end+1) = d(i);
+            if isempty(d2)
+                d2 = d(i);
+            else
+                d2(end+1) = d(i);
+            end
         else
             dmp = (d(i));
             tmp = {n{i}(2:end)};
