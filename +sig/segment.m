@@ -61,7 +61,7 @@ function out = main(in,option,postoption)
         s = {};
         Sstart = x.Sstart;
         si1 = 0;
-        pos(end+1) = Inf
+        pos(end+1) = Inf;
         for i = 1:length(pos)
             si2 = find(x.sdata > pos(i),1);
             if isempty(si2)
