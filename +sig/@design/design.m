@@ -87,65 +87,21 @@ classdef design
             if nargin<4
                 folder = 0;
             end
-            if strcmpi(arg,'Folder') || strcmpi(arg,'Folders') % When is this used?
-                [nfiles sz sr files] = ...
-                    folderinfo('',[],0,[],[],{},strcmpi(arg,'Folders'));
-                if nfiles == 0
-                    sig.warning('sig.eval','No sound file detected in this folder.')
-                    out = {{}};
-                    return
-                end
-                w = zeros(2,length(sz));
-                if isempty(obj.extract)
-                    for i = 1:length(sz)
-                        w(:,i) = [1;sz(i)];
-                    end
-                else
-                    for i = 1:length(sz)
-                        interval = obj.extract.value;
-                        if strcmpi(obj.extract.unit,'s')
-                            interval = round(interval*sr(i)) + 1;
-                        end
-                        w(:,i) = min(max(interval,1),sz(i));
-                    end
-                end
+
+            [sz,ch,sr] = fileinfo(arg,folder);
+            if isempty(sz)
+                w = [];
+            elseif isempty(obj.extract)
+                w = [1;sz];
             else
-                [sz,ch,sr] = fileinfo(arg,folder);
-                if isempty(sz)
-                    if strcmp(obj.package,'mus')
-                        x = mus.score(arg);
-                        out = obj.main(x,obj.duringoptions);
-                        return
-                    else
-                        out = [];
-                        return
-                    end
+                interval = obj.extract.value(:);
+                if strcmpi(obj.extract.unit,'s')
+                    interval = round(interval*sr) + 1;
                 end
-                if isempty(obj.extract)
-                    w = [1;sz];
-                else
-                    interval = obj.extract.value(:);
-                    if strcmpi(obj.extract.unit,'s')
-                        interval = round(interval*sr) + 1;
-                    end
-                    w = min(max(interval,1),sz);
-                end
-                files = {arg};
-                nfiles = 1;
+                w = min(max(interval,1),sz);
             end
-            out = cell(1,nfiles);
-            for i = 1:nfiles
-                out{i} = sig.evaleach(obj,files{i},w(:,i),sr(i),nargout);
-            end
-            %if isempty(obj.input.main)
-            %    out{1}.Ydata.design.input = files;
-            %end
-            if nfiles > 1
-                out = combineaudiofile(files,out{:});
-                out{1}.celllayers = 'files';
-            else
-                out = out{1};
-            end
+            
+            out = sig.evaleach(obj,arg,w,sr,nargout);
         end
         %%
         function out = display(obj,recurs)
@@ -167,7 +123,9 @@ classdef design
                     end
                 else
                     out = obj.eval(obj.files,1,0);
-                    if isa(out{1},'sig.signal')
+                    if isa(out,'mus.Sequence')
+                        out.display;
+                    elseif isa(out{1},'sig.signal')
                         out{1}.display;
                     end
                 end
@@ -320,51 +278,9 @@ function [sz,ch,sr] = fileinfo(file,folder)
         sz = info.TotalSamples;
         ch = info.NumChannels;
         sr = info.SampleRate;
-    catch thiserror
-        warning('Did you specify the file extension? This will be required in future versions of Matlab.');
-        display('If you did not specify a file extension, you can ignore the other warning messages below:');
-        err.audioread = thiserror.message;
-        try
-            [sz,ch,sr] = audioreader(@wavread,file);
-        catch thiserror
-            err.wav = thiserror.message;
-            try
-               [sz,ch,sr] = audioreader(@auread,file);
-            catch thiserror
-                err.au = thiserror.message;
-                try
-                    [sz,ch,sr] = audioreader(@mp3read,file);
-                catch thiserror
-                    err.mp3 = thiserror.message;
-                    try
-                        [sz,ch,sr] = audioreader(@aiffread,file);
-                    catch thiserror
-                        err.aiff = thiserror.message;
-                        try
-                            ch = midiread(file);
-                            sr = 0;
-                            sz = [];
-                            if ~ch
-                                error;
-                            end
-                        catch
-                            if ~folder
-                                misread(file, err);
-                            end
-                        end
-                    end
-                end
-            end
-        end
+    catch
+        
     end
-end
-
-
-function [sz,ch,sr] = audioreader(reader,file)
-    [unused,sr] = reader(file,1);
-    dsize = reader(file,'size');
-    sz = dsize(1);
-    ch = dsize(2);
 end
 
 
@@ -377,16 +293,6 @@ function test = midiread(name)
     head = fread(fid,'uint8');
     fclose(fid);
     test = isequal(head(1:4)',[77 84 104 100]);
-end
-
-
-function misread(file,err)
-    display('Here are the error message returned by each reader:');
-    display(err.wav);
-    display(err.au);
-    display(err.mp3);
-    display(err.aiff);
-    error(['Cannot open file ',file]);
 end
 
 
