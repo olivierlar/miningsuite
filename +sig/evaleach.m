@@ -27,9 +27,10 @@ if nargin<8 && length(window) > 1
     nbsamples = window(2)-window(1)+1;
 end
 
-if isstruct(design.tmpfile) && isfield(design.tmpfile,'fid') ...
-        && design.tmpfile.fid
+if isstruct(design(1).tmpfile) && isfield(design(1).tmpfile,'fid') ...
+        && design(1).tmpfile.fid
     % The input can be read from the temporary file
+    design(2) = [];
     y = {design.tmpfile.data};
     channels = y{1}.fbchannels;
     if isempty(channels)
@@ -79,42 +80,43 @@ if 0 %isaverage(specif)
     specif.eachchunk = 'Normal';
 end
 
-if isempty(design.main)
+if isempty(design(1).main)
     % The top-down traversal of the design flowchart now reaches the lowest
-    % layer, i.e., audio file loading.
+    % layer, i.e., file loading.
     % Now the actual evaluation will be carried out bottom-up.
     
-    [data sr] = sig.read(filename,window);
-    
-    if sr % Audio data
+    if isempty(sr)
+        y = mus.midi2nmat(filename);
+    else
+        data = sig.read(filename,window);
+        
         if strcmpi(design.duringoptions.mix,'Pre')
             data = data.sum('channel');
         end
-
+        
         %if frame.inner
         %    warning('Inner frame has not been executed.');
         %end
-
+        
         if ~isempty(frame) && frame.toggle
             frate = sig.compute(@sig.getfrate,sr,frame);
             data = data.frame(frame,sr);
             y = {sig.signal(data,'Xsampling',1/sr,'Name','audio',...
-                            'Sstart',(window(1)-1)/sr,'Srate',sr,...
-                            'Ssize',data.size('sample'),...
-                            'Frate',frate,'fnumber',data.size('frame'))};
+                'Sstart',(window(1)-1)/sr,'Srate',sr,...
+                'Ssize',data.size('sample'),...
+                'Frate',frate,'fnumber',data.size('frame'))};
         else
             y = {sig.signal(data,'Name','audio',...
-                            'Sstart',(window(1)-1)/sr,'Srate',sr,...
-                            'Ssize',data.size('sample'))};
+                'Sstart',(window(1)-1)/sr,'Srate',sr,...
+                'Ssize',data.size('sample'))};
         end
-    else % MIDI data
-        y = data;
+        
+        
+        %if not(isempty(d.postoption)) && d.postoption.mono
+        %    y = miraudio(y,'Mono',1);
+        %end
+        %y = set(y,'AcrossChunks',get(d,'AcrossChunks'));
     end
-    
-    %if not(isempty(d.postoption)) && d.postoption.mono
-    %    y = miraudio(y,'Mono',1);
-    %end
-    %y = set(y,'AcrossChunks',get(d,'AcrossChunks'));
     
 else
     if isempty(frame) || ~frame.toggle
@@ -122,164 +124,198 @@ else
         frame = design.frame;
     end    
     if chunking % Already in a chunk decomposition process
-        y = sig.evaleach(design.input,filename,window,sr,1,frame,chunking);
+        y = sig.evaleach(design.input(1),filename,window,sr,1,frame,chunking);
         switch chunking 
             case 1
                 after = design.afteroptions;
             case 2
                 after = [];
         end
-        y = design.main(y,design.duringoptions,after);
-    elseif design.nochunk % && isempty(d.tmpfile)
-        y = sig.evaleach(design.input,filename,window,sr,1,[],chunking);
-        y = design.main(y,design.duringoptions,design.afteroptions);
-    else
-        %frnochunk = isfield(d.frame,'dontchunk');
-        %frchunkbefore = isfield(d.frame,'chunkbefore');
-        if ~isempty(frame) && frame.toggle % && ~frame.inner
-            chunks = compute_frames(frame,sr,window,nbsamples,sig.chunklim,0);
-        else
-            if nbsamples > sig.chunklim
-            % The required memory exceed the max memory threshold.
-                nch = ceil(nbsamples/sig.chunklim); 
-                chunks = max(0,nbsamples-sig.chunklim*(nch:-1:1))+window(1);
-                chunks(2,:) = nbsamples-sig.chunklim*(nch-1:-1:0)+window(1)-1;
-            else
-                chunks = [];
-            end
+        main = design.main;
+        if iscell(main)
+            main = main{1};
         end
-
-        if not(isempty(chunks))
-            % The chunk decomposition is performed.
-            nch = size(chunks,2);
-            %d = callbeforechunk(d,d,w,lsz); % Some optional initialisation
-            %tmp = [];
-            if 1%mirwaitbar
-                h = waitbar(0,['Computing ' design.name]);
-            else
-                h = [];
-            end
-            if not(isempty(design.tmpfile)) && design.tmpfile.fid == 0
-                % When applicable, a new temporary file is created.
-                tmpname = [design.files '.sig.tmp'];
-                design.tmpfile.fid = fopen(tmpname,'w');
-                if design.tmpfile.fid == -1
-                    error('Error in SigMinr: Cannot write a temporary file on the Current Directory. Please select a Current Directory with write access.');
-                end
-                chunks = fliplr(chunks);
-            end
-
-            %afterpostoption = d.postoption; % Used only when:
-                            % - eachchunk is set to 'Normal',
-                            % - combinechunk is not set to 'Average', and
-                            % - no afterchunk field has been specified.
-                            % afterpostoption will be used for the final call
-                            % to the method after the chunk decomposition.
+        y = main(y,design.duringoptions,after);
+    elseif isempty(sr)
+        if length(design.input) == 2
+            y = sig.evaleach(design.input(2),filename,window,sr,1,[],chunking);
+            y = design.main{2}(y,design.duringoptions,design.afteroptions);
+        else
+            y = sig.evaleach(design.input,filename,window,sr,1,[],chunking);
+            y = design.main(y,design.duringoptions,design.afteroptions);
+        end
+    else
+        design = design(1);
+        if design.nochunk
+            y = sig.evaleach(design.input,filename,window,sr,1,[],chunking);
             main = design.main;
-            if 0 %~isfield(specif,'eachchunk')
-                specif.eachchunk = 'Normal';
+            if iscell(main)
+                main = main{1};
             end
-            if 1 %ischar(specif.eachchunk) && strcmpi(specif.eachchunk,'Normal')
-                if 0 %not(isempty(d.postoption))
-                    pof = fieldnames(d.postoption);
-                    for o = 1:length(pof)
-                        if isfield(specif.option.(pof{o}),'chunkcombine')
-                            afterpostoption = rmfield(afterpostoption,pof{o});
-                        else
-                            d.postoption = rmfield(d.postoption,pof{o});
+            y = design.main(y,design.duringoptions,design.afteroptions);
+        else
+            %frnochunk = isfield(d.frame,'dontchunk');
+            %frchunkbefore = isfield(d.frame,'chunkbefore');
+            if ~isempty(frame) && frame.toggle % && ~frame.inner
+                chunks = compute_frames(frame,sr,window,nbsamples,sig.chunklim,0);
+            else
+                if nbsamples > sig.chunklim
+                    % The required memory exceed the max memory threshold.
+                    nch = ceil(nbsamples/sig.chunklim);
+                    chunks = max(0,nbsamples-sig.chunklim*(nch:-1:1))+window(1);
+                    chunks(2,:) = nbsamples-sig.chunklim*(nch-1:-1:0)+window(1)-1;
+                else
+                    chunks = [];
+                end
+            end
+            
+            if not(isempty(chunks))
+                % The chunk decomposition is performed.
+                nch = size(chunks,2);
+                %d = callbeforechunk(d,d,w,lsz); % Some optional initialisation
+                %tmp = [];
+                if 1%mirwaitbar
+                    h = waitbar(0,['Computing ' design.name]);
+                else
+                    h = [];
+                end
+                if not(isempty(design.tmpfile)) && design.tmpfile.fid == 0
+                    % When applicable, a new temporary file is created.
+                    tmpname = [design.files '.sig.tmp'];
+                    design.tmpfile.fid = fopen(tmpname,'w');
+                    if design.tmpfile.fid == -1
+                        error('Error in SigMinr: Cannot write a temporary file on the Current Directory. Please select a Current Directory with write access.');
+                    end
+                    chunks = fliplr(chunks);
+                end
+                
+                %afterpostoption = d.postoption; % Used only when:
+                % - eachchunk is set to 'Normal',
+                % - combinechunk is not set to 'Average', and
+                % - no afterchunk field has been specified.
+                % afterpostoption will be used for the final call
+                % to the method after the chunk decomposition.
+                main = design.main;
+                if 0 %~isfield(specif,'eachchunk')
+                    specif.eachchunk = 'Normal';
+                end
+                if 1 %ischar(specif.eachchunk) && strcmpi(specif.eachchunk,'Normal')
+                    if 0 %not(isempty(d.postoption))
+                        pof = fieldnames(d.postoption);
+                        for o = 1:length(pof)
+                            if isfield(specif.option.(pof{o}),'chunkcombine')
+                                afterpostoption = rmfield(afterpostoption,pof{o});
+                            else
+                                d.postoption = rmfield(d.postoption,pof{o});
+                            end
                         end
                     end
+                else
+                    main = specif.eachchunk;
                 end
-            else
-                main = specif.eachchunk;
-            end
-
-            y = {};
-            options = design.duringoptions;
-            options.tmp = [];
-            for i = 1:size(chunks,2)
-                disp(['Chunk ',num2str(i),'/',num2str(nch),'...'])
-                window = [chunks(1,i) chunks(2,i) (i == size(chunks,2))];
-
-                if 0 %not(ischar(specif.eachchunk) && ...
-                       %strcmpi(specif.eachchunk,'Normal'))
-                   if frnochunk
-                       d2.postoption = 0;
-                   else
-                        diffchunks = diff(chunks); % Usual chunk size
-                        d2.postoption = max(diffchunks) -  diffchunks(i);
+                
+                y = {};
+                options = design.duringoptions;
+                options.tmp = [];
+                for i = 1:size(chunks,2)
+                    disp(['Chunk ',num2str(i),'/',num2str(nch),'...'])
+                    window = [chunks(1,i) chunks(2,i) (i == size(chunks,2))];
+                    
+                    if 0 %not(ischar(specif.eachchunk) && ...
+                        %strcmpi(specif.eachchunk,'Normal'))
+                        if frnochunk
+                            d2.postoption = 0;
+                        else
+                            diffchunks = diff(chunks); % Usual chunk size
+                            d2.postoption = max(diffchunks) -  diffchunks(i);
                             % Reduction of the current chunk size to be taken into
                             % consideration in mirspectrum, for instance, using
                             % zeropadding
-                   end
-                end
-
-                chunking = 1;
-                ss = sig.evaleach(design.input,filename,window,sr,1,...
-                                  frame,chunking,nbsamples);
-                if length(ss)>1 && isstruct(ss{2})
-                    design.input.tmpfile = ss{2};
-                    chunking = 2;
-                    nbsamples = chunks(2,end)-chunks(1,end)+1;
-                end
-                              
-                ss = design.main(ss,options,[]);
-
-                if length(ss)>1
-                    options.tmp = ss{2};
-                end
-
-                y = combinechunks(y,ss,i,design,chunks,nargout);
-
-                clear ss
-                if ~isempty(h)
-                    if 0 %not(d.ascending)
-                        close(h)
-                        h = waitbar((chunks(1,i)-chunks(1,end))/chunks(2,1),...
-                            ['Computing ' func2str(d.method) ' (backward)']);
-                    else
-                        waitbar((chunks(2,i)-chunks(1))/chunks(end),h)
+                        end
+                    end
+                    
+                    chunking = 1;
+                    ss = sig.evaleach(design.input,filename,window,sr,1,...
+                        frame,chunking,nbsamples);
+                    if length(ss)>1 && isstruct(ss{2})
+                        design.input.tmpfile = ss{2};
+                        chunking = 2;
+                        nbsamples = chunks(2,end)-chunks(1,end)+1;
+                    end
+                    
+                    main = design.main;
+                    if iscell(main)
+                        main = main{1};
+                    end
+                    ss = main(ss,options,[]);
+                    
+                    if length(ss)>1
+                        options.tmp = ss{2};
+                    end
+                    
+                    y = combinechunks(y,ss,i,design,chunks,nargout);
+                    
+                    clear ss
+                    if ~isempty(h)
+                        if 0 %not(d.ascending)
+                            close(h)
+                            h = waitbar((chunks(1,i)-chunks(1,end))/chunks(2,1),...
+                                ['Computing ' func2str(d.method) ' (backward)']);
+                        else
+                            waitbar((chunks(2,i)-chunks(1))/chunks(end),h)
+                        end
                     end
                 end
-            end
-
-            if isempty(design.tmpfile)
-                y = design.main(y,[],design.afteroptions);
-            else
-                % Final operations to be executed after the chunk decomposition
-                adr = ftell(design.tmpfile.fid);
-                fclose(design.tmpfile.fid);
-                ytmpfile.fid = fopen(tmpname);
-                fseek(ytmpfile.fid,adr,'bof');
-                ytmpfile.data = y{1};
-                ytmpfile.layer = 0;
-                ytmpfile.filename = tmpname;
-                y{2} = ytmpfile;
-            end
-            
-            if 0 %isa(d,'mirstruct') && ...
+                
+                if isempty(design.tmpfile)
+                    main = design.main;
+                    if iscell(main)
+                        main = main{1};
+                    end
+                    y = main(y,[],design.afteroptions);
+                else
+                    % Final operations to be executed after the chunk decomposition
+                    adr = ftell(design.tmpfile.fid);
+                    fclose(design.tmpfile.fid);
+                    ytmpfile.fid = fopen(tmpname);
+                    fseek(ytmpfile.fid,adr,'bof');
+                    ytmpfile.data = y{1};
+                    ytmpfile.layer = 0;
+                    ytmpfile.filename = tmpname;
+                    y{2} = ytmpfile;
+                end
+                
+                if 0 %isa(d,'mirstruct') && ...
                     (isempty(d.frame) || isfield(d.frame,'dontchunk'))
-                y = evalbranches(d,y);
-            end
-            if ~isempty(h)
-                close(h)
-            end
-            drawnow
-
-        else 
-            % No chunk decomposition
-            if design.extensive
-                innerframe = [];
+                    y = evalbranches(d,y);
+                end
+                if ~isempty(h)
+                    close(h)
+                end
+                drawnow
+                
             else
-                innerframe = frame;
+                % No chunk decomposition
+                if design.extensive
+                    innerframe = [];
+                else
+                    innerframe = frame;
+                end
+                y = sig.evaleach(design.input,filename,window,sr,1,innerframe);
+                design.afteroptions.extract = [];
+                main = design.main;
+                if iscell(main)
+                    main = main{1};
+                end
+                y = main(y,design.duringoptions,design.afteroptions);
+                if 0 %isa(d,'mirstruct') && isfield(d.frame,'dontchunk')
+                    y = evalbranches(d,y);
+                end
             end
-            y = sig.evaleach(design.input,filename,window,sr,1,innerframe);
-            design.afteroptions.extract = [];
-            y = design.main(y,design.duringoptions,design.afteroptions);
-            if 0 %isa(d,'mirstruct') && isfield(d.frame,'dontchunk')
-                y = evalbranches(d,y);
-            end
-        end    
+        end
+    end
+    if isa(y,'seq.Sequence')
+        return
     end
     if design.nochunk && ...
             ~isempty(frame) && frame.toggle
