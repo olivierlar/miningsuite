@@ -1,8 +1,19 @@
-function [x type] = init(x,option,frame)
+function [x,type] = init(x,option,frame)
     type = 'sig.Envelope';
     if x.istype('sig.Envelope')
         return
     end
+    if option.zp ~= 2 && ~isa(x,'seq.Sequence')
+        if isa(x,'sig.Signal')
+            x = init_audio(x,option);
+        elseif isa(x,'sig.design')
+            x = [init_audio(x,option),x];
+        end
+    end
+end
+
+
+function x = init_audio(x,option)
     if strcmpi(option.method,'Filter')
         if isnan(option.zp)
             if strcmpi(option.filter,'IIR')

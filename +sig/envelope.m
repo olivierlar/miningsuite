@@ -13,33 +13,12 @@
 
 function varargout = envelope(varargin)
     varargout = sig.operate('sig','envelope',sig.envelope.options,...
-                            @sig.envelope.init,@main,varargin,'concat');
+                            @sig.envelope.init,{@audio,@symbolic},varargin,'concat');
 end
 
 
-function out = main(x,option,postoption)
-    if isnumeric(x) % MIDI Note matrix
-        %%
-        % Code adapted from onsetacorr.m and duraccent.m in MIDItoolbox
-        % NDIVS = divisions in Hz (default = 4);
-        ndivs = 4;
-        ob = x(:,6); % onsets in sec.
-        
-        dur = x(:,7); % durations in sec.
-        tau=0.5;
-        accent_index=2;
-        d = (1-exp(-dur/tau)).^accent_index; % duration accent by Parncutt (1994)
-        
-        vlen = ndivs*(ceil(ob(end))+1);
-        g = zeros(vlen,1);
-        ind = mod(round(ob*ndivs),vlen)+1;
-        for k=1:length(ind)
-            g(ind(k)) = g(ind(k))+d(k);
-        end
-        %%
-        d = sig.data(g,{'sample'});
-        out = sig.Envelope(d,'Srate',ndivs,'Sstart',0,'Ssize',length(g));
-    elseif isempty(option)
+function out = audio(x,option,postoption)
+    if isempty(option)
         out = x;
         tmp = [];
     else
@@ -62,4 +41,27 @@ function x = after(x,postoption)
     x = sig.envelope.upsample(x,postoption);
     x.Ydata = sig.envelope.diff(x,postoption);
     x = sig.envelope.after(x,postoption);
+end
+
+
+function out = symbolic(x,option,postoption)
+    % Code adapted from onsetacorr.m and duraccent.m in MIDItoolbox
+    % NDIVS = divisions in Hz (default = 4);
+    ndivs = 4;
+    ob = x(:,6); % onsets in sec.
+    
+    dur = x(:,7); % durations in sec.
+    tau=0.5;
+    accent_index=2;
+    d = (1-exp(-dur/tau)).^accent_index; % duration accent by Parncutt (1994)
+    
+    vlen = ndivs*(ceil(ob(end))+1);
+    g = zeros(vlen,1);
+    ind = mod(round(ob*ndivs),vlen)+1;
+    for k=1:length(ind)
+        g(ind(k)) = g(ind(k))+d(k);
+    end
+    %%
+    d = sig.data(g,{'sample'});
+    out = {sig.Envelope(d,'Srate',ndivs,'Sstart',0,'Ssize',length(g))};
 end
