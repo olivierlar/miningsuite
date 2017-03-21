@@ -37,27 +37,23 @@ end
 
 if ischar(arg)
     filename = arg;
-    arg = sig.design('sig','input',arg,'sig.signal',[],during);
+    arg = sig.design('sig','input',arg,'file',[],during);
 elseif isa(arg,'sig.design')
     filename = arg.files;
 end
 
-if isa(arg,'sig.signal')
-    %error('Evaluated objects (sig.signal) cannot be used as argument of further operations yet..');
-end
-
 [arg type] = init(arg,during,frame);
 
-if ischar(arg) || isa(arg,'sig.design')
+if isa(arg,'sig.design')
     if isempty(extract) && ~ischar(arg)
-        extract = arg.extract;
+        extract = arg(1).extract;
     end
-    if (~extensive && arg.extensive) || nochunk
+    if (~extensive && arg(1).extensive) || nochunk
         nochunk = 1;
     %elseif ischar(arg)
     %    nochunk = 0;
     else
-        nochunk = arg.nochunk;
+        nochunk = arg(1).nochunk;
     end
     design = sig.design(pack,name,arg,type,main,during,after,frame,...
                         combine,argin(2:end),extract,extensive,nochunk);
