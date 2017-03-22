@@ -1019,7 +1019,7 @@ classdef pattern < hgsetget
                 l = [list(obj.parent) obj];
             end
         end
-        function txt = display(obj,option)
+        function txt = display(obj)
             if length(obj) > 1
                 for i = 1:length(obj)
                     i
@@ -1029,17 +1029,29 @@ classdef pattern < hgsetget
             end
             txt = '';
             if ~isempty(obj.parent) && ~isempty(obj.parent.parent)
-                txt = [display(obj.parent,0),'; '];
+                txt = [simpledisplay(obj.parent),'; '];
             end
             if ~isempty(obj.parameter)
-                txt = [txt display(obj.parameter,0)];
+                txt = [txt simpledisplay(obj.parameter)];
             end
-            if nargin == 1 || option == 1
-                disp(['Pattern: ',txt,' (',num2str(obj.freq),')']);
-            elseif option == 2
-                disp(txt);
+            disp(['Pattern: ',txt,' (',num2str(obj.freq),')']);
+        end
+        function txt = simpledisplay(obj)
+            if length(obj) > 1
+                for i = 1:length(obj)
+                    i
+                    obj(i).display;
+                end
+                return
             end
-            
+            txt = '';
+            if ~isempty(obj.parent) && ~isempty(obj.parent.parent)
+                txt = [display(obj.parent),'; '];
+            end
+            if ~isempty(obj.parameter)
+                txt = [txt simpledisplay(obj.parameter)];
+            end
+            disp(txt);
         end
         function tree(obj,indent)
             if nargin < 2
