@@ -840,11 +840,11 @@ for i=1:num_tracks
       msg_type = midi_msg_type(B,nB);
 
       % DEBUG:
-      if (i==2)
-	  if (msgCtr==1)
-	    disp(msg_type);
-	  end
-      end
+%       if (i==2)
+% 	  if (msgCtr==1)
+% 	    disp(msg_type);
+% 	  end
+%       end
       
       
       switch msg_type
@@ -867,11 +867,11 @@ for i=1:num_tracks
 	chan = Ln;
 
 	% DEBUG:
-	if (i==2)
-	  if (msgCtr==1)
-	    disp([999  Hn type])
-	  end
-	end
+% 	if (i==2)
+% 	  if (msgCtr==1)
+% 	    disp([999  Hn type])
+% 	  end
+% 	end
 	
 	ctr = ctr + len;
 	
