@@ -339,7 +339,7 @@ classdef paramstruct < seq.param
                 end
             end
         end
-        function txt = display(obj,varargin)
+        function txt = display(obj)
             if length(obj) > 1
                 for i = 1:length(obj)
                     display(obj(i));
@@ -359,8 +359,28 @@ classdef paramstruct < seq.param
                         end
                     end
                 end
-                if nargin == 1 && ~isempty(txt)
-                    disp(txt)
+                disp(txt)
+            end
+        end
+        function txt = simpledisplay(obj)
+            if length(obj) > 1
+                for i = 1:length(obj)
+                    display(obj(i));
+                end
+            else
+                txt = '';
+                if iscell(obj.fields)
+                    for i = 1:length(obj.fields)
+                        if isa(obj.fields{i},'seq.paramval')
+                            txt = [txt display(obj.fields{i},1)];
+                        end
+                    end
+                else
+                    for i = 1:length(obj.fields)
+                        if isa(obj.fields(i),'seq.paramval')
+                            txt = [txt display(obj.fields(i),1)];
+                        end
+                    end
                 end
             end
         end
