@@ -24,7 +24,7 @@
 %       frames. However we advise to use 'Frame' directly with the
 %       operators for which frame decomposition is actually used.
 %
-% Copyright (C) 2014, Olivier Lartillot
+% Copyright (C) 2017, Olivier Lartillot
 % All rights reserved.
 % License: New BSD License. See full text of the license in LICENSE.txt in
 % the main folder of the MiningSuite distribution.
