@@ -11,17 +11,17 @@ function options = options
     options = sig.signal.signaloptions();
 
         nCh.key = 'NbChannels';
-        nCh.type = 'Integer';
+        nCh.type = 'Numeric';
         nCh.default = Inf;
     options.nCh = nCh;
     
         Ch.key = {'Channel','Channels'};
-        Ch.type = 'Integer';
+        Ch.type = 'Numeric';
         Ch.default = 0;
     options.Ch = Ch;
     
         freq.key = 'CutOff';
-        freq.type = 'Integer';
+        freq.type = 'Numeric';
         freq.default = [-Inf 1000 Inf];
     options.freq = freq;
     
@@ -31,7 +31,7 @@ function options = options
     options.overlap = overlap;
 
         filterorder.key = 'Order';
-        filterorder.type = 'Integer';
+        filterorder.type = 'Numeric';
         filterorder.default = 4;
     options.filterorder = filterorder;
 end

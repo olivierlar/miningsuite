@@ -14,7 +14,7 @@ function options = options
     options.hilb = hilb;
  
         decim.key = {'Decim','PreDecim'};
-        decim.type = 'Integer';
+        decim.type = 'Numeric';
         decim.default = 0;
     options.decim = decim;
     
@@ -26,27 +26,27 @@ function options = options
 
             %% options related to 'IIR': 
             tau.key = 'Tau';
-            tau.type = 'Integer';
+            tau.type = 'Numeric';
             tau.default = .02;
     options.tau = tau;
     
         zp.key = 'ZeroPhase'; % internal use: for manual filtfilt
-        zp.type = 'Number';
+        zp.type = 'Numeric';
         zp.default = NaN;
     options.zp = zp;
 
         ds.key = {'Down','PostDecim'};
-        ds.type = 'Integer';
+        ds.type = 'Numeric';
         ds.default = NaN; % 0 if 'PreDecim' is used, else 16
         ds.when = 'After';
         ds.chunkcombine = 'During';
     options.ds = ds;
 
-        trim.key = 'Trim';
-        trim.type = 'Boolean';
-        trim.default = 0;
-        trim.when = 'After';
-    options.trim = trim;
+%         trim.key = 'Trim';
+%         trim.type = 'Boolean';
+%         trim.default = 0;
+%         trim.when = 'After';
+%     options.trim = trim;
 
 %% Options related to 'Spectro':
 
@@ -56,7 +56,7 @@ function options = options
     options.band = band;
 
         up.key = {'UpSample'};
-        up.type = 'Integer';
+        up.type = 'Numeric';
         up.default = 0;
         up.keydefault = 2;
         up.when = 'After';
@@ -84,8 +84,8 @@ function options = options
         terhardt.default = 0;
     options.terhardt = terhardt;
 
-        innerframe.key = 'Frame';
-        innerframe.type = 'Integer';
+        innerframe.key = 'InnerFrame';
+        innerframe.type = 'Numeric';
         innerframe.number = 2;
         innerframe.default = [.1 .1];
     options.innerframe = innerframe;
@@ -93,7 +93,7 @@ function options = options
 %% Options related to all methods:
     
         sampling.key = 'Sampling';
-        sampling.type = 'Integer';
+        sampling.type = 'Numeric';
         sampling.default = 0;
         sampling.when = 'After';
     options.sampling = sampling;
@@ -117,7 +117,7 @@ function options = options
     options.chwr = chwr;
     
         mu.key = 'Mu';
-        mu.type = 'Integer';
+        mu.type = 'Numeric';
         mu.default = 0;
         mu.keydefault = 100;
         mu.when = 'After';
@@ -130,7 +130,7 @@ function options = options
     options.log = oplog;
 
         minlog.key = 'MinLog';
-        minlog.type = 'Integer';
+        minlog.type = 'Numeric';
         minlog.default = 0;
         minlog.when = 'After';
     options.minlog = minlog;
@@ -142,34 +142,34 @@ function options = options
     options.power = oppow;
 
         diff.key = 'Diff';
-        diff.type = 'Integer';
+        diff.type = 'Numeric';
         diff.default = 0;
         diff.keydefault = 1;
         diff.when = 'After';
     options.diff = diff;
     
         diffhwr.key = 'HalfwaveDiff';
-        diffhwr.type = 'Integer';
+        diffhwr.type = 'Numeric';
         diffhwr.default = 0;
         diffhwr.keydefault = 1;
         diffhwr.when = 'After';
     options.diffhwr = diffhwr;
 
         lambda.key = 'Lambda';
-        lambda.type = 'Integer';
+        lambda.type = 'Numeric';
         lambda.default = 1;
         lambda.when = 'After';
     options.lambda = lambda;
 
         aver.key = 'Smooth';
-        aver.type = 'Integer';
+        aver.type = 'Numeric';
         aver.default = 0;
         aver.keydefault = 30;
         aver.when = 'After';
     options.aver = aver;
         
         gauss.key = 'Gauss';
-        gauss.type = 'Integer';
+        gauss.type = 'Numeric';
         gauss.default = 0;
         gauss.keydefault = 30;
         gauss.when = 'After';
