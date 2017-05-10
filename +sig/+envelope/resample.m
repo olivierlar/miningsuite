@@ -31,12 +31,6 @@ function e = resample(e,postoption)
         e.Ydata = sig.compute(@routine_downsample,e.Ydata,postoption.ds);
     end
     e.Srate = newsr;
-
-    if not(strcmpi(e.method,'Spectro')) && postoption.trim 
-        tdk = round(newsr*.1); 
-        d{k}{i}(1:tdk,:,:) = repmat(d{k}{i}(tdk,:,:),[tdk,1,1]); 
-        d{k}{i}(end-tdk+1:end,:,:) = repmat(d{k}{i}(end-tdk,:,:),[tdk,1,1]);
-    end
 end
 
 
