@@ -478,7 +478,7 @@ end
         fhop.type = 'Unit';
         fhop.default.unit = '/1';
         fhop.default.value = hop;
-        fhop.unit = {'s','sp','Hz','/1'};
+        fhop.unit = {'/1','s','sp','Hz'};
     options.fhop = fhop;
     
         frameconfig.key = 'FrameConfig';
