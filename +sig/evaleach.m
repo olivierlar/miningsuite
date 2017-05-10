@@ -27,10 +27,11 @@ if nargin<8 && length(window) > 1
     nbsamples = window(2)-window(1)+1;
 end
 
-if isstruct(design(1).tmpfile) && isfield(design(1).tmpfile,'fid') ...
-        && design(1).tmpfile.fid
+design = design(1);
+
+if isstruct(design.tmpfile) && isfield(design.tmpfile,'fid') ...
+        && design.tmpfile.fid
     % The input can be read from the temporary file
-    design(2) = [];
     y = {design.tmpfile.data};
     channels = y{1}.fbchannels;
     if isempty(channels)
@@ -80,7 +81,7 @@ if 0 %isaverage(specif)
     specif.eachchunk = 'Normal';
 end
 
-if isempty(design(1).main)
+if isempty(design.main)
     % The top-down traversal of the design flowchart now reaches the lowest
     % layer, i.e., file loading.
     % Now the actual evaluation will be carried out bottom-up.
@@ -90,7 +91,7 @@ if isempty(design(1).main)
     else
         data = sig.read(filename,window);
         
-        if strcmpi(design(1).duringoptions.mix,'Pre')
+        if strcmpi(design.duringoptions.mix,'Pre')
             data = data.sum('channel');
         end
         
@@ -145,7 +146,6 @@ else
             y = design.main(y,design.duringoptions,design.afteroptions);
         end
     else
-        design = design(1);
         if design.nochunk
             y = sig.evaleach(design.input,filename,window,sr,1,[],chunking);
             main = design.main;
