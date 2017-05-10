@@ -90,7 +90,7 @@ if isempty(design(1).main)
     else
         data = sig.read(filename,window);
         
-        if strcmpi(design.duringoptions.mix,'Pre')
+        if strcmpi(design(1).duringoptions.mix,'Pre')
             data = data.sum('channel');
         end
         
@@ -333,7 +333,7 @@ if iscell(y)
             if ischar(design)
                 y{i}.design = {filename};
             else
-                y{i}.design = design;
+                y{i}.design = design(1);
                 y{i}.design.evaluated = 1;
                 y{i}.design.files = filename;
             end
