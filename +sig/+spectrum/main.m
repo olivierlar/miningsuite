@@ -15,7 +15,8 @@ function out = main(x,option,postoption)
         xrate = x{1}.Srate/2/dsize;
     end
     out = sig.Spectrum(d,'Phase',ph,'xsampling',xrate,'Deframe',x{1},...
-                        'InputSampling',x{1}.Srate); %,'InputLength',1);
+                        'InputSampling',x{1}.Srate,...
+                        'InputLength',dsize/x{1}.Srate);
 end
 
 
