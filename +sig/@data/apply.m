@@ -15,7 +15,9 @@ function [obj varargout] = apply(obj,func,argin,dimfunc,ndimfunc,type)
     dimdata = size(data);
     ndimdata = length(dimdata);
     ordim = zeros(1,ndimdata);
-    ndimfunc = min(ndimfunc,ndimdata);
+    if isinf(ndimfunc)
+        ndimfunc = min(ndimfunc,ndimdata);
+    end
     
     for i = 1:length(dimfunc)
         foundim = obj.whichdim(dimfunc{i});
@@ -35,7 +37,7 @@ function [obj varargout] = apply(obj,func,argin,dimfunc,ndimfunc,type)
     if notherdims
         ordim(length(dimfunc)+1:ndimdata) = bestdim(1:notherdims);
     end
-
+    
     data = permute(data,ordim);
     dimdata = dimdata(ordim);
 
