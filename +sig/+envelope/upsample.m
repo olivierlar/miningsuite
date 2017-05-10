@@ -10,13 +10,17 @@ end
 
 
 function d = main(d,Hd,N)
-    d = d.apply(@routine,{Hd,N},{'sample'},1);
+    d = d.apply(@routine,{Hd,N},{'sample','','channel'},3);
 end
 
 
 function y = routine(x,Hd,N)
-    y = zeros(size(x,1).*N,1);
+    y = zeros(size(x,1).*N,size(x,2),size(x,3));
     y(1:N:end,:,:) = x;
-    y = filter(Hd,[y;zeros(6,1)]);
-    y = y(1+ceil(6/2):end-floor(6/2),1);
+    y = filter(Hd,[y;zeros(6,size(x,2),size(x,3))]);
+    y = y(1+ceil(6/2):end-floor(6/2),:,:);
+%     y = zeros(size(x,1).*N,1);
+%     y(1:N:end,:,:) = x;
+%     y = filter(Hd,[y;zeros(6,1)]);
+%     y = y(1+ceil(6/2):end-floor(6/2),1);
 end
