@@ -43,7 +43,13 @@ function [out phase] = routine(in,sampling,option,dim)
             Nkcq = round(Q*sampling/fj(kcq));
             w = window(option.win,Nkcq);
             w = sig.data(w,{'sample'});
-            ink = in.extract('sample',[1,Nkcq]);
+            if in.size('sample') > Nkcq
+                ink = in.extract('sample',[1,Nkcq]);
+            elseif in.size('sample') < Nkcq
+                ink = in.edit('sample',Nkcq,0);
+            else
+                ink = in;
+            end
             ink = ink.times(w);
             exq = exp(j2piQn(1:Nkcq)/Nkcq);
             exq = sig.data(exq,{'sample'});
@@ -51,6 +57,7 @@ function [out phase] = routine(in,sampling,option,dim)
             ink = ink.apply(@abs,{},{'sample'});
             out = out.edit('element',kcq,ink);
         end
+        phase = [];
     else
         if ischar(option.win) 
             if strcmpi(option.win,'Rectangular')
