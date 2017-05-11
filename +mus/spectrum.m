@@ -45,6 +45,9 @@ end
 
 
 function out = main(x,option,postoption)
+    if option.min && isnan(option.res) && (postoption.cent || postoption.collapsed)
+        option.res = option.min *(2^(1/1200)-1)*.9;
+    end       
     y = sig.spectrum.main(x,option,postoption);
     if isempty(postoption)
         out = {y};
@@ -59,14 +62,10 @@ function out = after(x,postoption)
     if iscell(x)
         x = x{1};
     end
-    
-    %if postoption.reso
-    %    x.Ydata = sig.compute(@resonance,x.Ydata,x.xdata,postoption.reso);
-    %end
         
     f = x.xdata;
     
-    if strcmp(x.xname,'Frequency') && postoption.cent
+    if strcmp(x.xname,'Frequency') && (postoption.cent || postoption.collapse)
         isgood = f*(2^(1/1200)-1) >= f(2)-f(1);
         good = find(isgood);
         if isempty(good)
@@ -107,6 +106,10 @@ function out = after(x,postoption)
         x.xname = 'cents (collapsed)';
         x.Xaxis.unit.origin = 0;
         x.Xaxis.unit.rate = 1;
+    end
+    
+    if postoption.reso
+        x.Ydata = resonance(x.Ydata,x.xdata,postoption.reso);
     end
         
     out = {x};
