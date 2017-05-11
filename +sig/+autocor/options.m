@@ -55,7 +55,7 @@ function options = options
     options.win = win;
 
         normwin.key = 'NormalWindow';
-        normwin.when = 'Both';
-        normwin.default = 'hanning';
+        normwin.default = NaN;
+        normwin.keydefault = 1;
     options.normwin = normwin;
 end

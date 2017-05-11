@@ -29,11 +29,9 @@ function out = after(x,postoption)
         x = x.extract(param,'element','Xaxis','Ydata'); %,'window');
     end
 
-    if not(isequal(postoption.normwin,0) || ...
-           strcmpi(postoption.normwin,'No') || ...
-           strcmpi(postoption.normwin,'Off') || ...
-           x.normalized)
-        %x = x.normalize;
+    if not(isequal(x.normwin,0) || strcmpi(x.normwin,'No') || ...
+           strcmpi(x.normwin,'Off') || x.normalized)
+        x = x.normalize;
     end
     if postoption.hwr
         x = x.hwr;

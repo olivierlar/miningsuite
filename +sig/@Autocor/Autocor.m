@@ -10,6 +10,7 @@ classdef Autocor < sig.signal
     properties
         normalized = 0;
         window
+        normwin
     end
     methods
         function s = Autocor(varargin)

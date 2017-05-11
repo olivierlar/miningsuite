@@ -43,14 +43,22 @@ function out = main(x,option,postoption)
         x{1}.Ydata = x{1}.Ydata.reframe;
         x{1}.Frate = x{1}.Srate;
         x{1}.Srate = x{1}.xsampling;
-        option.normwin = 0;
-        %option.win = 0;
-        %postoption.normwin = 0;
+        if isnan(option.norwin)
+            option.normwin = 0;
+        end
         warning('Work in progress')
     elseif isa(x{1},'sig.Envelope')
-        option.normwin = 'Rectangular';
-        %option.win = 0;
-        %postoption.normwin = 0;
+        if isnan(option.normwin) || isequal(option.normwin,1) || ...
+                       strcmpi(option.normwin,'On') || ...
+                       strcmpi(option.normwin,'Yes')
+            option.normwin = 'Rectangular';
+        end
+    else
+        if isnan(option.normwin) || isequal(option.normwin,1) || ...
+                       strcmpi(option.normwin,'On') || ...
+                       strcmpi(option.normwin,'Yes')
+            option.normwin = 'Hanning';
+        end
     end
     if isnan(option.win) 
         if isequal(option.normwin,0) || ...
@@ -76,6 +84,7 @@ function out = main(x,option,postoption)
     
     out = sig.Autocor(d,'xsampling',1/x{1}.Srate,'Deframe',x{1});
     out.window = w;
+    out.normwin = option.normwin;
     out.Xaxis.start = xstart;
 end
 
