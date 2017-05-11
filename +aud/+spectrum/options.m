@@ -24,13 +24,5 @@ function options = options
         mask.type = 'Boolean';
         mask.default = 0;
         mask.when = 'After';
-    options.mask = mask;
-    
-        reso.key = 'Resonance';
-        reso.type = 'String';
-        reso.choice = {'Fluctuation',0,'no','off'};
-        reso.default = 0;
-        reso.keydefault = 'Fluctuation';
-        reso.when = 'After';
-    options.reso = reso;    
+    options.mask = mask;   
 end
