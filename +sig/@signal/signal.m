@@ -447,12 +447,6 @@ function options = classoptions(fsize,fhop)
         trimthreshold.default = .06;
         trimthreshold.when = 'After';
     options.trimthreshold = trimthreshold;
-
-        halfwave.key = {'Halfwave'};
-        halfwave.type = 'Boolean';
-        halfwave.default = 0;
-        halfwave.when = 'After';
-    options.halfwave = halfwave;
 end
 
 
@@ -526,9 +520,6 @@ function obj = after(obj,option)
     %    order = round(option.median(1) * obj.sampling);
     %    obj = obj.median('sample',order,option.median(2));
     %end
-    if option.halfwave
-        obj = obj.halfwave;
-    end
 end
 
 
