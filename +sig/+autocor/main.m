@@ -43,18 +43,18 @@ function out = main(x,option,postoption)
         x{1}.Ydata = x{1}.Ydata.reframe;
         x{1}.Frate = x{1}.Srate;
         x{1}.Srate = x{1}.xsampling;
-        if isnan(option.norwin)
+        if strcmpi(option.normwin,'')
             option.normwin = 0;
         end
         warning('Work in progress')
     elseif isa(x{1},'sig.Envelope')
-        if isnan(option.normwin) || isequal(option.normwin,1) || ...
+        if strcmpi(option.normwin,'') || isequal(option.normwin,1) || ...
                        strcmpi(option.normwin,'On') || ...
                        strcmpi(option.normwin,'Yes')
             option.normwin = 'Rectangular';
         end
     else
-        if isnan(option.normwin) || isequal(option.normwin,1) || ...
+        if strcmpi(option.normwin,'') || isequal(option.normwin,1) || ...
                        strcmpi(option.normwin,'On') || ...
                        strcmpi(option.normwin,'Yes')
             option.normwin = 'Hanning';
