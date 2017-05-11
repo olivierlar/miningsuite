@@ -57,7 +57,7 @@ function out = main(x,option,postoption)
         if strcmpi(option.normwin,'') || isequal(option.normwin,1) || ...
                        strcmpi(option.normwin,'On') || ...
                        strcmpi(option.normwin,'Yes')
-            option.normwin = 'Hanning';
+            option.normwin = 'hanning';
         end
     end
     if isnan(option.win) 
