@@ -37,7 +37,7 @@ end
 
 if ischar(arg)
     filename = arg;
-    arg = sig.design('sig','input',arg,'file',[],during);
+    arg = sig.design('sig','input',arg,'sig.signal',[],during);
 elseif isa(arg,'sig.design')
     filename = arg.files;
 end
