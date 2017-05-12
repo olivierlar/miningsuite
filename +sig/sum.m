@@ -42,7 +42,7 @@ function res = main(x,option,postoption)
     end
     x = x{1};
     if option.mean
-        norm = length(x.fbchannels);
+        norm = x.Ydata.size('freqband');
     else
         norm = 1;
     end
