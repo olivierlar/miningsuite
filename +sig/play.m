@@ -27,10 +27,7 @@
 % the main folder of the MiningSuite distribution.
 function varargout = play(varargin)
 
-if 0 %isa(varargin{1},'sig.Signal')
-    varargout = varargin{1}.play(varargin{2:end});
-    return
-end
+options = sig.signal.signaloptions();
 
     ch.key = 'Channel';
     ch.type = 'Integer';

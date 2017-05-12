@@ -388,12 +388,6 @@ end
 
 
 function options = classoptions(fsize,fhop)
-    %if nargin < 1
-    %    fsize = .05;
-    %end
-    %if nargin < 2
-    %    fhop = .5;
-    %end
     if nargin
         options = initframes(fsize,fhop);
     end
