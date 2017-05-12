@@ -152,13 +152,17 @@ classdef data
             end
             args = scanargin(obj,varargin(1:end-1));
             obj.content = subsasgn(obj.content,args,data);
-            %eval(['obj.content(',args,') = content;']);
         end
         
         function obj = extract(obj,varargin)
             args = scanargin(obj,varargin);
-            obj.content = subsref(obj.content,args);
-            %eval(['obj.content = obj.content(',args,');']);
+            if obj.layers == 1
+                obj.content = subsref(obj.content,args);
+            elseif obj.layers == 2
+                for i = 1:length(obj.content)
+                    obj.content{i} = subsref(obj.content{i},args);
+                end
+            end
         end
         %%
         function obj = sum(obj,field)
