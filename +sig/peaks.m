@@ -112,10 +112,10 @@ function options = initoptions
         normal.default = 'Global';
     options.normal = normal;
 
-        extract.key = 'Extract';
-        extract.type = 'Boolean';
-        extract.default = 0;
-    options.extract = extract;
+%         extract.key = 'Extract';
+%         extract.type = 'Boolean';
+%         extract.default = 0;
+%     options.extract = extract;
     
         only.key = 'Only';
         only.type = 'Boolean';
