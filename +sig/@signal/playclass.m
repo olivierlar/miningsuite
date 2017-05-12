@@ -9,7 +9,7 @@ end
     
    
 function out = main(d,name,rate,sonify)
-    sig.playfile(sonify,d.content,name,rate)
+    sig.playfile(sonify,d,name,rate)
     
     out = {};
 end

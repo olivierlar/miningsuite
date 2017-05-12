@@ -17,13 +17,20 @@ if iscell(name)
     name = name{1};
 end
 display(['Playing file: ' name]);
+nch = d.size('freqband');
 
-d = synth(d,varargin{:});
-
-tic
-sound(d,rate);
-idealtime = length(d)/rate;
-practime = toc;
-if practime < idealtime
-    pause(idealtime-practime)
+for i = 1:nch
+    if nch == 1
+        s = d.content;
+    else
+        display(['Playing channel: ' num2str(i)]);
+        s = d.view('freqband',i);
+    end
+    tic
+    soundsc(s,rate);
+    idealtime = length(s)/rate;
+    practime = toc;
+    if practime < idealtime
+        pause(idealtime-practime)
+    end
 end
