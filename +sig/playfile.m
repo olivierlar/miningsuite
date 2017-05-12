@@ -18,19 +18,25 @@ if iscell(name)
 end
 display(['Playing file: ' name]);
 nch = d.size('freqband');
-
+nfr = d.size('frame');
 for i = 1:nch
-    if nch == 1
-        s = d.content;
-    else
+    di = d;
+    if nch > 1
         display(['Playing channel: ' num2str(i)]);
-        s = d.view('freqband',i);
+        di = di.extract('freqband',i);
     end
-    tic
-    soundsc(s,rate);
-    idealtime = length(s)/rate;
-    practime = toc;
-    if practime < idealtime
-        pause(idealtime-practime)
+    for j = 1:nfr
+        if nfr == 1
+            s = di.content;
+        else
+            s = di.view('frame',j);
+        end
+        tic
+        soundsc(s,rate);
+        idealtime = length(s)/rate;
+        practime = toc;
+        if practime < idealtime
+            pause(idealtime-practime)
+        end
     end
 end
