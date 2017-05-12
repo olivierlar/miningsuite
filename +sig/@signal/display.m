@@ -53,6 +53,7 @@ function display(obj)
     for i = 1:nchans
         if nchans > 1
             subplot(nchans,1,nchans-i+1,'align');
+            hold on
             ydatai = ydata.extract('freqband',i);
         else
             ydatai = ydata;
