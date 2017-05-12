@@ -67,7 +67,7 @@ function out = main(in,option,postoption)
             if isempty(si2)
                 if si1
                     if si1 < x.Ssize
-                        s{end+1} = x.Ydata.content(si1:end);
+                        s{end+1} = x.Ydata.view('sample',[si1,x.Ydata.size('sample')]);
                     end
                 else
                     s{end+1} = x.Ydata.content;
@@ -75,9 +75,9 @@ function out = main(in,option,postoption)
                 break
             end
             if si1
-                s{end+1} = x.Ydata.content(si1:si2-1);
+                s{end+1} = x.Ydata.view('sample',[si1,si2-1]);
             elseif si2 > 1
-                s{end+1} = x.Ydata.content(1:si2-1);
+                s{end+1} = x.Ydata.view('sample',[1,si2-1]);
             end
             si1 = si2;
             if i < length(pos)
