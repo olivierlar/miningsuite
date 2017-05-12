@@ -142,9 +142,15 @@ classdef data
                 
         function content = view(obj,varargin)
             args = scanargin(obj,varargin);
-            content = subsref(obj.content,args);
+            if obj.layers == 1
+                content = subsref(obj.content,args);
+            elseif obj.layers == 2
+                for i = 1:length(obj.content)
+                    content{i} = subsref(obj.content{i},args);
+                end
+            end
         end
-                
+        
         function obj = edit(obj,varargin)
             data = varargin{end};
             if isa(data,'sig.data')
