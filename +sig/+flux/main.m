@@ -25,7 +25,7 @@ function out = main(x,option,postoption)
         end
         res = sig.compute(@routine,x.Ydata,option,method);
     end
-    x = sig.signal(res,'Name',name,'Srate',x.Srate,'Ssize',x.Ssize);
+    x = sig.signal(res,'Name',name,'Srate',x.Srate,'Ssize',x.Ssize,'FbChannels',x.fbchannels);
     out = {x};
 end
 

@@ -31,7 +31,8 @@ function [out,postoption,tmp] = main(x,option,postoption)
     end
     out = sig.Envelope(d,'Srate',x.Srate,...
                        'Sstart',x.Sstart,'Ssize',x.Ssize,...
-                       'Method',option.method,'Frate',x.Frate);    
+                       'Method',option.method,'Frate',x.Frate,...
+                       'FbChannels',x.fbchannels);    
 end
 
 

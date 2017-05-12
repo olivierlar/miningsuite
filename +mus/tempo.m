@@ -57,7 +57,7 @@ function out = main(in,option,postoption)
             tp(i-1) = 60/(o(i) - o(i-1));
         end
         d = sig.data(tp,{'sample'});
-        t = sig.signal(d,'Name','Tempo','Srate',1);
+        t = sig.signal(d,'Name','Tempo','Srate',1); %'FbChannels',x.fbchannels??
         out = {t};
     else
         x = in{1};
@@ -73,7 +73,7 @@ function out = main(in,option,postoption)
                     pc(i) = p.content(i);
                 end
             end
-            t = sig.signal(pc','Name','Tempo','Srate',in{1}.Srate);
+            t = sig.signal(pc','Name','Tempo','Srate',in{1}.Srate,'FbChannels',in{1}.fbchannels);
             out = {t in{1}};
         end
     end

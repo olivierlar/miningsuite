@@ -108,7 +108,8 @@ function out = main(orig,option,postoption)
         [m,c,p,fc,o] = sig.compute(@routine,orig.Ydata,orig.xdata,option,chromascale);
         chro = mus.Chromagram(m,'ChromaClass',c,...%'XData',p
                            'ChromaFreq',fc,'Register',o,...
-                           'Srate',orig.Srate,'Ssize',orig.Ssize);
+                           'Srate',orig.Srate,'Ssize',orig.Ssize,...
+                           'FbChannels',orig.fbchannels);
         chro.Xaxis.unit.rate = 1;
         if ~isempty(postoption)
             chro = after(chro,postoption);

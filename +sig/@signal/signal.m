@@ -111,6 +111,8 @@ classdef signal
             s.Frate = options.frate;
             s.fnumber = options.fnumber;
             
+            s.fbchannels = options.fbchannels;
+            
             s.date = date;
             s.ver = ver;
             
@@ -374,6 +376,10 @@ function options = constructoptions
         fnumber.type = 'Numeric';
         fnumber.default = 0;
     options.fnumber = fnumber;
+    
+        fbchannels.key = 'FbChannels';
+        fbchannels.default = [];
+    options.fbchannels = fbchannels;
     
         deframe.key = 'Deframe';
         deframe.default = [];

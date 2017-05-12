@@ -47,7 +47,8 @@ end
 function out = main(in,option,postoption)
     x = in{1};
     d = sig.compute(@routine,x.peakpos,x.peakval,x.Ydata,option);
-    x = sig.signal(d,'Name','Roughness','Srate',x.Srate,'Ssize',x.Ssize);
+    x = sig.signal(d,'Name','Roughness','Srate',x.Srate,'Ssize',x.Ssize,...
+                   'FbChannels',x.fbchannels);
     out = {x};
 end
 

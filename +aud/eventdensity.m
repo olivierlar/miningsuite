@@ -83,6 +83,6 @@ function out = main(in,option,frame)
         end
         d = sig.data(ed',{'sample'});
     end
-    ed = sig.signal(d,'Name','Event density','Srate',1/fhop);
+    ed = sig.signal(d,'Name','Event density','Srate',1/fhop); %'FbChannels',x.fbchannels??
     out = {ed};
 end

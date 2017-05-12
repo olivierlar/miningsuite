@@ -26,7 +26,8 @@ function out = main(in,option,postoption)
     if ~strcmpi(x.yname,'RMS energy')
         d = sig.compute(@routine,x.Ydata);
         x = sig.signal(d,'Name','RMS energy',...
-                       'Srate',x.Frate,'Ssize',x.Ssize);
+                       'Srate',x.Frate,'Ssize',x.Ssize,...
+                       'FbChannels',x.fbchannels);
     end
     if ~isempty(postoption) && isstruct(postoption) && ...
             isfield(postoption,'notchunking') && postoption.notchunking

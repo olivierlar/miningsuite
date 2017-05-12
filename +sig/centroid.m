@@ -24,7 +24,8 @@ function out = main(in,option,postoption)
     if ~strcmpi(x.yname,'Centroid')
         res = sig.compute(@routine,x.Ydata,x.xdata);
         x = sig.signal(res,'Name','Centroid',...
-                       'Srate',x.Srate,'Ssize',x.Ssize);
+                       'Srate',x.Srate,'Ssize',x.Ssize,...
+                       'FbChannels',x.fbchannels);
     end
     out = {x};
 end

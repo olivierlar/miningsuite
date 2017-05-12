@@ -58,7 +58,8 @@ function out = main(in,option,postoption)
         out = in;
     else
         res = sig.compute(@routine,x.Ydata,option.rank);
-        x = aud.Mfcc(res,'Srate',x.Srate,'Ssize',x.Ssize);
+        x = aud.Mfcc(res,'Srate',x.Srate,'Ssize',x.Ssize,...
+                     'FbChannels',x.fbchannels);
         x = after(x,postoption);
         out = {x in{1}};
     end

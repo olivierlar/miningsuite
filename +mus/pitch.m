@@ -63,9 +63,9 @@ function out = main(in,option)
         d = sig.data(p,{'sample'});
         if option.sampling
             d.content = d.content';
-            out = {sig.signal(d,'Name',nam,'Srate',1/option.sampling)};
+            out = {sig.signal(d,'Name',nam,'Srate',1/option.sampling)}; %'FbChannels',x.fbchannels??
         else
-            out = {sig.signal(d,'Name',nam,'Xdata',t,'Srate',0)};
+            out = {sig.signal(d,'Name',nam,'Xdata',t,'Srate',0)}; %'FbChannels',x.fbchannels??
         end
     end
 end

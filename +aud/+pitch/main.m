@@ -1,7 +1,7 @@
 function [out,postoption,tmp] = main(x,option,postoption)
     x = x{1};
     d = sig.compute(@routine,x.peakpos);
-    out = sig.signal(d,'Name','Pitch','Srate',x.Srate,'Ssize',x.Ssize);
+    out = sig.signal(d,'Name','Pitch','Srate',x.Srate,'Ssize',x.Ssize,'FbChannels',x.fbchannels);
   
 end
 
