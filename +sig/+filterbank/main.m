@@ -53,13 +53,14 @@ function [y Hd] = subroutine(x,Hd)
         if ~iscell(Hdk)
             Hdk = {Hdk};
         end
+        yk = x;
         for h = 1:length(Hdk)
             if isa(Hdk{h},'function_handle')
-                yh = Hdk{h}(x);
+                yk = Hdk{h}(yk);
             else
-                yh = Hdk{h}.filter(x);
+                yk = Hdk{h}.filter(yk);
             end
         end
-        y(:,k) = yh;
+        y(:,k) = yk;
     end
 end
