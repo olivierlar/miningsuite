@@ -8,7 +8,7 @@ function display(obj)
     end
     
     %%    
-    if ~obj.Srate
+    if ~obj.Srate || obj.Ydata.size('sample',1) == 1
         if isempty(obj.xdata)
             textual(obj.yname,obj.Ydata.content);
             return
