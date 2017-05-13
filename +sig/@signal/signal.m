@@ -23,7 +23,7 @@ classdef signal
         initmethod = @init;
         mainmethod = @main;
         aftermethod = @after;
-        sonify = @sonifier;
+        %sonify = @sonifier;
     end
     properties
         yname
@@ -297,8 +297,11 @@ classdef signal
         
         obj = selectfile(obj,index)
         display(obj)
-        out = play(obj,varargin)
         playclass(obj,options)
+        
+        function func = sonifier(obj)
+            func = @sonify;
+        end
     end
 end
 
@@ -523,7 +526,7 @@ function obj = after(obj,option)
 end
 
 
-function d = sonifier(d,varargin)
+function [d,sr] = sonify(d,sr)
 end
 
 

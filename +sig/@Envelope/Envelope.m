@@ -8,9 +8,6 @@
 
 classdef Envelope < sig.signal
 %%
-    properties (Constant)
-        envelopesonify = @sonifier
-    end
     properties
         log = 0
         diff = 0
@@ -36,11 +33,20 @@ classdef Envelope < sig.signal
             end
             e.method = method;
         end
-        %%
+        
+        playclass(obj,options)
+        
+        function func = sonifier(obj)
+            func = @sonify;
+        end
     end
 end
 
 
 %%
-function d = sonifier(d,varargin)
+function [d,sr] = sonify(d,sr)
+    d = resample(d,11025,round(sr));
+    d = d/max(d);
+    d = rand(length(d),1).*d;
+    sr = 11025;
 end

@@ -1,27 +1,8 @@
 % SIG.PLAY
 % plays the audio waveform.
 % Syntax: sig.play(filename)
-% sig.input(...,'Mix') sums the channels together.
-% sig.input(...,'Center') centers the waveform.
-% sig.input(...,'Sampling',r) resamples at rate r (in Hz).
-% sig.input(...,'Extract',t1,t2,u) extracts the signal between dates
-%   t1 and t2, expressed in the unit u.
-%   Possible values for u:
-%       's' (seconds, by default),
-%       'sp' (sample index, starting from 1).
-% sig.input(...,...,'Trim') trims the pseudo-silence beginning and end off
-%   the audio file. Silent frames are frames with RMS below t times the
-%   medium RMS of the whole audio file.
-%   Default value: t = 0.06
-%   instead of 'Trim':
-%       'TrimStart' only trims the beginning of the audio file,
-%       'TrimEnd' only trims the end.
-% sig.input(...,'TrimThreshold',t) specifies the trimming threshold t.
-% sig.input(...,'Frame',...) decomposes the waveform into successive
-%   frames. However we advise to use 'Frame' directly with the operators
-%   for which frame decomposition is actually used.
 %
-% Copyright (C) 2014, Olivier Lartillot
+% Copyright (C) 2017, Olivier Lartillot
 % All rights reserved.
 % License: New BSD License. See full text of the license in LICENSE.txt in
 % the main folder of the MiningSuite distribution.
@@ -70,4 +51,43 @@ type = '?';
 
 
 function out = main(x,option,postoption)
-out = {x{1}.play(option)};
+x = x{1};
+if iscell(x.design)
+    filenames = x.design;
+else
+    filenames = x.design.files;
+end
+sig.compute(@playfile,x.Ydata,filenames,x.Srate,x.sonifier);
+out = {};
+
+
+function varargout = playfile(d,name,rate,synth)
+if iscell(name)
+    name = name{1};
+end
+display(['Playing file: ' name]);
+nch = d.size('freqband');
+nfr = d.size('frame');
+for i = 1:nch
+    di = d;
+    if nch > 1
+        display(['Playing channel: ' num2str(i)]);
+        di = di.extract('freqband',i);
+    end
+    for j = 1:nfr
+        if nfr == 1
+            s = di.content;
+        else
+            s = di.view('frame',j);
+        end
+        tic
+        [s,rate] = synth(s,rate);
+        soundsc(s,rate);
+        idealtime = length(s)/rate;
+        practime = toc;
+        if practime < idealtime
+            pause(idealtime-practime)
+        end
+    end
+end
+varargout = {1}; % How to avoid this?
