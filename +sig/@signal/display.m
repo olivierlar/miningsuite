@@ -9,7 +9,7 @@ function display(obj)
     
     %%    
     if ~obj.Srate || isequal(obj.Ydata.size('sample',1), 1)
-        if isempty(obj.xdata)
+        if isempty(obj.xdata) || length(obj.xdata) == 1
             textual(obj.yname,obj.Ydata.content);
             return
         end
