@@ -92,7 +92,7 @@ if isempty(design.main)
         data = sig.read(filename,window);
         
         if strcmpi(design.duringoptions.mix,'Pre')
-            data = data.sum('channel');
+            data = data.mean('channel');
         end
         
         %if frame.inner
