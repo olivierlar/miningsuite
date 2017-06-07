@@ -16,14 +16,6 @@ end
 function options = initoptions
     options = aud.spectrum.options;
     
-        reso.key = 'Resonance';
-        reso.type = 'String';
-        reso.choice = {'ToiviainenSnyder','Fluctuation','Meter',0,'no','off'};
-        reso.default = 0;
-        reso.keydefault = 'ToiviainenSnyder';
-        reso.when = 'After';
-    options.reso = reso;
-    
         cent.key = 'Cents';
         cent.type = 'Boolean';
         cent.default = 0;
@@ -65,7 +57,7 @@ function out = after(x,postoption)
         
     f = x.xdata;
     
-    if strcmp(x.xname,'Frequency') && (postoption.cent || postoption.collapse)
+    if strcmp(x.xname,'Frequency') && (postoption.cent || postoption.collapsed)
         isgood = f*(2^(1/1200)-1) >= f(2)-f(1);
         good = find(isgood);
         if isempty(good)
@@ -107,10 +99,6 @@ function out = after(x,postoption)
         x.Xaxis.unit.origin = 0;
         x.Xaxis.unit.rate = 1;
     end
-    
-    if postoption.reso
-        x.Ydata = resonance(x.Ydata,x.xdata,postoption.reso);
-    end
         
     out = {x};
 end
@@ -125,23 +113,5 @@ function y = collapse(x,cc)
     y = NaN(1200,size(x,2),size(x,3));
     for k = 0:1199
         y(k+1,:,:) = sum(x(find(cc==k),:,:),1);
-    end
-end
-
-
-function d = resonance(d,f,type)
-    if strcmpi(type,'ToiviainenSnyder') || strcmpi(type,'Meter')
-        w = max(0, 1 - 0.25*(log2(max(1./max(f,1e-12),1e-12)/0.5)).^2);
-    elseif strcmpi(type,'Fluctuation')
-        w1 = f / 4; % ascending part of the fluctuation curve;
-        w2 = 1 - 0.3 * (f - 4)/6; % descending part;
-        w = min(w1,w2);
-        w = max(0,w);
-    end
-    if max(w) == 0
-        warning('The resonance curve, not defined for this range of delays, will not be applied.')
-    else
-        w = sig.data(w',{'element'});
-        d = d.times(w);
     end
 end
