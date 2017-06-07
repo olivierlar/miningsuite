@@ -23,16 +23,13 @@ end
 
 function out = main(in,option,postoption)
     x = in{1};
-    if ~strcmpi(x.yname,'RMS energy')
+    if ~strcmpi(x.yname,'RMS')
         d = sig.compute(@routine,x.Ydata);
-        x = sig.signal(d,'Name','RMS energy',...
+        x = sig.signal(d,'Name','RMS',...
                        'Srate',x.Frate,'Ssize',x.Ssize,...
                        'FbChannels',x.fbchannels);
     end
-    if ~isempty(postoption) && isstruct(postoption) && ...
-            isfield(postoption,'notchunking') && postoption.notchunking
-        x = after(x);    
-    end
+    x = after(x);
     out = {x};
 end
 
@@ -70,5 +67,5 @@ end
 
 
 function d = afternorm(d,l)
-    d = sqrt(d)/sqrt(l);
+    d = sqrt(d/l);
 end
