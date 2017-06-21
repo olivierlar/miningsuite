@@ -13,7 +13,7 @@ end
 
 %%
 function options = initoptions
-    options = sig.signal.signaloptions(3,.1);
+    options = sig.signal.signaloptions('FrameAuto',3,.1);
     
         inter.key = 'Inter';
         inter.type = 'Boolean';

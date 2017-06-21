@@ -6,7 +6,7 @@ end
 
 %%
 function options = initoptions
-    options = sig.signal.signaloptions(.05,.5);
+    options = sig.signal.signaloptions('FrameAuto',.05,.5);
 
         p.key = 'Threshold';
         p.type = 'Numeric';

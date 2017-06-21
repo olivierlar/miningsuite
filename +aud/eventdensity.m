@@ -13,7 +13,7 @@ end
 
 %%
 function options = initoptions
-    options = sig.signal.signaloptions();
+    options = sig.signal.signaloptions('FrameManual');
 
         frame.key = 'Frame';
         frame.type = 'Boolean';

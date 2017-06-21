@@ -17,11 +17,10 @@ during = struct;
 after = [];
 extract = [];
 
-if isfield(options,'frame')
+if isfield(options,'fsize')
     frame.toggle = options.frame.default;
     frame.size = options.fsize.default;
     frame.hop = options.fhop.default;
-    %frame.inner = options.frame.inner;
 else
     frame = [];
 end
@@ -208,12 +207,14 @@ while i <= length(args)
                     optionvalue = arg;
                 end
             end
+        elseif strcmpi(field,'frame')
+            match = 0;
         elseif i == 2
             match = 1;
             optionvalue = arg;
         end    
         if match
-            if strcmpi(field,'frame')
+            if strcmpi(field,'frame') && options.frame.auto
                 frame.toggle = optionvalue;
             elseif strcmpi(field,'fsize')
                 frame.size = optionvalue;

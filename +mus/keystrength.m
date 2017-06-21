@@ -13,7 +13,7 @@ end
 
 
 function options = initoptions
-    options = sig.signal.signaloptions(.1,.125);
+    options = sig.signal.signaloptions('FrameAuto',.1,.125);
     
         wth.key = 'Weight';
         wth.type = 'Numeric';

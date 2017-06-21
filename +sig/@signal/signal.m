@@ -390,9 +390,16 @@ function options = constructoptions
 end
 
 
-function options = classoptions(fsize,fhop)
+function [options,frame] = classoptions(mode,fsize,fhop)
     if nargin
-        options = initframes(fsize,fhop);
+        if strcmpi(mode,'FrameAuto')
+            options = initframes(fsize,fhop);
+        else
+            options.frame.auto = 0;
+        end
+        frame = options.frame;
+    else
+        frame = [];
     end
 
         mix.key = 'Mix';
@@ -453,15 +460,11 @@ function options = classoptions(fsize,fhop)
 end
 
 
-function options = initframes(size,hop,inner)
-if nargin < 3
-    inner = 0;
-end
-
+function options = initframes(size,hop)
+        frame.auto = 1;
         frame.key = 'Frame';
         frame.type = 'Boolean';
         frame.default = 0;
-        %frame.inner = strcmpi(inner,'inner');
     options.frame = frame;
     
         fsize.key = 'FrameSize';

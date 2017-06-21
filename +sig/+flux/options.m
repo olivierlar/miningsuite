@@ -1,5 +1,5 @@
 function options = options    
-    options = sig.signal.signaloptions(.05,.5);
+    options = sig.signal.signaloptions('FrameAuto',.05,.5);
 
         dist.key = 'Dist';
         dist.type = 'String';

@@ -13,7 +13,7 @@ end
 
 
 function options = initoptions
-    options = sig.signal.signaloptions(2,.05);
+    options = sig.signal.signaloptions('FrameAuto',2,.05);
     
         cen.key = 'Center';
         cen.type = 'Boolean';

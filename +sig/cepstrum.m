@@ -15,7 +15,7 @@ end
 
 
 function options = options
-    options = sig.signal.signaloptions(.05,.5);
+    options = sig.signal.signaloptions('FrameAuto',.05,.5);
     
         mi.key = 'Min';
         mi.type = 'Numeric';
@@ -46,7 +46,7 @@ end
 
 
 %%
-function [x type] = init(x,option,frame)
+function [x,type] = init(x,option,frame)
     if ~x.istype('sig.Cepstrum')
         x = sig.spectrum(x,'FrameConfig',frame);
     end

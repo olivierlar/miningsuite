@@ -13,7 +13,7 @@ end
 
 %%
 function options = initoptions
-    options = sig.signal.signaloptions(3,.1);
+    options = sig.signal.signaloptions('FrameManual',3,.1);
     
         method.type = 'String';
         method.choice = {'Autocor','Pattern'};

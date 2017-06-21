@@ -1,5 +1,5 @@
 function options = options
-    options = sig.signal.signaloptions(.1,.1);
+    [options,spectroframe] = sig.signal.signaloptions('FrameManual');
     
         method.type = 'String';
         method.choice = {'Filter','Spectro'};
@@ -84,11 +84,11 @@ function options = options
         terhardt.default = 0;
     options.terhardt = terhardt;
 
-        innerframe.key = 'InnerFrame';
-        innerframe.type = 'Numeric';
-        innerframe.number = 2;
-        innerframe.default = [.1 .1];
-    options.innerframe = innerframe;
+        spectroframe.key = 'Frame';
+        spectroframe.type = 'Numeric';
+        spectroframe.number = 2;
+        spectroframe.default = [.1 .1];
+    options.spectroframe = spectroframe;
     
 %% Options related to all methods:
     
