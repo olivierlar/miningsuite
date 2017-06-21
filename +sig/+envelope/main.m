@@ -1,5 +1,9 @@
-function [out,postoption,tmp] = main(x,option,postoption)
+function [out,postoption] = main(x,option,postoption)
     x = x{1};
+    
+    if isa(x,'sig.Envelope') 
+        1
+    end
 
     if strcmpi(option.method,'Spectro')
         d = x.Ydata.rename('element','channel');
@@ -8,18 +12,7 @@ function [out,postoption,tmp] = main(x,option,postoption)
         postoption.ds = 0;
         
     elseif strcmpi(option.method,'Filter')
-        if isnan(option.zp)
-            if strcmpi(option.filter,'IIR')
-                option.zp = 1;
-            else
-                option.zp = 0;
-            end
-        end
-        if option.zp == 1
-            option.decim = 0;
-        end
-
-        [d tmp] = sig.compute(@routine_filter,x.Ydata,x.Srate,option);
+        d = sig.compute(@routine_filter,x.Ydata,x.Srate,option);
         
         if isfield(postoption,'ds') && isnan(postoption.ds)
             if option.decim
@@ -36,13 +29,7 @@ function [out,postoption,tmp] = main(x,option,postoption)
 end
 
 
-function out = routine_filter(in,sampling,option)
-    if isfield(option,'tmp')
-        tmp = option.tmp;
-    else
-        tmp = [];
-    end
-    
+function out = routine_filter(in,sampling,option)    
     if option.decim
         sampling = sampling/option.decim;
     end
@@ -61,10 +48,6 @@ function out = routine_filter(in,sampling,option)
         [b,a] = butter(3, w);
     end
     
-    if option.zp == 2
-        in = in.flip('sample');
-    end
-    
     if option.hilb
         try
             in = in.apply(@hilbert,{},{'sample'});
@@ -79,18 +62,9 @@ function out = routine_filter(in,sampling,option)
         in = in.apply(@decimate,{option.decim},{'sample'});
     end
     
-    notmp = isempty(tmp);
-    if notmp
-        [out tmp] = in.apply(@filter,{b,a,'self'},{'sample'});
-    else
-        [out tmp] = in.apply(@filter,{b,a,'self',tmp},{'sample'});
-    end
+    out = in.apply(@filtfilt,{b,a,'self'},{'sample'});
     
     out = out.apply(@max,{0},{'sample'}); % For security reason...
     
-    if option.zp == 2
-        out = out.flip('sample');
-    end
-    
-    out = {out tmp};
+    out = {out};
 end

@@ -20,14 +20,13 @@ end
 function out = audio(x,option,postoption)
     if isempty(option)
         out = x;
-        tmp = [];
     else
-        [out,postoption,tmp] = sig.envelope.main(x,option,postoption);
+        [out,postoption] = sig.envelope.main(x,option,postoption);
     end
     if isempty(postoption)
-        out = {out tmp};
+        out = {out};
     else
-        out = {after(out,postoption) tmp};
+        out = {after(out,postoption)};
     end
 end
 

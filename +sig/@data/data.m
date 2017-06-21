@@ -119,11 +119,17 @@ classdef data
             end
         end
                 
-        function obj = concat(obj,obj2,field)
+        function obj = concat(obj,obj2,field,from)
             if nargin<3
                 field = 'element';
             end
             dim = obj.whichdim(field);
+            if nargin>3 && from
+                l1 = obj.size(field);
+                obj = obj.extract(field,[1,l1-from]);
+                l2 = obj2.size(field);
+                obj2 = obj2.extract(field,[from+1,l2]);
+            end
             obj.content = cat(dim,obj.content,obj2.content);
         end
         

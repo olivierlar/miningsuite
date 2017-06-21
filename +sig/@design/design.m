@@ -39,7 +39,8 @@ classdef design
         
         extensive = 0
         nochunk = 0
-        tmpfile
+        overlap = 0
+%         tmpfile
     %end
     %properties (Dependent)
         files

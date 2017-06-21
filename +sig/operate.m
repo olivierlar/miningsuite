@@ -37,7 +37,7 @@ end
 
 if ischar(arg)
     filename = arg;
-    arg = sig.design('sig','input',arg,'sig.signal',[],during);
+    arg = sig.design('sig','input',arg,'sig.signal',[],during); %%%% why during???
 elseif isa(arg,'sig.design')
     filename = arg.files;
 end
@@ -64,6 +64,8 @@ if isa(arg,'sig.design')
     %    filename = arg.files;
     %end
     
+    design.overlap = arg.overlap;
+    
     if strcmpi(filename,'Design') || ~strcmp(name,'play')
         design.evaluate = 1;
         out = {design};
@@ -76,7 +78,9 @@ elseif isa(arg,'sig.signal')
         arg.Ydata = arg.Ydata.frame(frame,arg.Srate);
         arg.Frate = frate;
     end
-        
+    if iscell(main)
+        main = main{1};
+    end
     out = main({arg},during,after);
     
     out{1}.design = sig.design(pack,name,arg,type,main,during,after,...

@@ -3,7 +3,7 @@ function [x,type] = init(x,option,frame)
     if x.istype('sig.Envelope')
         return
     end
-    if option.zp ~= 2 && ~isa(x,'seq.Sequence')
+    if ~isa(x,'seq.Sequence')
         if isa(x,'sig.Signal')
             x = init_audio(x,option);
         elseif isa(x,'sig.design')
@@ -15,19 +15,19 @@ end
 
 function x = init_audio(x,option)
     if strcmpi(option.method,'Filter')
-        if isnan(option.zp)
-            if strcmpi(option.filter,'IIR')
-                option.zp = 1;
-            else
-                option.zp = 0;
+        if isa(x,'sig.design')
+            decim = option.decim(end);
+            if isnan(decim)
+                if option.decim
+                    decim = 0;
+                else
+                    decim = 16;
+                end
             end
-        end
-        if option.zp == 1
-            x = sig.envelope(x,'ZeroPhase',2,'Down',1,...
-                            'Tau',option.tau,'PreDecim',option.decim);
-            if isa(x,'sig.design')
-                x.tmpfile.fid = 0;
+            if ~decim
+                decim = 1;
             end
+            x.overlap = [3200,decim];
         end
     elseif strcmpi(option.method,'Spectro')
         x = aud.spectrum(x,'FrameSize',option.spectroframe(1),...
@@ -36,6 +36,6 @@ function x = init_audio(x,option)
                            ...'dB',
                            'Power',option.powerspectrum,...
                            'TimeSmooth',option.timesmooth,...
-                           'Terhardt',option.terhardt);%,'Mel');
+                           'Terhardt',option.terhardt);
     end
 end

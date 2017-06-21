@@ -57,7 +57,7 @@ classdef signal
         ver
         
         design
-        tmpfile
+%         tmpfile
     end
     properties (Dependent)
         %Xaxis

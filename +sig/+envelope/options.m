@@ -29,11 +29,6 @@ function options = options
             tau.type = 'Numeric';
             tau.default = .02;
     options.tau = tau;
-    
-        zp.key = 'ZeroPhase'; % internal use: for manual filtfilt
-        zp.type = 'Numeric';
-        zp.default = NaN;
-    options.zp = zp;
 
         ds.key = {'Down','PostDecim'};
         ds.type = 'Numeric';
@@ -182,7 +177,7 @@ function options = options
    % option.iir = iir;
 
         norm.key = 'Normal';
-        norm.type = 'String';
+        %norm.type = 'String';
         norm.choice = {0,1,'AcrossSegments'};
         norm.default = 0;
         norm.keydefault = 1;
