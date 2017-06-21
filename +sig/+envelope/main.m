@@ -7,9 +7,10 @@ function [out,postoption] = main(x,option,postoption)
 
     if strcmpi(option.method,'Spectro')
         d = x.Ydata.rename('element','channel');
-        tmp = [];
-        postoption.trim = 0;
-        postoption.ds = 0;
+        if ~isempty(postoption)
+            postoption.trim = 0;
+            postoption.ds = 0;
+        end
         
     elseif strcmpi(option.method,'Filter')
         d = sig.compute(@routine_filter,x.Ydata,x.Srate,option);
