@@ -361,7 +361,7 @@ else
     if old{1}.Frate
         res = combineframes(old,new);
     elseif old{1}.Srate
-        res = combinesamples(old,new,chunks(2,i-1) - chunks(1,i) + 1);
+        res = combinesamples(old,new,design.overlap(1));
     else
         res = old;
         for z = 1:length(old)
