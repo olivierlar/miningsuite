@@ -27,7 +27,7 @@ function x = init_audio(x,option)
             if ~decim
                 decim = 1;
             end
-            x.overlap = [3200,decim];
+            x.overlap = [6400,decim]; %3200
         end
     elseif strcmpi(option.method,'Spectro')
         x = aud.spectrum(x,'FrameSize',option.spectroframe(1),...
