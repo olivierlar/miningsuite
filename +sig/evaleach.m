@@ -261,12 +261,12 @@ else
     if isa(y,'seq.Sequence')
         return
     end
-    if design.nochunk && ...
-            ~isempty(frame) && frame.toggle
-        frate = sig.compute(@sig.getfrate,y{1}.Srate,frame);
-        y{1}.Ydata = y{1}.Ydata.frame(frame,y{1}.Srate);
-        y{1}.Frate = frate;
-    end
+%     if design.nochunk && ...
+%             ~isempty(frame) && frame.toggle
+%         frate = sig.compute(@sig.getfrate,y{1}.Srate,frame);
+%         y{1}.Ydata = y{1}.Ydata.frame(frame,y{1}.Srate);
+%         y{1}.Frate = frate;
+%     end
 end
 
 
