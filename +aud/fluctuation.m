@@ -1,6 +1,10 @@
 function varargout = fluctuation(varargin)
-    varargout = sig.operate('aud','fluctuation',...
+    out = sig.operate('aud','fluctuation',...
                             initoptions,@init,@main,varargin);
+    if isa(out{1},'sig.design')
+        out{1}.nochunk = 1;
+    end
+    varargout = out;
 end
 
 
@@ -57,13 +61,17 @@ function [x type] = init(x,option,frame)
     x = aud.spectrum(x,'AlongBands','Max',option.max,...
                        'Window',0,... 'NormalLength',...(not working: we need to keep track of audio input length)
                        'Resonance','Fluctuation','MinRes',option.mr);
+    if isa(x,'sig.design')
+        x.nochunk = 1;
+    end
+    
     type = 'sig.Spectrum';
 end
 
 
 function out = main(in,option,postoption)
     x = in{1};
-    if postoption.sum
+    if ~isempty(postoption) && postoption.sum
         x = sig.sum(x);
         %x.Ydata = sig.compute(@summary,x.Ydata);
     end
