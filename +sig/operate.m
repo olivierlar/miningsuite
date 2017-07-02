@@ -17,6 +17,9 @@
 
 function out = operate(pack,name,options,init,main,argin,combine,extensive)
 arg = argin{1};
+if iscell(arg)
+    arg = arg{1};
+end
 if nargin<7
     combine = [];    
     nochunk = 0;
