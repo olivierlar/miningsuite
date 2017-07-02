@@ -44,6 +44,10 @@ end
 
 [arg type] = init(arg,during,frame);
 
+if isempty(frame) && ~ischar(arg) && isa(arg,'sig.design')
+    frame = arg.frame;
+end
+
 if isa(arg,'sig.design')
     if isempty(extract) && ~ischar(arg)
         extract = arg(1).extract;
