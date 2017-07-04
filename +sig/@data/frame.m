@@ -29,7 +29,7 @@ function [data nfr] = main(data,param,sr)
     
     olddim = data.whichdim('sample');
     oldcontent = data.content;
-    if olddim > 1
+    if olddim > 2
         error('not implemented yet');
     end
     
@@ -39,20 +39,39 @@ function [data nfr] = main(data,param,sr)
             disp('Frame length longer than total sequence size. No frame decomposition.');
             return
         end
-        if size(oldcontent,2) == 1
-            newcontent = zeros(l,nfr);
-            for i = 1:nfr % For each frame, ...
-                st = floor((i-1)*h+1);
-                newcontent(:,i) = oldcontent(st:st+l-1);
-            end
-            data.dims{2} = 'frame';
-        else
-            newcontent = zeros(l,size(oldcontent,2),nfr);
-            for i = 1:nfr % For each frame, ...
-                st = floor((i-1)*h+1);
-                newcontent(:,:,i) = oldcontent(st:st+l-1,:);
-            end
-            data.dims{3} = 'frame';
+        switch olddim
+            case 1
+                if size(oldcontent,2) == 1
+                    newcontent = zeros(l,nfr);
+                    for i = 1:nfr % For each frame, ...
+                        st = floor((i-1)*h+1);
+                        newcontent(:,i) = oldcontent(st:st+l-1);
+                    end
+                    data.dims{2} = 'frame';
+                else
+                    newcontent = zeros(l,size(oldcontent,2),nfr);
+                    for i = 1:nfr % For each frame, ...
+                        st = floor((i-1)*h+1);
+                        newcontent(:,:,i) = oldcontent(st:st+l-1,:);
+                    end
+                    data.dims{3} = 'frame';
+                end
+            case 2
+                if size(oldcontent,1) == 1
+                    newcontent = zeros(nfr,l);
+                    for i = 1:nfr % For each frame, ...
+                        st = floor((i-1)*h+1);
+                        newcontent(i,:) = oldcontent(1,st:st+l-1);
+                    end
+                    data.dims{1} = 'frame';
+                else
+                    newcontent = zeros(size(oldcontent,1),l,nfr);
+                    for i = 1:nfr % For each frame, ...
+                        st = floor((i-1)*h+1);
+                        newcontent(:,:,i) = oldcontent(:,st:st+l-1);
+                    end
+                    data.dims{3} = 'frame';
+                end
         end
     end
     
