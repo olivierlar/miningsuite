@@ -246,3 +246,7 @@ while i <= length(args)
     end
     i = i+1;
 end
+if isfield(options,'frame') && isfield(options.frame,'when') && strcmpi(options.frame.when,'After')
+    after.frame = frame;
+    frame = [];
+end

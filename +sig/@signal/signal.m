@@ -390,10 +390,14 @@ function options = constructoptions
 end
 
 
-function [options,frame] = classoptions(mode,fsize,fhop)
+function [options,frame] = classoptions(mode,fsize,fhop,when)
     if nargin
-        if strcmpi(mode,'FrameAuto')
-            options = initframes(fsize,fhop);
+        if nargin > 1
+            if nargin < 4
+                when = 'During';
+            end
+            options = initframes(fsize,fhop,when);
+            options.frame.auto = strcmpi(mode,'FrameAuto');
         else
             options.frame.auto = 0;
         end
@@ -460,11 +464,12 @@ function [options,frame] = classoptions(mode,fsize,fhop)
 end
 
 
-function options = initframes(size,hop)
+function options = initframes(size,hop,when)
         frame.auto = 1;
         frame.key = 'Frame';
         frame.type = 'Boolean';
         frame.default = 0;
+        frame.when = when;
     options.frame = frame;
     
         fsize.key = 'FrameSize';
@@ -472,6 +477,7 @@ function options = initframes(size,hop)
         fsize.default.unit = 's';
         fsize.default.value = size;
         fsize.unit = {'s','sp'};
+        fsize.when = when;
     options.fsize = fsize;
 
         fhop.key = 'FrameHop';
@@ -479,6 +485,7 @@ function options = initframes(size,hop)
         fhop.default.unit = '/1';
         fhop.default.value = hop;
         fhop.unit = {'/1','s','sp','Hz'};
+        fhop.when = when;
     options.fhop = fhop;
     
         frameconfig.key = 'FrameConfig';
