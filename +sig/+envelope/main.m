@@ -2,7 +2,8 @@ function [out,postoption] = main(x,option,postoption)
     x = x{1};
     
     if isa(x,'sig.Envelope') 
-        1
+        out = x;
+        return
     end
 
     if strcmpi(option.method,'Spectro')
