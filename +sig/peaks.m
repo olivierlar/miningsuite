@@ -150,7 +150,7 @@ function [x type] = init(x,option,frame)
 end
 
 
-function out = main(in,option,postoption)
+function out = main(s,option,postoption)
     if option.chro
         option.order = 'Abscissa';
     elseif option.ranked
@@ -168,7 +168,9 @@ function out = main(in,option,postoption)
         option.first = option.cthr / 2;
     end
     
-    s = in{1};
+    if iscell(s)
+        s = s{1};
+    end
     if length(s.xdata) < 2
         s.peakdim = 'sample';
         x = s.sdata;
@@ -247,7 +249,7 @@ function out = search(y,x,option,interpol)
         bufmax = y(mj);
         oldbufmin = min(y(1:p(1)-1));
         while jj <= length(p)
-            if wait && not(mod(jj,5000))
+            if isa(wait,'matlab.ui.Figure') && not(mod(jj,5000))
                 waitbar(jj/length(p),wait,['Selecting peaks... (',...
                                             num2str(length(finalm)),...
                                             ' out of ',num2str(jj),')']);
@@ -297,7 +299,7 @@ function out = search(y,x,option,interpol)
             % The last peak candidate is OK and stored
             finalm(end+1) = p(j);
         end
-        if wait
+        if isa(wait,'matlab.ui.Figure')
             waitbar(1,wait);
             close(wait);
             drawnow
