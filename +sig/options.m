@@ -214,7 +214,7 @@ while i <= length(args)
             optionvalue = arg;
         end    
         if match
-            if strcmpi(field,'frame') && options.frame.auto
+            if strcmpi(field,'frame') % && options.frame.auto
                 frame.toggle = optionvalue;
             elseif strcmpi(field,'fsize')
                 frame.size = optionvalue;
