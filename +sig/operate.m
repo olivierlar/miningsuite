@@ -34,7 +34,7 @@ end
 
 [during,after,frame,extract] = sig.options(options,argin,name);
 if ~isempty(frame) && ~frame.toggle && ...
-        ~ischar(arg) && isa(arg,'sig.design')
+        ~ischar(arg) && isa(arg,'sig.design') && ~isempty(arg.frame)
     frame = arg.frame;
 end
 
