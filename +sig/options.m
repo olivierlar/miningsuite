@@ -94,7 +94,7 @@ while i <= length(args)
                                 if isfield(options.(field),'keydefault')
                                     optionvalue = options.(field).keydefault;
                                 else
-                                    error(['SYNTAX ERROR IN ',func2str(method),...
+                                    error(['SYNTAX ERROR IN ',name,...
                                         ': Unexpected keyword after key ',arg'.']);
                                 end
                             end

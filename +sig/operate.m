@@ -32,7 +32,7 @@ else
     extensive = strcmpi(extensive,'extensive');
 end
 
-[during,after,frame,extract] = sig.options(options,argin,name);
+[during,after,frame,extract] = sig.options(options,argin,[pack,'.',name]);
 if ~isempty(frame) && ~frame.toggle && ...
         ~ischar(arg) && isa(arg,'sig.design') && ~isempty(arg.frame)
     frame = arg.frame;
