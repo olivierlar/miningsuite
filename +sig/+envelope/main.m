@@ -16,11 +16,14 @@ function [out,postoption] = main(x,option,postoption)
     elseif strcmpi(option.method,'Filter')
         d = sig.compute(@routine_filter,x.Ydata,x.Srate,option);
         
-        if isfield(postoption,'ds') && isnan(postoption.ds)
-            if option.decim
-                postoption.ds = 0;
-            else
-                postoption.ds = 16;
+        if isfield(postoption,'ds') 
+            postoption.ds = postoption.ds(end);
+            if isnan(postoption.ds)
+                if option.decim
+                    postoption.ds = 0;
+                else
+                    postoption.ds = 16;
+                end
             end
         end
     end
