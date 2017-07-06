@@ -32,7 +32,7 @@ function d = main(d,postoption,elog)
             d = d.apply(@minlog,{postoption.minlog},{'sample'});
         end
     elseif postoption.norm == 1
-            d = d.apply(@norm,{},{'sample'});
+            d = d.apply(@norm,{},{'sample'},1);
     elseif ischar(postoption.norm) && ...
             strcmpi(postoption.norm,'AcrossSegments')
         d = d./repmat(mdk,[size(d,1),1,1]); % not ready yet!
