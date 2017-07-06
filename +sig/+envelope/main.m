@@ -17,7 +17,7 @@ function [out,postoption] = main(x,option,postoption)
         d = sig.compute(@routine_filter,x.Ydata,x.Srate,option);
         
         if isfield(postoption,'ds') 
-            postoption.ds = postoption.ds(end);
+            postoption.ds = postoption.ds(1);
             if isnan(postoption.ds)
                 if option.decim
                     postoption.ds = 0;
