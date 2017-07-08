@@ -114,7 +114,7 @@ classdef signal
             s.fbchannels = options.fbchannels;
             
             s.date = date;
-            s.ver = ver;
+            s.ver = 0; %ver;
             
             if ~isempty(options.deframe)
                 s = s.deframe(options.deframe);

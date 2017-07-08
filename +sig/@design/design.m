@@ -66,7 +66,7 @@ classdef design
                 obj.argin = argin;
                 obj.extract = extract;
                 obj.date = date;
-                obj.ver = ver;
+                obj.ver = 0; %ver;
                 obj.extensive = extensive;
                 obj.nochunk = nochunk;
             end
@@ -164,6 +164,7 @@ classdef design
             v = v{1}.getpeakval;
         end
         function show(obj,varargin)
+            obj = obj(1);
             if isempty(obj.input)
                 return
             end
@@ -192,15 +193,15 @@ classdef design
             disp(['> ',obj.package,'.',obj.name,' ( ',input,str,' )']);
             disp(obj.duringoptions)
             disp(obj.afteroptions)
-            if nargin < 2
-                disp(['Design date: ' obj.date])
-                for i = 1:length(obj.ver)
-                    if strcmp(obj.ver(i).Name,'The MiningSuite')
-                        disp(['using The MiningSuite version ',obj.ver(i).Version])
-                        break
-                    end
-                end
-            end
+%             if nargin < 2
+%                 disp(['Design date: ' obj.date])
+%                 for i = 1:length(obj.ver)
+%                     if strcmp(obj.ver(i).Name,'The MiningSuite')
+%                         disp(['using The MiningSuite version ',obj.ver(i).Version])
+%                         break
+%                     end
+%                 end
+%             end
         end
         function obj = previous(obj,n)
             obj = obj.input;
