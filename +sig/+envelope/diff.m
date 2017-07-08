@@ -36,6 +36,6 @@ end
 
 
 function y = zdiff(x)
-    y = [zeros(1,size(x,2)); diff(x)];
+    y = [zeros(1,size(x,2),size(x,3)); diff(x)];
 end
     
