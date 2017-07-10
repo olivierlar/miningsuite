@@ -122,7 +122,7 @@ else
             if iscell(main)
                 main = main{1};
             end
-            y = design.main(y,design.duringoptions,design.afteroptions);
+            y = main(y,design.duringoptions,design.afteroptions);
         else
             %frnochunk = isfield(d.frame,'dontchunk');
             %frchunkbefore = isfield(d.frame,'chunkbefore');
