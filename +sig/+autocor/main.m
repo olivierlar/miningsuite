@@ -1,5 +1,8 @@
 function out = main(x,option,postoption)
-    if isa(x{1},'sig.Autocor')
+    if iscell(x)
+        x = x{1};
+    end
+    if isa(x,'sig.Autocor')
         out = x;
         return
     end
@@ -30,7 +33,7 @@ function out = main(x,option,postoption)
             option.min.unit = 's';
         end
         if isempty(option.max)
-            if isa(x{1},'sig.Envelope') %% should find another way..
+            if isa(x,'sig.Envelope') %% should find another way..
                 option.max.value = 2;
             else
                 option.max.value = 0.05;
@@ -39,15 +42,15 @@ function out = main(x,option,postoption)
         end
     end
     
-    if isa(x{1},'sig.Spectrum')
-        x{1}.Ydata = x{1}.Ydata.reframe;
-        x{1}.Frate = x{1}.Srate;
-        x{1}.Srate = x{1}.xsampling;
+    if isa(x,'sig.Spectrum')
+        x.Ydata = x.Ydata.reframe;
+        x.Frate = x.Srate;
+        x.Srate = x.xsampling;
         if strcmpi(option.normwin,'')
             option.normwin = 0;
         end
         warning('Work in progress')
-    elseif isa(x{1},'sig.Envelope')
+    elseif isa(x,'sig.Envelope')
         if strcmpi(option.normwin,'') || isequal(option.normwin,1) || ...
                        strcmpi(option.normwin,'On') || ...
                        strcmpi(option.normwin,'Yes')
@@ -74,7 +77,7 @@ function out = main(x,option,postoption)
         end
     end
 
-    [d w xstart] = sig.compute(@routine,x{1}.Ydata,x{1}.Srate,option);
+    [d w xstart] = sig.compute(@routine,x.Ydata,x.Srate,option);
 
     if option.freq
         xname = 'Frequency';
@@ -82,7 +85,7 @@ function out = main(x,option,postoption)
         xname = 'Time';
     end
     
-    out = sig.Autocor(d,'xsampling',1/x{1}.Srate,'Deframe',x{1});
+    out = sig.Autocor(d,'xsampling',1/x.Srate,'Deframe',x);
     out.window = w;
     out.normwin = option.normwin;
     out.Xaxis.start = xstart;
