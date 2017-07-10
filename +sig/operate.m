@@ -33,6 +33,7 @@ else
 end
 
 [during,after,frame,extract] = sig.options(options,argin,[pack,'.',name]);
+
 if ~isempty(frame) && ~frame.toggle && ...
         ~ischar(arg) && isa(arg,'sig.design') && ~isempty(arg.frame)
     frame = arg.frame;
@@ -55,13 +56,13 @@ if isa(arg,'sig.design')
     if isempty(extract) && ~ischar(arg)
         extract = arg(1).extract;
     end
-    if (~extensive && arg(1).extensive) || nochunk
-        nochunk = 1;
+%     if (~extensive && arg(1).extensive) || nochunk
+%         nochunk = 1;
     %elseif ischar(arg)
     %    nochunk = 0;
-    else
+%     else
         nochunk = arg(1).nochunk;
-    end
+%     end
     design = sig.design(pack,name,arg,type,main,during,after,frame,...
                         combine,argin(2:end),extract,extensive,nochunk);
     
@@ -89,7 +90,9 @@ elseif isa(arg,'sig.signal')
         main = main{1};
     end
     out = main({arg},during,after);
-    
+    if ~iscell(out)
+        out = {out};
+    end
     out{1}.design = sig.design(pack,name,arg,type,main,during,after,...
                                frame,combine,argin(2:end),[],0,0);
     out{1}.design.evaluated = 1;

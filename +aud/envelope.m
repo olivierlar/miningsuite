@@ -9,7 +9,7 @@
 
 function varargout = envelope(varargin)
     varargout = sig.operate('aud','envelope',initoptions,...
-                            @sig.envelope.init,@main,varargin,'concat'); %,'extensive');
+                            @sig.envelope.init,@main,varargin,'concat','extensive');
 end
 
 

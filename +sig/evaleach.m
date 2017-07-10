@@ -116,7 +116,7 @@ else
             y = design.main(y,design.duringoptions,design.afteroptions);
         end
     else
-        if design.nochunk
+        if design.nochunk || design.extensive
             y = sig.evaleach(design.input,filename,window,sr,1,[],chunking);
             main = design.main;
             if iscell(main)
