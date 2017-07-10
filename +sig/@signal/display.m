@@ -90,7 +90,9 @@ function display(obj)
                         end
                     else
                         for j = 1:length(ydata.content)
-                            plot(sdata(j),squeeze(ydatai.content{j}),'+');
+                            if ~isempty(ydatai.content{j})
+                                plot(sdata(j),squeeze(ydatai.content{j}),'+');
+                            end
                         end
                     end
                 else
