@@ -59,7 +59,7 @@ end
 
 function d = resonance(d,f,type)
     if strcmpi(type,'ToiviainenSnyder')
-        w = max(0, 1 - 0.25*(log2(max(1./max(f,1e-12),1e-12)/0.5)).^2);
+        w = max(0, 1 - 0.25*(log2(max(f,1e-12)/0.5)).^2);
     elseif strcmpi(type,'vanNoorden')
         f0=2.193; b=0.5; 
         f=1./f; a1=(f0*f0-f.*f).^2+b*f.^2; a2=f0^4+f.^4;
