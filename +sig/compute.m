@@ -28,6 +28,7 @@ if nblayers > layer
     argouts = cell(1,nout);
     for i = 1:l
         argi = argins;
+        argi{1}.layers = argi{1}.layers - 1;
         for j = 1:length(argi)
             if isa(argi{j},'sig.data')
                 argj = argi{j}.content;
@@ -58,6 +59,7 @@ if nblayers > layer
             if isa(y{j},'sig.data')
                 if i == 1
                     argouts{j} = y{j};
+                    argouts{j}.layers = argouts{j}.layers + 1;
                     argouts{j}.content = {y{j}.content};
                 else
                     argouts{j}.content{i} = y{j}.content;
