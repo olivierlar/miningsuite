@@ -574,7 +574,7 @@ function o = main(o,option,postoption)
     end
     
     if isfield(option,'sum') && option.sum
-        o = sig.sum(o,'Type','channel'); %,'Adjacent',option.sum);
+        o = sig.sum(o,'Type','freqband'); %'channel'); %,'Adjacent',option.sum);
     end
     
     if isa(o,'sig.Envelope') && isfield(postoption,'normal') && ...
