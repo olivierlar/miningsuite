@@ -45,22 +45,22 @@ function [obj varargout] = apply(obj,func,argin,dimfunc,ndimfunc,type)
     for i = 1:ndimfunc
         start{i} = ':';
     end
-    if iscell(data)
-        oldtype = '{}';
-    else
+%     if iscell(data)
+%         oldtype = '{}';
+%     else
         oldtype = '()';
-    end
+%     end
     args = recurse(data,start,ndimfunc+1,ndimdata,{},oldtype);
     argsin = {};
     for j = 1:length(argin)
         if isa(argin{j},'sig.data')
             argin{j} = argin{j}.content;
             argin{j} = permute(argin{j},ordim);
-            if iscell(argin{j})
-                oldtype = '{}';
-            else
+            %if iscell(argin{j})
+            %    oldtype = '{}';
+            %else
                 oldtype = '()';
-            end
+            %end
             argsin{j} = recurse(argin{j},start,ndimfunc+1,ndimdata,{},...
                                 oldtype);
         end

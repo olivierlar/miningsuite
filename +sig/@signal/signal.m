@@ -553,6 +553,7 @@ end
 
 
 function d = peakroutine(d,v)
+    d = d{1};
     d = v(d);
     d = d(:);
 end

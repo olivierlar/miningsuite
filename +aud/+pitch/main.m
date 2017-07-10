@@ -13,5 +13,5 @@ end
 
 
 function y = convert(x)
-    y = 1./x;
+    y = 1./x{1};
 end

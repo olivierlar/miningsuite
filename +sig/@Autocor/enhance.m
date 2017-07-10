@@ -17,6 +17,8 @@ end
 function y = routine(x,p,v,e,t)
     t = t(:);
     mv = [];
+    p = p{1};
+    v = v{1};
     if not(isempty(p))
         mp = min(p); %Lowest peak
         mv = v(find(v<mp,1,'last'));
