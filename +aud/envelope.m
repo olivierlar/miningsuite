@@ -34,11 +34,11 @@ end
 
 
 function out = main(x,option,postoption)    
-    [y,postoption,tmp] = sig.envelope.main(x,option,postoption);
+    [y,postoption] = sig.envelope.main(x,option,postoption);
     if isempty(postoption)
-        out = {y tmp};
+        out = {y};
     else
-        out = {after(y,postoption) tmp};
+        out = {after(y,postoption)};
     end
 end
 
