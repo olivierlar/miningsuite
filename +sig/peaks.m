@@ -171,12 +171,13 @@ function out = main(s,option,postoption)
     if iscell(s)
         s = s{1};
     end
-    if length(s.xdata) < 2
+    xdata = s.xdata;
+    if length(xdata) < 2
         s.peakdim = 'sample';
         x = s.sdata;
     else
         s.peakdim = 'element';
-        x = s.xdata;
+        x = xdata;
     end
     
     interpol = s.interpolable && not(isempty(option.interpol)) && ...
