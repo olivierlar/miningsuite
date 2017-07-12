@@ -46,7 +46,7 @@ end
 
 
 function x = defaultval(unit,index,segment)
-    if nargin < 2
+    if nargin < 3
         segment = 1;
     end
     if length(unit.rate) == 1
