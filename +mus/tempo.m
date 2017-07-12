@@ -17,8 +17,8 @@ function options = initoptions
     options = aud.tempo.options;
     
         method.type = 'String';
-        method.choice = {'Autocor','Pattern'};
-        method.default = 'Autocor';
+        method.choice = {'Signal','Pattern'};
+        method.default = 'Signal';
     options.method = method;
     
         reso.key = 'Resonance';
@@ -31,7 +31,7 @@ end
 
 %%
 function [x, type] = init(x,option,frame)
-    if strcmpi(option.method,'Autocor')
+    if strcmpi(option.method,'Signal')
         [x, type] = aud.tempo.init(x,option,frame,@mus_autocor,@mus_spectrum);
     elseif strcmpi(option.method,'Pattern')
         x = mus.score(x,'Metre');
