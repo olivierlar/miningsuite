@@ -124,13 +124,12 @@ classdef design
                     end
                 else
                     out = obj.eval(obj.files,1,0);
-                    if iscell(out)
-                        out = out{1};
-                    end
-                    if isa(out,'mus.Sequence')
-                        out.display;
-                    elseif isa(out,'sig.signal')
-                        out.display;
+                    for i = 1:length(out)
+                        if isa(out{i},'mus.Sequence')
+                            out{i}.display;
+                        elseif isa(out{1},'sig.signal')
+                            out{i}.display;
+                        end
                     end
                 end
             else
