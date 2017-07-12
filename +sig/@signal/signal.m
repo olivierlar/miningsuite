@@ -149,7 +149,7 @@ classdef signal
             elseif ~obj.xsampling
                 x = obj.xstart;
             else
-                x = obj.Xaxis.data(obj.Ydata.size('element'));
+                x = obj.Xaxis.data([1 obj.Ydata.size('element')]);
             end
         end
         
@@ -160,7 +160,7 @@ classdef signal
             if ~obj.Srate
                 s = obj.xdata(1);
             else
-                s = obj.saxis.data(obj.Ydata.size('sample',1));
+                s = obj.saxis.data([1 obj.Ydata.size('sample',1)]);
             end
         end
         
@@ -175,21 +175,21 @@ classdef signal
             if isempty(obj.faxis)
                 f = [];
             else
-                f = obj.faxis.data(obj.Ydata.size('frame'));
+                f = obj.faxis.data([1 obj.Ydata.size('frame')]);
             end
         end
         function f = get.fends(obj)
             if isempty(obj.faxis)
                 f = [];
             else
-                f = obj.faxis.data(obj.Ydata.size('frame')) + obj.fnumber;
+                f = obj.faxis.data([1 obj.Ydata.size('frame')]) + obj.fnumber;
             end
         end
         function f = get.fcenters(obj)
             if isempty(obj.faxis)
                 f = [];
             else
-                f = obj.faxis.data(obj.Ydata.size('frame')) + obj.fnumber/2;
+                f = obj.faxis.data([1 obj.Ydata.size('frame')]) + obj.fnumber/2;
             end
         end
         

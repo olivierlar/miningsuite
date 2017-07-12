@@ -40,7 +40,10 @@ classdef axis
                     x = x(segment);
                 end
             end
-            x = x + (1:sd)-1;
+            if length(sd) == 2
+                sd = sd(1):sd(2);
+            end
+            x = x + sd - 1;
         end
         
         function x = data(obj,sd,segment)
