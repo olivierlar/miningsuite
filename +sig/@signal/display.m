@@ -7,9 +7,11 @@ function display(obj)
         return
     end
     
+    xdata = obj.xdata;
+    sdata = obj.sdata;
     %%    
     if ~obj.Srate || isequal(obj.Ydata.size('sample',1), 1)
-        if isempty(obj.xdata) || length(obj.xdata) == 1
+        if isempty(xdata) || length(xdata) == 1
             textual(obj.yname,obj.Ydata.content);
             return
         end
@@ -18,8 +20,8 @@ function display(obj)
         ydata = obj.Ydata;
         iscurve = (length(obj.Sstart) == 1);  
         
-    elseif length(obj.xdata) < 2   
-        switch length(obj.xdata)
+    elseif length(xdata) < 2   
+        switch length(xdata)
             case 0
                 % Variable number of data points per sample
                 iscurve = -1;
@@ -32,9 +34,9 @@ function display(obj)
         
     else
         iscurve = 0;
-        f = obj.sdata;
+        f = sdata;
         t = [f 2*f(end)-f(end-1)];
-        x = obj.xdata(:);
+        x = xdata(:);
         x = [ 1.5*x(1) - 0.5*x(2); ...
               (x(1:end-1) + x(2:end)) / 2; ...
               1.5*x(end) - 0.5*x(end-1) ];
@@ -83,7 +85,6 @@ function display(obj)
             end
             if iscell(ydatai.content)
                 if strcmp(abscissa,'sdata')
-                    sdata = obj.sdata;
                     if iscell(sdata)
                         for j = 1:length(ydata.content)
                             plot(sdata{j},squeeze(ydatai.content{j}));
@@ -104,7 +105,7 @@ function display(obj)
         elseif iscell(ydatai.content)
             for j = 1:length(ydatai.content)
                 x = obj.Sstart(j) + [0, obj.Ssize(j)];
-                y = obj.xdata{j}';
+                y = xdata{j}';
                 y(end+1) = 2 * y(end) - y(end-1);
                 surfplot(x,y,ydatai.content{j});
             end
@@ -132,7 +133,7 @@ function display(obj)
                     if pk.size('sample') == 1
                         pk = pk.content{1};
                         if ~isempty(pk)
-                            py = obj.Xaxis.unit.generate(pk+.5);
+                            py = obj.Xaxis.data(pk+.5);
                             px = obj.Sstart(k) + obj.Ssize(k) / 2;
                             plot(px,py,'+k');
                         end
@@ -140,8 +141,8 @@ function display(obj)
                         for j = 1:pk.size('sample')
                             pj = pk.view('sample',j);
                             if ~isempty(pj{1})
-                                px = obj.saxis.unit.generate(j+.5);
-                                py = obj.Xaxis.unit.generate(pj{1});
+                                px = obj.saxis.data(j+.5);
+                                py = obj.Xaxis.data(pj{1});
                                 plot(px,py,'+k');
                             end
                         end
@@ -151,8 +152,8 @@ function display(obj)
                 for j = 1:obj.peak.size('sample')
                     pj = p.view('sample',j);
                     if ~isempty(pj{1})
-                        px = obj.saxis.unit.generate(j+.5);
-                        py = obj.Xaxis.unit.generate(pj{1});
+                        px = obj.saxis.data(j+.5);
+                        py = obj.Xaxis.data(pj{1});
                         plot(px,py,'+k');
                     end
                 end
