@@ -134,7 +134,7 @@ classdef design
                     for i = 1:length(out)
                         if isa(out{i},'mus.Sequence')
                             out{i}.display;
-                        elseif isa(out{1},'sig.signal')
+                        elseif isa(out{i},'sig.signal')
                             out{i}.display;
                         end
                     end
