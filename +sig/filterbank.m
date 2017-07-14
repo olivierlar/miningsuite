@@ -9,7 +9,7 @@
 
 function varargout = filterbank(varargin)
     varargout = sig.operate('sig','filterbank',sig.filterbank.options(),...
-                            @init,@main,varargin,'concat');
+                            @init,@main,@after,varargin,'concat');
 end
 
 
@@ -19,6 +19,10 @@ function [x type] = init(x,option,frame)
 end
 
 
-function x = main(x,option,postoption)    
+function x = main(x,option)    
     x = sig.filterbank.main(x,option,@sig.filterbank.specif);
+end
+
+
+function x = after(x,option)    
 end
