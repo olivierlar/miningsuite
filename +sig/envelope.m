@@ -13,37 +13,39 @@
 
 function varargout = envelope(varargin)
     varargout = sig.operate('sig','envelope',sig.envelope.options,...
-                            @sig.envelope.init,{@audio,@symbolic},varargin,'concat','extensive');
+                            @sig.envelope.init,...
+                            {@sig.envelope.main,@symbolic},@after,...
+                            varargin,'concat');
 end
 
 
-function out = audio(x,option,postoption)
-    if isempty(option)
-        out = x;
-    else
-        [out,postoption] = sig.envelope.main(x,option,postoption);
-    end
-    if isempty(postoption)
-        out = {out};
-    else
-        out = {after(out,postoption)};
-    end
-end
-
-
-function x = after(x,postoption)
+function out = after(x,option)
     if iscell(x)
         x = x{1};
     end
-    x = sig.envelope.resample(x,postoption);
-    x = sig.envelope.rescale(x,postoption);
-    x = sig.envelope.upsample(x,postoption);
-    x.Ydata = sig.envelope.diff(x,postoption);
-    x = sig.envelope.after(x,postoption);
+    if strcmpi(option.method,'Spectro')
+        option.trim = 0;
+        option.ds = 0;
+    elseif strcmpi(option.method,'Filter')        
+        option.ds = option.ds(1);
+        if isnan(option.ds)
+            if option.decim
+                option.ds = 0;
+            else
+                option.ds = 16;
+            end
+        end
+    end
+    x = sig.envelope.resample(x,option);
+    x = sig.envelope.rescale(x,option);
+    x = sig.envelope.upsample(x,option);
+    x.Ydata = sig.envelope.diff(x,option);
+    x = sig.envelope.after(x,option);
+    out = {x};
 end
 
 
-function out = symbolic(x,option,postoption)
+function out = symbolic(x,option)
     % Code adapted from onsetacorr.m and duraccent.m in MIDItoolbox
     % NDIVS = divisions in Hz (default = 4);
     ndivs = 4;

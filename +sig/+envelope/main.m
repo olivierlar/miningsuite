@@ -1,4 +1,4 @@
-function [out,postoption] = main(x,option,postoption)
+function out = main(x,option)
     x = x{1};
     
     if isa(x,'sig.Envelope') 
@@ -7,30 +7,14 @@ function [out,postoption] = main(x,option,postoption)
     end
 
     if strcmpi(option.method,'Spectro')
-        d = x.Ydata.rename('element','channel');
-        if ~isempty(postoption)
-            postoption.trim = 0;
-            postoption.ds = 0;
-        end
-        
+        d = x.Ydata.rename('element','freqband');
     elseif strcmpi(option.method,'Filter')
         d = sig.compute(@routine_filter,x.Ydata,x.Srate,option);
-        
-        if isfield(postoption,'ds') 
-            postoption.ds = postoption.ds(1);
-            if isnan(postoption.ds)
-                if option.decim
-                    postoption.ds = 0;
-                else
-                    postoption.ds = 16;
-                end
-            end
-        end
     end
-    out = sig.Envelope(d,'Srate',x.Srate,...
+    out = {sig.Envelope(d,'Srate',x.Srate,...
                        'Sstart',x.Sstart,'Ssize',x.Ssize,...
                        'Method',option.method,'Frate',x.Frate,...
-                       'FbChannels',x.fbchannels);    
+                       'FbChannels',x.fbchannels)};    
 end
 
 
