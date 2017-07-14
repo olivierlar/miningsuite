@@ -15,24 +15,21 @@
 % + pattern mining + ...", AES 53RD INTERNATIONAL CONFERENCE, London, UK,
 % 2014
 
-function out = operate(pack,name,options,init,main,argin,combine,extensive)
+function out = operate(pack,name,options,init,main,after,argin,combine,extensive)
 arg = argin{1};
 if iscell(arg)
     arg = arg{1};
 end
-if nargin<7
-    combine = [];    
-    nochunk = 0;
-else
-    nochunk = strcmpi(combine,'nochunk');
-end
 if nargin<8
+    combine = 'no';    
+end
+if nargin<9
     extensive = 0;
 else
     extensive = strcmpi(extensive,'extensive');
 end
 
-[during,after,frame,extract] = sig.options(options,argin,[pack,'.',name]);
+[options,frame,extract] = sig.options(options,argin,[pack,'.',name]);
 
 if ~isempty(frame) && ~frame.toggle && ...
         ~ischar(arg) && isa(arg,'sig.design') && ~isempty(arg.frame)
@@ -41,12 +38,12 @@ end
 
 if ischar(arg)
     filename = arg;
-    arg = sig.design('sig','input',arg,'sig.signal',[],during); %%%% why during???
+    arg = sig.design('sig','input',arg,'sig.signal',[],[],options); %%%% why options???
 elseif isa(arg,'sig.design')
     filename = arg.files;
 end
 
-[arg type] = init(arg,during,frame);
+[arg,type] = init(arg,options,frame);
 
 if isempty(frame) && ~ischar(arg) && isa(arg,'sig.design')
     frame = arg.frame;
@@ -56,14 +53,14 @@ if isa(arg,'sig.design')
     if isempty(extract) && ~ischar(arg)
         extract = arg(1).extract;
     end
-%     if (~extensive && arg(1).extensive) || nochunk
-%         nochunk = 1;
+    if arg(1).extensive || arg(1).nochunk
+        nochunk = 1;
     %elseif ischar(arg)
     %    nochunk = 0;
-%     else
+    else
         nochunk = arg(1).nochunk;
-%     end
-    design = sig.design(pack,name,arg,type,main,during,after,frame,...
+    end
+    design = sig.design(pack,name,arg,type,main,after,options,frame,...
                         combine,argin(2:end),extract,extensive,nochunk);
     
     %if ischar(arg)
@@ -89,17 +86,18 @@ elseif isa(arg,'sig.signal')
     if iscell(main)
         main = main{1};
     end
-    out = main({arg},during,after);
+    out = main({arg},options);
+    out = after(out,options);
     if ~iscell(out)
         out = {out};
     end
-    out{1}.design = sig.design(pack,name,arg,type,main,during,after,...
+    out{1}.design = sig.design(pack,name,arg,type,main,after,options,...
                                frame,combine,argin(2:end),[],0,0);
     out{1}.design.evaluated = 1;
 elseif isa(arg,'mus.Sequence')
-    out = main(arg,during);
+    out = main(arg,options);
 elseif isa(arg,'aud.Sequence')
-    out = main(arg,during,frame);
+    out = main(arg,options,frame);
 else
     out = {arg};
 end

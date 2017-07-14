@@ -11,43 +11,30 @@
 % + pattern mining + ...", AES 53RD INTERNATIONAL CONFERENCE, London, UK,
 % 2014
 
-function [during after frame extract] = options(options,args,name)
+function [options frame extract] = options(specif,args,name)
 
-during = struct;
-after = [];
+options = struct;
 extract = [];
 
-if isfield(options,'fsize')
-    frame.toggle = options.frame.default;
-    frame.size = options.fsize.default;
-    frame.hop = options.fhop.default;
+if isfield(specif,'fsize')
+    frame.toggle = specif.frame.default;
+    frame.size = specif.fsize.default;
+    frame.hop = specif.fhop.default;
 else
     frame = [];
 end
 
-if isa(options,'function_handle')
-    options = options(.05,.5);
+if isa(specif,'function_handle')
+    specif = specif(.05,.5);
 end
-fields = fieldnames(options);
+fields = fieldnames(specif);
 for i = 1:length(fields)
     field = fields{i};
     if ~max(strcmpi(field,{'frame','fsize','fhop'}))
-        if isfield(options.(field),'when') && ...
-                (strcmpi(options.(field).when,'After') || ...
-                 strcmpi(options.(field).when,'Both'))
-            if isfield(options.(field),'default')
-                after.(field) = options.(field).default;
-            else
-                after.(field) = 0;
-            end
-        end
-        if not(isfield(options.(field),'when')) || ...
-                strcmpi(options.(field).when,'Both')
-            if isfield(options.(field),'default')
-                during.(field) = options.(field).default;
-            else
-                during.(field) = 0;
-            end
+        if isfield(specif.(field),'default')
+            options.(field) = specif.(field).default;
+        else
+            options.(field) = 0;
         end
     end
 end
@@ -60,8 +47,8 @@ while i <= length(args)
     while not(match) && k<length(fields)
         k = k+1;
         field = fields{k};
-        if isfield(options.(field),'key')
-            key = options.(field).key;
+        if isfield(specif.(field),'key')
+            key = specif.(field).key;
             if not(iscell(key))
                 key = {key};
             end
@@ -71,18 +58,18 @@ while i <= length(args)
                 end
             end
             if match
-                if isfield(options.(field),'type')
-                    type = options.(field).type;
+                if isfield(specif.(field),'type')
+                    type = specif.(field).type;
                 else
                     type = [];
                 end
                 if strcmpi(type,'String')
                     if length(args) > i && ...
                             (ischar(args{i+1}) || args{i+1} == 0)
-                        if isfield(options.(field),'choice')
+                        if isfield(specif.(field),'choice')
                             match2 = 0;
                             arg2 = args{i+1};
-                            for j = options.(field).choice
+                            for j = specif.(field).choice
                                 if (ischar(j{1}) && strcmpi(arg2,j)) || ...
                                    (not(ischar(j{1})) && isequal(arg2,j{1}))
                                         match2 = 1;
@@ -91,8 +78,8 @@ while i <= length(args)
                                 end
                             end
                             if not(match2)
-                                if isfield(options.(field),'keydefault')
-                                    optionvalue = options.(field).keydefault;
+                                if isfield(specif.(field),'keydefault')
+                                    optionvalue = specif.(field).keydefault;
                                 else
                                     error(['SYNTAX ERROR IN ',name,...
                                         ': Unexpected keyword after key ',arg'.']);
@@ -102,10 +89,10 @@ while i <= length(args)
                             i = i+1;
                             optionvalue = args{i};
                         end
-                    elseif isfield(options.(field),'keydefault')
-                        optionvalue = options.(field).keydefault;
-                    elseif isfield(options.(field),'default')
-                        optionvalue = options.(field).default;
+                    elseif isfield(specif.(field),'keydefault')
+                        optionvalue = specif.(field).keydefault;
+                    elseif isfield(specif.(field),'default')
+                        optionvalue = specif.(field).default;
                     else
                         error(['SYNTAX ERROR IN ',func2str(method),...
                             ': A string should follow the key ',arg'.']);
@@ -133,38 +120,38 @@ while i <= length(args)
                                             iscell(args{i+1}))
                         i = i+1;
                         optionvalue = args{i};
-                    elseif isfield(options.(field),'keydefault')
+                    elseif isfield(specif.(field),'keydefault')
                         if strcmpi(type,'Integers')
-                            optionvalue = options.(field).keydefault;
+                            optionvalue = specif.(field).keydefault;
                         else
-                            optionvalue = options.(field).keydefault(1);
+                            optionvalue = specif.(field).keydefault(1);
                         end
-                    elseif isfield(options.(field),'default')
+                    elseif isfield(specif.(field),'default')
                         if strcmpi(type,'Integers')
-                            optionvalue = options.(field).default;
+                            optionvalue = specif.(field).default;
                         else
-                            optionvalue = options.(field).default(1);
+                            optionvalue = specif.(field).default(1);
                         end
                     else
                         error(['SYNTAX ERROR IN ',func2str(method),...
                             ': An integer should follow the key ',arg'.']);
                     end
-                    if isfield(options.(field),'number')...
-                            && options.(field).number == 2
+                    if isfield(specif.(field),'number')...
+                            && specif.(field).number == 2
                         if length(args) > i && isnumeric(args{i+1})
                             i = i+1;
                             optionvalue = [optionvalue args{i}];
-                        elseif isfield(options.(field),'keydefault')
-                            optionvalue = [optionvalue options.(field).keydefault(2)];
-                        elseif isfield(options.(field),'default')
-                            optionvalue = [optionvalue options.(field).default(2)];
+                        elseif isfield(specif.(field),'keydefault')
+                            optionvalue = [optionvalue specif.(field).keydefault(2)];
+                        elseif isfield(specif.(field),'default')
+                            optionvalue = [optionvalue specif.(field).default(2)];
                         else
                             error(['SYNTAX ERROR IN ',func2str(method),...
                             ': Two integers should follow the key ',arg'.']);
                         end
                     end
                     if strcmpi(type,'Unit')
-                        unit = options.(field).unit;
+                        unit = specif.(field).unit;
                         value = optionvalue;
                         optionvalue = struct;
                         optionvalue.value = value;
@@ -187,8 +174,8 @@ while i <= length(args)
                     if length(args) > i
                         i = i+1;
                         optionvalue = args{i};
-                    elseif isfield(options.(field),'keydefault')
-                        optionvalue = options.(field).keydefault(1);
+                    elseif isfield(specif.(field),'keydefault')
+                        optionvalue = specif.(field).keydefault(1);
                     else
                         error(['SYNTAX ERROR IN ',name,...
                             ': Data should follow the key ',arg'.']);
@@ -199,8 +186,8 @@ while i <= length(args)
                     extract = optionvalue;
                 end
             end
-        elseif isfield(options.(field),'choice')
-            choices = options.(field).choice;
+        elseif isfield(specif.(field),'choice')
+            choices = specif.(field).choice;
             for j = 1:length(choices)
                 if strcmpi(arg,choices{j})
                     match = 1;
@@ -225,15 +212,7 @@ while i <= length(args)
             elseif strcmpi(field,'frameconfig')
                 frame = optionvalue;
             else
-                if isfield(options.(field),'when') ...
-                        && (strcmpi(options.(field).when,'After') || ...
-                            strcmpi(options.(field).when,'Both'))
-                    after.(field) = optionvalue;
-                end
-                if not(isfield(options.(field),'when')) ...
-                        || strcmpi(options.(field).when,'Both')
-                    during.(field) = optionvalue;
-                end
+                options.(field) = optionvalue;
             end
         end
     end
@@ -246,7 +225,7 @@ while i <= length(args)
     end
     i = i+1;
 end
-if isfield(options,'frame') && isfield(options.frame,'when') && strcmpi(options.frame.when,'After')
-    after.frame = frame;
+if isfield(specif,'frame') && isfield(specif.frame,'when') && strcmpi(specif.frame.when,'After')
+    options.frame = frame;
     frame = [];
 end

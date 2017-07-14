@@ -312,27 +312,23 @@ function options = constructoptions
 
         name.key = 'Name';
         name.type = 'String';
-        name.when = 'Both';
         name.default = 'Signal';
     options.name = name;
 
         unit.key = 'Unit';
         unit.type = 'String';
         unit.default = '';
-        unit.when = 'Both';
     options.unit = unit;
     
     
         xname.key = 'XName';
         xname.type = 'String';
         xname.default = '';
-        xname.when = 'Both';
     options.xname = xname;
 
         xunit.key = 'XUnit';
         xunit.type = 'String';
         xunit.default = '';
-        xunit.when = 'Both';
     options.xunit = xunit;
     
         xdatamethod.key = 'XDataMethod';
@@ -410,30 +406,25 @@ function [options,frame] = classoptions(mode,fsize,fhop,when)
         mix.type = 'String';
         mix.choice = {'Pre','Post','No',0};
         mix.default = 'Pre'; %sig.signal.default.Mix;
-        mix.when = 'Both';
     options.mix = mix;
 
         center.key = 'Center';
         center.type = 'Boolean';
         center.default = sig.signal.default.Center;
-        center.when = 'After';
     options.center = center;
 
 %        normal.key = 'Normal';
 %        normal.type = 'Boolean';
 %        normal.default = 0;
-%        normal.when = 'After';
 %    options.normal = normal;
     
     %    channel.key = {'Channel','Channels'};
     %    channel.type = 'Numeric';
     %    channel.default = [];
-    %    channel.when = 'After';
     %options.channel = channel;
     
         sampling.key = 'Sampling';
         sampling.type = 'Numeric';
-        sampling.when = 'Both';
     options.sampling = sampling;
 
         extract.key = {'Extract','Excerpt'};
@@ -441,25 +432,21 @@ function [options,frame] = classoptions(mode,fsize,fhop,when)
         extract.number = 2;
         extract.default = [];
         extract.unit = {'s','sp'};
-        extract.when = 'After';
     options.extract = extract;
     
         trim.key = {'Trim'};
         trim.type = 'Boolean';
         trim.default = 0;
-        trim.when = 'After';
     options.trim = trim;
     
         trimwhere.type = 'String';
         trimwhere.choice = {'JustStart','JustEnd','BothEnds'};
         trimwhere.default = 'BothEnds';
-        trimwhere.when = 'After';
     options.trimwhere = trimwhere;
     
         trimthreshold.key = 'TrimThreshold';
         trimthreshold.type = 'Numeric';
         trimthreshold.default = .06;
-        trimthreshold.when = 'After';
     options.trimthreshold = trimthreshold;
 end
 
@@ -477,7 +464,6 @@ function options = initframes(size,hop,when)
         fsize.default.unit = 's';
         fsize.default.value = size;
         fsize.unit = {'s','sp'};
-        fsize.when = when;
     options.fsize = fsize;
 
         fhop.key = 'FrameHop';
@@ -485,7 +471,6 @@ function options = initframes(size,hop,when)
         fhop.default.unit = '/1';
         fhop.default.value = hop;
         fhop.unit = {'/1','s','sp','Hz'};
-        fhop.when = when;
     options.fhop = fhop;
     
         frameconfig.key = 'FrameConfig';
@@ -500,12 +485,8 @@ function [x type] = init(x,option,frame)
 end
 
 
-function out = main(x,option,postoption)
-    if isempty(postoption)
-        out = x;
-    else
-        out = {after(x{1},postoption)};
-    end
+function out = main(x,option)
+    out = x;
 end
 
 

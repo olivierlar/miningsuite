@@ -24,9 +24,9 @@ classdef design
         extract
         
         main
+        after
         
-        duringoptions
-        afteroptions
+        options
         
         frame
         combine
@@ -47,9 +47,9 @@ classdef design
     end
 %%
     methods
-        function obj = design(pack,name,input,type,main,during,after,...
+        function obj = design(pack,name,input,type,main,after,options,...
                               frame,combine,argin,extract,extensive,nochunk)
-            if nargin<10
+            if nargin<11
                 extract = 0;
             end
             
@@ -58,9 +58,9 @@ classdef design
             obj.input = input;
             obj.type = type;
             obj.main = main;
-            obj.duringoptions = during;
-            if nargin>6
-                obj.afteroptions = after;
+            obj.after = after;
+            obj.options = options;
+            if nargin>7
                 obj.frame = frame;
                 obj.combine = combine;
                 obj.argin = argin;
@@ -75,8 +75,15 @@ classdef design
                 obj.files = input.files;
             end
         end
-        function res = istype(obj,type)
-            res = strcmp(obj.type,type);
+        function res = istype(obj,type,pos)
+            if iscell(obj.type)
+                if nargin < 3
+                    pos = 1;
+                end
+                res = strcmp(obj.type{pos},type);
+            else
+                res = strcmp(obj.type,type);
+            end
         end
         function out = eval(obj,arg,nargout,folder)
             if nargin<2
