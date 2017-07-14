@@ -7,7 +7,7 @@
 % the main folder of the MiningSuite distribution.
 
 function varargout = frame(varargin)
-    varargout = sig.operate('sig','frame',options,@init,@main,varargin);
+    varargout = sig.operate('sig','frame',options,@init,@main,@after,varargin);
 end
 
 
@@ -43,5 +43,9 @@ function [x type] = init(x,option,frame)
 end
 
 
-function x = main(x,option,postoption)
+function x = main(x,option)
+end
+
+
+function x = after(x,option)
 end
