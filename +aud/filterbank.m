@@ -9,8 +9,8 @@
 % the main folder of the MiningSuite distribution.
 
 function varargout = filterbank(varargin)
-    varargout = sig.operate('aud','filterbank',initoptions,@init,@main,...
-                            varargin,'concat');
+    varargout = sig.operate('aud','filterbank',initoptions,...
+                            @init,@main,@after,varargin,'concat');
 end
 
 
@@ -42,7 +42,7 @@ function [x type] = init(x,option,frame)
 end
 
 
-function x = main(x,option,postoption)
+function x = main(x,option)
     if isempty(option)
         return
     end
@@ -216,4 +216,8 @@ function Hd=ERBFilters(fs,numChannels,chans,lowFreq)
         Hd{i} = {dfilt.df2t(aa1,bb1);dfilt.df2t(aa2,bb2);...
                  dfilt.df2t(aa3,bb3);dfilt.df2t(aa4,bb4)};
     end
+end
+
+
+function x = after(x,option)    
 end
