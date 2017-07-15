@@ -159,8 +159,16 @@ classdef signal
         function s = get.sdata(obj)
             if ~obj.Srate
                 s = obj.xdata(1);
-            else
-                s = obj.saxis.data([1 obj.Ydata.size('sample',1)]);
+            else 
+                ysize = obj.Ydata.size('sample',1);
+                if iscell(ysize)
+                    s = cell(1,length(ysize));
+                    for i = 1:length(ysize)
+                        s{i} = obj.saxis.data([1 ysize{i}],i);
+                    end
+                else
+                    s = obj.saxis.data([1 ysize]);
+                end
             end
         end
         
