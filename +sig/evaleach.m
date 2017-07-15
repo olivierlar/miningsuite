@@ -373,6 +373,7 @@ else
                 res{z} = design.combine(old{z},new{z});
             end
         end
+        res{z}.Ssize = old{z}.Ssize + new{z}.Ssize;
     end
 end
 
