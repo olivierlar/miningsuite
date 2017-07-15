@@ -8,8 +8,13 @@
 % the main folder of the MiningSuite distribution.
 
 function varargout = sum(varargin)
-    varargout = sig.operate('sig','sum',options,...
-                            @init,@main,varargin,'concat');
+    if varargin{1}.istype('sig.signal')
+        chunk = 'concat';
+    else
+        chunk = 'no';
+    end
+    varargout = sig.operate('sig','sum',options,@init,@main,@after,...
+                            varargin,chunk);
 end
 
 
@@ -35,11 +40,7 @@ function [x type] = init(x,option,frame)
 end
 
 
-function res = main(x,option,postoption)
-    if isempty(option)
-        res = x;
-        return
-    end
+function out = main(x,option)
     x = x{1};
     if option.mean
         norm = x.Ydata.size('freqband');
@@ -48,7 +49,7 @@ function res = main(x,option,postoption)
     end
     x.Ydata = sig.compute(@routine,x.Ydata,norm,option.type);
     x.fbchannels = 1;
-    res = {x};
+    out = {x};
 end
 
 
@@ -57,4 +58,8 @@ function out = routine(in,norm,type)
     if norm ~= 1
         out.content = out.content / norm;
     end
+end
+
+
+function x = after(x,option)
 end
