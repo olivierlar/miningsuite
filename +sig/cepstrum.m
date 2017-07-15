@@ -10,7 +10,7 @@
 
 function varargout = cepstrum(varargin)
     varargout = sig.operate('sig','cepstrum',options,...
-                            @init,@main,varargin,'sum');
+                            @init,@main,@after,varargin,'sum');
 end
 
 
@@ -54,14 +54,10 @@ function [x,type] = init(x,option,frame)
 end
 
 
-function out = main(x,option,postoption)
+function out = main(x,option)
     x = x{1};
     if isa(x,'sig.Cepstrum')
-        if ~isempty(option)
-            out = modify(x,option,postoption);
-        else
-            out = x;
-        end
+        out = {x};
     else
         sr = x.inputsampling;
         ph = x.phase;
@@ -131,21 +127,24 @@ end
 
 
 %%
-function obj = modify(obj,option,postoption)
-    start = ceil(option.mi/obj.xsampling)+1;
-    idx = max(start - obj.xstart,0);
+function out = after(in,option)
+    x = in{1};
+    start = ceil(option.mi/x.xsampling)+1;
+    idx = max(start - x.xstart,0);
     if idx > 0
-        obj.xstart = start;
-        obj.Xaxis.start = start;
+        x.xstart = start;
+        x.Xaxis.start = start;
     end
-    newlen = ceil(option.ma/obj.xsampling);
-    obj.Ydata = sig.compute(@extract,obj.Ydata,newlen,obj.xstart,idx);
+    newlen = ceil(option.ma/x.xsampling);
+    x.Ydata = sig.compute(@extract,x.Ydata,newlen,x.xstart,idx);
     
-    if postoption.fr
-        obj.xname = 'Frequency';
-        obj.xunit = 'Hz';
-        obj.Xaxis.unit.generator = @freq;
+    if option.fr
+        x.xname = 'Frequency';
+        x.xunit = 'Hz';
+        x.Xaxis.unit.generator = @freq;
     end
+
+    out = {x};
 end
 
 
@@ -158,6 +157,6 @@ function d = extract(d,newlen,xstart,idx)
 end
 
 
-function x = freq(unit,index)
+function x = freq(unit,index,segment)
     x = 1./((index - 1 + unit.origin) * unit.rate);
 end
