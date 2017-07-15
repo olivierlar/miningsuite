@@ -1,8 +1,4 @@
-function out = main(x,option,postoption)
-    if isempty(option)
-        x = {x};
-        return
-    end
+function out = main(x,option)
     x = x{1};
     name = x.yname;
     if isa(x,'sig.Spectrum')

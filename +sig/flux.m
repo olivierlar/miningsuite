@@ -8,14 +8,18 @@
 
 function varargout = flux(varargin)
     varargout = sig.operate('sig','flux',sig.flux.options,...
-                            @init,@sig.flux.main,varargin);
+                            @init,@sig.flux.main,@after,varargin);
 end
 
 
-function [x type] = init(x,option,frame)
+function [x,type] = init(x,option,frame)
     if x.istype('sig.signal')
         frame.toggle = 1;
         x = sig.spectrum(x,'FrameConfig',frame);
     end
     type = 'sig.signal';
+end
+
+
+function x = after(x,option)
 end
