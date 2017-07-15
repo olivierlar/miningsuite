@@ -9,11 +9,6 @@
 
 function varargout = spectrum(varargin)
     varargout = sig.operate('sig','spectrum',sig.spectrum.options,...
-                            @init,@sig.spectrum.main,@sig.spectrum.after,...
-                            varargin,'sum');
-end
-
-
-function [x type] = init(x,option,frame)
-    type = 'sig.Spectrum';
+                            @sig.spectrum.init,@sig.spectrum.main,...
+                            @sig.spectrum.after,varargin,'sum');
 end

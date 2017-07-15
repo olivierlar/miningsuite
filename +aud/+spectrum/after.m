@@ -8,13 +8,13 @@
 % License: New BSD License. See full text of the license in LICENSE.txt in
 % the main folder of the MiningSuite distribution.
 
-function out = after(x,postoption)
-    x = sig.spectrum.after(x,postoption);
+function out = after(x,option)
+    x = sig.spectrum.after(x,option);
     if iscell(x)
         x = x{1};
     end
     
-    [x.Ydata, meth] = sig.compute(@routine,x.xdata,x.Ydata,x.xname,postoption);
+    [x.Ydata, meth] = sig.compute(@routine,x.xdata,x.Ydata,x.xname,option);
     
     if iscell(meth)
         meth = meth{1};
@@ -33,10 +33,10 @@ end
 
 
 %%
-function out = routine(f,d,xname,postoption)
+function out = routine(f,d,xname,option)
     meth = '';
 
-    if postoption.terhardt
+    if option.terhardt
     % Code taken from Pampalk's MA Toolbox
         W_Adb = zeros(size(f));
         W_Adb(2:end) = + 10.^((-3.64*(f(2:end)/1000).^-0.8 ...
@@ -48,20 +48,20 @@ function out = routine(f,d,xname,postoption)
     end
         
     if strcmp(xname,'Frequency')
-        if strcmpi(postoption.band,'Mel') 
+        if strcmpi(option.band,'Mel') 
             meth = 'Mel';
             % Computing Mel-frequency spectral representation
             %%
             % The following is largely based on the source code from Auditory Toolbox 
             lowestFrequency = 133.3333;
-            if not(postoption.nbbands)
-                postoption.nbbands = 40;
+            if not(option.nbbands)
+                option.nbbands = 40;
             end
-            linearFilters = min(13,postoption.nbbands);
+            linearFilters = min(13,option.nbbands);
             linearSpacing = 66.66666666;
-            logFilters = postoption.nbbands - linearFilters;
+            logFilters = option.nbbands - linearFilters;
             logSpacing = 1.0711703;
-            totalFilters = postoption.nbbands;
+            totalFilters = option.nbbands;
 
             % Figure the band edges.  Interesting frequencies are spaced
             % by linearSpacing for a while, then go logarithmic.  First figure
@@ -99,7 +99,7 @@ function out = routine(f,d,xname,postoption)
             
             d = d.apply(@matprod,{weights},{'element'},2);
             
-        elseif strcmpi(postoption.band,'Bark')   
+        elseif strcmpi(option.band,'Bark')   
             meth = 'Bark';
             %% Code inspired by Pampalk's MA Toolbox.
             % zwicker & fastl: psychoacoustics 1999, page 159
@@ -123,7 +123,7 @@ function out = routine(f,d,xname,postoption)
         end
     end
     
-    if postoption.mask
+    if option.mask
         if isempty(meth) && strcmp(xname,'Frequency')
             warning('WARNING IN AUD.SPECTRUM: ''Mask'' option available only for Mel-spectrum and Bark-spectrum.');
             disp('''Mask'' option ignored');
