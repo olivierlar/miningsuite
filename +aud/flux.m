@@ -9,7 +9,7 @@
 
 function varargout = flux(varargin)
     varargout = sig.operate('aud','flux',options,...
-                            @init,@sig.flux.main,varargin);
+                            @init,@sig.flux.main,@after,varargin);
 end
 
 
@@ -36,4 +36,8 @@ function [x type] = init(x,option,frame)
         x = sig.spectrum(x,'FrameConfig',frame);
     end
     type = 'sig.signal';
+end
+
+
+function x = after(x,option)
 end
