@@ -1,9 +1,9 @@
-function out = main(x,option,postoption)
+function out = main(x,option)
     if iscell(x)
         x = x{1};
     end
     if isa(x,'sig.Autocor')
-        out = x;
+        y = {x};
         return
     end
     if isstruct(option.min) && strcmpi(option.min.unit,'Hz')
@@ -77,7 +77,7 @@ function out = main(x,option,postoption)
         end
     end
 
-    [d w xstart] = sig.compute(@routine,x.Ydata,x.Srate,option);
+    [d,w,xstart] = sig.compute(@routine,x.Ydata,x.Srate,option);
 
     if option.freq
         xname = 'Frequency';
@@ -85,10 +85,12 @@ function out = main(x,option,postoption)
         xname = 'Time';
     end
     
-    out = sig.Autocor(d,'xsampling',1/x.Srate,'Deframe',x);
-    out.window = w;
-    out.normwin = option.normwin;
-    out.Xaxis.start = xstart;
+    y = sig.Autocor(d,'xsampling',1/x.Srate,'Deframe',x);
+    y.window = w;
+    y.normwin = option.normwin;
+    y.Xaxis.start = xstart;
+
+    out = {y};
 end
 
 

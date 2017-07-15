@@ -1,31 +1,31 @@
-function out = after(x,postoption)
+function out = after(x,option)
     if iscell(x)
         x = x{1};
     end
     
-    if isfield(postoption,'tmp')
-        tmp = postoption.tmp;
+    if isfield(option,'tmp')
+        tmp = option.tmp;
     else
         tmp = [];
     end
     
-    if postoption.freq
+    if option.freq
         x.Xaxis.name = 'Frequency';
     else
         x.Xaxis.name = 'Time';
     end
 
-    if isstruct(postoption.min) || isstruct(postoption.max)
-        if ~isstruct(postoption.min)
-            postoption.min.value = -Inf;
-            postoption.min.unit = 's';
+    if isstruct(option.min) || isstruct(option.max)
+        if ~isstruct(option.min)
+            option.min.value = -Inf;
+            option.min.unit = 's';
         end
-        if ~isstruct(postoption.max)
-            postoption.max.value = Inf;
-            postoption.max.unit = 's';
+        if ~isstruct(option.max)
+            option.max.value = Inf;
+            option.max.unit = 's';
         end
-        param.value = [postoption.min.value,postoption.max.value];
-        param.unit = postoption.min.unit;
+        param.value = [option.min.value,option.max.value];
+        param.unit = option.min.unit;
         x = x.extract(param,'element','Xaxis','Ydata'); %,'window');
     end
 
@@ -33,15 +33,15 @@ function out = after(x,postoption)
            strcmpi(x.normwin,'Off') || x.normalized)
         x = x.normalize;
     end
-    if postoption.hwr
+    if option.hwr
         x = x.hwr;
     end
     
-    if isequal(postoption.enhance,1)
-        postoption.enhance = 2:10;
+    if isequal(option.enhance,1)
+        option.enhance = 2:10;
     end
-    if max(postoption.enhance)>1
-        x = x.enhance(postoption.enhance);
+    if max(option.enhance)>1
+        x = x.enhance(option.enhance);
     end
 
     out = {x,tmp};
