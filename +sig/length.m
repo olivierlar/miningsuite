@@ -9,7 +9,7 @@
 
 function varargout = length(varargin)
     varargout = sig.operate('sig','length',options,...
-                            @init,@main,varargin,'sum');
+                            @init,@main,@after,varargin,@sum);
 end
 
 
@@ -29,7 +29,7 @@ function [x type] = init(x,option,frame)
 end
 
 
-function out = main(in,option,postoption)
+function out = main(in,option)
     x = in{1};
     res = sig.compute(@routine,x.Ydata,x.Srate,option);
     out = {sig.signal(res,'Name','Length','Srate',0,'Ssize',1,...
@@ -56,4 +56,13 @@ function l = algo(d,sr,option)
     if strcmp(option.unit,'Second')
         l = l./sr;
     end
+end
+
+
+function x = after(x,option)
+end
+
+
+function x = sum(x,y)
+    x.Ydata.content = x.Ydata.content + y.Ydata.content;
 end
