@@ -9,7 +9,8 @@
 
 function varargout = envelope(varargin)
     varargout = sig.operate('aud','envelope',initoptions,...
-                            @sig.envelope.init,@main,varargin,'concat','extensive');
+                            @sig.envelope.init,@sig.envelope.main,@after,...
+                            varargin,'concat','extensive');
 end
 
 
@@ -22,48 +23,54 @@ function options = initoptions
         mu.key = 'Mu';
         mu.type = 'Numeric';
         mu.default = 100;
-        mu.when = 'After';
     options.mu = mu;
     
         lambda.key = 'Lambda';
         lambda.type = 'Numeric';
         lambda.default = .8;
-        lambda.when = 'After';
     options.lambda = lambda;
 end
 
 
-function out = main(x,option,postoption)    
-    [y,postoption] = sig.envelope.main(x,option,postoption);
-    if isempty(postoption)
-        out = {y};
-    else
-        out = {after(y,postoption)};
+function out = after(x,option)
+    if iscell(x)
+        x = x{1};
     end
-end
-
-
-function x = after(x,postoption)
-    x = sig.envelope.resample(x,postoption);
-    
-    if postoption.mu
-        x.Ydata = sig.compute(@routine_rescale,x.Ydata,postoption.mu);
-    end
-    x = sig.envelope.rescale(x,postoption);
-    
-    x = sig.envelope.upsample(x,postoption);
-
-    if (postoption.diffhwr || postoption.diff) && ~x.diff
-        if isfield(postoption,'lambda') && not(postoption.lambda)
-            postoption.lambda = 1;
+    if strcmpi(option.method,'Spectro')
+        option.trim = 0;
+        option.ds = 0;
+    elseif strcmpi(option.method,'Filter')        
+        option.ds = option.ds(1);
+        if isnan(option.ds)
+            if option.decim
+                option.ds = 0;
+            else
+                option.ds = 16;
+            end
         end
-        d = sig.envelope.diff(x,postoption);
+    end
+    x = sig.envelope.resample(x,option);
+    
+    if option.mu
+        x.Ydata = sig.compute(@routine_rescale,x.Ydata,option.mu);
+    end
+    x = sig.envelope.rescale(x,option);
+    
+    x = sig.envelope.upsample(x,option);
+
+    if (option.diffhwr || option.diff) && ~x.diff
+        if isfield(option,'lambda') && not(option.lambda)
+            option.lambda = 1;
+        end
+        x.Ydata = sig.envelope.diff(x,option);
         
         x.Ydata = sig.compute(@routine_lambda,x.Ydata,...
-                              postoption.lambda,x.Srate);
+                              option.lambda,x.Srate);
     end
     
-    x = sig.envelope.after(x,postoption);
+    x = sig.envelope.after(x,option);
+    
+    out = {x};
 end
 
 
