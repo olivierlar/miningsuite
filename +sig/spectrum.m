@@ -9,30 +9,11 @@
 
 function varargout = spectrum(varargin)
     varargout = sig.operate('sig','spectrum',sig.spectrum.options,...
-                            @init,@main,varargin,'sum');
+                            @init,@sig.spectrum.main,@sig.spectrum.after,...
+                            varargin,'sum');
 end
 
 
 function [x type] = init(x,option,frame)
     type = 'sig.Spectrum';
-end
-
-
-function out = main(x,option,postoption)
-    if ~isempty(option)
-        if ~isempty(postoption)
-            if option.phase && ...
-                    (~isempty(postoption.msum) || ~isempty(postoption.mprod) ...
-                     || postoption.log || postoption.db || postoption.pow ...
-                     || postoption.aver || postoption.gauss)
-                option.phase = 0;
-            end
-        end
-        x = sig.spectrum.main(x,option,postoption);
-    end
-    if isempty(postoption)
-        out = {x};
-    else
-        out = sig.spectrum.after(x,postoption);
-    end
 end

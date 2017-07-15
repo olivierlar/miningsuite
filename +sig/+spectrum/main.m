@@ -1,7 +1,13 @@
-function out = main(x,option,postoption)
+function out = main(x,option)
     if isa(x{1},'sig.Spectrum') && (isempty(option) || ~option.alongbands)
         out = x;
         return
+    end
+    
+    if option.phase && (~isempty(option.msum) || ~isempty(option.mprod) ...
+            || option.log || option.db || option.pow ...
+            || option.aver || option.gauss)
+        option.phase = 0;
     end
     [d,ph] = sig.compute(@routine,x{1}.Ydata,x{1}.Srate,option,'sample');
 
@@ -17,18 +23,18 @@ function out = main(x,option,postoption)
     if iscell(dsize)
         il = zeros(size(dsize));
         for i = 1:length(dsize)
-            il(i) = dsize{i}./x{1}.Srate;;
+            il(i) = dsize{i}./x{1}.Srate;
         end
     else 
         il = dsize./x{1}.Srate;
     end
-    out = sig.Spectrum(d,'Phase',ph,'xsampling',xrate,'Deframe',x{1},...
+    out = {sig.Spectrum(d,'Phase',ph,'xsampling',xrate,'Deframe',x{1},...
                         'InputSampling',x{1}.Srate,...
-                        'InputLength',il);
+                        'InputLength',il)};
 end
 
 
-function [out phase] = routine(in,sampling,option,dim)
+function [out,phase] = routine(in,sampling,option,dim)
     N = in.size(dim);
 
     if option.constq

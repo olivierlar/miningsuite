@@ -1,76 +1,76 @@
-function out = after(x,postoption)
+function out = after(x,option)
     if iscell(x)
         x = x{1};
     end
     
-    if isfield(postoption,'tmp')
-        tmp = postoption.tmp;
+    if isfield(option,'tmp')
+        tmp = option.tmp;
     else
         tmp = [];
     end
         
-    if postoption.min || postoption.max < Inf
+    if option.min || option.max < Inf
         [x.Ydata, x.Xaxis.start] = ...
-            sig.compute(@extract,x.Ydata,x.xdata,x.Xaxis.start,postoption);
+            sig.compute(@extract,x.Ydata,x.xdata,x.Xaxis.start,option);
         
     end
     
-    if postoption.timesmooth
+    if option.timesmooth
         [x.Ydata, tmp] = ...
             sig.compute(@routine_timesmooth,x.Ydata,...
-                        postoption.timesmooth,tmp);
+                        option.timesmooth,tmp);
     end
     
-    if x.power == 1 && (postoption.pow || any(postoption.mprod) ...
-                        || any(postoption.msum)) 
+    if x.power == 1 && (option.pow || any(option.mprod) ...
+                        || any(option.msum)) 
                 % mprod could be tried without power?
         x.Ydata = sig.compute(@routine_square,x.Ydata);
         x.power = 2;
         x.yname = ['Power ',x.yname];
     end
     
-    if any(postoption.mprod)
+    if any(option.mprod)
         x.Ydata = sig.compute(@routine_mprodsum,x.Ydata,...
-                              postoption.mprod,@times);
+                              option.mprod,@times);
         x.yname = 'Spectral product';
     end
     
-    if any(postoption.mprod)
+    if any(option.mprod)
         x.Ydata = sig.compute(@routine_mprodsum,x.Ydata,...
-                              postoption.msum,@sum);
+                              option.msum,@sum);
         x.yname = 'Spectral sum';
     end
     
-    if postoption.norm
+    if option.norm
         x.Ydata = sig.compute(@routine_norm,x.Ydata);
     end
     
-    if postoption.nl
+    if option.nl
         x.Ydata = sig.compute(@divide,x.Ydata,x.inputlength);
     end
     
-    if postoption.log || postoption.db
+    if option.log || option.db
         if ~x.log
             x.Ydata = sig.compute(@routine_log,x.Ydata);
             x.log = 1;
         end
-        if postoption.db && x.log == 1
+        if option.db && x.log == 1
             x.Ydata = sig.compute(@routine_db,x.Ydata,x.power);
             x.log = 10;
             x.power = 2;
         end
-        if postoption.db>0 && postoption.db < Inf
-            x.Ydata = sig.compute(@routine_crop,x.Ydata,postoption.db);
+        if option.db>0 && option.db < Inf
+            x.Ydata = sig.compute(@routine_crop,x.Ydata,option.db);
         end
         x.phase = [];
     end
     
-    if postoption.aver
-        x.Ydata = sig.compute(@routine_smooth,x.Ydata,postoption.aver);
+    if option.aver
+        x.Ydata = sig.compute(@routine_smooth,x.Ydata,option.aver);
     end
 
-    if postoption.gauss
-        sigma = postoption.gauss;
+    if option.gauss
+        sigma = option.gauss;
         gauss = 1/sigma/2/pi*exp(- (-4*sigma:4*sigma).^2 /2/sigma^2);
         x.Ydata = sig.compute(@routine_gausssmooth,x.Ydata,sigma,gauss);
     end
