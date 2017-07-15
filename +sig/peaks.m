@@ -1,6 +1,6 @@
 function varargout = peaks(varargin)
     varargout = sig.operate('sig','peaks',initoptions,...
-                            @init,@main,varargin);
+                            @init,@main,@after,varargin);
 end
 
 
@@ -150,7 +150,7 @@ function [x type] = init(x,option,frame)
 end
 
 
-function out = main(s,option,postoption)
+function out = main(s,option)
     if option.chro
         option.order = 'Abscissa';
     elseif option.ranked
@@ -343,4 +343,8 @@ function out = search(y,x,option,interpol)
         end
     end
     out = {p pp pv};
+end
+
+
+function x = after(x,option)
 end
