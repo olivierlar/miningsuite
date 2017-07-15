@@ -33,7 +33,6 @@ function options = options
         ds.key = {'Down','PostDecim'};
         ds.type = 'Numeric';
         ds.default = NaN; % 0 if 'PreDecim' is used, else 16
-        ds.when = 'After';
         ds.chunkcombine = 'During';
     options.ds = ds;
 
@@ -54,13 +53,11 @@ function options = options
         up.type = 'Numeric';
         up.default = 0;
         up.keydefault = 2;
-        up.when = 'After';
     options.up = up;
 
         complex.key = 'Complex';
         complex.type = 'Boolean';
         complex.default = 0;
-        complex.when = 'After';
     options.complex = complex;    
 
         powerspectrum.key = 'PowerSpectrum';
@@ -90,90 +87,76 @@ function options = options
         sampling.key = 'Sampling';
         sampling.type = 'Numeric';
         sampling.default = 0;
-        sampling.when = 'After';
     options.sampling = sampling;
 
         hwr.key = 'Halfwave';
         hwr.type = 'Boolean';
         hwr.default = 0;
-        hwr.when = 'After';
     options.hwr = hwr;
 
         center.key = 'Center';
         center.type = 'Boolean';
         center.default = 0;
-        center.when = 'After';
     options.center = center;
     
         chwr.key = 'HalfwaveCenter';
         chwr.type = 'Boolean';
         chwr.default = 0;
-        chwr.when = 'After';
     options.chwr = chwr;
     
         mu.key = 'Mu';
         mu.type = 'Numeric';
         mu.default = 0;
         mu.keydefault = 100;
-        mu.when = 'After';
     options.mu = mu;
     
         oplog.key = 'Log';
         oplog.type = 'Boolean';
         oplog.default = 0;
-        oplog.when = 'After';
     options.log = oplog;
 
         minlog.key = 'MinLog';
         minlog.type = 'Numeric';
         minlog.default = 0;
-        minlog.when = 'After';
     options.minlog = minlog;
 
         oppow.key = 'Power';
         oppow.type = 'Boolean';
         oppow.default = 0;
-        oppow.when = 'After';
     options.power = oppow;
 
         diff.key = 'Diff';
         diff.type = 'Numeric';
         diff.default = 0;
         diff.keydefault = 1;
-        diff.when = 'After';
     options.diff = diff;
     
         diffhwr.key = 'HalfwaveDiff';
         diffhwr.type = 'Numeric';
         diffhwr.default = 0;
         diffhwr.keydefault = 1;
-        diffhwr.when = 'After';
     options.diffhwr = diffhwr;
 
         lambda.key = 'Lambda';
         lambda.type = 'Numeric';
         lambda.default = 1;
-        lambda.when = 'After';
     options.lambda = lambda;
 
         aver.key = 'Smooth';
         aver.type = 'Numeric';
         aver.default = 0;
         aver.keydefault = 30;
-        aver.when = 'After';
     options.aver = aver;
         
         gauss.key = 'Gauss';
         gauss.type = 'Numeric';
         gauss.default = 0;
         gauss.keydefault = 30;
-        gauss.when = 'After';
     options.gauss = gauss;
 
    %     iir.key = 'IIR';
    %     iir.type = 'Boolean';
    %     iir.default = 0;
-   %     iir.when = 'After';
    % option.iir = iir;
 
         norm.key = 'Normal';
@@ -181,7 +164,6 @@ function options = options
         norm.choice = {0,1,'AcrossSegments'};
         norm.default = 0;
         norm.keydefault = 1;
-        norm.when = 'After';
     options.norm = norm;
 
         presel.type = 'String';
