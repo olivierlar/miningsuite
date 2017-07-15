@@ -1,6 +1,6 @@
 function varargout = rms(varargin)
     varargout = sig.operate('sig','rms',...
-                            initoptions,@init,@main,varargin,'plus');
+                            initoptions,@init,@main,@after,varargin,'plus');
 end
 
 
@@ -21,7 +21,7 @@ function [x type] = init(x,option,frame)
 end
 
 
-function out = main(in,option,postoption)
+function out = main(in,option)
     x = in{1};
     if ~strcmpi(x.yname,'RMS')
         d = sig.compute(@routine,x.Ydata);
@@ -29,7 +29,6 @@ function out = main(in,option,postoption)
                        'Srate',x.Frate,'Ssize',x.Ssize,...
                        'FbChannels',x.fbchannels);
     end
-    x = after(x);
     out = {x};
 end
 
@@ -51,13 +50,15 @@ function y = algo(x)
 end
 
 
-function x = after(x)
+function out = after(in,option)
+    x = in{1};
     if find(strcmp('element',x.Ydata.dims))
         dim = 'element';
     else
         dim = 'sample';
     end
     x.Ydata = sig.compute(@routine_norm,x.Ydata,x.Ssize,dim);
+    out = {x};
 end
 
 
