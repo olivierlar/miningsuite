@@ -20,6 +20,11 @@ function options = initoptions
     options.diffhwr.default = 1;
     options.up.default = 2;
     
+        presel.type = 'String';
+        presel.choice = {'Klapuri06'};
+        presel.default = 0;
+    options.presel = presel;
+    
         mu.key = 'Mu';
         mu.type = 'Numeric';
         mu.default = 100;

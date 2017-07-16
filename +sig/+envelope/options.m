@@ -165,9 +165,4 @@ function options = options
         norm.default = 0;
         norm.keydefault = 1;
     options.norm = norm;
-
-        presel.type = 'String';
-        presel.choice = {'Klapuri06'};
-        presel.default = 0;
-    options.presel = presel;  
 end
