@@ -9,7 +9,7 @@
 
 function varargout = spectrum(varargin)
     varargout = sig.operate('mus','spectrum',initoptions,...
-                            @init,@main,varargin,'sum');
+                            @sig.spectrum.init,@main,@after,varargin,'sum');
 end
 
 
@@ -19,55 +19,41 @@ function options = initoptions
         cent.key = 'Cents';
         cent.type = 'Boolean';
         cent.default = 0;
-        cent.when = 'After';
     options.cent = cent;
     
         collapsed.key = 'Collapsed';
         collapsed.type = 'Boolean';
         collapsed.default = 0;
-        collapsed.when = 'After';
     options.collapsed = collapsed;
     
-        reso.key = 'Resonance';
-        reso.type = 'String';
-        reso.choice = {'ToiviainenSnyder','Fluctuation','Meter',0,'no','off'};
-        reso.default = 0;
-        reso.keydefault = 'ToiviainenSnyder';
-        reso.when = 'After';
-    options.reso = reso;
+    options.reso.choice = {'ToiviainenSnyder','Fluctuation','Meter',0,'no','off'};
+    options.reso.keydefault = 'ToiviainenSnyder';
 end
 
 
-%%
-function [x type] = init(x,option,frame)
-    type = 'sig.Spectrum';
-end
-
-
-function out = main(x,option,postoption)
-    if option.min && isnan(option.res) && (postoption.cent || postoption.collapsed)
+function out = main(x,option)
+    if option.min && isnan(option.res) && (option.cent || option.collapsed)
         option.res = option.min *(2^(1/1200)-1)*.9;
     end       
-    y = sig.spectrum.main(x,option,postoption);
-    if isempty(postoption)
-        out = {y};
-    else
-        out = after(y,postoption);
-    end
+    out = sig.spectrum.main(x,option);
 end
 
 
-function out = after(x,postoption)
-    x = aud.spectrum.after(x,postoption);
+function out = after(x,option)
     if iscell(x)
         x = x{1};
     end
-    
-    x.Ydata = sig.compute(@routine,x.xdata,x.Ydata,postoption);
 
-    f = x.xdata;
+    if ischar(option.reso) && strcmpi(option.reso,'ToiviainenSnyder')
+        x.Ydata = sig.compute(@resonance,x.Ydata,x.xdata);
+    end
+
+    res = aud.spectrum.after(x,option);
+    x = res{1};
+    tmp = res{2};
     
-    if strcmp(x.xname,'Frequency') && (postoption.cent || postoption.collapsed)
+    if strcmp(x.xname,'Frequency') && (option.cent || option.collapsed)
+        f = x.xdata;
         isgood = f*(2^(1/1200)-1) >= f(2)-f(1);
         good = find(isgood);
         if isempty(good)
@@ -101,7 +87,7 @@ function out = after(x,postoption)
         x.phase = [];
     end
     
-    if strcmp(x.xname,'cents') && postoption.collapsed
+    if strcmp(x.xname,'cents') && option.collapsed
         f = x.xdata;
         centclass = rem(f,1200);
         x.Ydata = x.Ydata.apply(@collapse,{centclass},{'element'});
@@ -110,27 +96,12 @@ function out = after(x,postoption)
         x.Xaxis.unit.rate = 1;
     end
         
-    out = {x};
+    out = {x,tmp};
 end
 
 
-function out = routine(f,d,postoption)
-    if postoption.reso
-        d = resonance(d,f,postoption.reso);
-    end
-    out = {d};
-end
-
-
-function d = resonance(d,f,type)
-    if strcmpi(type,'ToiviainenSnyder') || strcmpi(type,'Meter')
-        w = max(0, 1 - 0.25*(log2(max(1./max(f,1e-12),1e-12)/0.5)).^2);
-    elseif strcmpi(type,'Fluctuation')
-        w1 = f / 4; % ascending part of the fluctuation curve;
-        w2 = 1 - 0.3 * (f - 4)/6; % descending part;
-        w = min(w1,w2);
-        w = max(0,w);
-    end
+function d = resonance(d,f)
+    w = max(0, 1 - 0.25*(log2(max(1./max(f,1e-12),1e-12)/0.5)).^2);
     if max(w) == 0
         warning('The resonance curve, not defined for this range of delays, will not be applied.')
     else
