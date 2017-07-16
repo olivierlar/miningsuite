@@ -9,8 +9,8 @@
 
 function varargout = autocor(varargin)
     varargout = sig.operate('mus','autocor',initoptions,...
-                            @init,@main,varargin,...
-                            @sig.autocor.combinechunks);
+                            @sig.autocor.init,@sig.autocor.main,@after,...
+                            varargin,@sig.autocor.combinechunks);
 end
 
 
@@ -27,32 +27,12 @@ function options = initoptions
 end
 
 
-%%
-function [x type] = init(x,option,frame)
-    type = 'sig.Autocor';
-end
-
-
-function out = main(x,option,postoption)
-    y = sig.autocor.main(x,option,postoption);
-    if isempty(postoption)
-        out = {y};
-    else
-        out = after(y,postoption);
+function out = after(x,option)
+    x = sig.autocor.after(x,option);
+    x = x{1};    
+    if option.reso
+        x.Ydata = sig.compute(@resonance,x.Ydata,x.xdata,option.reso);
     end
-end
-
-
-function out = after(x,postoption)
-    x = sig.autocor.after(x,postoption);
-    if iscell(x)
-        x = x{1};
-    end
-    
-    if postoption.reso
-        x.Ydata = sig.compute(@resonance,x.Ydata,x.xdata,postoption.reso);
-    end
-        
     out = {x};
 end
 

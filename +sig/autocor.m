@@ -8,11 +8,6 @@
 
 function varargout = autocor(varargin)
     varargout = sig.operate('sig','autocor',sig.autocor.options,...
-                            @init,@sig.autocor.main,@sig.autocor.after,...
+                            @sig.autocor.init,@sig.autocor.main,@sig.autocor.after,...
                             varargin,@sig.autocor.combinechunks);
-end
-
-
-function [x type] = init(x,option,frame)
-    type = 'sig.Autocor';
 end
