@@ -25,4 +25,11 @@ function options = options
         mask.default = 0;
         mask.when = 'After';
     options.mask = mask;    
+    
+        reso.key = 'Resonance';
+        reso.type = 'String';
+        reso.choice = {'Fluctuation',0,'no','off'};
+        reso.default = 0;
+        reso.keydefault = 'Fluctuation';
+    options.reso = reso;
 end

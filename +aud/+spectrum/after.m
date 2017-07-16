@@ -1,7 +1,7 @@
 % AUD.SPECTRUM
 % auditory modeling of spectrum decomposition
 %
-% Copyright (C) 2014, Olivier Lartillot
+% Copyright (C) 2017, Olivier Lartillot
 % Copyright (C) 1998, Malcolm Slaney, Interval Research Corporation
 %
 % All rights reserved.
@@ -9,10 +9,11 @@
 % the main folder of the MiningSuite distribution.
 
 function out = after(x,option)
-    x = sig.spectrum.after(x,option);
     if iscell(x)
         x = x{1};
     end
+    
+    [x,tmp] = sig.spectrum.after1(x,option);
     
     [x.Ydata, meth] = sig.compute(@routine,x.xdata,x.Ydata,x.xname,option);
     
@@ -28,7 +29,9 @@ function out = after(x,option)
         x.phase = [];
     end
     
-    out = {x};
+    x = sig.spectrum.after2(x,option);
+
+    out = {x,tmp};
 end
 
 
@@ -45,6 +48,10 @@ function out = routine(f,d,xname,option)
         W_Adb = W_Adb.^2;
         W_Adb = sig.data(W_Adb',{'element'});
         d = d.times(W_Adb);
+    end
+    
+    if ischar(option.reso) && strcmpi(option.reso,'Fluctuation')
+        d = fluctuation(d,f);
     end
         
     if strcmp(xname,'Frequency')
@@ -143,6 +150,20 @@ function out = routine(f,d,xname,option)
     end
     
     out = {d, meth};
+end
+
+
+function d = fluctuation(d,f)
+    w1 = f / 4; % ascending part of the fluctuation curve;
+    w2 = 1 - 0.3 * (f - 4)/6; % descending part;
+    w = min(w1,w2);
+    w = max(0,w);
+    if max(w) == 0
+        warning('The resonance curve, not defined for this range of delays, will not be applied.')
+    else
+        w = sig.data(w',{'element'});
+        d = d.times(w);
+    end
 end
 
 
