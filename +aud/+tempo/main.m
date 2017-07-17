@@ -1,4 +1,4 @@
-function out = main(in,option,postoption)
+function out = main(in,option)
     x = in{1};
     if strcmpi(x.yname,'Tempo')
         out = in;

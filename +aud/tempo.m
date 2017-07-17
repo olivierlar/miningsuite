@@ -8,6 +8,9 @@
 
 function varargout = tempo(varargin)
     varargout = sig.operate('aud','tempo',aud.tempo.options,...
-                            @aud.tempo.init,@aud.tempo.main,...
-                            varargin,'plus','extensive');
+                            @aud.tempo.init,@aud.tempo.main,@after,varargin);
+end
+
+
+function x = after(x,option)
 end
