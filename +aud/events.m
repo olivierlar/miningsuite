@@ -10,7 +10,7 @@
 
 function varargout = events(varargin)
     varargout = sig.operate('aud','events',initoptions,...
-                            @init,@main,varargin,'concat');
+                            @init,@main,@after,varargin,'concat','extensive');
 end
 
 
@@ -119,7 +119,6 @@ function options = initoptions
         chwr.key = 'HalfwaveCenter';
         chwr.type = 'Boolean';
         chwr.default = 0;
-        chwr.when = 'After';
     options.chwr = chwr;
     
         mu.key = 'Mu';
@@ -131,19 +130,16 @@ function options = initoptions
         oplog.key = 'Log';
         oplog.type = 'Boolean';
         oplog.default = 0;
-        oplog.when = 'After';
     options.log = oplog;
 
         minlog.key = 'MinLog';
         minlog.type = 'Numeric';
         minlog.default = 0;
-        minlog.when = 'After';
     options.minlog = minlog;
 
         oppow.key = 'Power';
         oppow.type = 'Boolean';
         oppow.default = 0;
-        oppow.when = 'After';
     options.power = oppow;
     
         diffenv.key = 'DiffEnvelope'; % obsolete, replaced by 'Diff'
@@ -155,33 +151,28 @@ function options = initoptions
         diff.type = 'Numeric';
         diff.default = 0;
         diff.keydefault = 1;
-        diff.when = 'After';
     options.diff = diff;
     
         diffhwr.key = 'HalfwaveDiff';
         diffhwr.type = 'Numeric';
         diffhwr.default = 0;
         diffhwr.keydefault = 1;
-        diffhwr.when = 'After';
     options.diffhwr = diffhwr;
 
         lambda.key = 'Lambda';
         lambda.type = 'Numeric';
         lambda.default = 1;
-        lambda.when = 'After';
     options.lambda = lambda;
 
         c.key = 'Center';
         c.type = 'Boolean';
         c.default = 0;
-        c.when = 'After';
     options.c = c;
     
         aver.key = 'Smooth';
         aver.type = 'Numeric';
         aver.default = 0;
         aver.keydefault = 30;
-        aver.when = 'After';
     options.aver = aver;
     
         ds.key = {'Down','PostDecim'};
@@ -194,7 +185,6 @@ function options = initoptions
         sampling.key = 'Sampling';
         sampling.type = 'Numeric';
         sampling.default = 0;
-        sampling.when = 'After';
     options.sampling = sampling;
     
         up.key = {'UpSample'};
@@ -207,7 +197,6 @@ function options = initoptions
         normal.type = 'String';
         normal.choice = {0,1,'AcrossSegments'};
         normal.default = 1;
-        normal.when = 'After';
     options.normal = normal;
 
 %% options related to 'SpectralFlux'
@@ -218,7 +207,6 @@ function options = initoptions
     
         complex.key = 'Complex';
         complex.type = 'Boolean';
-        complex.when = 'Both';
         complex.default = 0;
     options.complex = complex;
     
@@ -231,13 +219,11 @@ function options = initoptions
         median.type = 'Numeric';
         median.number = 2;
         median.default = [.2 1.3];
-        median.when = 'After';
     options.median = median;
 
         hw.key = 'Halfwave';
         hw.type = 'Boolean';
         hw.default = 1;
-        hw.when = 'After';
     options.hw = hw;
     
 %% options related to 'Pitch':
@@ -272,7 +258,6 @@ function options = initoptions
         sgate.choice = {'Goto','Lartillot'};
         sgate.default = '';
         sgate.keydefault = 'Lartillot';
-        sgate.when = 'Both';
     options.sgate = sgate;
     
         minres.key = 'MinRes';
@@ -292,25 +277,21 @@ function options = initoptions
         detect.choice = {'Peaks','Valleys',0,'no','off'};
         detect.default = 'Peaks';
         detect.keydefault = 'Peaks';
-        detect.when = 'After';
     options.detect = detect;
     
         cthr.key = 'Contrast';
         cthr.type = 'Numeric';
         cthr.default = NaN;
-        cthr.when = 'After';
     options.cthr = cthr;
 
         thr.key = 'Threshold';
         thr.type = 'Numeric';
         thr.default = 0;
-        thr.when = 'After';
     options.thr = thr;
     
         single.key = 'Single';
         single.type = 'Boolean';
         single.default = 0;
-        single.when = 'After';
     options.single = single;
 
         attack.key = {'Attack','Attacks'};
@@ -318,24 +299,20 @@ function options = initoptions
         attack.choice = {'Derivate','Effort'};
         attack.default = 0;
         attack.keydefault = 'Derivate';
-        attack.when = 'Both';
     options.attack = attack;
     
         alpha.key = 'Alpha';
         alpha.type = 'Numeric';
         alpha.default = 3.75;
-        alpha.when = 'After';
     options.alpha = alpha;  
     
         new.key = 'New';
         new.default = 0;
-        new.when = 'After';
     options.new = new;
         
         decay.key = {'Decay','Decays','Release','Releases'};
         decay.type = 'Boolean';
         decay.default = 0;
-        decay.when = 'Both';
     options.decay = decay;
     
 %% preselection
@@ -407,11 +384,11 @@ function [y, type] = init(x,option,frame)
                 end
                 
                 if option.fb>1
-                    fb = aud.filterbank(x,option.filtertype,'NbChannels',option.fb); %%%%%%
+                    fb = aud.filterbank(x,option.filtertype,'NbChannels',option.fb);
                 else
                     fb = x;
                 end
-                y = sig.envelope(fb,'Filter','FilterType',option.filter,... %%%%%%%%
+                y = aud.envelope(fb,'Filter','FilterType',option.filter,...
                     'Hilbert',option.hilb,...
                     'Tau',option.tau,...'CutOff',option.cutoff,...
                     'UpSample',option.up,...
@@ -427,7 +404,7 @@ function [y, type] = init(x,option,frame)
                         option.specframe = [.1 .1];
                     end
                 end
-                y = sig.envelope(x,'Spectro',...                %%%% BIG MESS. Current aud.envelope is Klapuri model
+                y = aud.envelope(x,'Spectro',...
                     'Frame',option.specframe(1),option.specframe(2),...
                     'PowerSpectrum',option.powerspectrum,...
                     'TimeSmooth',option.timesmooth,...
@@ -495,97 +472,93 @@ end
 
 
 %%
-function o = main(o,option,postoption)  
+function out = main(o,option)  
     if iscell(o)
         if length(o) > 1
-            postoption.new = o{2};
+            option.new = o{2};
         end
         o = o{1};
     end
     if not(isempty(option)) && ischar(option.presel)
         if strcmpi(option.presel,'Scheirer')
-            postoption.sampling = 200;
-            postoption.diffhwr = 1;
+            option.sampling = 200;
+            option.diffhwr = 1;
             option.sum = 0;
-            postoption.detect = 0;
+            option.detect = 0;
         elseif strcmpi(option.presel,'Klapuri99')
-            postoption.diffhwr = 1;
+            option.diffhwr = 1;
             option.sum = 0;
-            postoption.ds = 0;
+            option.ds = 0;
             o2 = o;
         end
     end
-    if not(isempty(option)) && option.diffenv
-        postoption.diff = 1;
+    if option.diffenv
+        option.diff = 1;
     end
     if isa(o,'sig.Envelope')
-        if isfield(postoption,'sampling') && postoption.sampling
-            o = sig.envelope(o,'Sampling',postoption.sampling);
-        elseif isfield(postoption,'ds')
-            if isnan(postoption.ds)
+        if option.sampling
+            o = sig.envelope(o,'Sampling',option.sampling);
+        else
+            if isnan(option.ds)
                 %% If input already envelope, ds=1
                 if option.decim || strcmpi(option.envmeth,'Spectro')
-                    postoption.ds = 0;
+                    option.ds = 0;
                 else
-                    postoption.ds = 16;
+                    option.ds = 16;
                 end
             end
-            if postoption.ds
-                o = sig.envelope(o,'Down',postoption.ds);
+            if option.ds
+                o = sig.envelope(o,'Down',option.ds);
             end
         end
     end
-    if isfield(postoption,'cthr')
-        if isa(o,'sig.Envelope')
-            if postoption.power
-                o = sig.envelope(o,'Power');
-            end
-            if postoption.diff
-                o = sig.envelope(o,'Diff',postoption.diff,...
-                    'Lambda',postoption.lambda,...
-                    'Complex',postoption.complex);
-            end
-            if postoption.diffhwr
-                o = sig.envelope(o,'HalfwaveDiff',postoption.diffhwr,...
-                    'Lambda',postoption.lambda,...
-                    'Complex',postoption.complex);
-            end
-            if postoption.aver
-                o = sig.envelope(o,'Smooth',postoption.aver);
-            end
-            if postoption.chwr
-                o = sig.envelope(o,'HalfwaveCenter');
-            end
-%         elseif isa(o,'mirscalar') && strcmp(get(o,'Title'),'Spectral flux') && ... %%%%%%%%%%%%%%%
-%                 ischar(postoption.sgate) && ~isempty(postoption.sgate)
-%             if postoption.median
-%                 o = mirflux(o,'Median',postoption.median(1),postoption.median(2),...
-%                     'Halfwave',postoption.hw);
-%             else
-%                 o = mirflux(o,'Halfwave',postoption.hw);
-%             end
-%         elseif isa(o,'mirscalar') && strcmp(get(o,'Title'),'Novelty')  %%%%%%%%%%%%%%%
-%             if postoption.diff
-%                 o = mirenvelope(o,'Diff',postoption.diff,...
-%                     'Lambda',postoption.lambda,...
-%                     'Complex',postoption.complex);
-%             end
+    if isa(o,'sig.Envelope')
+        if option.power
+            o = sig.envelope(o,'Power');
         end
+        if option.diff
+            o = sig.envelope(o,'Diff',option.diff,...
+                'Lambda',option.lambda,...
+                'Complex',option.complex);
+        end
+        if option.diffhwr
+            o = sig.envelope(o,'HalfwaveDiff',option.diffhwr,...
+                'Lambda',option.lambda,...
+                'Complex',option.complex);
+        end
+        if option.aver
+            o = sig.envelope(o,'Smooth',option.aver);
+        end
+        if option.chwr
+            o = sig.envelope(o,'HalfwaveCenter');
+        end
+        %         elseif isa(o,'mirscalar') && strcmp(get(o,'Title'),'Spectral flux') && ... %%%%%%%%%%%%%%%
+        %                 ischar(postoption.sgate) && ~isempty(postoption.sgate)
+        %             if postoption.median
+        %                 o = mirflux(o,'Median',postoption.median(1),postoption.median(2),...
+        %                     'Halfwave',postoption.hw);
+        %             else
+        %                 o = mirflux(o,'Halfwave',postoption.hw);
+        %             end
+        %         elseif isa(o,'mirscalar') && strcmp(get(o,'Title'),'Novelty')  %%%%%%%%%%%%%%%
+        %             if postoption.diff
+        %                 o = mirenvelope(o,'Diff',postoption.diff,...
+        %                     'Lambda',postoption.lambda,...
+        %                     'Complex',postoption.complex);
+        %             end
     end
     
-    if isfield(option,'sum') && option.sum
+    if option.sum
         o = sig.sum(o,'Type','freqband'); %'channel'); %,'Adjacent',option.sum);
     end
     
-    if isa(o,'sig.Envelope') && isfield(postoption,'normal') && ...
-            ~isequal(postoption.normal,0) && ~o.log
-        o = sig.envelope(o,'Normal',postoption.normal);
+    if isa(o,'sig.Envelope') && ~isequal(option.normal,0) && ~o.log
+        o = sig.envelope(o,'Normal',option.normal);
     end
-    if isa(o,'sig.Envelope') && isfield(postoption,'log') && postoption.log
+    if isa(o,'sig.Envelope') && option.log
         o = sig.envelope(o,'Log');
     end
-    if isfield(option,'presel') && ...
-            ischar(option.presel) && strcmpi(option.presel,'Klapuri99')
+    if ischar(option.presel) && strcmpi(option.presel,'Klapuri99')
         % o, already computed, corresponds to mirenvelope(o,'Mu','HalfwaveDiff');
         % o is the relative distance function W in (Klapuri, 99);
         o2 = sig.envelope(o2,'HalfwaveDiff');
@@ -598,41 +571,39 @@ function o = main(o,option,postoption)
         o = sig.sum(o,'Weights',(filtfreq(1:end-1)+filtfreq(2:end))/2);
         o = sig.envelope(o,'Smooth',12);
     end
-    if isfield(postoption,'detect')
-        if postoption.c || (ischar(postoption.sgate) && ~isempty(postoption.sgate))
-            o = sig.envelope(o,'Center');
-        end
-        if isa(o,'sig.Envelope') && postoption.minlog
-            o = sig.envelope(o,'MinLog',postoption.minlog);
-        end
+    if option.c || (ischar(option.sgate) && ~isempty(option.sgate))
+        o = sig.envelope(o,'Center');
     end
-    o = sig.framenow(o,postoption);
-    if isfield(postoption,'detect') && ischar(postoption.detect)
-        if isnan(postoption.cthr) || not(postoption.cthr)
-            if ischar(postoption.attack) || postoption.decay
-                postoption.cthr = .05;
-            elseif ischar(postoption.detect) || postoption.detect
-                postoption.cthr = .01;
+    if isa(o,'sig.Envelope') && option.minlog
+        o = sig.envelope(o,'MinLog',option.minlog);
+    end
+    o = sig.framenow(o,option);
+    if ischar(option.detect)
+        if isnan(option.cthr) || not(option.cthr)
+            if ischar(option.attack) || option.decay
+                option.cthr = .05;
+            elseif ischar(option.detect) || option.detect
+                option.cthr = .01;
             end
-        elseif postoption.cthr
-            if not(ischar(postoption.detect) || postoption.detect)
-                postoption.detect = 'Peaks';
+        elseif option.cthr
+            if not(ischar(option.detect) || option.detect)
+                option.detect = 'Peaks';
             end
         end
-        if postoption.single
+        if option.single
             total = 1;
             noend = 0;
         else
             total = Inf;
             noend = 1;
         end
-        if strcmpi(postoption.detect,'Peaks')
+        if strcmpi(option.detect,'Peaks')
             o = sig.peaks(o,'Total',total,'SelectFirst',0,...
-                'Threshold',postoption.thr,'Contrast',postoption.cthr,...
+                'Threshold',option.thr,'Contrast',option.cthr,...
                 'Order','Abscissa','NoBegin','NoEnd',noend);
-        elseif strcmpi(postoption.detect,'Valleys')
+        elseif strcmpi(option.detect,'Valleys')
             o = sig.peaks(o,'Total',total,'SelectFirst',0,...
-                'Threshold',postoption.thr,'Contrast',postoption.cthr,...
+                'Threshold',option.thr,'Contrast',option.cthr,...
                 'Valleys','Order','Abscissa','NoBegin','NoEnd',noend);
         end
         nop = {}; %cell(size(get(o,'Data')));
@@ -640,7 +611,7 @@ function o = main(o,option,postoption)
 %         o.attacks = nop;
 %         o.decays = nop;
     end
-    if (isfield(postoption,'attack')) && (ischar(postoption.attack) || postoption.decay)
+    if ischar(option.attack) || option.decay
 %         pp = get(o,'PeakPos');
 %         d = get(o,'Data');
 %         t = get(o,'Time');
@@ -686,6 +657,11 @@ function o = main(o,option,postoption)
     if not(length(title)>11 && strcmp(title(1:11),'Onset curve'))
         o.yname = ['Onset curve (',title,')'];
     end
+    out = {o};
+end
+
+
+function x = after(x,option)
 end
 
 
