@@ -20,7 +20,7 @@ function options = options
     
         filter.key = 'FilterType';
         filter.type = 'String';
-        filter.choice = {'IIR','HalfHann','Butter',0};
+        filter.choice = {'IIR','HalfHann','Butter'};
         filter.default = 'IIR';
     options.filter = filter;
 
