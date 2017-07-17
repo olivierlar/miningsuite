@@ -123,7 +123,7 @@ function display(obj)
             
             if iscurve
                 pi = p.content{1};
-                px = Xaxis.unit.generate(pi);
+                px = Xaxis.data(pi);
                 py = ydatai.content(pi);
                 plot(px,squeeze(py),'or');
             elseif iscell(ydatai.content)
