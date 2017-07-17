@@ -7,8 +7,8 @@
 % the main folder of the MiningSuite distribution.
 
 function varargout = tempo(varargin)
-    varargout = sig.operate('mus','tempo',initoptions,@init,@main,...
-                            varargin,'plus','extensive');
+    varargout = sig.operate('mus','tempo',initoptions,...
+                            @init,@main,@after,varargin);
 end
 
 
@@ -55,7 +55,7 @@ function y = mus_spectrum(x,option)
 end
 
 
-function out = main(in,option,postoption)
+function out = main(in,option)
     if isa(in,'mus.Sequence')
         o = [];
         for i = 1:length(in.content)
@@ -72,6 +72,10 @@ function out = main(in,option,postoption)
         t = sig.signal(d,'Name','Tempo','Srate',1); %'FbChannels',x.fbchannels??
         out = {t};
     else
-        out = aud.tempo.main(in,option,postoption);
+        out = aud.tempo.main(in,option);
     end
+end
+
+
+function x = after(x,option)
 end
