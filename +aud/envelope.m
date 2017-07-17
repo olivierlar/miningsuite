@@ -9,16 +9,13 @@
 
 function varargout = envelope(varargin)
     varargout = sig.operate('aud','envelope',initoptions,...
-                            @sig.envelope.init,@sig.envelope.main,@after,...
+                            @init,@main,@after,...
                             varargin,'concat','extensive');
 end
 
 
 function options = initoptions
     options = sig.envelope.options;
-    %options.method.default = 'Spectro';
-    options.diffhwr.default = 1;
-    options.up.default = 2;
     
         presel.type = 'String';
         presel.choice = {'Klapuri06'};
@@ -37,7 +34,36 @@ function options = initoptions
 end
 
 
+function [x,type] = init(x,option,frame)
+    if ischar(option.presel) && strcmpi(option.presel,'Klapuri06')
+        option.method = 'Spectro';
+    end
+    [x,type] = sig.envelope.init(x,option,frame);
+end
+
+
+function out = main(x,option)
+    if isfield(option,'presel') && ischar(option.presel) && ...
+            strcmpi(option.presel,'Klapuri06')
+        option.method = 'Spectro';
+        option.up = 2;
+        option.mu = 100;
+        option.diffhwr = 1;
+        option.lambda = .8;
+    end
+    out = sig.envelope.main(x,option);
+end
+
+
 function out = after(x,option)
+    if isfield(option,'presel') && ischar(option.presel) && ...
+            strcmpi(option.presel,'Klapuri06')
+        option.method = 'Spectro';
+        option.up = 2;
+        option.mu = 100;
+        option.diffhwr = 1;
+        option.lambda = .8;
+    end
     if iscell(x)
         x = x{1};
     end
