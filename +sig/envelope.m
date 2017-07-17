@@ -23,22 +23,25 @@ function out = after(x,option)
     if iscell(x)
         x = x{1};
     end
-    if strcmpi(option.method,'Spectro')
-        option.trim = 0;
-        option.ds = 0;
-    elseif strcmpi(option.method,'Filter')        
-        option.ds = option.ds(1);
-        if isnan(option.ds)
-            if option.decim
-                option.ds = 0;
-            else
-                option.ds = 16;
+    if ~x.processed
+        if strcmpi(option.method,'Spectro')
+            option.trim = 0;
+            option.ds = 0;
+        elseif strcmpi(option.method,'Filter')        
+            option.ds = option.ds(1);
+            if isnan(option.ds)
+                if option.decim
+                    option.ds = 0;
+                else
+                    option.ds = 16;
+                end
             end
         end
+        x = sig.envelope.resample(x,option);
+        x = sig.envelope.rescale(x,option);
+        x = sig.envelope.upsample(x,option);
+        x.processed = 1;
     end
-    x = sig.envelope.resample(x,option);
-    x = sig.envelope.rescale(x,option);
-    x = sig.envelope.upsample(x,option);
     x.Ydata = sig.envelope.diff(x,option);
     x = sig.envelope.after(x,option);
     out = {x};

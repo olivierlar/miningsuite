@@ -9,6 +9,7 @@
 classdef Envelope < sig.signal
 %%
     properties
+        processed = 0
         log = 0
         diff = 0
         method
