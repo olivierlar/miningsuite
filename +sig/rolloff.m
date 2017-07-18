@@ -1,10 +1,6 @@
 function varargout = rolloff(varargin)
-    out = sig.operate('sig','rolloff',...
+    varargout = sig.operate('sig','rolloff',...
                       initoptions,@init,@main,@after,varargin);
-    if isa(out{1},'sig.design')
-        out{1}.nochunk = 1;
-    end
-    varargout = out;
 end
 
 
