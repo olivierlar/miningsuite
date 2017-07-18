@@ -9,8 +9,12 @@
 % the main folder of the MiningSuite distribution.
 
 function varargout = cepstrum(varargin)
-    varargout = sig.operate('sig','cepstrum',options,...
+    out = sig.operate('sig','cepstrum',options,...
                             @init,@main,@after,varargin,'sum');
+%     if isa(out{1},'sig.design')
+%         out{1}.nochunk = 1;
+%     end
+    varargout = out;
 end
 
 
