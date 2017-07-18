@@ -13,7 +13,7 @@ end
 %%
 function [x type] = init(x,option,frame)
     if x.istype('sig.signal')
-        x = sig.spectrum(x);
+        x = sig.spectrum(x,'FrameConfig',frame);
     end
     type = 'sig.signal';
 end
