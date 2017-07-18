@@ -96,11 +96,16 @@ function [out,phase] = routine(in,sampling,option,dim)
             in = in.times(w);
         end
         
+        if isfield(option,'missing') && option.missing
+            option.zp = option.zp + option.missing;
+        end
+        
         if option.zp
             if isinf(option.zp)
                 option.zp = N;
             end
-            in = in.edit(dim,N+option.zp,0);
+            N = N+option.zp;
+            %in = in.edit(dim,N,0);
         end
         
         if option.octave
