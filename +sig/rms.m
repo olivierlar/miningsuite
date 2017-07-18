@@ -6,12 +6,7 @@ end
 
 %%
 function options = initoptions
-    options = sig.signal.signaloptions('FrameAuto',.05,.5);
-    
-        notchunking.type = 'Boolean';
-        notchunking.when = 'After';
-        notchunking.default = 1;
-    options.notchunking = notchunking;
+    options = sig.signal.signaloptions('FrameAuto',.05,.5);    
 end
 
 
