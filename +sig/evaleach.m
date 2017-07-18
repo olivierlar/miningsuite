@@ -178,23 +178,12 @@ else
                 y = {};
                 options = design.options;
                 options.tmp = [];
+                options.missing = 0;
+                diffchunks = diff(chunks);
                 for i = 1:size(chunks,2)
                     disp(['Chunk ',num2str(i),'/',num2str(nch),'...'])
                     window = [chunks(1,i) chunks(2,i) (i == size(chunks,2))];
-                    
-                    if 0 %not(ischar(specif.eachchunk) && ...
-                        %strcmpi(specif.eachchunk,'Normal'))
-                        if frnochunk
-                            d2.postoption = 0;
-                        else
-                            diffchunks = diff(chunks); % Usual chunk size
-                            d2.postoption = max(diffchunks) -  diffchunks(i);
-                            % Reduction of the current chunk size to be taken into
-                            % consideration in mirspectrum, for instance, using
-                            % zeropadding
-                        end
-                    end
-                    
+                    options.missing = max(diffchunks) -  diffchunks(i);
                     chunking = 1;
                     ss = sig.evaleach(design.input,filename,window,sr,1,...
                         frame,chunking,nbsamples);
