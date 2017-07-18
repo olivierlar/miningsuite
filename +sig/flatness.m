@@ -1,4 +1,4 @@
-function varargout = kurtosis(varargin)
+function varargout = flatness(varargin)
     varargout = sig.operate('sig','flatness',...
                             initoptions,@init,@main,@after,varargin);
 end
@@ -21,7 +21,7 @@ end
 
 function out = main(in,option)
     x = in{1};
-    if ~strcmpi(x.yname,'Kurtosis')
+    if ~strcmpi(x.yname,'Flatness')
         res = sig.compute(@routine,x.Ydata);
         x = sig.signal(res,'Name','Flatness',...
                        'Srate',x.Srate,'Ssize',x.Ssize,...
