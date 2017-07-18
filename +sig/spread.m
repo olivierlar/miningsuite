@@ -1,5 +1,5 @@
-function varargout = centroid(varargin)
-    varargout = sig.operate('sig','centroid',...
+function varargout = spread(varargin)
+    varargout = sig.operate('sig','spread',...
                             initoptions,@init,@main,@after,varargin);
 end
 
@@ -21,9 +21,9 @@ end
 
 function out = main(in,option)
     x = in{1};
-    if ~strcmpi(x.yname,'Centroid')
+    if ~strcmpi(x.yname,'Spread')
         res = sig.compute(@routine,x.Ydata,x.xdata);
-        x = sig.signal(res,'Name','Centroid',...
+        x = sig.signal(res,'Name','Spread',...
                        'Srate',x.Srate,'Ssize',x.Ssize,...
                        'FbChannels',x.fbchannels);
     end
@@ -32,8 +32,14 @@ end
 
 
 function out = routine(d,f)
-    e = d.apply(@sig.centroid.algo,{f},{'element'},1);
+    e = d.apply(@algo,{f},{'element'},1);
     out = {e};
+end
+
+
+function y = algo(d,f)
+    c = sig.centroid.algo(d,f);
+    y = sqrt( sum((f'-c).^2 .* (d/sum(d)) ) );
 end
 
 
