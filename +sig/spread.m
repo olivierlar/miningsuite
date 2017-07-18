@@ -13,7 +13,7 @@ end
 %%
 function [x type] = init(x,option,frame)
     if x.istype('sig.signal')
-        x = sig.spectrum(x);
+        x = sig.spectrum(x,'FrameConfig',frame);
     end
     type = 'sig.signal';
 end
@@ -32,14 +32,8 @@ end
 
 
 function out = routine(d,f)
-    e = d.apply(@algo,{f},{'element'},1);
+    e = d.apply(@sig.spread.algo,{f},{'element'},1);
     out = {e};
-end
-
-
-function y = algo(d,f)
-    c = sig.centroid.algo(d,f);
-    y = sqrt( sum((f'-c).^2 .* (d/sum(d)) ) );
 end
 
 
