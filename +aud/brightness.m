@@ -1,6 +1,10 @@
 function varargout = brightness(varargin)
-    varargout = sig.operate('aud','brightness',...
-                            initoptions,@init,@main,varargin);
+    out = sig.operate('aud','brightness',...
+                            initoptions,@init,@main,@after,varargin);
+    if isa(out{1},'sig.design')
+        out{1}.nochunk = 1;
+    end
+    varargout = out;
 end
 
 
@@ -24,7 +28,7 @@ function [x type] = init(x,option,frame)
 end
 
 
-function out = main(in,option,postoption)
+function out = main(in,option)
     x = in{1};
     if ~strcmpi(x.yname,'Brightness')
         res = sig.compute(@routine,x.Ydata,x.xdata,option.cutoff);
@@ -44,4 +48,8 @@ end
 
 function y = algo(m,f,f0)
     y = sum(m(f > f0,:,:)) ./ sum(m);
+end
+
+
+function x = after(x,option)
 end
