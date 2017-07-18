@@ -1,6 +1,6 @@
 function varargout = centroid(varargin)
     varargout = sig.operate('sig','centroid',...
-                            initoptions,@init,@main,varargin);
+                            initoptions,@init,@main,@after,varargin);
 end
 
 
@@ -19,7 +19,7 @@ function [x type] = init(x,option,frame)
 end
 
 
-function out = main(in,option,postoption)
+function out = main(in,option)
     x = in{1};
     if ~strcmpi(x.yname,'Centroid')
         res = sig.compute(@routine,x.Ydata,x.xdata);
@@ -39,4 +39,8 @@ end
 
 function y = algo(d,f)
     y = (f*d) ./ sum(d);
+end
+
+
+function x = after(x,option)
 end
