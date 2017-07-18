@@ -1,6 +1,10 @@
 function varargout = rolloff(varargin)
-    varargout = sig.operate('sig','rolloff',...
-                            initoptions,@init,@main,varargin);
+    out = sig.operate('sig','rolloff',...
+                      initoptions,@init,@main,@after,varargin);
+    if isa(out{1},'sig.design')
+        out{1}.nochunk = 1;
+    end
+    varargout = out;
 end
 
 
@@ -28,7 +32,7 @@ function [x type] = init(x,option,frame)
 end
 
 
-function out = main(in,option,postoption)
+function out = main(in,option)
     x = in{1};
     if option.p>1
         option.p = option.p/100;
@@ -58,4 +62,8 @@ function v = algo(m,f,p)
     else
         v = f(fthr);
     end
+end
+
+
+function x = after(x,option)
 end
