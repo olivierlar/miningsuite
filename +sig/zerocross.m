@@ -1,6 +1,6 @@
 function varargout = zerocross(varargin)
     varargout = sig.operate('sig','zerocross',...
-                            initoptions,@init,@main,varargin,'plus');
+                            initoptions,@init,@main,@after,varargin,'plus');
 end
 
 
@@ -28,12 +28,12 @@ function [x type] = init(x,option,frame)
 end
 
 
-function out = main(in,option,postoption)
+function out = main(in,option)
     x = in{1};
     if ~strcmpi(x.yname,'Brightness')
         res = sig.compute(@routine,x.Ydata,x.Srate,option);
         x = sig.signal(res,'Name','Zero-crossing rate',...
-                       'Deframe',in{1});
+                       'Deframe',x);
     end
     out = {x};
 end
@@ -46,13 +46,29 @@ function out = routine(d,sr,option)
 end
 
 
-function out = algo(x,option,sr)
-    n = sum(x(2:end,:,:).*x(1:end-1,:,:) < 0) / size(x,1);
-    if strcmp(option.per,'Second')
-        n = n * sr;
+function y = algo(x,option,sr)
+    y = sum(x(2:end,:,:).*x(1:end-1,:,:) < 0);
+    if strcmp(option.per,'Sample')
+        y = y / sr;
     end
     if strcmp(option.dir,'One')
-        n = n / 2;
+        y = y / 2;
     end
-    out = n;
+end
+
+
+function out = after(in,option)
+    x = in{1};
+    x.Ydata = sig.compute(@routine_norm,x.Ydata,x.Ssize);
+    out = {x};
+end
+
+
+function d = routine_norm(d,Ssize)
+    d = d.apply(@afternorm,{Ssize},{'sample'},Inf);
+end
+
+
+function d = afternorm(d,l)
+    d = d/l;
 end
