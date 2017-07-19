@@ -3,7 +3,7 @@ function out = main(x,option)
         x = x{1};
     end
     if isa(x,'sig.Autocor')
-        y = {x};
+        out = {x};
         return
     end
     if isstruct(option.min) && strcmpi(option.min.unit,'Hz')
