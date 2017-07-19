@@ -183,7 +183,9 @@ else
                 for i = 1:size(chunks,2)
                     disp(['Chunk ',num2str(i),'/',num2str(nch),'...'])
                     window = [chunks(1,i) chunks(2,i) (i == size(chunks,2))];
-                    options.missing = max(diffchunks) -  diffchunks(i);
+                    if isempty(frame) || ~frame.toggle
+                        options.missing = max(diffchunks) - diffchunks(i);
+                    end
                     chunking = 1;
                     ss = sig.evaleach(design.input,filename,window,sr,1,...
                         frame,chunking,nbsamples);
