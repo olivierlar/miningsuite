@@ -52,7 +52,7 @@ function [x type] = init(x,option,frame)
 end
 
 
-function out = main(in,option,postoption)
+function out = main(in,option)
     x = in{1};
     if isa(x,'aud.mfcc')
         % Not done yet.
