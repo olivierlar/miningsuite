@@ -9,7 +9,7 @@
 
 function varargout = mfcc(varargin)
     varargout = sig.operate('aud','mfcc',...
-                            initoptions,@init,@main,varargin);
+                            initoptions,@init,@main,@after,varargin);
 end
 
 
@@ -45,7 +45,8 @@ end
 %%
 function [x type] = init(x,option,frame)
     if ~x.istype('aud.mfcc')
-        x = aud.spectrum(x,'Mel','log','Bands',option.nbbands);
+        x = aud.spectrum(x,'FrameConfig',frame,...
+                         'Mel','log','Bands',option.nbbands);
     end
     type = {'aud.mfcc','sig.Spectrum'};
 end
@@ -60,7 +61,6 @@ function out = main(in,option,postoption)
         res = sig.compute(@routine,x.Ydata,option.rank);
         x = aud.Mfcc(res,'Srate',x.Srate,'Ssize',x.Ssize,...
                      'FbChannels',x.fbchannels);
-        x = after(x,postoption);
         out = {x in{1}};
     end
 end
@@ -86,8 +86,8 @@ end
 
 function x = after(x,option)
     if option.delta
-        x.Ydata = sig.compute(@delta,x.Ydata,option.delta,option.radius);
-        x.yname = ['Delta-',x.yname];
+        x{1}.Ydata = sig.compute(@delta,x{1}.Ydata,option.delta,option.radius);
+        x{1}.yname = ['Delta-',x{1}.yname];
     end
 end
 
