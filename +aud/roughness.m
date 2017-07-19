@@ -1,12 +1,13 @@
 function varargout = roughness(varargin)
     varargout = sig.operate('aud','roughness',...
-                            initoptions,@init,@main,varargin);
+                            initoptions,@init,@main,@after,varargin);
 end
 
 
 %%
 function options = initoptions
     options = sig.signal.signaloptions('FrameAuto',.05,.5);
+    options.frame.default = 1;
     
         meth.type = 'String';
         meth.choice = {'Sethares','Vassilakis'};
@@ -33,18 +34,14 @@ end
 %%
 function [x type] = init(x,option,frame)
     if ~istype(x,'sig.Spectrum')
-        if ~frame.toggle
-            x = sig.frame(x,'FrameSize',frame.size.value,frame.size.unit,...
-                            'FrameHop',frame.hop.value,frame.hop.unit);
-        end
-        x = sig.spectrum(x);
+        x = sig.spectrum(x,'FrameConfig',frame);
     end
     x = sig.peaks(x,'Contrast',option.cthr);
     type = {'sig.signal','sig.Spectrum'};
 end
 
 
-function out = main(in,option,postoption)
+function out = main(in,option)
     x = in{1};
     d = sig.compute(@routine,x.peakpos,x.peakval,x.Ydata,option);
     x = sig.signal(d,'Name','Roughness','Srate',x.Srate,'Ssize',x.Ssize,...
@@ -95,4 +92,8 @@ function pd = plomp(f1, f2)
     s2 = 18.96;
     s = tril(xstar ./ (s1 * min(f1,f2) + s2 ));
     pd = exp(-b1*s.*abs(f2-f1)) - exp(-b2*s.*abs(f2-f1));
+end
+
+
+function x = after(x,option)
 end
