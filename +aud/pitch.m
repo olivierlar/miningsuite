@@ -8,26 +8,9 @@
 
 function varargout = pitch(varargin)
     varargout = sig.operate('aud','pitch',aud.pitch.options,...
-                            @aud.pitch.init,@main,varargin);
+                            @aud.pitch.init,@aud.pitch.main,@after,varargin);
 end
 
 
-function out = main(x,option,postoption)
-    if isempty(option)
-        out = x;
-    else
-        out = aud.pitch.main(x,option,postoption);
-    end
-    if isempty(postoption)
-        out = {out};
-    else
-        out = {after(out,postoption)};
-    end
-end
-
-
-function x = after(x,postoption)
-    if iscell(x)
-        x = x{1};
-    end
+function x = after(x,option)
 end

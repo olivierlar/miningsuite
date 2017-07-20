@@ -1,5 +1,5 @@
 function options = options
-    options = sig.signal.signaloptions('FrameAuto',.1,.1);
+    options = sig.signal.signaloptions('FrameManual',.1,.1);
    
         enh.key = 'Enhanced';
         enh.type = 'Numeric';
