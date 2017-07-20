@@ -90,10 +90,10 @@ if isempty(design.main)
     end
     
 else
-    if isempty(frame) || ~frame.toggle
+    %if isempty(frame) || ~frame.toggle
         % Not already in a frame decomposition process
         frame = design.frame;
-    end    
+   % end    
     if chunking % Already in a chunk decomposition process
         y = sig.evaleach(design.input(1),filename,window,sr,1,frame,chunking);
         main = design.main;
