@@ -78,13 +78,6 @@ function out = main(x,option)
     end
 
     [d,w,xstart] = sig.compute(@routine,x.Ydata,x.Srate,option);
-
-    if option.freq
-        xname = 'Frequency';
-    else
-        xname = 'Time';
-    end
-    
     y = sig.Autocor(d,'xsampling',1/x.Srate,'Deframe',x);
     y.window = w;
     y.normwin = option.normwin;

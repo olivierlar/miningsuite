@@ -11,7 +11,7 @@ function out = after(x,option)
     
     if option.freq
         x.Xaxis.name = 'Frequency';
-    else
+    elseif isempty(x.Xaxis.name)
         x.Xaxis.name = 'Time';
     end
 
