@@ -197,8 +197,7 @@ classdef design
                 input = '...';
             end
             disp(['> ',obj.package,'.',obj.name,' ( ',input,str,' )']);
-            disp(obj.duringoptions)
-            disp(obj.afteroptions)
+            disp(obj.options)
 %             if nargin < 2
 %                 disp(['Design date: ' obj.date])
 %                 for i = 1:length(obj.ver)
