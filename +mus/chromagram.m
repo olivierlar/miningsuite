@@ -8,7 +8,7 @@
 
 function varargout = chromagram(varargin)
     varargout = sig.operate('mus','chromagram',initoptions,...
-                            @init,@main,varargin);
+                            @init,@main,@after,varargin);
 end
 
 
@@ -87,35 +87,29 @@ function [x type] = init(x,option,frame)
         while freqmax < option.max
             freqmax = freqmax*2;
         end
-        x = sig.spectrum(x,'dB',option.thr,'Min',freqmin,'Max',freqmax,...
+        x = sig.spectrum(x,'FrameConfig',frame,...
+                           'dB',option.thr,'Min',freqmin,'Max',freqmax,...
                           'NormalInput','MinRes',option.res,'OctaveRatio',.85);
     end
     type = {'mus.Chromagram','sig.Spectrum'};
 end
 
 
-function out = main(orig,option,postoption)
+function out = main(orig,option)
     orig = orig{1};
-    if isempty(option)
-        out = {after(orig,postoption)};
+    if option.res == 12
+        chromascale = {'C','C#','D','D#','E','F','F#','G','G#','A','A#','B'};
     else
-        if option.res == 12
-            chromascale = {'C','C#','D','D#','E','F','F#','G','G#','A','A#','B'};
-        else
-            chromascale = 1:option.res;
-            option.plabel = 0;
-        end
-        [m,c,p,fc,o] = sig.compute(@routine,orig.Ydata,orig.xdata,option,chromascale);
-        chro = mus.Chromagram(m,'ChromaClass',c,...%'XData',p
-                           'ChromaFreq',fc,'Register',o,...
-                           'Srate',orig.Srate,'Ssize',orig.Ssize,...
-                           'FbChannels',orig.fbchannels);
-        chro.Xaxis.unit.rate = 1;
-        if ~isempty(postoption)
-            chro = after(chro,postoption);
-        end
-        out = {chro orig};
+        chromascale = 1:option.res;
+        option.plabel = 0;
     end
+    [m,c,p,fc,o] = sig.compute(@routine,orig.Ydata,orig.xdata,option,chromascale);
+    chro = mus.Chromagram(m,'ChromaClass',c,...%'XData',p
+        'ChromaFreq',fc,'Register',o,...
+        'Srate',orig.Srate,'Ssize',orig.Ssize,...
+        'FbChannels',orig.fbchannels);
+    chro.Xaxis.unit.rate = 1;
+    out = {chro orig};
 end
 
 
@@ -184,10 +178,12 @@ end
 
 
 %%
-function x = after(x,postoption)
-    if postoption.wrp && ~x.wrap
-        x.Ydata = sig.compute(@wrap,x.Ydata,x.chromaclass,postoption.res);
+function x = after(x,option)
+    x = x{1};
+    if option.wrp && ~x.wrap
+        x.Ydata = sig.compute(@wrap,x.Ydata,x.chromaclass,option.res);
     end
+    x = {x};
 end
 
 
