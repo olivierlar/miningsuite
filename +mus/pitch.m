@@ -6,14 +6,14 @@
 % the main folder of the MiningSuite distribution.
 
 function varargout = pitch(varargin)
-    varargout = sig.operate('mus','pitch',initoptions,@init,@main,...
+    varargout = sig.operate('mus','pitch',initoptions,@init,@main,@after,...
                             varargin);
 end
 
 
 %%
 function options = initoptions
-    options = sig.signal.signaloptions('FrameAuto',3,.1);
+    options = aud.pitch.options;
     
         inter.key = 'Inter';
         inter.type = 'Boolean';
@@ -30,7 +30,7 @@ end
 %%
 function [x type] = init(x,option,frame)
     if istype(x,'sig.signal')
-        x = aud.pitch(x);
+        x = aud.pitch.init(x,option,frame);
     elseif ~istype(x,'mus.Sequence')
         x = mus.score(x);
     end
@@ -39,8 +39,9 @@ end
 
 
 function out = main(in,option)
-    if isa(in,'sig.signal')
-        out = in;
+    if ~(length(in{1}.yname) >= 5 && strcmpi(in{1}.yname(end-4:end),'Pitch'))
+        out = aud.pitch.main(in,option);
+        out{1}.Ydata = sig.compute(@routine,out{1}.Ydata);
     else
         p = zeros(length(in.content),1);
         t = zeros(length(in.content),1);
@@ -71,12 +72,15 @@ function out = main(in,option)
 end
 
 
-function out = routine(d)
-    e = d.apply(@convert,{},{'element'});
-    out = {e};
+function p = routine(f)
+    p = f.apply(@freq2chro,{},{'element'},1,'{}');
 end
 
 
-function y = convert(x)
-    y = 60./x;
+function y = freq2chro(x)
+    y = 1200*log2(x{1});
+end
+
+
+function x = after(x,option)
 end
