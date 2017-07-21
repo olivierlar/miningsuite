@@ -8,7 +8,7 @@
 
 function varargout = keystrength(varargin)
     varargout = sig.operate('mus','keystrength',initoptions,...
-                            @init,@main,varargin);
+                            @init,@main,@after,varargin);
 end
 
 
@@ -37,7 +37,7 @@ end
 function [x type] = init(x,option,frame)
     if ~istype(x,'mus.Keystrength')
         if ~istype(x,'mus.Chromagram')
-            x = mus.chromagram(x,'Weight',option.wth,...
+            x = mus.chromagram(x,'FrameConfig',frame,'Weight',option.wth,...
                                'Triangle',option.tri,'Normal');
         else
             x = mus.chromagram(x,'Wrap','Normal');
@@ -47,19 +47,15 @@ function [x type] = init(x,option,frame)
 end
 
 
-function out = main(orig,option,postoption)
+function out = main(orig,option)
     orig = orig{1};
-    if isempty(option)
-        out = {after(orig,option)};
-    else
-        load gomezprofs;
-        s = sig.compute(@routine,orig.Ydata,gomezprofs');
-        ks = mus.Keystrength(s,'Srate',orig.Srate,'Ssize',orig.Ssize,...
-                             'FbChannels',orig.fbchannels);
-        ks.Xaxis.unit.rate = 1;
-        ks = after(ks,option);
-        out = {ks orig};
-    end
+    load gomezprofs;
+    s = sig.compute(@routine,orig.Ydata,gomezprofs');
+    ks = mus.Keystrength(s,'Srate',orig.Srate,'Ssize',orig.Ssize,...
+        'FbChannels',orig.fbchannels);
+    ks.Xaxis.unit.rate = 1;
+    ks = after(ks,option);
+    out = {ks orig};
 end
 
 
@@ -75,6 +71,5 @@ function s = algo(m,gomezprofs)
 end
 
 
-function out = after(x,postoption)
-    out = x;
+function x = after(x,option)
 end
