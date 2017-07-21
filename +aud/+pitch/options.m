@@ -73,4 +73,11 @@ function options = options
         track.type = 'Boolean';
         track.default = 0;
     options.track = track;
+    
+    %% preset model
+
+        tolo.key = 'Tolonen';
+        tolo.type = 'Boolean';
+        tolo.default = 0;
+    options.tolo = tolo;
 end

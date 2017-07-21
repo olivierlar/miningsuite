@@ -1,4 +1,11 @@
 function [x, type] = init(x,option,frame)
+
+    if option.tolo
+        option.enh = 2:10;
+        option.gener = .67;
+        option.filtertype = '2Channels';
+    end
+    
     type = 'sig.signal';
     if not(strcmpi(option.filtertype,'NoFilterBank'))
         x = aud.filterbank(x,option.filtertype);
