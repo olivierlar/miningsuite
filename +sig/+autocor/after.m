@@ -8,12 +8,6 @@ function out = after(x,option)
     else
         tmp = [];
     end
-    
-    if option.freq
-        x.Xaxis.name = 'Frequency';
-    elseif isempty(x.Xaxis.name)
-        x.Xaxis.name = 'Time';
-    end
 
     if isstruct(option.min) || isstruct(option.max)
         if ~isstruct(option.min)
@@ -44,5 +38,11 @@ function out = after(x,option)
         x = x.enhance(option.enhance);
     end
 
+    if option.freq
+        x.Xaxis.name = 'Frequency';
+    elseif isempty(x.Xaxis.name)
+        x.Xaxis.name = 'Time';
+    end
+    
     out = {x,tmp};
 end
