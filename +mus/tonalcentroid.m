@@ -20,7 +20,7 @@ end
 %%
 function [x,type] = init(x,option,frame)
     x = mus.chromagram(x,'FrameConfig',frame);
-    type = {'sig.signal'};
+    type = {'mus.tonalcentroid'};
 end
 
 
