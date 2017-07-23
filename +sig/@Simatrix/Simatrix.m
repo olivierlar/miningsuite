@@ -17,7 +17,7 @@ classdef Simatrix < sig.signal
         function s = Simatrix(varargin)
             s = s@sig.signal(varargin{:});
             if strcmp(s.yname,'Signal')
-                s.yname = 'Simatrix';
+                s.yname = 'Dissimilarity Matrix';
             end
             s.xname = '?';    
             s.xsampling = 1;

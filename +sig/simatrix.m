@@ -24,7 +24,6 @@ function options = options
         simf.type = 'String';
         simf.default = 'oneminus';
         simf.keydefault = 'Similarity';        
-        simf.when = 'After';
     options.simf = simf;
 
         dissim.key = 'Dissimilarity';
@@ -40,32 +39,27 @@ function options = options
         filt.key = 'Filter';
         filt.type = 'Integer';
         filt.default = 0;
-        filt.when = 'After';
     options.filt = filt;
 
         view.type = 'String';
         view.default = 'Standard';
         view.choice = {'Standard','Horizontal','TimeLag'};
-        view.when = 'After';
     options.view = view;
 
         half.key = 'Half';
         half.type = 'Boolean';
         half.default = 0;
-        half.when = 'Both';
     options.half = half;
 
         warp.key = 'Warp';
         warp.type = 'Integer';
         warp.default = 0;
         warp.keydefault = .5;
-        warp.when = 'After';
     options.warp = warp;
     
         cluster.key = 'Cluster';
         cluster.type = 'Boolean';
         cluster.default = 0;
-        cluster.when = 'After';
     options.cluster = cluster;
 
         arg2.position = 2;
@@ -234,4 +228,38 @@ end
 
 
 function x = after(x,option)
+    x = x{1};
+    if ischar(option.simf)
+        if strcmpi(option.simf,'Similarity')
+            if not(isequal(x.similarity,NaN))
+                option.dissim = 0;
+            end
+            option.simf = 'oneminus';
+        end
+        if isequal(x.similarity,0) && ~option.dissim
+            simf = str2func(option.simf);
+            x.Ydata = sig.compute(@routine_sim,x.Ydata,simf);
+            x.similarity = option.simf;
+            x.yname = 'Similarity Matrix';
+        elseif length(x.similarity) == 1 && isnan(x.similarity) ...
+                && option.dissim
+            x.similarity = 0;
+        end
+    end
+    x = {x};
+end
+
+
+function out = routine_sim(in,simf)
+    out = in.apply(simf,{},{'element','sample'},2);
+end
+
+
+function s = exponential(d)
+    s = (exp(-d) - exp(-1)) / (1-exp(-1));
+end
+    
+    
+function s = oneminus(d)
+    s = 1-d;
 end
