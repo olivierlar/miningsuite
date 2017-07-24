@@ -1,6 +1,6 @@
 function varargout = hist(varargin)
     varargout = sig.operate('sig','hist',...
-                            initoptions,@init,@main,varargin);
+                            initoptions,@init,@main,@after,varargin);
 end
 
 
@@ -19,7 +19,7 @@ function [x type] = init(x,option,frame)
 end
 
 
-function out = main(in,option,postoption)
+function out = main(in,option)
     x = in{1};
     if ~strcmpi(x.yname,'Histogram')
         res = sig.compute(@routine,x.Ydata,option.n);
@@ -32,7 +32,7 @@ end
 
 
 function out = routine(d,nbins)
-    if find(strcmp('element',d.dims))
+    if find(strcmp('element',d.dims)) && d.size('element') > 1
         dim = 'element';
     else
         dim = 'sample';
@@ -47,4 +47,8 @@ end
 function [n, xout] = algo(x,nbins)
     [n xout] = hist(x,nbins);
     n = n';
+end
+
+
+function x = after(x,option)
 end
