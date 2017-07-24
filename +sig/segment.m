@@ -7,40 +7,174 @@
 
 function varargout = segment(varargin)
     varargout = sig.operate('sig','segment',initoptions,...
-                     @init,@main,@after,varargin); %,'concat_sample');
-%     if isa(s{1},'sig.design')
-%         s = s{1}.eval;
-%         s = s{1};
-%     end
+                     @init,@main,@after,varargin);
 end
                     
                     
 %%
 function options = initoptions
-    options = sig.signal.signaloptions();
+    options = sig.signal.signaloptions('FrameAuto',.05,1);
+    
+        mfc.key = {'Rank','MFCC'};
+        mfc.type = 'Integers';
+        mfc.default = 0;
+        mfc.keydefault = 1:13;
+    options.mfc = mfc;
+
+        K.key = 'KernelSize';
+        K.type = 'Integer';
+        K.default = 128;
+    options.K = K;
+    
+        distance.key = 'Distance';
+        distance.type = 'String';
+        distance.default = 'cosine';
+    options.distance = distance;
+
+        measure.key = {'Measure','Similarity'};
+        measure.type = 'String';
+        measure.default = 'exponential';
+    options.measure = measure;
+
+        tot.key = 'Total';
+        tot.type = 'Integer';
+        tot.default = Inf;
+    options.tot = tot;
+
+        cthr.key = 'Contrast';
+        cthr.type = 'Integer';
+        cthr.default = .1;
+    options.cthr = cthr;
+
+        ana.type = 'String';
+        ana.choice = {'Spectrum','Keystrength','AutocorPitch','Pitch'};
+        ana.default = 0;
+    options.ana = ana;
+    
+%       f = mirsegment(...,'Spectrum')    
+    
+            band.choice = {'Mel','Bark','Freq'};
+            band.type = 'String';
+            band.default = 'Freq';
+        options.band = band;
+
+            mi.key = 'Min';
+            mi.type = 'Integer';
+            mi.default = 0;
+        options.mi = mi;
+
+            ma.key = 'Max';
+            ma.type = 'Integer';
+            ma.default = 0;
+        options.ma = ma;
+
+            norm.key = 'Normal';
+            norm.type = 'Boolean';
+            norm.default = 0;
+        options.norm = norm;
+
+            win.key = 'Window';
+            win.type = 'String';
+            win.default = 'hamming';
+        options.win = win;
+    
+%       f = mirsegment(...,'Silence')    
+    
+            throff.key = 'Off';
+            throff.type = 'Integer';
+            throff.default = .01;
+        options.throff = throff;
+
+            thron.key = 'On';
+            thron.type = 'Integer';
+            thron.default = .02;
+        options.thron = thron;
+
+        strat.choice = {'Novelty','HCDF','RMS','Silence'}; % should remain as last field
+        strat.default = 'Novelty';
+        strat.position = 2;
+    options.strat = strat;
     
         pos.type = 'Numeric';
+        pos.default = [];
     options.pos = pos;
 end
 
 
 %%
-function [x type] = init(x,option,frame)
+function [out type] = init(x,option,frame)
+    if isempty(option.pos)
+        if iscell(x)
+            x = x{1};
+        end
+        if ischar(option.strat)
+            if strcmpi(option.strat,'Novelty')
+                if ~frame.size.value
+                    if strcmpi(option.ana,'Keystrength')
+                        frame.size.value = .5;
+                        frame.hop.value = .2;
+                    elseif strcmpi(option.ana,'AutocorPitch') ...
+                            || strcmpi(option.ana,'Pitch')
+                        frame.size.value = .05;
+                        frame.hop.value = .01;
+                    else
+                        frame.size.value = .05;
+                        frame.hop.value = 1;
+                    end
+                end
+                frame.toggle = 1;
+                if not(isequal(option.mfc,0))
+                    fe = aud.mfcc(x,'FrameConfig',frame,'Rank',option.mfc);
+                elseif strcmpi(option.ana,'Spectrum')
+                    fe = mirspectrum(fr,'Min',option.mi,'Max',option.ma,...
+                        'Normal',option.norm,option.band,...
+                        'Window',option.win);
+                elseif strcmpi(option.ana,'Keystrength')
+                    fe = mirkeystrength(fr);
+                elseif strcmpi(option.ana,'AutocorPitch') ...
+                        || strcmpi(option.ana,'Pitch')
+                    [unused,fe] = mirpitch(x,'Frame');
+                else
+                    fe = x;
+                end
+                n = sig.novelty(fe,'Distance',option.distance,...
+                                'FrameConfig',frame,...
+                                'Measure',option.measure,...
+                                'KernelSize',option.K);
+                p = sig.peaks(n,'Total',option.tot,...
+                                'Contrast',option.cthr,...
+                                'Chrono','NoBegin','NoEnd');
+            end
+        end
+        out = [x,p];
+    else
+        out = x;
+    end
     type = 'sig.signal';
 end
 
 
 function out = main(in,option)
     x = in{1};
-    pos = option.pos;
-    if isa(pos,'sig.design')
-        pos = pos.eval;
-        if iscell(pos)
-            pos = pos{1};
+    if length(in) > 1
+        y = in{2};
+        pos = y.peakprecisepos.content{1};
+    else
+        pos = option.pos;
+        if isa(pos,'sig.design')
+            pos = pos.eval;
+            if iscell(pos)
+                pos = pos{1};
+            end
         end
-    end
-    if isa(pos,'sig.signal')
-        pos = sort(pos.peakpos.content{1});
+        if isa(pos,'sig.signal')
+            if isempty(pos.peakpos)
+                pos = sig.peaks(pos,'Total',option.tot,...
+                                    'Contrast',option.cthr,...
+                                    'Chrono','NoBegin','NoEnd');
+            end
+            pos = sort(pos.peakpos.content{1});
+        end
     end
     
 %     if 0 %strcmp(type,'sp')
