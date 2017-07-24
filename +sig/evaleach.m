@@ -116,7 +116,12 @@ else
         end
     else
         if design.nochunk || strcmpi(design.combine,'no')
-            y = sig.evaleach(design.input,filename,window,sr,1,[],chunking);
+            if size(design.input) == 1
+                y = sig.evaleach(design.input,filename,window,sr,1,[],chunking);
+            else
+                y = [sig.evaleach(design.input(1),filename,window,sr,1,[],chunking),...
+                     sig.evaleach(design.input(2),filename,window,sr,1,[],chunking)];
+            end
             main = design.main;
             if iscell(main)
                 main = main{1};
