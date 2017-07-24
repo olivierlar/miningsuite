@@ -91,7 +91,7 @@ function out = main(x,option)
 
     lK = 2*floor(option.K/2)+1;
     d = sig.compute(@routine,x.Ydata,lK,option);
-    y = sig.Simatrix(d);
+    y = sig.Simatrix(d,'Srate',x.Srate);
     y.diagwidth = lK;
     if strcmpi(option.view,'TimeLag')
         y.view = 'l';
@@ -162,12 +162,8 @@ function d = algo(v,lK,option)
             end
         end
         hK = ceil(lK/2);
-        if not(isempty(postoption)) && ...
-                strcmpi(postoption.view,'TimeLag')
+        if strcmpi(option.view,'TimeLag')
             for i = 1:l
-                if mirwaitbar && (mod(i,100) == 1 || i == l)
-                    waitbar(i/l,handle);
-                end
                 ij = min(i+lK-1,l); % Frame region i:ij
                 if ij==i
                     continue
@@ -181,15 +177,15 @@ function d = algo(v,lK,option)
                 end
                 if option.half
                     for j = 1:length(dkij)
-                        dk{z}(j,i+j-1,g) = dkij(j);
+                        d(j,i+j-1) = dkij(j);
                     end
                 else
                     for j = 0:ij-i
                         if hK-j>0
-                            dk{z}(hK-j,i,g) = dkij(j+1);
+                            d(hK-j,i) = dkij(j+1);
                         end
                         if hK+j<=lK
-                            dk{z}(hK+j,i+j,g) = dkij(j+1);
+                            d(hK+j,i+j) = dkij(j+1);
                         end
                     end
                 end
@@ -198,9 +194,6 @@ function d = algo(v,lK,option)
             win = window(@hanning,lK);
             win = win(ceil(length(win)/2):end);
             for i = 1:l
-                if mirwaitbar && (mod(i,100) == 1 || i == l)
-                    waitbar(i/l,handle);
-                end
                 j = min(i+hK-1,l);
                 if j==i
                     continue
@@ -213,9 +206,9 @@ function d = algo(v,lK,option)
                     dkij = mm(:,1);
                 end
                 dkij = dkij.*win(1:length(dkij));
-                dk{z}(i,i:j,g) = dkij';
+                d(i,i:j,g) = dkij';
                 if ~option.half
-                    dk{z}(i:j,i,g) = dkij;
+                    d(i:j,i) = dkij;
                 end
             end
         end
@@ -252,6 +245,29 @@ end
 
 function out = routine_sim(in,simf)
     out = in.apply(simf,{},{'element','sample'},2);
+end
+
+
+function d = cosine(r,s)
+    d = 1-r'*s;
+end
+
+
+function d = KL(x,y)
+    % Kullback-Leibler distance
+    if size(x,4)>1
+        x(end+1:2*end,:,:,1) = x(:,:,:,2);
+        x(:,:,:,2) = [];
+    end
+    if size(y,4)>1
+        y(end+1:2*end,:,:,1) = y(:,:,:,2);
+        y(:,:,:,2) = [];
+    end
+    m1 = mean(x);
+    m2 = mean(y);
+    S1 = cov(x);
+    S2 = cov(y);
+    d = (trace(S1/S2)+trace(S2/S1)+(m1-m2)'*inv(S1+S2)*(m1-m2))/2 - size(S1,1);
 end
 
 
