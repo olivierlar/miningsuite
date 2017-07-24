@@ -30,11 +30,9 @@ end
 
 function out = main(in,option)
     x = in{1};
-    if ~strcmpi(x.yname,'Brightness')
-        res = sig.compute(@routine,x.Ydata,x.Srate,option);
-        x = sig.signal(res,'Name','Zero-crossing rate',...
-                       'Deframe',x);
-    end
+    res = sig.compute(@routine,x.Ydata,x.Srate,option);
+    x = sig.signal(res,'Name','Zero-crossing rate',...
+        'Deframe',x);
     out = {x};
 end
 
