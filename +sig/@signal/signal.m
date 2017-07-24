@@ -231,6 +231,10 @@ classdef signal
             end
         end    
         function p = get.peakpos(obj)
+            if isempty(obj.peak)
+                p = [];
+                return
+            end
             if strcmp(obj.peakdim,'sample')
                 pos = obj.sdata;
             else
