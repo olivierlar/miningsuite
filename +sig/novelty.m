@@ -106,8 +106,17 @@ function out = main(x,option)
     
     if isinf(option.K)
         d = sig.compute(@routine_inf,x.Ydata);
+    else
+        dw = x.diagwidth;
+        Ks = option.K;
+        if ~isnan(Ks) && Ks
+            cgs = min(Ks,dw);
+        else
+            cgs = dw;
+        end
+        cg = checkergauss(cgs,option.transf)/cgs;%.^option.gran;
+        d = sig.compute(@routine_K,x.Ydata,cg);
     end
-    
     n = sig.signal(d,'Name','Novelty','Srate',x.Srate,'Ssize',x.Ssize,'FbChannels',x.fbchannels);
     out = {n};
 end
@@ -148,5 +157,83 @@ function score = algo_inf(x)
 end
 
 
+function out = routine_K(in,cg)
+    out = in.apply(@algo_K,{cg},{'element','sample'},2);
+end
+
+
+function score = algo_K(x,cg)
+    ma = max(max(x));
+    mi = min(min(x));
+    x = (x-mi)/(ma-mi);
+    x = 2*x-1;
+    x(isnan(x)) = 0;
+    cv = convolve2(x,cg,'same');
+    nl = size(cv,1);
+    if nl == 0
+        warning('WARNING IN NOVELTY: No frame decomposition. The novelty score cannot be computed.');
+        score = [];
+    else
+        score = cv(floor(size(cv,1)/2),:);
+        incr = find(diff(score)>=0);
+        if not(isempty(incr))
+            decr = find(diff(score)<=0);
+            score(1:incr(1)-1) = NaN(1,incr(1)-1);
+            if not(isempty(decr))
+                score(decr(end)+1:end) = NaN(1,length(score)-decr(end));
+            end
+            incr = find(diff(score)>=0);
+            sco2 = score;
+            if not(isempty(incr))
+                sco2 = sco2(1:incr(end)+1);
+            end
+            decr = find(diff(score)<=0);
+            if not(isempty(decr)) && decr(1)>2
+                sco2 = sco2(decr(1)-1:end);
+            end
+            mins = min(sco2);
+            rang = find(score>= mins);
+            if not(isempty(rang))
+                score(1:rang(1)-1) = NaN(1,rang(1)-1);
+                score(rang(end)+1:end) = NaN(1,length(score)-rang(end));
+            end
+        end
+    end
+end
+
+
 function x = after(x,option)
+end
+
+
+function y = checkergauss(N,transf)
+    %hN = ceil(N/2);
+    hN = (N-1)/2+1;
+    if strcmpi(transf,'TimeLag') || strcmpi(transf,'Standard')
+        y = zeros(2*N,N);
+        for j = 1:N
+            for i = 1:2*N+1
+                g = exp(-((((i-N)-(j-hN))/hN)^2 + (((j-hN)/hN)^2))*4);
+                if xor(j>hN,j-hN>i-N)
+                    y(i,j) = -g;
+                elseif j>hN+i || j-hN<i-2*N
+                    y(i,j) = 0;
+                else
+                    y(i,j) = g;
+                end
+            end
+        end
+    else
+        y = zeros(N);
+        for i = 1:N
+            for j = 1:N
+                g = exp(-(((i-hN)/hN)^2 + (((j-hN)/hN)^2))*4);
+                if xor(j-hN>floor((i-hN)/2),j-hN>floor((hN-i)/2))
+                    y(i,j) = -g;
+                else
+                    y(i,j) = g;
+                end
+            end
+        end
+    end
 end
