@@ -1,7 +1,7 @@
 % MiningSuite
 % Version 0.9 (Beta version) 3-December-2014
 %
-% It is still a Beta version, so the results cannot be trusted for the moment..
+% It is still an Alpha version, so the results cannot be trusted for the moment..
 %
 %
 % Sig.Minr: Signal processing package
