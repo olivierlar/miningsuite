@@ -1,6 +1,6 @@
 MiningSuite
 
-Version 0.8.1 (Alpha version) released on December 3 2014.
+Version 0.9 (Second alpha version) released on July 28 2017
 
 Open-source project hosted at http://olivierlar.github.io/miningsuite/
 
