@@ -8,9 +8,9 @@ MiningSuite is a framework developed within the Matlab environment. It is organi
 
 The MiningSuite until version 0.8.1 was designed and developed by Olivier Lartillot.
 
-Open-source project hosted at http://code.google.com/p/miningsuite
+Open-source project hosted at http://olivierlar.github.io/miningsuite/
 
-Copyright (C) 2017, Olivier Lartillot
+Copyright (C) 2014—2017, Olivier Lartillot and the MiningSuite contributors
 All rights reserved.
 License: New BSD License. See full text of the license in LICENSE.txt.
 
@@ -22,4 +22,4 @@ To use the toolbox, simply add the folder "miningsuite" to your Matlab path.
 The list of operators available in the MiningSuite, stored in file Contents.m, can also be displayed by typing "help miningsuite" in Matlab.
 
 A documentation is available in the wiki of the GitHub site of the MiningSuite.
-https://github.com/olivierlar/miningsuite/wiki/MiningSuite
+https://github.com/olivierlar/miningsuite/wiki
