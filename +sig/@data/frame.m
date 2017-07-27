@@ -1,3 +1,11 @@
+% SIG.DATA.FRAME
+%
+% Copyright (C) 2014, 2017 Olivier Lartillot
+%
+% All rights reserved.
+% License: New BSD License. See full text of the license in LICENSE.txt in
+% the main folder of the MiningSuite distribution.
+
 function obj = frame(obj,param,sr)
     obj = sig.compute(@main,obj,param,sr);
 end

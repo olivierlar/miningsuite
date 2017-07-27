@@ -1,10 +1,10 @@
 % SIG.ENVELOPE
 % extracts the envelope, showing the global shape of the waveform
 %
-% Copyright (C) 2014, Olivier Lartillot
+% Copyright (C) 2014, 2017 Olivier Lartillot
 %
 % Code for envelope generation from MIDI file is taken from onsetacorr.m
-%   and duraccent.m, part of MIDI Toolbox. Copyright ? 2004, University of 
+%   and duraccent.m, part of MIDI Toolbox. Copyright (C) 2004, University of 
 %   Jyvaskyla, Finland
 %
 % All rights reserved.

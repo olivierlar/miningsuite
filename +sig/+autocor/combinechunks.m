@@ -1,3 +1,10 @@
+% SIG.AUTOCOR.AFTER
+%
+% Copyright (C) 2014 Olivier Lartillot
+% All rights reserved.
+% License: New BSD License. See full text of the license in LICENSE.txt in
+% the main folder of the MiningSuite distribution.
+
 function obj = combinechunks(obj,new)
     do = obj.Ydata;
     dn = new.Ydata;

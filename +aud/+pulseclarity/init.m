@@ -1,3 +1,11 @@
+% AUD.PULSECLARITY.INIT
+%
+% Copyright (C) 2017 Olivier Lartillot
+%
+% All rights reserved.
+% License: New BSD License. See full text of the license in LICENSE.txt in
+% the main folder of the MiningSuite distribution.
+
 function [x, type] = init(x,option,frame,tempo_frame,tempo_noframe)
     if nargin < 4
         tempo_frame = @aud_tempo_frame;

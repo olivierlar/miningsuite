@@ -1,3 +1,11 @@
+% SIG.DATA.SCANARGIN
+%
+% Copyright (C) 2014 Olivier Lartillot
+%
+% All rights reserved.
+% License: New BSD License. See full text of the license in LICENSE.txt in
+% the main folder of the MiningSuite distribution.
+
 function [args content] = scanargin(obj,argin)
     args = cell(1,length(obj.dims));
     for i = 1:length(obj.dims)

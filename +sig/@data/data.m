@@ -1,10 +1,10 @@
-% SIG.DATA class adds a syntactic layer on top of Matlab that makes 
+% SIG.DATA CLASS adds a syntactic layer on top of Matlab that makes 
 % operators' code simpler.
 % Internally called by all operators available to users in SigMinr,
 % AudMinr, VocMinr and audio-based approaches in MusMinr, as well as by
 % sig.read
 %
-% Copyright (C) 2014, Olivier Lartillot
+% Copyright (C) 2014, 2017 Olivier Lartillot
 % All rights reserved.
 % License: New BSD License. See full text of the license in LICENSE.txt in
 % the main folder of the MiningSuite distribution.

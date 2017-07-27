@@ -1,6 +1,6 @@
 % AUD.MFCC
 %
-% Copyright (C) 2014, Olivier Lartillot
+% Copyright (C) 2014, 2017 Olivier Lartillot
 % Copyright (C) 1998, Malcolm Slaney, Interval Research Corporation
 %
 % All rights reserved.

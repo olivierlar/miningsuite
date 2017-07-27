@@ -1,3 +1,11 @@
+% SIG.SIGNAL.EXTRACT
+%
+% Copyright (C) 2014 Olivier Lartillot
+%
+% All rights reserved.
+% License: New BSD License. See full text of the license in LICENSE.txt in
+% the main folder of the MiningSuite distribution.
+
 function obj = extract(obj,param,dim,axis,varargin)
     argins = cell(1,length(varargin));
     for i = 1:length(varargin)

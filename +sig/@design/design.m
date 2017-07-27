@@ -1,9 +1,9 @@
-% SIG.DESIGN class
+% SIG.DESIGN CLASS
 % stores the whole dataflow design, which is evaluated only when the user
 % wants to display the results.
 % Internally called by sig.operate and seq.Sequence.
 %
-% Copyright (C) 2014, Olivier Lartillot
+% Copyright (C) 2014, 2017 Olivier Lartillot
 % All rights reserved.
 % License: New BSD License. See full text of the license in LICENSE.txt in
 % the main folder of the MiningSuite distribution.

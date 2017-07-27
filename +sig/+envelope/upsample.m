@@ -1,3 +1,11 @@
+% SIG.ENVELOPE.UPSAMPLE
+%
+% Copyright (C) 2014, 2017 Olivier Lartillot
+% © 2007-2009 Olivier Lartillot & University of Jyvaskyla
+% All rights reserved.
+% License: New BSD License. See full text of the license in LICENSE.txt in
+% the main folder of the MiningSuite distribution.
+
 function e = upsample(e,postoption)
     if postoption.up
         [z,p,gain] = butter(6,10/e.Srate/postoption.up*2,'low');

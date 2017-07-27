@@ -1,7 +1,7 @@
-% SIG.FILTERBANK.MAIN
+% SIG.FILTERBANK.OPTIONS
 % Options related to sig.filterbank, also called by aud.filterbank
 %
-% Copyright (C) 2014, Olivier Lartillot
+% Copyright (C) 2014, 2017 Olivier Lartillot
 %
 % All rights reserved.
 % License: New BSD License. See full text of the license in LICENSE.txt in

@@ -1,3 +1,11 @@
+% MUS.GROUP
+%
+% Copyright (C) 2014-2015 Olivier Lartillot
+%
+% All rights reserved.
+% License: New BSD License. See full text of the license in LICENSE.txt in
+% the main folder of the MiningSuite distribution.
+
 function [memo,mode] = group(from,ioi1,ioi0,options,note,p1,memo,chan,...
                              mode,pattern)
 

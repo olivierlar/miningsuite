@@ -1,3 +1,11 @@
+% AUD.PULSECLARITY.MAIN
+%
+% Copyright (C) 2017 Olivier Lartillot
+%
+% All rights reserved.
+% License: New BSD License. See full text of the license in LICENSE.txt in
+% the main folder of the MiningSuite distribution.
+
 function options = options
     options = sig.signal.signaloptions('FrameManual',5,.1);
     

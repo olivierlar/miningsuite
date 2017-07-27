@@ -1,3 +1,11 @@
+% SIG.STD
+%
+% Copyright (C) 2017, Olivier Lartillot
+%
+% All rights reserved.
+% License: New BSD License. See full text of the license in LICENSE.txt in
+% the main folder of the MiningSuite distribution.
+
 function varargout = std(varargin)
     varargout = sig.operate('sig','std',...
                             initoptions,@init,@main,@after,varargin);

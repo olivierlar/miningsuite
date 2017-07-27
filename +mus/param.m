@@ -1,3 +1,11 @@
+% MUS.PARAM
+%
+% Copyright (C) 2014 Olivier Lartillot
+%
+% All rights reserved.
+% License: New BSD License. See full text of the license in LICENSE.txt in
+% the main folder of the MiningSuite distribution.
+
 function p = param(ps,chro,letter,accident,ons,off,channel,harm)
 
 p = ps.type2val;

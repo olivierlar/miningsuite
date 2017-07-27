@@ -1,3 +1,12 @@
+% SIG.AUTOCOR.ENHANCE
+%
+% Copyright (C) 2014, 2017 Olivier Lartillot
+% © 2007-2009 Olivier Lartillot & University of Jyvaskyla
+%
+% All rights reserved.
+% License: New BSD License. See full text of the license in LICENSE.txt in
+% the main folder of the MiningSuite distribution.
+
 function obj = enhance(obj,e)
     p = sig.peaks(obj,'NoBegin','NoEnd','Contrast',.01,...
                   'Normalize','Local');

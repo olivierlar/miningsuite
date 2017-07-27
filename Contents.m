@@ -1,6 +1,12 @@
 % MiningSuite
 % Version 0.9 (Beta version) 3-December-2014
 %
+% Copyright (C) 2014-2015, 2017 Olivier Lartillot and the MiningSuite
+% contributors
+% All rights reserved
+% License: New BSD License. See full text of the license in LICENSE.txt in
+% the main folder of the MiningSuite distribution.
+%
 % It is still an Alpha version, so the results cannot be trusted for the moment..
 %
 %
@@ -77,9 +83,3 @@
 %
 %
 % More operators are currently under preparation.
-%
-% Copyright (C) 2014-2017, Olivier Lartillot and the MiningSuite
-% contributors
-% All rights reserved
-% License: New BSD License. See full text of the license in LICENSE.txt in
-% the main folder of the MiningSuite distribution.

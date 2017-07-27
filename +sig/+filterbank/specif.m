@@ -1,7 +1,8 @@
 % SIG.FILTERBANK.SPECIF
 % Filterbank specification, called by sig.filterbank and aud.filterbank
 %
-% Copyright (C) 2014, Olivier Lartillot
+% Copyright (C) 2014 Olivier Lartillot
+% © 2007-2009 Olivier Lartillot & University of Jyvaskyla
 %
 % All rights reserved.
 % License: New BSD License. See full text of the license in LICENSE.txt in

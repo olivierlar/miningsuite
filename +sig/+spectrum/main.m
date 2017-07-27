@@ -1,3 +1,12 @@
+% SIG.SPECTRUM.MAIN
+%
+% Copyright (C) 2014, 2017 Olivier Lartillot
+% © 2007-2009 Olivier Lartillot & University of Jyvaskyla
+%
+% All rights reserved.
+% License: New BSD License. See full text of the license in LICENSE.txt in
+% the main folder of the MiningSuite distribution.
+
 function out = main(x,option)
     if isa(x{1},'sig.Spectrum') && (isempty(option) || ~option.alongbands)
         out = x;

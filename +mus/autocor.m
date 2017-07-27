@@ -1,7 +1,8 @@
 % MUS.AUTOCOR
 % music-theoretical representation of autocorrelation function
 %
-% Copyright (C) 2014, Olivier Lartillot
+% Copyright (C) 2014, 2017 Olivier Lartillot
+% © 2007-2012 Olivier Lartillot & University of Jyvaskyla
 %
 % All rights reserved.
 % License: New BSD License. See full text of the license in LICENSE.txt in

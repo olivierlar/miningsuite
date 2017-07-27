@@ -1,3 +1,12 @@
+% SIG.ROLLOFF
+%
+% Copyright (C) 2014, 2017 Olivier Lartillot
+% © 2007-2009 Olivier Lartillot & University of Jyvaskyla
+%
+% All rights reserved.
+% License: New BSD License. See full text of the license in LICENSE.txt in
+% the main folder of the MiningSuite distribution.
+
 function varargout = rolloff(varargin)
     varargout = sig.operate('sig','rolloff',...
                       initoptions,@init,@main,@after,varargin);

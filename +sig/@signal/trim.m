@@ -1,3 +1,11 @@
+% SIG.SIGNAL.TRIM
+%
+% Copyright (C) 2014 Olivier Lartillot
+%
+% All rights reserved.
+% License: New BSD License. See full text of the license in LICENSE.txt in
+% the main folder of the MiningSuite distribution.
+
 function obj = trim(obj,where,threshold)
     [obj.Ydata obj.Sstart] = sig.compute(@main,obj.Ydata,obj.sdata,where,threshold);
 end
