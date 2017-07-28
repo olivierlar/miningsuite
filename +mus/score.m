@@ -1,7 +1,10 @@
-% Copyright (C) 2014-2015 Olivier Lartillot
+% MUS.SCORE
+%
+% Copyright (C) 2014-2015, 2017 Olivier Lartillot
 % All rights reserved.
 % License: New BSD License. See full text of the license in LICENSE.txt in
 % the main folder of the MiningSuite distribution.
+
 function out = score(arg,varargin)
 
 options = seq.options(initoptions,varargin);
@@ -113,7 +116,7 @@ end
 
 function out = read(out,name,options,concept,folder)
 try
-    info = audioinfo(name);
+    audioinfo(name);
     
     type = 'audio';
 catch
@@ -261,7 +264,7 @@ if folder
 else
     out.files = name;
 end
-if options.metre || options.motif
+if options.metre || options.motif || options.passing
     pattern = initpattern(options);
 else
     pattern = [];
