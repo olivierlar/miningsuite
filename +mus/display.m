@@ -1,6 +1,6 @@
 % MUS.DISPLAY
 %
-% Copyright (C) 2014-2015 Olivier Lartillot
+% Copyright (C) 2014-2015, 2017 Olivier Lartillot
 %
 % All rights reserved.
 % License: New BSD License. See full text of the license in LICENSE.txt in
@@ -357,9 +357,9 @@ for i = 1:nn
                 
                     for h = 1:length(s.closedbranches)
                         p = s.closedbranches(h);
-                        if p.length < 4
-                            continue
-                        end
+%                         if p.length < 4
+%                             continue
+%                         end
                         y = y-.4;
                         desc = p.display; %(0);
                         %fprintf([desc,'\n']);
@@ -419,7 +419,11 @@ for i = 1:nn
                             %end
                             %fprintf('\n');
 
-                            N2 = occs(k).suffix.to.address;
+                            if isa(occs(k).suffix,'pat.event')
+                                N2 = occs(k).suffix.address;
+                            else
+                                N2 = occs(k).suffix.to.address;
+                            end
                             nk = N2;
                             
                             if isempty(N2)
