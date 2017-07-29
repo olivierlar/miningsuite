@@ -1,7 +1,10 @@
-% Copyright (C) 2014, Olivier Lartillot
+% PAT.MEMORY
+%
+% Copyright (C) 2014, 2017 Olivier Lartillot
 % All rights reserved.
 % License: New BSD License. See full text of the license in LICENSE.txt in
 % the main folder of the MiningSuite distribution.
+
 classdef memory < hgsetget
     properties (SetAccess = private)
         name
@@ -12,7 +15,9 @@ classdef memory < hgsetget
 	methods
         function obj = memory(param)
             obj.name = param.name;
-            obj.fields = param.fields;
+            if ~isa(obj,'pat.memoparam')
+                obj.fields = param.fields;
+            end
         end
         function obj = combine(obj,field,param,occ,succ,parent,specif,...
                                cyclic,root,options,detect)
