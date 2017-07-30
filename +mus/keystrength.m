@@ -36,11 +36,13 @@ end
 %%
 function [x type] = init(x,option,frame)
     if ~istype(x,'mus.Keystrength')
-        if ~istype(x,'mus.Chromagram')
+        if isa(x,'mus.Sequence')
+            x = mus.chromagram(x,'Wrap','Normal');
+        elseif ~istype(x,'mus.Chromagram')
             x = mus.chromagram(x,'FrameConfig',frame,'Weight',option.wth,...
                                'Triangle',option.tri,'Normal');
         else
-            x = mus.chromagram(x,'Wrap','Normal');
+            x = [mus.chromagram(x,'Wrap','Normal'),x];
         end
     end
     type = {'mus.Keystrength','sig.Spectrum'};
