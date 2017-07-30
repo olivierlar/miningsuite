@@ -42,8 +42,10 @@ function out = main(x,option)
         if isempty(option.max)
             if isa(x,'sig.Envelope') %% should find another way..
                 option.max.value = 2;
-            else
+            elseif x.Srate > 1000
                 option.max.value = 0.05;
+            else
+                option.max.value = Inf;
             end
             option.max.unit = 's';
         end
@@ -57,7 +59,7 @@ function out = main(x,option)
             option.normwin = 0;
         end
         warning('Work in progress')
-    elseif isa(x,'sig.Envelope')
+    elseif isa(x,'sig.Envelope') || x.Srate < 1000
         if strcmpi(option.normwin,'') || isequal(option.normwin,1) || ...
                        strcmpi(option.normwin,'On') || ...
                        strcmpi(option.normwin,'Yes')
