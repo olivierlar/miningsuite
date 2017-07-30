@@ -38,35 +38,21 @@ end
 
 
 %%
-function [out,type] = init(x,option,frame)
+function [p,type] = init(x,option,frame)
     s = mus.keystrength(x,'FrameConfig',frame,...
         'Weight',option.wth,'Triangle',option.tri);
     p = sig.peaks(s,'Total',option.tot,'Contrast',option.thr);
-    out = [p,x];
     type = {'sig.signal','sig.signal','mus.Keystrength'};
 end
 
 
 function x = main(x,option)
-    if iscell(x)
-        if isa(x{1},'mus.Chromagram')
-            s = mus.keystrength(x);
-            s = sig.peaks(s,'Total',option.tot,'Contrast',option.thr);
-        else
-            s = x{1};
-        end
-    else
-        s = mus.keystrength(x);
-        s = sig.peaks(s,'Total',option.tot,'Contrast',option.thr);
-        x = {};
-    end
-    x{1} = s;
-    x{2} = s;
-    x{3} = s;
-    x{1}.Ydata = sig.compute(@routine,s.peakpos);
+    x{2} = x{1};
+    x{3} = x{1};
+    x{1}.Ydata = sig.compute(@routine,x{1}.peakpos);
     x{1}.peak = [];
     x{1}.yname = 'Key';
-    x{2}.Ydata = sig.compute(@routine,s.peakval);
+    x{2}.Ydata = sig.compute(@routine,x{2}.peakval);
     x{2}.peak = [];
     x{2}.yname = 'Key clarity';
 end
