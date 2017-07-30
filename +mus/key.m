@@ -56,7 +56,9 @@ function x = main(x,option)
             s = x{1};
         end
     else
-        1
+        s = mus.keystrength(x);
+        s = sig.peaks(s,'Total',option.tot,'Contrast',option.thr);
+        x = {};
     end
     x{1} = s;
     x{2} = s;
