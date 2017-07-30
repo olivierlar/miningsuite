@@ -96,8 +96,10 @@ elseif isa(arg(1),'sig.signal')
     out{1}.design.evaluated = 1;
 elseif isa(arg(1),'mus.Sequence')
     out = main(arg(1),options);
+    out = after(out,options);
 elseif isa(arg(1),'aud.Sequence')
     out = main(arg(1),options,frame);
+    out = after(out,options);
 else
     out = {arg};
 end
