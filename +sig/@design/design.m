@@ -80,9 +80,9 @@ classdef design
                 if nargin < 3
                     pos = 1;
                 end
-                res = strcmp(obj.type{pos},type);
+                res = strcmpi(obj.type{pos},type);
             else
-                res = strcmp(obj.type,type);
+                res = strcmpi(obj.type,type);
             end
         end
         function out = eval(obj,arg,nargout,folder)
