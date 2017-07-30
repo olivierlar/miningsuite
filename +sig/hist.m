@@ -40,7 +40,7 @@ end
 
 
 function out = routine(d,nbins)
-    if find(strcmp('element',d.dims)) && d.size('element') > 1
+    if ~isempty(find(strcmp('element',d.dims),1)) && d.size('element') > 1
         dim = 'element';
     else
         dim = 'sample';
