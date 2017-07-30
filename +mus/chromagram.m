@@ -88,29 +88,56 @@ function [x type] = init(x,option,frame)
         while freqmax < option.max
             freqmax = freqmax*2;
         end
-        x = sig.spectrum(x,'FrameConfig',frame,...
+        x = [sig.spectrum(x,'FrameConfig',frame,...
                            'dB',option.thr,'Min',freqmin,'Max',freqmax,...
-                          'NormalInput','MinRes',option.res,'OctaveRatio',.85);
+                          'NormalInput','MinRes',option.res,'OctaveRatio',.85),...
+             x];
     end
     type = {'mus.Chromagram','sig.Spectrum'};
 end
 
 
-function out = main(orig,option)
-    orig = orig{1};
-    if option.res == 12
-        chromascale = {'C','C#','D','D#','E','F','F#','G','G#','A','A#','B'};
+function out = main(in,option)
+    if iscell(in)
+        in = in{1};
+        if option.res == 12
+            chromascale = {'C','C#','D','D#','E','F','F#','G','G#','A','A#','B'};
+        else
+            chromascale = 1:option.res;
+            option.plabel = 0;
+        end
+        [m,c,p,fc,o] = sig.compute(@routine,in.Ydata,in.xdata,option,chromascale);
+        chro = mus.Chromagram(m,'ChromaClass',c,...%'XData',p
+            'ChromaFreq',fc,'Register',o,...
+            'Srate',in.Srate,'Ssize',in.Ssize,...
+            'FbChannels',in.fbchannels);
+        chro.Xaxis.unit.rate = 1;
+        out = {chro in};
     else
-        chromascale = 1:option.res;
-        option.plabel = 0;
+        c = zeros(length(in.content),1);
+        d = zeros(length(in.content),1);
+        for i = 1:length(in.content)
+            c(i) = in.content{i}.parameter.getfield('chro').value;
+            d(i) = in.content{i}.parameter.getfield('offset').value - ...
+                   in.content{i}.parameter.getfield('onset').value;
+        end
+        chro = min(c):max(c);
+        c = c - chro(1) + 1;
+        m = zeros(length(chro),1);
+        for i = 1:length(in.content)
+            m(c(i)) = m(c(i)) + d(i);
+        end
+        chro = mod(chro,12);
+        m = sig.data(m,{'element'});
+        fc = [];
+        o = [];
+        chro = mus.Chromagram(m,'ChromaClass',chro,...%'XData',p
+            'ChromaFreq',fc,'Register',o,...
+            'Srate',0,'Ssize',1,...
+            'FbChannels',1);
+        chro.Xaxis.unit.rate = 1;
+        out = {chro};  
     end
-    [m,c,p,fc,o] = sig.compute(@routine,orig.Ydata,orig.xdata,option,chromascale);
-    chro = mus.Chromagram(m,'ChromaClass',c,...%'XData',p
-        'ChromaFreq',fc,'Register',o,...
-        'Srate',orig.Srate,'Ssize',orig.Ssize,...
-        'FbChannels',orig.fbchannels);
-    chro.Xaxis.unit.rate = 1;
-    out = {chro orig};
 end
 
 
