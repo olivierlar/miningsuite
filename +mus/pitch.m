@@ -78,7 +78,7 @@ end
 
 
 function y = freq2chro(x)
-    y = 1200*log2(x{1});
+    y = 12*log2(x{1});
 end
 
 
