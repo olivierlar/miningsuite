@@ -82,7 +82,7 @@ end
 
 %%
 function [x type] = init(x,option,frame)
-    if iscell(x) && ~istype(x,'mus.Chromagram')
+    if ~isa(x,'mus.Sequence') && ~istype(x,'mus.Chromagram')
         freqmin = option.min;
         freqmax = freqmin*2;
         while freqmax < option.max
