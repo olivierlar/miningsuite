@@ -28,20 +28,20 @@ end
 
 
 %%
-function [x type] = init(x,option,frame)
-    if istype(x,'sig.signal')
-        x = aud.pitch.init(x,option,frame);
-    elseif ~istype(x,'mus.Sequence')
-        x = mus.score(x);
-    end
+function [x,type] = init(x,option,frame)
+    x = [aud.pitch.init(x,option,frame),x];
     type = {'sig.signal'};
 end
 
 
 function out = main(in,option)
-    if ~(length(in{1}.yname) >= 5 && strcmpi(in{1}.yname(end-4:end),'Pitch'))
-        out = aud.pitch.main(in,option);
-        out{1}.Ydata = sig.compute(@routine,out{1}.Ydata);
+    if iscell(in)
+        if length(in{1}.yname) >= 5 && strcmpi(in{1}.yname(end-4:end),'Pitch')
+            out = in;
+        else
+            out = aud.pitch.main(in,option);
+            out{1}.Ydata = sig.compute(@routine,out{1}.Ydata);
+        end
     else
         p = zeros(length(in.content),1);
         t = zeros(length(in.content),1);
