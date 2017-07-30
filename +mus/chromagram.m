@@ -82,7 +82,7 @@ end
 
 %%
 function [x type] = init(x,option,frame)
-    if ~istype(x,'mus.Chromagram')
+    if iscell(x) && ~istype(x,'mus.Chromagram')
         freqmin = option.min;
         freqmax = freqmin*2;
         while freqmax < option.max
@@ -99,20 +99,24 @@ end
 
 function out = main(in,option)
     if iscell(in)
-        in = in{1};
-        if option.res == 12
-            chromascale = {'C','C#','D','D#','E','F','F#','G','G#','A','A#','B'};
+        if isa(in{1},'mus.Chromagram')
+            out = in;
         else
-            chromascale = 1:option.res;
-            option.plabel = 0;
+            in = in{1};
+            if option.res == 12
+                chromascale = {'C','C#','D','D#','E','F','F#','G','G#','A','A#','B'};
+            else
+                chromascale = 1:option.res;
+                option.plabel = 0;
+            end
+            [m,c,p,fc,o] = sig.compute(@routine,in.Ydata,in.xdata,option,chromascale);
+            chro = mus.Chromagram(m,'ChromaClass',c,...%'XData',p
+                'ChromaFreq',fc,'Register',o,...
+                'Srate',in.Srate,'Ssize',in.Ssize,...
+                'FbChannels',in.fbchannels);
+            chro.Xaxis.unit.rate = 1;
+            out = {chro in};
         end
-        [m,c,p,fc,o] = sig.compute(@routine,in.Ydata,in.xdata,option,chromascale);
-        chro = mus.Chromagram(m,'ChromaClass',c,...%'XData',p
-            'ChromaFreq',fc,'Register',o,...
-            'Srate',in.Srate,'Ssize',in.Ssize,...
-            'FbChannels',in.fbchannels);
-        chro.Xaxis.unit.rate = 1;
-        out = {chro in};
     else
         c = zeros(length(in.content),1);
         d = zeros(length(in.content),1);
@@ -210,6 +214,7 @@ function x = after(x,option)
     x = x{1};
     if option.wrp && ~x.wrap
         x.Ydata = sig.compute(@wrap,x.Ydata,x.chromaclass,option.res);
+        x.wrap = 1;
     end
     x = {x};
 end
