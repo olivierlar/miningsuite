@@ -9,12 +9,6 @@ function out = score(arg,varargin)
 
 options = seq.options(initoptions,varargin);
 
-if isa(arg,'mus.Sequence')
-    out = arg;
-else
-    out = mus.Sequence;
-end
-
 if options.mode
     concept = initmode;
 else
@@ -23,7 +17,16 @@ end
 
 if ischar(arg)
     out = reads(arg,options,concept);
-elseif isa(arg,'sig.design')
+    return
+end
+
+if isa(arg,'mus.Sequence')
+    out = arg;
+else
+    out = mus.Sequence;
+end
+
+if isa(arg,'sig.design')
     design = sig.design('mus','minr',arg,'mus.Sequence',...
                         @transcribe,options,[],arg.frame,[],varargin,...
                         arg.extract,0,arg.nochunk);
@@ -187,7 +190,7 @@ else
             notes = struct('chro',num2cell(C{1}),'ons',num2cell(C{8}),...
                            'dur',num2cell(C{9}),'chan',num2cell(C{11}),...
                            'harm',C{12});
-        elseif 1 % françois
+        elseif 0 % françois
             C = textscan(fid,'%f,%f,%f\n');
             notes = struct('chro',num2cell(C{1}),...
                            'ons',num2cell(C{2}),...
@@ -200,7 +203,7 @@ else
                                           'dur',num2cell(C{3}));
                 end
             end
-        elseif 1 % jakob
+        elseif 0 % jakob
             C = textscan(fid,'%f,%f,%f,%f\n');
             notes = struct('chro',num2cell(C{1}),...
                            'ons',num2cell(C{2}),...
