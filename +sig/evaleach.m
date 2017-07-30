@@ -57,7 +57,7 @@ if isempty(design.main)
     % Now the actual evaluation will be carried out bottom-up.
     
     if isempty(sr)
-        y = mus.midi2nmat(filename);
+        y = mus.score(filename);
     else
         data = sig.read(filename,window);
         
@@ -107,7 +107,7 @@ else
     elseif isempty(sr)
         if length(design.input) == 2
             y = sig.evaleach(design.input(2),filename,window,sr,1,[],chunking);
-            y = design.main{2}(y,design.options);
+            y = design.main(y,design.options);
             y = design.after(y,design.options);
         else
             y = sig.evaleach(design.input,filename,window,sr,1,[],chunking);
@@ -116,7 +116,7 @@ else
         end
     else
         if design.nochunk || strcmpi(design.combine,'no')
-            if size(design.input) == 1
+            if length(design.input) == 1
                 y = sig.evaleach(design.input,filename,window,sr,1,[],chunking);
             else
                 y = [sig.evaleach(design.input(1),filename,window,sr,1,[],chunking),...
