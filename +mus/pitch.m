@@ -29,7 +29,9 @@ end
 
 %%
 function [x,type] = init(x,option,frame)
-    x = [aud.pitch.init(x,option,frame),x];
+    if iscell(x)
+        x = [aud.pitch.init(x,option,frame),x];
+    end
     type = {'sig.signal'};
 end
 
