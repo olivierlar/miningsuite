@@ -177,8 +177,12 @@ classdef design
             if isempty(obj.input)
                 return
             end
-            if ~ischar(obj.input)
-                obj.input.show(0);
+            input = obj.input;
+            if iscell(input)
+                input = input{1};
+            end
+            if ~ischar(input)
+                input.show(0);
             end
             str = '';
             for i = 1:length(obj.argin)
@@ -192,9 +196,9 @@ classdef design
                 end
                 str = [str ', ' arg];
             end
-            if ischar(obj.input)
+            if ischar(input)
                 disp('--------')
-                input = ['''' obj.input ''''];
+                input = ['''' input ''''];
             else
                 %disp(' ')
                 input = '...';
