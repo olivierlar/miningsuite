@@ -97,7 +97,11 @@ else
         frame = design.frame;
    % end    
     if chunking % Already in a chunk decomposition process
-        y = sig.evaleach(design.input{1},filename,window,sr,1,frame,chunking);
+        input = design.input;
+        if iscell(input)
+            input = input{1};
+        end
+        y = sig.evaleach(input,filename,window,sr,1,frame,chunking);
         main = design.main;
         if iscell(main)
             main = main{1};
