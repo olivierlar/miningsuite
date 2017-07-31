@@ -27,7 +27,9 @@ if nargin<8 && length(window) > 1
     nbsamples = window(2)-window(1)+1;
 end
 
-design = design(1);
+if iscell(design)
+    design = design{1};
+end
 
 %chan = d.channel;
 
@@ -95,7 +97,7 @@ else
         frame = design.frame;
    % end    
     if chunking % Already in a chunk decomposition process
-        y = sig.evaleach(design.input(1),filename,window,sr,1,frame,chunking);
+        y = sig.evaleach(design.input{1},filename,window,sr,1,frame,chunking);
         main = design.main;
         if iscell(main)
             main = main{1};
@@ -105,16 +107,24 @@ else
             y = design.after(y,design.options);
         end
     elseif isempty(sr)
-        y = sig.evaleach(design.input(end),filename,window,sr,1,[],chunking);
+        input = design.input;
+        if iscell(input)
+            input = input{end};
+        end
+        y = sig.evaleach(input,filename,window,sr,1,[],chunking);
         design.options.frame = frame;
         y = design.main(y,design.options);
         y = design.after(y,design.options);
     elseif design.nochunk || strcmpi(design.combine,'no')
         if length(design.input) == 1
-            y = sig.evaleach(design.input,filename,window,sr,1,[],chunking);
+            input = design.input;
+            if iscell(input)
+                input = input{1};
+            end
+            y = sig.evaleach(input,filename,window,sr,1,[],chunking);
         else
-            y = [sig.evaleach(design.input(1),filename,window,sr,1,[],chunking),...
-                sig.evaleach(design.input(2),filename,window,sr,1,[],chunking)];
+            y = [sig.evaleach(design.input{1},filename,window,sr,1,[],chunking),...
+                 sig.evaleach(design.input{2},filename,window,sr,1,[],chunking)];
         end
         main = design.main;
         if iscell(main)

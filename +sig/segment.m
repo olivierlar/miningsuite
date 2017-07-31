@@ -146,7 +146,7 @@ function [out type] = init(x,option,frame)
                                 'Chrono','NoBegin','NoEnd');
             end
         end
-        out = [x,p];
+        out = {x,p};
     else
         out = x;
     end

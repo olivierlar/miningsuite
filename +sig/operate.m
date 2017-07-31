@@ -44,23 +44,31 @@ elseif isa(arg,'sig.design')
 end
 
 [arg,type] = init(arg,options,frame);
-
-if isempty(frame) && ~ischar(arg(1)) && isa(arg(1),'sig.design')
-    frame = arg.frame;
+if ~iscell(arg)
+    arg = {arg};
 end
 
-if isa(arg(1),'sig.design')
-    if isempty(extract) && ~ischar(arg(1))
-        extract = arg(1).extract;
+if isempty(frame) && ~ischar(arg{1}) && isa(arg{1},'sig.design')
+    frame = arg{1}.frame;
+end
+
+if isa(arg{1},'sig.design')
+    if isempty(extract) && ~ischar(arg{1})
+        extract = arg{1}.extract;
     end
-    if arg(1).extensive || arg(1).nochunk
+    if arg{1}.extensive || arg{1}.nochunk
         nochunk = 1;
     %elseif ischar(arg)
     %    nochunk = 0;
     else
-        nochunk = arg(1).nochunk;
+        nochunk = arg{1}.nochunk;
     end
-    design = sig.design(pack,name,arg,type,main,after,options,frame,...
+    if length(arg) == 1
+        argin1 = arg{1};
+    else
+        argin1 = arg;
+    end
+    design = sig.design(pack,name,argin1,type,main,after,options,frame,...
                         combine,argin(2:end),extract,extensive,nochunk);
     
     %if ischar(arg)
@@ -69,7 +77,7 @@ if isa(arg(1),'sig.design')
     %    filename = arg.files;
     %end
     
-    design.overlap = arg(1).overlap;
+    design.overlap = arg{1}.overlap;
     
     if strcmpi(filename,'Design') || ~strcmp(name,'play')
         design.evaluate = 1;
@@ -77,28 +85,28 @@ if isa(arg(1),'sig.design')
     else
         out = design.eval(filename);
     end
-elseif isa(arg(1),'sig.signal')
+elseif isa(arg{1},'sig.signal')
     if ~isempty(frame) && frame.toggle
-        frate = sig.compute(@sig.getfrate,arg(1).Srate,frame);
-        arg(1).Ydata = arg(1).Ydata.frame(frame,arg(1).Srate);
-        arg(1).Frate = frate;
+        frate = sig.compute(@sig.getfrate,arg{1}.Srate,frame);
+        arg{1}.Ydata = arg{1}.Ydata.frame(frame,arg{1}.Srate);
+        arg{1}.Frate = frate;
     end
     if iscell(main)
         main = main{1};
     end
-    out = main({arg(1)},options);
+    out = main({arg{1}},options);
     out = after(out,options);
     if ~iscell(out)
         out = {out};
     end
-    out{1}.design = sig.design(pack,name,arg(1),type,main,after,options,...
+    out{1}.design = sig.design(pack,name,arg{1},type,main,after,options,...
                                frame,combine,argin(2:end),[],0,0);
     out{1}.design.evaluated = 1;
-elseif isa(arg(1),'mus.Sequence')
-    out = main(arg(1),options);
+elseif isa(arg{1},'mus.Sequence')
+    out = main(arg{1},options);
     out = after(out,options);
-elseif isa(arg(1),'aud.Sequence')
-    out = main(arg(1),options,frame);
+elseif isa(arg{1},'aud.Sequence')
+    out = main(arg{1},options,frame);
     out = after(out,options);
 else
     out = {arg};

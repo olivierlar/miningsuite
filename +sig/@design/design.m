@@ -71,6 +71,9 @@ classdef design
                 obj.nochunk = nochunk;
             end
             obj.files = input;
+            if iscell(input)
+                input = input{1};
+            end
             if isa(input,'sig.design')
                 obj.files = input.files;
             end
