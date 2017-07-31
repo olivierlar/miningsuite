@@ -109,9 +109,9 @@ function out = main(in,option)
                 chromascale = 1:option.res;
                 option.plabel = 0;
             end
-            [m,c,p,fc,o] = sig.compute(@routine,in.Ydata,in.xdata,option,chromascale);
+            [m,c,p,fc,on] = sig.compute(@routine,in.Ydata,in.xdata,option,chromascale);
             chro = mus.Chromagram(m,'ChromaClass',c,...%'XData',p
-                'ChromaFreq',fc,'Register',o,...
+                'ChromaFreq',fc,'Register',on,...
                 'Srate',in.Srate,'Ssize',in.Ssize,...
                 'FbChannels',in.fbchannels);
             chro.Xaxis.unit.rate = 1;
@@ -119,25 +119,69 @@ function out = main(in,option)
         end
     else
         c = zeros(length(in.content),1);
-        d = zeros(length(in.content),1);
+        on = zeros(length(in.content),1);
+        off = zeros(length(in.content),1);
         for i = 1:length(in.content)
             c(i) = in.content{i}.parameter.getfield('chro').value;
-            d(i) = in.content{i}.parameter.getfield('offset').value - ...
-                   in.content{i}.parameter.getfield('onset').value;
+            on(i) = in.content{i}.parameter.getfield('onset').value;
+            off(i) = in.content{i}.parameter.getfield('offset').value;
         end
         chro = min(c):max(c);
         c = c - chro(1) + 1;
-        m = zeros(length(chro),1);
-        for i = 1:length(in.content)
-            m(c(i)) = m(c(i)) + d(i);
+        if option.frame.toggle
+            if strcmpi(option.frame.size.unit,'s')
+                l = option.frame.size.value;
+            elseif strcmpi(option.frame.size.unit,'sp')
+                error('Error: ''sp'' not adequate for symbolic data');
+            end
+            if strcmpi(option.frame.hop.unit,'/1')
+                h = option.frame.hop.value*l;
+            elseif strcmpi(option.frame.hop.unit,'%')
+                h = option.frame.hop.value*l*.01;
+            elseif strcmpi(option.frame.hop.unit,'s')
+                h = option.frame.hop.value;
+            elseif strcmpi(option.frame.hop.unit,'sp')
+                error('Error: ''sp'' not adequate for symbolic data');
+            elseif strcmpi(option.frame.hop.unit,'Hz')
+                h = 1/option.frame.hop.value;
+            end
+            nfr = floor((max(off)-l)/h)+1; % Number of frames
+        else
+            nfr = 0;
+        end
+        if nfr
+            srate = 1/h;
+            m = zeros(length(chro),nfr);
+            for i = 1:nfr
+                st = (i-1)*h;
+                en = st + l;
+                
+                f = find(off >= st,1);
+                c(1:f-1) = [];
+                on(1:f-1) = [];
+                off(1:f-1) = [];
+
+                f = find(on > en,1);
+                for j = 1:f-1
+                    onj = max(on(j),st);
+                    offj = min(off(j),en);
+                    m(c(j),i) = m(c(j),i) + offj - onj;
+                end
+            end
+        else
+            srate = 0;
+            m = zeros(length(chro),1);
+            for i = 1:length(in.content)
+                m(c(i)) = m(c(i)) + off(i) - on(i);
+            end
         end
         chro = mod(chro,12);
-        m = sig.data(m,{'element'});
+        m = sig.data(m,{'element','sample'});
         fc = [];
-        o = [];
+        on = [];
         chro = mus.Chromagram(m,'ChromaClass',chro,...%'XData',p
-            'ChromaFreq',fc,'Register',o,...
-            'Srate',0,'Ssize',1,...
+            'ChromaFreq',fc,'Register',on,...
+            'Srate',srate,'Ssize',nfr,...
             'FbChannels',1);
         chro.Xaxis.unit.rate = 1;
         out = {chro};  

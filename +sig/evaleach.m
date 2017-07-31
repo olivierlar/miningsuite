@@ -106,6 +106,7 @@ else
         end
     elseif isempty(sr)
         y = sig.evaleach(design.input(end),filename,window,sr,1,[],chunking);
+        design.options.frame = frame;
         y = design.main(y,design.options);
         y = design.after(y,design.options);
     elseif design.nochunk || strcmpi(design.combine,'no')
