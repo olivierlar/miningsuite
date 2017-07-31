@@ -8,7 +8,9 @@
 
 function varargout = frame(varargin)
     out = sig.operate('sig','frame',options,@init,@main,@after,varargin);
-    out{1}.options = out{1}.frame;
+    if isa(out{1},'sig.design')
+        out{1}.options = out{1}.frame;
+    end
     varargout = out;
 end
 
@@ -46,19 +48,19 @@ end
 
 
 function x = main(x,frame)
-    sr = x{1}.Srate;
-    [x{1}.Ydata,x{1}.Ssize,x{1}.fnumber] = ...
-        sig.compute(@routine,x{1}.Ydata,frame,sr);
-    x{1}.Frate = sig.compute(@sig.getfrate,sr,frame);
+%     sr = x{1}.Srate;
+%     [x{1}.Ydata,x{1}.Ssize,x{1}.fnumber] = ...
+%         sig.compute(@routine,x{1}.Ydata,frame,sr);
+%     x{1}.Frate = sig.compute(@sig.getfrate,sr,frame);
 end
 
 
-function out = routine(d,frame,sr)
-    d = d.frame(frame,sr);
-    ssize = d.size('sample');
-    fnumber = d.size('frame');
-    out = {d,ssize,fnumber};
-end
+% function out = routine(d,frame,sr)
+%     d = d.frame(frame,sr);
+%     ssize = d.size('sample');
+%     fnumber = d.size('frame');
+%     out = {d,ssize,fnumber};
+% end
 
 
 function x = after(x,option)
