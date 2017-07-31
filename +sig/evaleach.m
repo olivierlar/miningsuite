@@ -116,7 +116,9 @@ else
             input = input{end};
         end
         y = sig.evaleach(input,filename,window,sr,1,[],chunking);
-        design.options.frame = frame;
+        if ~isfield(design.options,'frame')
+            design.options.frame = frame;
+        end
         y = design.main(y,design.options);
         y = design.after(y,design.options);
     elseif design.nochunk || strcmpi(design.combine,'no')
