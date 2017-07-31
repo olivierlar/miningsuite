@@ -42,7 +42,7 @@ function [x, type] = init(x,option,frame,tempo_frame,tempo_noframe)
                 option.enh = 0;
             end
             if ~isempty(frame) && frame.toggle
-                x = tempo_frame(x,option);
+                x = tempo_frame(x,option,frame);
             else
                 x = tempo_noframe(x,option);
             end
@@ -52,7 +52,7 @@ function [x, type] = init(x,option,frame,tempo_frame,tempo_noframe)
 end
 
 
-function y = aud_tempo_frame(x,option)
+function y = aud_tempo_frame(x,option,frame)
     y = aud.tempo(x,option.fea,'Method',option.envmeth,...
                     option.band,...
                     'Sum',option.sum,'Enhanced',option.enh,...
