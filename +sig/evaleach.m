@@ -105,144 +105,136 @@ else
             y = design.after(y,design.options);
         end
     elseif isempty(sr)
-        if length(design.input) == 2
-            y = sig.evaleach(design.input(2),filename,window,sr,1,[],chunking);
-            y = design.main(y,design.options);
-            y = design.after(y,design.options);
-        else
+        y = sig.evaleach(design.input(end),filename,window,sr,1,[],chunking);
+        y = design.main(y,design.options);
+        y = design.after(y,design.options);
+    elseif design.nochunk || strcmpi(design.combine,'no')
+        if length(design.input) == 1
             y = sig.evaleach(design.input,filename,window,sr,1,[],chunking);
-            y = design.main(y,design.options);
-            y = design.after(y,design.options);
+        else
+            y = [sig.evaleach(design.input(1),filename,window,sr,1,[],chunking),...
+                sig.evaleach(design.input(2),filename,window,sr,1,[],chunking)];
         end
+        main = design.main;
+        if iscell(main)
+            main = main{1};
+        end
+        y = main(y,design.options);
+        y = design.after(y,design.options);
     else
-        if design.nochunk || strcmpi(design.combine,'no')
-            if length(design.input) == 1
-                y = sig.evaleach(design.input,filename,window,sr,1,[],chunking);
+        %frnochunk = isfield(d.frame,'dontchunk');
+        %frchunkbefore = isfield(d.frame,'chunkbefore');
+        if ~isempty(frame) && frame.toggle % && ~frame.inner
+            chunks = compute_frames(frame,sr,window,nbsamples,sig.chunklim,design.overlap);
+        else
+            if nbsamples > sig.chunklim
+                % The required memory exceed the max memory threshold.
+                nch = ceil(nbsamples/sig.chunklim);
+                chunks = max(0,nbsamples-sig.chunklim*(nch:-1:1))+window(1);
+                chunks(2,:) = nbsamples-max( sig.chunklim*(nch-1:-1:0)-design.overlap(1) , 0)+window(1)-1;
             else
-                y = [sig.evaleach(design.input(1),filename,window,sr,1,[],chunking),...
-                     sig.evaleach(design.input(2),filename,window,sr,1,[],chunking)];
+                chunks = [];
             end
+        end
+        
+        if not(isempty(chunks))
+            % The chunk decomposition is performed.
+            nch = size(chunks,2);
+            %d = callbeforechunk(d,d,w,lsz); % Some optional initialisation
+            %tmp = [];
+            if 1%mirwaitbar
+                h = waitbar(0,['Computing ' design.name]);
+            else
+                h = [];
+            end
+            
+            %afterpostoption = d.postoption; % Used only when:
+            % - eachchunk is set to 'Normal',
+            % - combinechunk is not set to 'Average', and
+            % - no afterchunk field has been specified.
+            % afterpostoption will be used for the final call
+            % to the method after the chunk decomposition.
+            %                 main = design.main;
+            %                 if 0 %~isfield(specif,'eachchunk')
+            %                     specif.eachchunk = 'Normal';
+            %                 end
+            %                 if 1 %ischar(specif.eachchunk) && strcmpi(specif.eachchunk,'Normal')
+            %                     if 0 %not(isempty(d.postoption))
+            %                         pof = fieldnames(d.postoption);
+            %                         for o = 1:length(pof)
+            %                             if isfield(specif.option.(pof{o}),'chunkcombine')
+            %                                 afterpostoption = rmfield(afterpostoption,pof{o});
+            %                             else
+            %                                 d.postoption = rmfield(d.postoption,pof{o});
+            %                             end
+            %                         end
+            %                     end
+            %                 else
+            %                     main = specif.eachchunk;
+            %                 end
+            
+            y = {};
+            options = design.options;
+            options.tmp = [];
+            options.missing = 0;
+            diffchunks = diff(chunks);
+            for i = 1:size(chunks,2)
+                disp(['Chunk ',num2str(i),'/',num2str(nch),'...'])
+                window = [chunks(1,i) chunks(2,i) (i == size(chunks,2))];
+                if isempty(frame) || ~frame.toggle
+                    options.missing = max(diffchunks) - diffchunks(i);
+                end
+                chunking = 1;
+                ss = sig.evaleach(design.input,filename,window,sr,1,...
+                    frame,chunking,nbsamples);
+                
+                main = design.main;
+                if iscell(main)
+                    main = main{1};
+                end
+                ss = main(ss,options);
+                
+                if length(ss)>1
+                    options.tmp = ss{2};
+                end
+                
+                y = combinechunks(y,ss,i,design,chunks,nargout);
+                
+                clear ss
+                if ~isempty(h)
+                    if 0 %not(d.ascending)
+                        close(h)
+                        h = waitbar((chunks(1,i)-chunks(1,end))/chunks(2,1),...
+                            ['Computing ' func2str(d.method) ' (backward)']);
+                    else
+                        waitbar((chunks(2,i)-chunks(1))/chunks(end),h)
+                    end
+                end
+            end
+            
+            y = design.after(y,design.options);
+            
+            if 0 %isa(d,'mirstruct') && ...
+                (isempty(d.frame) || isfield(d.frame,'dontchunk'))
+                y = evalbranches(d,y);
+            end
+            if ~isempty(h)
+                close(h)
+            end
+            drawnow
+            
+        else
+            % No chunk decomposition
+            y = sig.evaleach(design.input,filename,window,sr,1,frame);
+            design.options.extract = [];
             main = design.main;
             if iscell(main)
                 main = main{1};
             end
             y = main(y,design.options);
             y = design.after(y,design.options);
-        else
-            %frnochunk = isfield(d.frame,'dontchunk');
-            %frchunkbefore = isfield(d.frame,'chunkbefore');
-            if ~isempty(frame) && frame.toggle % && ~frame.inner
-                chunks = compute_frames(frame,sr,window,nbsamples,sig.chunklim,design.overlap);
-            else
-                if nbsamples > sig.chunklim
-                    % The required memory exceed the max memory threshold.
-                    nch = ceil(nbsamples/sig.chunklim);
-                    chunks = max(0,nbsamples-sig.chunklim*(nch:-1:1))+window(1);
-                    chunks(2,:) = nbsamples-max( sig.chunklim*(nch-1:-1:0)-design.overlap(1) , 0)+window(1)-1;
-                else
-                    chunks = [];
-                end
-            end
-            
-            if not(isempty(chunks))
-                % The chunk decomposition is performed.
-                nch = size(chunks,2);
-                %d = callbeforechunk(d,d,w,lsz); % Some optional initialisation
-                %tmp = [];
-                if 1%mirwaitbar
-                    h = waitbar(0,['Computing ' design.name]);
-                else
-                    h = [];
-                end
-                
-                %afterpostoption = d.postoption; % Used only when:
-                % - eachchunk is set to 'Normal',
-                % - combinechunk is not set to 'Average', and
-                % - no afterchunk field has been specified.
-                % afterpostoption will be used for the final call
-                % to the method after the chunk decomposition.
-%                 main = design.main;
-%                 if 0 %~isfield(specif,'eachchunk')
-%                     specif.eachchunk = 'Normal';
-%                 end
-%                 if 1 %ischar(specif.eachchunk) && strcmpi(specif.eachchunk,'Normal')
-%                     if 0 %not(isempty(d.postoption))
-%                         pof = fieldnames(d.postoption);
-%                         for o = 1:length(pof)
-%                             if isfield(specif.option.(pof{o}),'chunkcombine')
-%                                 afterpostoption = rmfield(afterpostoption,pof{o});
-%                             else
-%                                 d.postoption = rmfield(d.postoption,pof{o});
-%                             end
-%                         end
-%                     end
-%                 else
-%                     main = specif.eachchunk;
-%                 end
-                
-                y = {};
-                options = design.options;
-                options.tmp = [];
-                options.missing = 0;
-                diffchunks = diff(chunks);
-                for i = 1:size(chunks,2)
-                    disp(['Chunk ',num2str(i),'/',num2str(nch),'...'])
-                    window = [chunks(1,i) chunks(2,i) (i == size(chunks,2))];
-                    if isempty(frame) || ~frame.toggle
-                        options.missing = max(diffchunks) - diffchunks(i);
-                    end
-                    chunking = 1;
-                    ss = sig.evaleach(design.input,filename,window,sr,1,...
-                        frame,chunking,nbsamples);
-                    
-                    main = design.main;
-                    if iscell(main)
-                        main = main{1};
-                    end
-                    ss = main(ss,options);
-                    
-                    if length(ss)>1
-                        options.tmp = ss{2};
-                    end
-                    
-                    y = combinechunks(y,ss,i,design,chunks,nargout);
-                    
-                    clear ss
-                    if ~isempty(h)
-                        if 0 %not(d.ascending)
-                            close(h)
-                            h = waitbar((chunks(1,i)-chunks(1,end))/chunks(2,1),...
-                                ['Computing ' func2str(d.method) ' (backward)']);
-                        else
-                            waitbar((chunks(2,i)-chunks(1))/chunks(end),h)
-                        end
-                    end
-                end
-                
-                y = design.after(y,design.options);
-                
-                if 0 %isa(d,'mirstruct') && ...
-                    (isempty(d.frame) || isfield(d.frame,'dontchunk'))
-                    y = evalbranches(d,y);
-                end
-                if ~isempty(h)
-                    close(h)
-                end
-                drawnow
-                
-            else
-                % No chunk decomposition
-                y = sig.evaleach(design.input,filename,window,sr,1,frame);
-                design.options.extract = [];
-                main = design.main;
-                if iscell(main)
-                    main = main{1};
-                end
-                y = main(y,design.options);
-                y = design.after(y,design.options);
-                if 0 %isa(d,'mirstruct') && isfield(d.frame,'dontchunk')
-                    y = evalbranches(d,y);
-                end
+            if 0 %isa(d,'mirstruct') && isfield(d.frame,'dontchunk')
+                y = evalbranches(d,y);
             end
         end
     end
