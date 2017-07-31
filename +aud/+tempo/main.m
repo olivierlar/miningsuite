@@ -14,10 +14,10 @@ function out = main(in,option)
         p = sig.compute(@routine,x.peakpos);
         pc = zeros(1,length(p.content));
         for i = 1:length(p.content)
-            if isempty(p.content(i))
+            if isempty(p.content{i})
                 pc(i) = NaN;
             else
-                pc(i) = p.content(i);
+                pc(i) = p.content{i};
             end
         end
         t = sig.signal(pc','Name','Tempo','Srate',in{1}.Srate,'FbChannels',in{1}.fbchannels);
@@ -27,7 +27,7 @@ end
 
 
 function out = routine(d)
-    e = d.apply(@convert,{},{'element'},1);
+    e = d.apply(@convert,{},{'element'},1,'{}');
     out = {e};
 end
 
