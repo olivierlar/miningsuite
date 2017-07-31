@@ -3,6 +3,9 @@
 % events, and estimates those event time positions.
 %
 % Copyright (C) 2017 Olivier Lartillot
+% Code for envelope generation from MIDI file is taken from onsetacorr.m
+%   and duraccent.m, part of MIDI Toolbox. Copyright (C) 2004, University of 
+%   Jyvaskyla, Finland
 %
 % All rights reserved.
 % License: New BSD License. See full text of the license in LICENSE.txt in
@@ -326,6 +329,11 @@ end
 
 %%
 function [y, type] = init(x,option,frame)
+    type = 'sig.Envelope';
+    if isa(x,'mus.Sequence')
+        y = x;
+        return
+    end
     if ischar(option.presel)
         if strcmpi(option.presel,'Scheirer')
             option.filtertype = 'Scheirer';
@@ -357,7 +365,7 @@ function [y, type] = init(x,option,frame)
             option.kernelsize = 64;
         end
     end
-    if x.istype('sig.signal')
+    if x.istype('sig.signal') || x.istype('sig.Envelope')
         y = [];
         if option.env
             if strcmpi(option.envmeth,'Filter')
@@ -467,12 +475,16 @@ function [y, type] = init(x,option,frame)
 %             'PreSilence',option.presilence,'PostSilence',option.postsilence);
 %         y = {y,z};
 %     end
-    type = 'sig.Envelope';
+    y = {y,x};
 end
 
 
 %%
 function out = main(o,option)  
+    if isa(o,'mus.Sequence')
+        out = symbolic(o,option);
+        return
+    end
     if iscell(o)
         if length(o) > 1
             option.new = o{2};
@@ -914,4 +926,34 @@ function [pp en] = enddecay(d,t,pp,ppu,rlu)
     pp(length(en)+1:end) = [];
 
     pp = {{pp} {en}};
+end
+
+
+function out = symbolic(x,option)
+    % Code adapted from onsetacorr.m and duraccent.m in MIDItoolbox
+    % NDIVS = divisions in Hz (default = 4);
+    ndivs = 4;
+    tau=0.5;
+    accent_index=2;
+    l = length(x.content);
+    if l == 0
+        g = [];
+    else
+        on = zeros(1,l);
+        dur = zeros(1,l);
+        for i = 1:l
+            on(i) = x.content{i}.parameter.getfield('onset').value;
+            dur(i) = x.content{i}.parameter.getfield('offset').value - on(i);
+        end
+        d = (1-exp(-dur/tau)).^accent_index; % duration accent by Parncutt (1994)
+        vlen = ndivs*(ceil(on(end))+1);
+        g = zeros(vlen,1);
+        ind = mod(round(on*ndivs),vlen)+1;
+        for k=1:length(ind)
+            g(ind(k)) = g(ind(k))+d(k);
+        end
+    end
+    %%
+    d = sig.data(g,{'sample'});
+    out = {sig.Envelope(d,'Srate',ndivs,'Sstart',0,'Ssize',length(g))};
 end
