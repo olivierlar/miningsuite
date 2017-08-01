@@ -312,13 +312,7 @@ for j = 1:length(notes)
                                       pattern,mode,ioi);
     end
 end
-if 0 %options.group
-    for i = 1:length(memo)
-        if ~isempty(memo{i}(1))
-            mus.group(memo{i}(1),Inf,options);
-        end
-    end
-end
+
 %process(concept,[],memo,options,pattern,mode,ioi);
 if folder
     out.concept{end+1} = concept;
@@ -503,7 +497,7 @@ while k <= length(memo{chan+1})
     end
 end
 
-if options.group && ~isempty(memo{chan+1})
+if (options.group || options.broderie) && ~isempty(memo{chan+1})
     ioi1 = sk1.parameter.getfield('onset').inter.value;
         % New inter-onset interval
     [memo{chan+1},mode] = mus.group(prev1,ioi1,ioi,options,...
