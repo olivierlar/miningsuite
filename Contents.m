@@ -1,5 +1,5 @@
 % MiningSuite
-% Version 0.9.1 (Third alpha version) 6-August-2017
+% Version 0.9.2 (Third alpha version) 6-August-2017
 %
 % Copyright (C) 2014-2015, 2017 Olivier Lartillot and the MiningSuite
 % contributors
