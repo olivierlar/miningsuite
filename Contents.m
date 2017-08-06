@@ -1,5 +1,5 @@
 % MiningSuite
-% Version 0.9 (Second alpha version) 28-July-2017
+% Version 0.9.1 (Third alpha version) 6-August-2017
 %
 % Copyright (C) 2014-2015, 2017 Olivier Lartillot and the MiningSuite
 % contributors
@@ -72,6 +72,7 @@
 % mus.keysom: key self-organizing map projection
 % mus.tonalcentroid: projection along circles of fifths and thirds
 % mus.hcdf: Harmonic Change Detection Function
+% mus.score: symbolic representation and analysis
 %
 %
 % SeqMinr: Sequence processing
