@@ -99,20 +99,24 @@ classdef design
                 folder = 0;
             end
 
-            [sz,ch,sr] = fileinfo(arg,folder);
-            if isempty(sz)
-                w = [];
-            elseif isempty(obj.extract)
-                w = [1;sz];
+            if strcmpi(obj.package,'vid')
+                v = VideoReader(arg);
+                out = vid.evaleach(obj,arg,v,nargout);
             else
-                interval = obj.extract.value(:);
-                if strcmpi(obj.extract.unit,'s')
-                    interval = round(interval*sr) + 1;
+                [sz,ch,sr] = audioinfo(arg);
+                if isempty(sz)
+                    w = [];
+                elseif isempty(obj.extract)
+                    w = [1;sz];
+                else
+                    interval = obj.extract.value(:);
+                    if strcmpi(obj.extract.unit,'s')
+                        interval = round(interval*sr) + 1;
+                    end
+                    w = min(max(interval,1),sz);
                 end
-                w = min(max(interval,1),sz);
+                out = sig.evaleach(obj,arg,w,sr,nargout);
             end
-            
-            out = sig.evaleach(obj,arg,w,sr,nargout);
         end
         %%
         function out = display(obj,recurs)
@@ -274,7 +278,7 @@ function [l sz sr a] = folderinfo(path,s,l,sz,sr,a,folders)
                 cd ..
             end
         else
-            [di,ch,fi] = fileinfo(nf,1);
+            [di,ch,fi] = audioinfo(nf);
             if not(isempty(di))
                 l = l+1;
                 sz(l) = di;
@@ -286,7 +290,7 @@ function [l sz sr a] = folderinfo(path,s,l,sz,sr,a,folders)
 end
 
 
-function [sz,ch,sr] = fileinfo(file,folder)
+function [sz,ch,sr] = audioinfo(file)
     sz = [];
     ch = [];
     sr = [];
@@ -295,8 +299,6 @@ function [sz,ch,sr] = fileinfo(file,folder)
         sz = info.TotalSamples;
         ch = info.NumChannels;
         sr = info.SampleRate;
-    catch
-        
     end
 end
 
