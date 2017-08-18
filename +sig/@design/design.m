@@ -103,7 +103,7 @@ classdef design
                 v = VideoReader(arg);
                 out = vid.evaleach(obj,arg,v,nargout);
             else
-                [sz,ch,sr] = audioinfo(arg);
+                [sz,ch,sr] = fileinfo(arg);
                 if isempty(sz)
                     w = [];
                 elseif isempty(obj.extract)
@@ -278,7 +278,7 @@ function [l sz sr a] = folderinfo(path,s,l,sz,sr,a,folders)
                 cd ..
             end
         else
-            [di,ch,fi] = audioinfo(nf);
+            [di,ch,fi] = fileinfo(nf);
             if not(isempty(di))
                 l = l+1;
                 sz(l) = di;
@@ -290,7 +290,7 @@ function [l sz sr a] = folderinfo(path,s,l,sz,sr,a,folders)
 end
 
 
-function [sz,ch,sr] = audioinfo(file)
+function [sz,ch,sr] = fileinfo(file)
     sz = [];
     ch = [];
     sr = [];
@@ -299,150 +299,6 @@ function [sz,ch,sr] = audioinfo(file)
         sz = info.TotalSamples;
         ch = info.NumChannels;
         sr = info.SampleRate;
-    end
-end
-
-
-function test = midiread(name)
-    fid = fopen(name);
-    if fid<0
-        error;
-        return
-    end
-    head = fread(fid,'uint8');
-    fclose(fid);
-    test = isequal(head(1:4)',[77 84 104 100]);
-end
-
-
-%%
-function c = combineaudiofile(files,varargin)
-    % Combine output from several audio files into one single
-    c = varargin{1};    % The (series of) output(s) related to the first audio file
-    if 0 %isempty(c)
-        return
-    end
-    if 0 %isstruct(c)
-        for j = 1:length(varargin)
-            if j == 1
-                fields = fieldnames(varargin{1});
-            else
-                fields = union(fields,fieldnames(varargin{j}));
-            end
-        end
-        for i = 1:length(fields)
-            field = fields{i};
-            v = {};
-            for j = 1:length(varargin)
-                if isfield(varargin{j},field)
-                    v{j} = varargin{j}.(field);
-                else
-                    v{j} = NaN;
-                end
-            end
-            c.(field) = combineaudiofile('',isstat,v{:});
-            if strcmp(field,'Class')
-                c.Class = c.Class{1};
-            end
-        end
-        if not(isempty(files)) && isstat
-            c.FileNames = files;
-        end
-        return
-    end
-    if 0% ischar(c)
-        c = varargin;
-        return
-    end
-    if 0 %(not(iscell(c)) && not(isa(c,'sig.signal')))
-        for j = 1:length(varargin)
-            if j == 1
-                lv = size(varargin{j},1);
-            else
-                lv = max(lv,size(varargin{j},1));
-            end
-        end
-        c = NaN(lv,length(varargin));
-        for i = 1:length(varargin)
-            if not(isempty(varargin{i}))
-                c(1:length(varargin{i}),i) = varargin{i};
-            end
-        end
-        return
-    end
-    if 0 %(iscell(c) && not(isa(c{1},'sig.signal')))
-        for i = 1:length(c)
-            v = cell(1,nargin-2);
-            for j = 1:nargin-2
-                v{j} = varargin{j}{i};
-            end
-            c{i} = combineaudiofile(files,isstat,v{:});
-        end
-        return
-    end
-    if not(iscell(c))
-        c = {c};
-    end
-    nv = length(c); % The number of output for each different audio file
-    for j = 1:nv    % Combine files for each different output
-        v = varargin;
-        for i = 1:length(varargin)
-            if iscell(v{i})
-                v{i} = v{i}{j};
-            end
-        end
-        if not(isempty(v)) && not(isempty(v{1}))
-            c{j} = combine(v);
-        end
-    end
-end
-
-
-function c = combine(v)
-    c = v{1};
-    l = length(v);
-    if isa(c,'sig.signal')
-        cfields = c.combinables;
-        for i = 1:length(cfields)
-            v1 = v{1}.(cfields{i});
-            if isa(v1,'sig.axis')
-                val = v1;
-                val.start = ones(1,l);
-                for j = 1:l
-                    val.start(j) = v{j}.(cfields{i}).start;
-                end
-                c.(cfields{i}) = val;
-            else
-                usecell = 0;
-                %isdata = isa(c.(cfields{i}),'sig.data');
-                val = cell(1,l);
-                for j = 1:l
-                    val{j} = v{j}.(cfields{i});
-                    %if isdata
-                    %    val{j} = val{j}.content;
-                    %end
-                    if ~usecell
-                        if length(val{j})~=1
-                            usecell = 1;
-                        end
-                    end
-                end
-                if 0 %~usecell
-                    val = cell2mat(val);
-                end
-                %if isdata
-                %    c.(cfields{i}).content = val;
-                %else
-                    c.(cfields{i}) = val;
-                %end
-            end
-        end
-        c.celllayers = [{'files'} c.celllayers];
-        files = {};
-        for j = 1:l
-            files{j} = v{j}.files;
-        end
-        c.design.files = files;
     end
 end
 
