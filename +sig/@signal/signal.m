@@ -57,10 +57,8 @@ classdef signal
         ver
         
         design
-%         tmpfile
     end
     properties (Dependent)
-        %Xaxis
     	xdata
         
         saxis
@@ -71,7 +69,6 @@ classdef signal
         fends
         fcenters
         
-        %design
         framed
         polyfile
         combinables
@@ -200,13 +197,6 @@ classdef signal
                 f = obj.faxis.data([1 obj.Ydata.size('frame')]) + obj.fnumber/2;
             end
         end
-        
-        %function d = get.design(obj)
-        %    d = obj.Ydata.design;
-        %end
-        %function obj = set.design(obj,d)
-        %    obj.Ydata.design = d;
-        %end
         
         function b = get.polyfile(obj)
             b = ~isempty(obj.celllayers) && strcmp(obj.celllayers,'files');
