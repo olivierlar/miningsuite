@@ -73,6 +73,7 @@ else
                 break
             end
             imagesc(image);
+            title(filename)
             drawnow
         end
         if f.isvalid
