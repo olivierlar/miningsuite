@@ -123,7 +123,7 @@ classdef design
             if obj.evaluate
                 if strcmpi(obj.files,'Folder') || ...
                    strcmpi(obj.files,'Folders')
-                    [nfiles sz sr files] = folderinfo('',[],0,[],[],{},...
+                    [nfiles,files] = folderinfo('',[],0,[],[],{},...
                                             strcmpi(obj.files,'Folders'));
                     if nfiles == 0
                         sig.warning('sig.eval','No sound file detected in this folder.')
@@ -245,7 +245,7 @@ end
 %end
         
 
-function [l sz sr a] = folderinfo(path,s,l,sz,sr,a,folders)
+function [l,a] = folderinfo(path,s,l,sz,sr,a,folders)
     if not(isempty(path))
         path = [path '/'];
     end
@@ -274,15 +274,13 @@ function [l sz sr a] = folderinfo(path,s,l,sz,sr,a,folders)
         if folders && dd(i).isdir
             if not(strcmp(nf(1),'.'))
                 cd(dd(i).name)
-                [l sz sr a] = folderinfo([path nf],s,l,sz,sr,a,1);
+                [l,a] = folderinfo([path nf],s,l,sz,sr,a,1);
                 cd ..
             end
         else
-            [di,ch,fi] = fileinfo(nf);
+            di = fileinfo(nf);
             if not(isempty(di))
                 l = l+1;
-                sz(l) = di;
-                sr(l) = fi;
                 a{l} = [path nf];
             end
         end
