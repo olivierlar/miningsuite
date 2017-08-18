@@ -66,7 +66,7 @@ else
         end
     else
         f = figure;
-        while video.CurrentTime <= video.Duration
+        while video.CurrentTime < video.Duration
             image = readFrame(video);
             if ~f.isvalid
                 disp('Video interrupted')
@@ -75,6 +75,7 @@ else
             imagesc(image);
             drawnow
         end
+        close(f);
         y = {};
     end
 end
