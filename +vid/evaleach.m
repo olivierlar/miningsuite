@@ -75,7 +75,9 @@ else
             imagesc(image);
             drawnow
         end
-        close(f);
+        if f.isvalid
+            close(f);
+        end
         y = {};
     end
 end
