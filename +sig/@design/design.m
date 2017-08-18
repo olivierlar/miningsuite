@@ -103,7 +103,7 @@ classdef design
                 v = VideoReader(arg);
                 out = vid.evaleach(obj,arg,v,nargout);
             else
-                [sz,ch,sr] = fileinfo(arg);
+                [sz,ch,sr] = audiofileinfo(arg);
                 if isempty(sz)
                     w = [];
                 elseif isempty(obj.extract)
@@ -124,9 +124,14 @@ classdef design
                 if strcmpi(obj.files,'Folder') || ...
                    strcmpi(obj.files,'Folders')
                     [nfiles,files] = folderinfo('',[],0,[],[],{},...
-                                            strcmpi(obj.files,'Folders'));
+                                            strcmpi(obj.files,'Folders'),...
+                                            strcmpi(obj.package,'vid'));
                     if nfiles == 0
-                        sig.warning('sig.eval','No sound file detected in this folder.')
+                        if strcmpi(obj.package,'vid')
+                            disp('No video file detected in this folder.');
+                        else
+                            sig.warning('sig.eval','No sound file detected in this folder.')
+                        end
                         out = {{}};
                         return
                     end
@@ -245,7 +250,7 @@ end
 %end
         
 
-function [l,a] = folderinfo(path,s,l,sz,sr,a,folders)
+function [l,a] = folderinfo(path,s,l,sz,sr,a,folders,video)
     if not(isempty(path))
         path = [path '/'];
     end
@@ -274,11 +279,21 @@ function [l,a] = folderinfo(path,s,l,sz,sr,a,folders)
         if folders && dd(i).isdir
             if not(strcmp(nf(1),'.'))
                 cd(dd(i).name)
-                [l,a] = folderinfo([path nf],s,l,sz,sr,a,1);
+                [l,a] = folderinfo([path nf],s,l,sz,sr,a,1,video);
                 cd ..
             end
         else
-            di = fileinfo(nf);
+            if video
+                di = [];
+                try
+                    di = VideoReader(nf);
+                    if ~di.FrameRate
+                        di = [];
+                    end
+                end
+            else
+                di = audiofileinfo(nf);
+            end
             if not(isempty(di))
                 l = l+1;
                 a{l} = [path nf];
@@ -288,7 +303,7 @@ function [l,a] = folderinfo(path,s,l,sz,sr,a,folders)
 end
 
 
-function [sz,ch,sr] = fileinfo(file)
+function [sz,ch,sr] = audiofileinfo(file)
     sz = [];
     ch = [];
     sr = [];
