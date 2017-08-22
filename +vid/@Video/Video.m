@@ -259,37 +259,41 @@ function [options,frame] = classoptions(mode,fsize,fhop,when)
     else
         frame = [];
     end
+    
+        motion.key = 'Motion';
+        motion.type = 'Boolean';
+    options.motion = motion;
 
-        center.key = 'Center';
-        center.type = 'Boolean';
-        center.default = sig.signal.default.Center;
-    options.center = center;
-    
-        sampling.key = 'Sampling';
-        sampling.type = 'Numeric';
-    options.sampling = sampling;
-
-        extract.key = {'Extract','Excerpt'};
-        extract.type = 'Unit';
-        extract.number = 2;
-        extract.default = [];
-        extract.unit = {'s','sp'};
-    options.extract = extract;
-    
-        trim.key = {'Trim'};
-        trim.type = 'Boolean';
-        trim.default = 0;
-    options.trim = trim;
-    
-        trimwhere.type = 'String';
-        trimwhere.choice = {'JustStart','JustEnd','BothEnds'};
-        trimwhere.default = 'BothEnds';
-    options.trimwhere = trimwhere;
-    
-        trimthreshold.key = 'TrimThreshold';
-        trimthreshold.type = 'Numeric';
-        trimthreshold.default = .06;
-    options.trimthreshold = trimthreshold;
+%         center.key = 'Center';
+%         center.type = 'Boolean';
+%         center.default = sig.signal.default.Center;
+%     options.center = center;
+%     
+%         sampling.key = 'Sampling';
+%         sampling.type = 'Numeric';
+%     options.sampling = sampling;
+% 
+%         extract.key = {'Extract','Excerpt'};
+%         extract.type = 'Unit';
+%         extract.number = 2;
+%         extract.default = [];
+%         extract.unit = {'s','sp'};
+%     options.extract = extract;
+%     
+%         trim.key = {'Trim'};
+%         trim.type = 'Boolean';
+%         trim.default = 0;
+%     options.trim = trim;
+%     
+%         trimwhere.type = 'String';
+%         trimwhere.choice = {'JustStart','JustEnd','BothEnds'};
+%         trimwhere.default = 'BothEnds';
+%     options.trimwhere = trimwhere;
+%     
+%         trimthreshold.key = 'TrimThreshold';
+%         trimthreshold.type = 'Numeric';
+%         trimthreshold.default = .06;
+%     options.trimthreshold = trimthreshold;
 end
 
 
@@ -333,16 +337,22 @@ end
 
 
 function obj = after(obj,option)
-    if option.center
-        obj = obj.center('sample');
+    if isfield(option,'motion') && option.motion
+        if size(obj.Ydata.content,4) > 1
+            obj.Ydata.content(:,:,:,3) = diff(obj.Ydata.content(:,:,:,1:2),1,4);
+        end
     end
-    if option.sampling
-        obj = obj.resample(option.sampling);
-    end
-    if ~isempty(option.extract)
-        obj = obj.extract(option.extract,'sample','saxis','Ydata');
-    end
-    if option.trim
-        obj = obj.trim(option.trimwhere,option.trimthreshold);
-    end
+
+%     if option.center
+%         obj = obj.center('sample');
+%     end
+%     if option.sampling
+%         obj = obj.resample(option.sampling);
+%     end
+%     if ~isempty(option.extract)
+%         obj = obj.extract(option.extract,'sample','saxis','Ydata');
+%     end
+%     if option.trim
+%         obj = obj.trim(option.trimwhere,option.trimthreshold);
+%     end
 end

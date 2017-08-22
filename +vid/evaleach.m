@@ -12,12 +12,12 @@
 % + pattern mining + ...", AES 53RD INTERNATIONAL CONFERENCE, London, UK,
 % 2014
 
-function y = evaleach(design,filename,video,nargout,frame,chunking)
+function y = evaleach(design,filename,video,nargout,frame,y)
 if nargin<5
     frame = [];
 end
 if nargin<6
-    chunking = 0;
+    y = [];
 end
 
 sr = video.FrameRate;
@@ -34,45 +34,47 @@ if isempty(design.main)
     % layer, i.e., file loading.
     % Now the actual evaluation will be carried out bottom-up.
     
-    data = vid.read(filename,window);
+    data = readFrame(video);
     
-    if ~isempty(frame) && frame.toggle
-        frate = sig.compute(@sig.getfrate,sr,frame);
-        data = data.frame(frame,sr);
-        y = {vid.Video(data,'Name','video',...
-            'Sstart',(window(1)-1)/sr,'Srate',sr,...
-            'Ssize',data.size('sample'),...
-            'Frate',frate,'fnumber',data.size('frame'))};
+    if isequal(y, 0)
+        y = vid.Video(data,'Name','video');
     else
-        y = {vid.Video(data,'Name','video',...
-            'Sstart',(window(1)-1)/sr,'Srate',sr,...
-            'Ssize',data.size('sample'))};
+        if size(y.Ydata.content,4) > 1
+            y.Ydata.content(:,:,:,1) = y.Ydata.content(:,:,:,2);
+        end
+        y.Ydata.content(:,:,:,2) = data;
     end
 else
     frame = design.frame;
-    if chunking % Already in a chunk decomposition process
+    if ~isempty(y) % Already in a chunk decomposition process
         input = design.input;
         if iscell(input)
             input = input{1};
         end
-        y = vid.evaleach(input,filename,video,1,frame,chunking);
+        y = vid.evaleach(input,filename,video,1,frame,y);
         main = design.main;
         if iscell(main)
             main = main{1};
         end
         y = main(y,design.options);
-        if chunking == 1
-            y = design.after(y,design.options);
-        end
+        y = design.after(y,design.options);
     else
         f = figure;
+        y = 0;
         while video.CurrentTime < video.Duration
-            image = readFrame(video);
+            y = vid.evaleach(design.input,filename,video,nargout,frame,y);
+            main = design.main;
+            if iscell(main)
+                main = main{1};
+            end
+            y = main(y,design.options);
+            y = design.after(y,design.options);
+            
             if ~f.isvalid
                 disp('Video interrupted')
                 break
             end
-            imagesc(image);
+            imagesc(abs(y.Ydata.content(:,:,:,end)));
             title(filename)
             drawnow
         end
