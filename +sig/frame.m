@@ -21,7 +21,6 @@ function options = options
         frame.key = 'Frame';
         frame.type = 'Boolean';
         frame.default = 0;
-        %frame.inner = strcmpi(inner,'inner');
     options.frame = frame;
     
         fsize.key = 'FrameSize';
@@ -41,26 +40,12 @@ end
 
 
 function [x type] = init(x,option,frame)
-%     x = sig.input(x,'FrameSize',frame.size.value,frame.size.unit,...
-%                     'FrameHop',frame.hop.value,frame.hop.unit);
     type = 'sig.Signal';
 end
 
 
 function x = main(x,frame)
-%     sr = x{1}.Srate;
-%     [x{1}.Ydata,x{1}.Ssize,x{1}.fnumber] = ...
-%         sig.compute(@routine,x{1}.Ydata,frame,sr);
-%     x{1}.Frate = sig.compute(@sig.getfrate,sr,frame);
 end
-
-
-% function out = routine(d,frame,sr)
-%     d = d.frame(frame,sr);
-%     ssize = d.size('sample');
-%     fnumber = d.size('frame');
-%     out = {d,ssize,fnumber};
-% end
 
 
 function x = after(x,option)
