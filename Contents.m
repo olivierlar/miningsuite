@@ -12,7 +12,7 @@
 %
 % Sig.Minr: Signal processing package
 % 
-% sig.input: signal waveform
+% sig.signal: signal waveform
 % sig.frame: frame decomposition
 % sig.filterbank: filterbank decomposition
 % sig.envelope: envelope extraction
