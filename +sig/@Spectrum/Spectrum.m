@@ -6,7 +6,7 @@
 % License: New BSD License. See full text of the license in LICENSE.txt in
 % the main folder of the MiningSuite distribution.
 
-classdef Spectrum < sig.signal
+classdef Spectrum < sig.Signal
     properties (Constant)
         spectrumsonify = @sonifier;
     end
@@ -40,7 +40,7 @@ classdef Spectrum < sig.signal
                     i = i+1;
                 end
             end
-            s = s@sig.signal(varargin{:});
+            s = s@sig.Signal(varargin{:});
             if strcmp(s.yname,'Signal')
                 s.yname = 'Spectrum';
             end

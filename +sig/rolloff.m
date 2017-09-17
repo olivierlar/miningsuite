@@ -1,7 +1,7 @@
 % SIG.ROLLOFF
 %
 % Copyright (C) 2014, 2017 Olivier Lartillot
-% © 2007-2009 Olivier Lartillot & University of Jyvaskyla
+% ? 2007-2009 Olivier Lartillot & University of Jyvaskyla
 %
 % All rights reserved.
 % License: New BSD License. See full text of the license in LICENSE.txt in
@@ -15,7 +15,7 @@ end
 
 %%
 function options = initoptions
-    options = sig.signal.signaloptions('FrameAuto',.05,.5);
+    options = sig.Signal.signaloptions('FrameAuto',.05,.5);
 
         p.key = 'Threshold';
         p.type = 'Numeric';
@@ -33,7 +33,7 @@ end
 %%
 function [x type] = init(x,option,frame)
     x = sig.spectrum(x,'FrameConfig',frame);
-    type = 'sig.signal';
+    type = 'sig.Signal';
 end
 
 
@@ -44,7 +44,7 @@ function out = main(in,option)
     end
     if ~strcmpi(x.yname,'Roll-off')
         res = sig.compute(@routine,x.Ydata,x.xdata,option.p);
-        x = sig.signal(res,'Name','Roll-off','Unit','Hz.',...
+        x = sig.Signal(res,'Name','Roll-off','Unit','Hz.',...
                        'Srate',x.Srate,'Ssize',x.Ssize,...
                        'FbChannels',x.fbchannels);
     end

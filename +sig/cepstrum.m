@@ -19,7 +19,7 @@ end
 
 
 function options = options
-    options = sig.signal.signaloptions('FrameAuto',.05,.5);
+    options = sig.Signal.signaloptions('FrameAuto',.05,.5);
     
         mi.key = 'Min';
         mi.type = 'Numeric';

@@ -14,7 +14,7 @@ end
 
 
 function options = options
-    options = sig.signal.signaloptions();
+    options = sig.Signal.signaloptions();
     
         unit.key = 'Unit';
         unit.type = 'String';
@@ -25,14 +25,14 @@ end
 
 
 function [x type] = init(x,option,frame)
-    type = 'sig.signal';
+    type = 'sig.Signal';
 end
 
 
 function out = main(in,option)
     x = in{1};
     res = sig.compute(@routine,x.Ydata,x.Srate,option);
-    out = {sig.signal(res,'Name','Length','Srate',0,'Ssize',1,...
+    out = {sig.Signal(res,'Name','Length','Srate',0,'Ssize',1,...
                       'FbChannels',x.fbchannels)};
 end
 

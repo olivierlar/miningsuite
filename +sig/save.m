@@ -1,6 +1,6 @@
 function varargout = save(varargin)
 
-if isa(varargin{1},'sig.signal')
+if isa(varargin{1},'sig.Signal')
     varargout = varargin{1}.save(varargin{2:end});
     return
 end

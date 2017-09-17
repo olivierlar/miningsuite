@@ -74,12 +74,12 @@ if isempty(design.main)
         if ~isempty(frame) && frame.toggle
             frate = sig.compute(@sig.getfrate,sr,frame);
             data = data.frame(frame,sr);
-            y = {sig.signal(data,'Xsampling',1/sr,'Name','audio',...
+            y = {sig.Signal(data,'Xsampling',1/sr,'Name','audio',...
                 'Sstart',(window(1)-1)/sr,'Srate',sr,...
                 'Ssize',data.size('sample'),...
                 'Frate',frate,'fnumber',data.size('frame'))};
         else
-            y = {sig.signal(data,'Name','audio',...
+            y = {sig.Signal(data,'Name','audio',...
                 'Sstart',(window(1)-1)/sr,'Srate',sr,...
                 'Ssize',data.size('sample'))};
         end
@@ -270,7 +270,7 @@ end
 
 if iscell(y)
     for i = 1:length(y)
-        if isa(y{i},'sig.signal')
+        if isa(y{i},'sig.Signal')
             if ischar(design)
                 y{i}.design = {filename};
             else
@@ -392,7 +392,7 @@ end
 
 function old = combinesamples(old,new,delta)
 for i = 1:length(new)
-    if ~isa(old{i},'sig.signal')
+    if ~isa(old{i},'sig.Signal')
         continue
     end
     old{i}.Ydata = old{i}.Ydata.concat(new{i}.Ydata,'sample',delta/2);

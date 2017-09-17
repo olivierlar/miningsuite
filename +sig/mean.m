@@ -20,14 +20,14 @@ end
 
 %%
 function [x type] = init(x,option,frame)
-    type = 'sig.signal';
+    type = 'sig.Signal';
 end
 
 
 function out = main(in,option)
     x = in{1};
     res = sig.compute(@routine,x.Ydata);
-    x = sig.signal(res,'Name','Mean',...
+    x = sig.Signal(res,'Name','Mean',...
         'Xsampling',1,'Xstart',1,...
         'Srate',x.Frate,'Ssize',x.Ssize);
     out = {x};

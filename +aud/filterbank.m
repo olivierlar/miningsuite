@@ -39,7 +39,7 @@ end
 
 %%
 function [x type] = init(x,option,frame)
-    type = 'sig.signal';
+    type = 'sig.Signal';
 end
 
 

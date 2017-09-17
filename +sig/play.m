@@ -8,7 +8,7 @@
 % the main folder of the MiningSuite distribution.
 function varargout = play(varargin)
 
-    options = sig.signal.signaloptions();
+    options = sig.Signal.signaloptions();
 
         ch.key = 'Channel';
         ch.type = 'Integer';

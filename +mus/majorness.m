@@ -13,7 +13,7 @@ end
 
 %%
 function options = initoptions
-    options = sig.signal.signaloptions('FrameManual',1,.5);
+    options = sig.Signal.signaloptions('FrameManual',1,.5);
     
         stra.type = 'String';
         stra.default = 'Best';
@@ -25,7 +25,7 @@ end
 %%
 function [x,type] = init(x,option,frame)
     x = mus.keystrength(x,'FrameConfig',frame);
-    type = {'sig.signal'};
+    type = {'sig.Signal'};
 end
 
 

@@ -13,7 +13,7 @@ end
 
 %%
 function options = initoptions
-    options = sig.signal.signaloptions('FrameManual',.743,.1);
+    options = sig.Signal.signaloptions('FrameManual',.743,.1);
 end
 
 
@@ -24,7 +24,7 @@ function [x,type] = init(x,option,frame)
         x = mus.tonalcentroid(x,'FrameConfig',frame);
     end
     x = sig.flux(x);
-    type = {'sig.signal'};
+    type = {'sig.Signal'};
 end
 
 

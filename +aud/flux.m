@@ -25,7 +25,7 @@ end
 
 
 function [x type] = init(x,option,frame)
-    if x.istype('sig.signal')
+    if x.istype('sig.Signal')
         if strcmpi(option.sb,'Manual')
             x = sig.filterbank(x,'Cutoff',[-Inf 50*2.^(0:1:8) Inf],...
                                'Order',2);
@@ -35,7 +35,7 @@ function [x type] = init(x,option,frame)
         frame.toggle = 1;
         x = sig.spectrum(x,'FrameConfig',frame);
     end
-    type = 'sig.signal';
+    type = 'sig.Signal';
 end
 
 

@@ -137,7 +137,7 @@ classdef design
                     end
                     for i = 1:length(files)
                         out = obj.eval(files{i},1,1);
-                        if ~isempty(out) && isa(out{1},'sig.signal')
+                        if ~isempty(out) && isa(out{1},'sig.Signal')
                             out{1}.display;
                         end
                     end
@@ -146,7 +146,7 @@ classdef design
                     for i = 1:length(out)
                         if isa(out{i},'mus.Sequence')
                             out{i}.display;
-                        elseif isa(out{i},'sig.signal')
+                        elseif isa(out{i},'sig.Signal')
                             out{i}.display;
                         end
                     end
@@ -244,7 +244,7 @@ end
 %    f = obj.input;
 %    if isa(f,'sig.design')
 %        f = getfiles(f);
-%    elseif isa(f,'sig.signal')
+%    elseif isa(f,'sig.Signal')
 %        f = getfiles(f.design);
 %    end
 %end

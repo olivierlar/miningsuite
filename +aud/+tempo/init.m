@@ -78,7 +78,7 @@ function [y, type] = init(x,option,frame,autocor,spectrum)
         y = sig.autocor(y,'Phase');
     end
 
-    type = {'sig.signal','sig.Autocor'};
+    type = {'sig.Signal','sig.Autocor'};
 end
 
 

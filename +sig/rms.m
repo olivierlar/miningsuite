@@ -14,13 +14,13 @@ end
 
 %%
 function options = initoptions
-    options = sig.signal.signaloptions('FrameAuto',.05,.5);    
+    options = sig.Signal.signaloptions('FrameAuto',.05,.5);    
 end
 
 
 %%
 function [x type] = init(x,option,frame)
-    type = 'sig.signal';
+    type = 'sig.Signal';
 end
 
 
@@ -28,7 +28,7 @@ function out = main(in,option)
     x = in{1};
     if ~strcmpi(x.yname,'RMS')
         d = sig.compute(@routine,x.Ydata);
-        x = sig.signal(d,'Name','RMS',...
+        x = sig.Signal(d,'Name','RMS',...
                        'Srate',x.Frate,'Ssize',x.Ssize,...
                        'FbChannels',x.fbchannels);
     end

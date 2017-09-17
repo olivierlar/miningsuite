@@ -1,7 +1,7 @@
 % SIG.NOVELTY
 %
 % Copyright (C) 2017 Olivier Lartillot
-% © 2007-2009 Olivier Lartillot & University of Jyvaskyla
+% ? 2007-2009 Olivier Lartillot & University of Jyvaskyla
 %
 % All rights reserved.
 % License: New BSD License. See full text of the license in LICENSE.txt in
@@ -13,7 +13,7 @@ end
 
 
 function options = options
-    options = sig.signal.signaloptions('FrameAuto',.05,1);
+    options = sig.Signal.signaloptions('FrameAuto',.05,1);
 
         dist.key = 'Distance';
         dist.type = 'String';
@@ -118,7 +118,7 @@ function out = main(x,option)
         cg = checkergauss(cgs,option.transf)/cgs;%.^option.gran;
         d = sig.compute(@routine_K,x.Ydata,cg);
     end
-    n = sig.signal(d,'Name','Novelty','Srate',x.Srate,'Ssize',x.Ssize,'FbChannels',x.fbchannels);
+    n = sig.Signal(d,'Name','Novelty','Srate',x.Srate,'Ssize',x.Ssize,'FbChannels',x.fbchannels);
     out = {n};
 end
 

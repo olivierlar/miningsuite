@@ -38,7 +38,7 @@ end
 
 if ischar(arg)
     filename = arg;
-    arg = sig.design('sig','input',arg,'sig.signal',[],[],options); %%%% why options???
+    arg = sig.design('sig','input',arg,'sig.Signal',[],[],options); %%%% why options???
 elseif isa(arg,'sig.design')
     filename = arg.files;
 end
@@ -85,7 +85,7 @@ if isa(arg{1},'sig.design')
     else
         out = design.eval(filename);
     end
-elseif isa(arg{1},'sig.signal')
+elseif isa(arg{1},'sig.Signal')
     if ~isempty(frame) && frame.toggle
         frate = sig.compute(@sig.getfrate,arg{1}.Srate,frame);
         arg{1}.Ydata = arg{1}.Ydata.frame(frame,arg{1}.Srate);

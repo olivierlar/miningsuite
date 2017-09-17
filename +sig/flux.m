@@ -13,11 +13,11 @@ end
 
 
 function [x,type] = init(x,option,frame)
-    if x.istype('sig.signal')
+    if x.istype('sig.Signal')
         frame.toggle = 1;
         x = sig.spectrum(x,'FrameConfig',frame);
     end
-    type = 'sig.signal';
+    type = 'sig.Signal';
 end
 
 

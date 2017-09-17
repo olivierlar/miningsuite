@@ -18,7 +18,7 @@ end
 
 %%
 function options = initoptions
-    options = sig.signal.signaloptions('FrameAuto',.05,.5);
+    options = sig.Signal.signaloptions('FrameAuto',.05,.5);
     
         cutoff.key = 'CutOff';
         cutoff.type = 'Numeric';
@@ -32,7 +32,7 @@ function [x type] = init(x,option,frame)
     if ~istype(x,'sig.Spectrum')
         x = sig.spectrum(x,'FrameConfig',frame);
     end
-    type = 'sig.signal';
+    type = 'sig.Signal';
 end
 
 
@@ -40,7 +40,7 @@ function out = main(in,option)
     x = in{1};
     if ~strcmpi(x.yname,'Brightness')
         res = sig.compute(@routine,x.Ydata,x.xdata,option.cutoff);
-        x = sig.signal(res,'Name','Brightness',...
+        x = sig.Signal(res,'Name','Brightness',...
                        'Srate',x.Srate,'Ssize',x.Ssize,...
                        'FbChannels',x.fbchannels);
     end

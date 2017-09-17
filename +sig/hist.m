@@ -23,7 +23,7 @@ end
 
 %%
 function [x type] = init(x,option,frame)
-    type = 'sig.signal';
+    type = 'sig.Signal';
 end
 
 
@@ -31,7 +31,7 @@ function out = main(in,option)
     x = in{1};
     if ~strcmpi(x.yname,'Histogram')
         res = sig.compute(@routine,x.Ydata,option.n);
-        x = sig.signal(res,'Name','Histogram',...
+        x = sig.Signal(res,'Name','Histogram',...
                        'Xsampling',1,'Xstart',1,...res{2},...
                        'Srate',x.Frate,'Ssize',x.Ssize);
     end

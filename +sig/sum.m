@@ -8,7 +8,7 @@
 % the main folder of the MiningSuite distribution.
 
 function varargout = sum(varargin)
-    if varargin{1}.istype('sig.signal')
+    if varargin{1}.istype('sig.Signal')
         chunk = 'concat';
     else
         chunk = 'no';
@@ -19,7 +19,7 @@ end
 
 
 function options = options
-    options = sig.signal.signaloptions();
+    options = sig.Signal.signaloptions();
 
         mean.key = 'Mean';
         mean.type = 'Boolean';
@@ -36,7 +36,7 @@ end
 
 %%
 function [x type] = init(x,option,frame)
-    type = 'sig.signal';
+    type = 'sig.Signal';
 end
 
 

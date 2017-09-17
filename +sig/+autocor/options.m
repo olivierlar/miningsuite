@@ -6,7 +6,7 @@
 % the main folder of the MiningSuite distribution.
 
 function options = options    
-    options = sig.signal.signaloptions('FrameAuto',.05,.5);
+    options = sig.Signal.signaloptions('FrameAuto',.05,.5);
 
         min.key = 'Min';
         min.type = 'Unit';

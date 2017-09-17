@@ -1,7 +1,7 @@
 % SIG.FLUX.MAIN
 %
 % Copyright (C) 2014, 2017 Olivier Lartillot
-% © 2007-2009 Olivier Lartillot & University of Jyvaskyla
+% ? 2007-2009 Olivier Lartillot & University of Jyvaskyla
 %
 % All rights reserved.
 % License: New BSD License. See full text of the license in LICENSE.txt in
@@ -30,7 +30,7 @@ function out = main(x,option)
         end
         res = sig.compute(@routine,x.Ydata,option,method);
     end
-    x = sig.signal(res,'Name',name,'Srate',x.Srate,'Ssize',x.Ssize,'FbChannels',x.fbchannels);
+    x = sig.Signal(res,'Name',name,'Srate',x.Srate,'Ssize',x.Ssize,'FbChannels',x.fbchannels);
     out = {x};
 end
 

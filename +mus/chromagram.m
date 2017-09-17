@@ -1,7 +1,7 @@
 % MUS.CHROMAGRAM
 %
 % Copyright (C) 2014, 2017 Olivier Lartillot
-% © 2007-2012 Olivier Lartillot & University of Jyvaskyla
+% ? 2007-2012 Olivier Lartillot & University of Jyvaskyla
 %
 % All rights reserved.
 % License: New BSD License. See full text of the license in LICENSE.txt in
@@ -14,7 +14,7 @@ end
 
 
 function options = initoptions
-    options = sig.signal.signaloptions('FrameAuto',2,.05);
+    options = sig.Signal.signaloptions('FrameAuto',2,.05);
     
         cen.key = 'Center';
         cen.type = 'Boolean';

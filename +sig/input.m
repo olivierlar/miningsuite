@@ -1,9 +1,9 @@
 % SIG.INPUT simply loads the waveform stored in a soundfile and performs
 % basic post-processing.
 %   SIG.INPUT('filename') loads the waveform stored in the file named 
-%       'filename'. The data is stored into a sig.signal object.
+%       'filename'. The data is stored into a sig.Signal object.
 %   SIG.INPUT('Folder') loads all the sound files in the CURRENT folder
-%       into a single sig.signal object.
+%       into a single sig.Signal object.
 %   Transformation options:
 %       SIG.INPUT(...,'Mix','No') does not perform the default summing of
 %           channels into one single mono track, but instead stores each 
@@ -33,6 +33,6 @@
 
 function varargout = input(varargin)
 varargout = sig.operate('sig','input',...
-                        sig.signal.signaloptions('FrameAuto',.05,.5),...
-                        sig.signal.initmethod,sig.signal.mainmethod,...
-                        sig.signal.aftermethod,varargin,'concat_sample');
+                        sig.Signal.signaloptions('FrameAuto',.05,.5),...
+                        sig.Signal.initmethod,sig.Signal.mainmethod,...
+                        sig.Signal.aftermethod,varargin,'concat_sample');

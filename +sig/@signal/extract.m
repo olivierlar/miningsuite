@@ -56,13 +56,13 @@ function out = main(d,param,dim,axis,fields)
     end
     
     if isempty(x1) || x1>l
-        sig.warning('sig.signal',...
+        sig.warning('sig.Signal',...
             'The ''Excerpt'' zone is out of reach. No result returned.')
         x1 = 1;
         x2 = 1;
     elseif isempty(x2) || x2>size(d,dim)
         if ~isinf(x2)
-            %sig.warning('sig.signal',...
+            %sig.warning('sig.Signal',...
             %    'The ''Excerpt'' zone exceeds the scope of the signal. Signal truncated.')
         end
         x2 = l;

@@ -6,7 +6,7 @@
 % License: New BSD License. See full text of the license in LICENSE.txt in
 % the main folder of the MiningSuite distribution.
 
-classdef Keystrength < sig.signal
+classdef Keystrength < sig.Signal
     properties (Constant)
     end
     properties   
@@ -14,7 +14,7 @@ classdef Keystrength < sig.signal
     end
     methods
         function s = Keystrength(varargin)
-            s = s@sig.signal(varargin{:});
+            s = s@sig.Signal(varargin{:});
             if strcmp(s.yname,'Signal')
                 s.yname = 'Keystrength';
             end

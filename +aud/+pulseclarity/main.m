@@ -18,7 +18,7 @@ function out = main(in,option)
     end
     if strcmpi(option.stratg,'MaxAutocor')
         d = sig.compute(@max,x.Ydata);
-        pc = sig.signal(d,'Name','Pulse Clarity','Srate',in{1}.Srate,'FbChannels',in{1}.fbchannels);
+        pc = sig.Signal(d,'Name','Pulse Clarity','Srate',in{1}.Srate,'FbChannels',in{1}.fbchannels);
         out = {pc x};
     end
 end

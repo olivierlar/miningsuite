@@ -13,7 +13,7 @@ end
                     
 %%
 function options = initoptions
-    options = sig.signal.signaloptions('FrameAuto',.05,1);
+    options = sig.Signal.signaloptions('FrameAuto',.05,1);
     
         mfc.key = {'Rank','MFCC'};
         mfc.type = 'Integers';
@@ -150,7 +150,7 @@ function [out type] = init(x,option,frame)
     else
         out = x;
     end
-    type = 'sig.signal';
+    type = 'sig.Signal';
 end
 
 
@@ -167,7 +167,7 @@ function out = main(in,option)
                 pos = pos{1};
             end
         end
-        if isa(pos,'sig.signal')
+        if isa(pos,'sig.Signal')
             if isempty(pos.peakpos)
                 pos = sig.peaks(pos,'Total',option.tot,...
                                     'Contrast',option.cthr,...

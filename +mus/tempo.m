@@ -35,7 +35,7 @@ function [x, type] = init(x,option,frame)
         [x, type] = aud.tempo.init(x,option,frame,@mus_autocor,@mus_spectrum);
     elseif strcmpi(option.method,'Pattern')
         x = mus.score(x,'Metre');
-        type = {'sig.signal','mus.Sequence'};
+        type = {'sig.Signal','mus.Sequence'};
     end
 end
 
@@ -69,7 +69,7 @@ function out = main(in,option)
             tp(i-1) = 60/(o(i) - o(i-1));
         end
         d = sig.data(tp,{'sample'});
-        t = sig.signal(d,'Name','Tempo','Srate',1); %'FbChannels',x.fbchannels??
+        t = sig.Signal(d,'Name','Tempo','Srate',1); %'FbChannels',x.fbchannels??
         out = {t};
     else
         out = aud.tempo.main(in,option);

@@ -1,6 +1,6 @@
 % SIG.AXIS class
 % generates on the fly axis information such as time positions in signal.
-% Internally called by sig.signal
+% Internally called by sig.Signal
 %
 % Copyright (C) 2014, Olivier Lartillot
 % All rights reserved.

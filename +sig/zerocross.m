@@ -1,7 +1,7 @@
 % SIG.ZEROCROSS
 %
 % Copyright (C) 2014, 2017 Olivier Lartillot
-% © 2007-2009 Olivier Lartillot & University of Jyvaskyla
+% ? 2007-2009 Olivier Lartillot & University of Jyvaskyla
 %
 % All rights reserved.
 % License: New BSD License. See full text of the license in LICENSE.txt in
@@ -15,7 +15,7 @@ end
 
 %%
 function options = initoptions
-    options = sig.signal.signaloptions('FrameAuto',.05,.5);
+    options = sig.Signal.signaloptions('FrameAuto',.05,.5);
 
         per.key = 'Per';
         per.type = 'String';
@@ -33,14 +33,14 @@ end
 
 %%
 function [x type] = init(x,option,frame)
-    type = 'sig.signal';
+    type = 'sig.Signal';
 end
 
 
 function out = main(in,option)
     x = in{1};
     res = sig.compute(@routine,x.Ydata,x.Srate,option);
-    x = sig.signal(res,'Name','Zero-crossing rate',...
+    x = sig.Signal(res,'Name','Zero-crossing rate',...
         'Deframe',x);
     out = {x};
 end

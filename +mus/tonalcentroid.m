@@ -13,7 +13,7 @@ end
 
 %%
 function options = initoptions
-    options = sig.signal.signaloptions('FrameManual',.743,.1);
+    options = sig.Signal.signaloptions('FrameManual',.743,.1);
 end
 
 

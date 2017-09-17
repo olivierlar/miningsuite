@@ -6,7 +6,7 @@
 % License: New BSD License. See full text of the license in LICENSE.txt in
 % the main folder of the MiningSuite distribution.
 
-classdef Envelope < sig.signal
+classdef Envelope < sig.Signal
 %%
     properties
         processed = 0
@@ -28,7 +28,7 @@ classdef Envelope < sig.signal
                     i = i+1;
                 end
             end
-            e = e@sig.signal(varargin{:});
+            e = e@sig.Signal(varargin{:});
             if strcmp(e.yname,'Signal')
                 e.yname = 'Envelope';
             end

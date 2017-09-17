@@ -13,7 +13,7 @@ end
 
 %%
 function options = initoptions
-    options = sig.signal.signaloptions('FrameManual');
+    options = sig.Signal.signaloptions('FrameManual');
 
         frame.key = 'Frame';
         frame.type = 'Boolean';
@@ -45,7 +45,7 @@ function [x type] = init(x,option,frame)
     if ~isa(x,'aud.Sequence')
         x = aud.score(x);
     end
-    type = 'sig.signal';
+    type = 'sig.Signal';
 end
 
 
@@ -83,6 +83,6 @@ function out = main(in,option,frame)
         end
         d = sig.data(ed',{'sample'});
     end
-    ed = sig.signal(d,'Name','Event density','Srate',1/fhop); %'FbChannels',x.fbchannels??
+    ed = sig.Signal(d,'Name','Event density','Srate',1/fhop); %'FbChannels',x.fbchannels??
     out = {ed};
 end

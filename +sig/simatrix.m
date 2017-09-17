@@ -13,7 +13,7 @@ end
 
 
 function options = options    
-    options = sig.signal.signaloptions('FrameAuto',.05,1);
+    options = sig.Signal.signaloptions('FrameAuto',.05,1);
 
         distance.key = 'Distance';
         distance.type = 'String';
@@ -74,7 +74,7 @@ end
 
 
 function [x,type] = init(x,option,frame)
-    if x.istype('sig.signal')
+    if x.istype('sig.Signal')
         frame.toggle = 1;
         x = sig.spectrum(x,'FrameConfig',frame);
     end

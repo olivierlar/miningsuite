@@ -18,7 +18,7 @@ end
 
 
 function options = initoptions
-    options = sig.signal.signaloptions('FrameManual',3,.1,'After');
+    options = sig.Signal.signaloptions('FrameManual',3,.1,'After');
 
 %% options related to 'Envelope':
 
@@ -365,7 +365,7 @@ function [y, type] = init(x,option,frame)
             option.kernelsize = 64;
         end
     end
-    if x.istype('sig.signal') || x.istype('sig.Envelope')
+    if x.istype('sig.Signal') || x.istype('sig.Envelope')
         y = [];
         if option.env
             if strcmpi(option.envmeth,'Filter')
@@ -792,7 +792,7 @@ function [st pp] = startattack(d,t,pp,ppu,stu,option)
             M				= mean(dpercent_posn_v(param.m1:param.m2));
 
             % === 1) START ATTACK
-            % === on DEMARRE juste APRES que l'effort à fournir (écart temporal entre percent) soit trop important
+            % === on DEMARRE juste APRES que l'effort ? fournir (?cart temporal entre percent) soit trop important
             pos2_v			= find(dpercent_posn_v(param.s1att:param.s2att) > option.alpha * M);
             if ~isempty(pos2_v)
                 result		= pos2_v(end)+param.s1att-1+1;
@@ -810,7 +810,7 @@ function [st pp] = startattack(d,t,pp,ppu,stu,option)
             end
 
             % === 2) END ATTACK
-            % === on ARRETE juste AVANT que l'effort à fournir (écart temporal entre percent) soit trop important
+            % === on ARRETE juste AVANT que l'effort ? fournir (?cart temporal entre percent) soit trop important
             pos2_v		= find(dpercent_posn_v(param.e1att:param.e2att) > option.alpha * M);
             if ~isempty(pos2_v)
                 result		= pos2_v(1)+param.e1att-1;

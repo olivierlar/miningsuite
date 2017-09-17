@@ -14,7 +14,7 @@
 % + pattern mining + ...", AES 53RD INTERNATIONAL CONFERENCE, London, UK,
 % 2014
 
-classdef signal
+classdef Signal
 %%
     properties (Constant)
         signaloptions = @classoptions;
@@ -79,9 +79,9 @@ classdef signal
     end
 %%
     methods
-        function s = signal(varargin)
+        function s = Signal(varargin)
             [options post] = sig.options(constructoptions,varargin,...
-                                         'sig.signal');
+                                         'sig.Signal');
             
             data = varargin{1};
             if isnumeric(data)
@@ -407,12 +407,12 @@ function [options,frame] = classoptions(mode,fsize,fhop,when)
         mix.key = 'Mix';
         mix.type = 'String';
         mix.choice = {'Pre','Post','No',0};
-        mix.default = 'Pre'; %sig.signal.default.Mix;
+        mix.default = 'Pre'; %sig.Signal.default.Mix;
     options.mix = mix;
 
         center.key = 'Center';
         center.type = 'Boolean';
-        center.default = sig.signal.default.Center;
+        center.default = sig.Signal.default.Center;
     options.center = center;
 
 %        normal.key = 'Normal';
@@ -483,7 +483,7 @@ end
 
 %%
 function [x type] = init(x,option,frame)
-    type = 'sig.signal';
+    type = 'sig.Signal';
 end
 
 

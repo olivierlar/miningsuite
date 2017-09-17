@@ -266,7 +266,7 @@ function [options,frame] = classoptions(mode,fsize,fhop,when)
 
 %         center.key = 'Center';
 %         center.type = 'Boolean';
-%         center.default = sig.signal.default.Center;
+%         center.default = sig.Signal.default.Center;
 %     options.center = center;
 %     
 %         sampling.key = 'Sampling';

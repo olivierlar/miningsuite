@@ -8,7 +8,7 @@
 % the main folder of the MiningSuite distribution.
 
 function options = options
-    options = sig.signal.signaloptions();
+    options = sig.Signal.signaloptions();
 
         nCh.key = 'NbChannels';
         nCh.type = 'Numeric';

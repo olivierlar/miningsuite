@@ -1,7 +1,7 @@
 % AUD.ROUGHNESS 
 %
 % Copyright (C) 2014, 2017 Olivier Lartillot
-% © 2009-2013 Olivier Lartillot & University of Jyvaskyla
+% ? 2009-2013 Olivier Lartillot & University of Jyvaskyla
 % All rights reserved.
 % License: New BSD License. See full text of the license in LICENSE.txt in
 % the main folder of the MiningSuite distribution.
@@ -14,7 +14,7 @@ end
 
 %%
 function options = initoptions
-    options = sig.signal.signaloptions('FrameAuto',.05,.5);
+    options = sig.Signal.signaloptions('FrameAuto',.05,.5);
     options.frame.default = 1;
     
         meth.type = 'String';
@@ -45,14 +45,14 @@ function [x type] = init(x,option,frame)
         x = sig.spectrum(x,'FrameConfig',frame);
     end
     x = sig.peaks(x,'Contrast',option.cthr);
-    type = {'sig.signal','sig.Spectrum'};
+    type = {'sig.Signal','sig.Spectrum'};
 end
 
 
 function out = main(in,option)
     x = in{1};
     d = sig.compute(@routine,x.peakpos,x.peakval,x.Ydata,option);
-    x = sig.signal(d,'Name','Roughness','Srate',x.Srate,'Ssize',x.Ssize,...
+    x = sig.Signal(d,'Name','Roughness','Srate',x.Srate,'Ssize',x.Ssize,...
                    'FbChannels',x.fbchannels);
     out = {x};
 end

@@ -13,7 +13,7 @@ end
 
 %%
 function options = initoptions
-    options = sig.signal.signaloptions('FrameManual',1,.5);
+    options = sig.Signal.signaloptions('FrameManual',1,.5);
     
         tot.key = 'Total';
         tot.type = 'Integer';
@@ -42,7 +42,7 @@ function [p,type] = init(x,option,frame)
     s = mus.keystrength(x,'FrameConfig',frame,...
         'Weight',option.wth,'Triangle',option.tri);
     p = sig.peaks(s,'Total',option.tot,'Contrast',option.thr);
-    type = {'sig.signal','sig.signal','mus.Keystrength'};
+    type = {'sig.Signal','sig.Signal','mus.Keystrength'};
 end
 
 

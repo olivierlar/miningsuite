@@ -6,7 +6,7 @@
 % License: New BSD License. See full text of the license in LICENSE.txt in
 % the main folder of the MiningSuite distribution.
 
-classdef Autocor < sig.signal
+classdef Autocor < sig.Signal
     properties
         normalized = 0;
         window
@@ -14,7 +14,7 @@ classdef Autocor < sig.signal
     end
     methods
         function s = Autocor(varargin)
-          	s = s@sig.signal(varargin{:});
+          	s = s@sig.Signal(varargin{:});
             if strcmp(s.yname,'Signal')
                 s.yname = 'Autocor';
             end

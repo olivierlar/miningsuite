@@ -16,7 +16,7 @@ function [x, type] = init(x,option,frame,tempo_frame,tempo_noframe)
 %             disp('Suggestion: Use the ''Frame'' option instead.')
 %         end
     if x.istype('sig.Autocor')
-        type = {'sig.signal','sig.Autocor'};
+        type = {'sig.Signal','sig.Autocor'};
     elseif length(option.model) > 1
         %...
     else
@@ -46,7 +46,7 @@ function [x, type] = init(x,option,frame,tempo_frame,tempo_noframe)
             else
                 x = tempo_noframe(x,option);
             end
-            type = {'sig.signal','sig.Autocor'};
+            type = {'sig.Signal','sig.Autocor'};
         end
     end
 end

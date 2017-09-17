@@ -6,7 +6,7 @@
 % License: New BSD License. See full text of the license in LICENSE.txt in
 % the main folder of the MiningSuite distribution.
 
-classdef Mfcc < sig.signal
+classdef Mfcc < sig.Signal
     properties (Constant)
     end
     properties   
@@ -25,7 +25,7 @@ classdef Mfcc < sig.signal
                     i = i+1;
                 end
             end
-            c = c@sig.signal(varargin{:});
+            c = c@sig.Signal(varargin{:});
             if strcmp(c.yname,'Signal')
                 c.yname = 'Mel-frequency cepstrum coefficient';
             end

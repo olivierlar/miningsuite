@@ -18,7 +18,7 @@ end
 
 %%
 function options = initoptions
-    options = sig.signal.signaloptions();
+    options = sig.Signal.signaloptions();
     
         sum.key = 'Summary';
         sum.type = 'Boolean';

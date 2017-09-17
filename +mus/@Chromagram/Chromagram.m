@@ -6,7 +6,7 @@
 % License: New BSD License. See full text of the license in LICENSE.txt in
 % the main folder of the MiningSuite distribution.
 
-classdef Chromagram < sig.signal
+classdef Chromagram < sig.Signal
     properties (Constant)
     end
     properties   
@@ -49,7 +49,7 @@ classdef Chromagram < sig.signal
                     i = i+1;
                 end
             end
-            c = c@sig.signal(varargin{:});
+            c = c@sig.Signal(varargin{:});
             if strcmp(c.yname,'Signal')
                 c.yname = 'Chromagram';
             end

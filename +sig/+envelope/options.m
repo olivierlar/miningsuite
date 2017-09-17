@@ -6,7 +6,7 @@
 % the main folder of the MiningSuite distribution.
 
 function options = options
-    [options,spectroframe] = sig.signal.signaloptions('FrameManual');
+    [options,spectroframe] = sig.Signal.signaloptions('FrameManual');
     
         method.type = 'String';
         method.choice = {'Filter','Spectro'};

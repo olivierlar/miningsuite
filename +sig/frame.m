@@ -16,7 +16,7 @@ end
 
 
 function options = options
-    options = sig.signal.signaloptions();
+    options = sig.Signal.signaloptions();
 
         frame.key = 'Frame';
         frame.type = 'Boolean';
@@ -43,7 +43,7 @@ end
 function [x type] = init(x,option,frame)
 %     x = sig.input(x,'FrameSize',frame.size.value,frame.size.unit,...
 %                     'FrameHop',frame.hop.value,frame.hop.unit);
-    type = 'sig.signal';
+    type = 'sig.Signal';
 end
 
 

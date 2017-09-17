@@ -20,7 +20,7 @@ function out = main(in,option)
                 pc(i) = p.content{i};
             end
         end
-        t = sig.signal(pc','Name','Tempo','Srate',in{1}.Srate,'FbChannels',in{1}.fbchannels);
+        t = sig.Signal(pc','Name','Tempo','Srate',in{1}.Srate,'FbChannels',in{1}.fbchannels);
         out = {t in{1}};
     end
 end
