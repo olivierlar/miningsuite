@@ -190,7 +190,7 @@ else
             notes = struct('chro',num2cell(C{1}),'ons',num2cell(C{8}),...
                            'dur',num2cell(C{9}),'chan',num2cell(C{11}),...
                            'harm',C{12});
-        elseif 0 % françois
+        elseif 0 % fran?ois
             C = textscan(fid,'%f,%f,%f\n');
             notes = struct('chro',num2cell(C{1}),...
                            'ons',num2cell(C{2}),...
@@ -257,9 +257,9 @@ if options.notes
     options.notes(options.notes > length(notes)) = [];
     notes = notes(options.notes);
 end
-for i = 1:length(notes)-1
-    notes(i).dur = notes(i+1).ons - notes(i).ons;
-end
+% for i = 1:length(notes)-1
+%     notes(i).dur = notes(i+1).ons - notes(i).ons;
+% end
 note = [];
 if folder
     out.content{end+1} = [];
