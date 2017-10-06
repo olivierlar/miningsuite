@@ -192,11 +192,11 @@ for i=1:length(tracklist)
     % find start/stop of notes:
     %    if (strcmp(name,'Note on') && (data(2)>0))
     % note on with vel>0:
+    pitch = data(1) + pitchbend;
+    pitchbend = 0;
     if (midimeta==1 && type==144 && data(2)>0)
       % note on:
       
-     pitch = data(1) + pitchbend;
-     pitchbend = 0;
      Notes(end+1,:) = [tracknum chan pitch data(2) seconds 0 runnro -1];
      runnro=runnro+1;
   
