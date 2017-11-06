@@ -94,7 +94,7 @@ elseif isa(arg{1},'sig.Signal')
     if iscell(main)
         main = main{1};
     end
-    out = main({arg{1}},options);
+    out = main(arg(1),options);
     out = after(out,options);
     if ~iscell(out)
         out = {out};
