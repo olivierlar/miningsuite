@@ -492,7 +492,10 @@ function out = main(x,option)
 end
 
 
-function obj = after(obj,option)
+function out = after(obj,option)
+    if iscell(obj)
+        obj = obj{1};
+    end
     %if option.channel
     %    obj = obj.channel(option.channel);
     %end
@@ -516,6 +519,7 @@ function obj = after(obj,option)
     %    order = round(option.median(1) * obj.sampling);
     %    obj = obj.median('sample',order,option.median(2));
     %end
+    out = {obj};
 end
 
 
