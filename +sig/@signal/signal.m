@@ -288,7 +288,7 @@ classdef Signal
             obj.Ssize = Ssize / in.Srate;
         end
                     
-        obj = sum(obj,dim)
+%         obj = sum(obj,dim)
         obj = center(obj,dim)
         obj = halfwave(obj)
         obj = median(obj,field,order,offset)
@@ -405,9 +405,10 @@ function [options,frame] = classoptions(mode,fsize,fhop,when)
     end
 
         mix.key = 'Mix';
-        mix.type = 'String';
-        mix.choice = {'Pre','Post','No',0};
-        mix.default = 'Pre'; %sig.Signal.default.Mix;
+%         mix.type = 'String';
+%         mix.choice = {'Pre','Post','No',0};
+        mix.type = 'Boolean';
+        mix.default = sig.Signal.default.Mix;
     options.mix = mix;
 
         center.key = 'Center';
@@ -499,9 +500,10 @@ function out = after(obj,option)
     %if option.channel
     %    obj = obj.channel(option.channel);
     %end
-    if strcmpi(option.mix,'Post')
-        obj = obj.sum('channel');
     end
+%     if strcmpi(option.mix,'Post')
+%         obj = obj.sum('channel');
+%     end
 
     if option.center
         obj = obj.center('sample');
