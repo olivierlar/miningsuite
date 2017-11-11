@@ -63,7 +63,7 @@ if isempty(design.main)
     else
         data = sig.read(filename,window);
         
-        if strcmpi(design.options.mix,'Pre')
+        if design.options.mix %strcmpi(design.options.mix,'Pre')
             data = data.mean('channel');
         end
         
