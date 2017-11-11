@@ -108,7 +108,7 @@ function display(obj)
                     
                 end
             else
-                plot(obj.(abscissa),squeeze(ydatai.content));
+                ydatai.apply(@draw,{obj.(abscissa),obj.Frate,'index'},{'sample','channel'},2);
             end
         elseif iscell(ydatai.content)
             for j = 1:length(ydatai.content)
@@ -186,4 +186,25 @@ end
 function textual(name,data)
     disp(['The ' name ' is:']);
     display(data);
+end
+
+
+function draw(y,x,frate,index)
+    if frate
+        x = x + (index-1) / frate;
+        plot(x,y,'k');
+        y(isnan(y)) = [];
+        y(isinf(y)) = [];
+        if ~isempty(y)
+            rectangle('Position',[x(1),...
+                min(min(y)),...
+                x(end)-x(1),...
+                max(max(y))-...
+                min(min(y))]+1e-16,...
+                'EdgeColor','k',...
+                'Curvature',.1,'LineWidth',1)
+        end
+    else
+        plot(x,y);
+    end
 end
