@@ -295,6 +295,7 @@ classdef Signal
         
         obj = resample(obj,sampling)
         obj = extract(obj,param,dim,finder,varargin)
+        obj = channel(obj,param)
         obj = trim(obj,trimwhere,trimthreshold)
         
         obj = selectfile(obj,index)
@@ -421,10 +422,10 @@ function [options,frame] = classoptions(mode,fsize,fhop,when)
 %        normal.default = 0;
 %    options.normal = normal;
     
-    %    channel.key = {'Channel','Channels'};
-    %    channel.type = 'Numeric';
-    %    channel.default = [];
-    %options.channel = channel;
+       channel.key = {'Channel','Channels'};
+       channel.type = 'Numeric';
+       channel.default = [];
+    options.channel = channel;
     
         sampling.key = 'Sampling';
         sampling.type = 'Numeric';
@@ -497,9 +498,8 @@ function out = after(obj,option)
     if iscell(obj)
         obj = obj{1};
     end
-    %if option.channel
-    %    obj = obj.channel(option.channel);
-    %end
+    if option.channel
+        obj = obj.channel(option.channel);
     end
 %     if strcmpi(option.mix,'Post')
 %         obj = obj.sum('channel');
