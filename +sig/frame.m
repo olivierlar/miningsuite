@@ -20,7 +20,7 @@ function options = options
 
         frame.key = 'Frame';
         frame.type = 'Boolean';
-        frame.default = 0;
+        frame.default = 1;
     options.frame = frame;
     
         fsize.key = 'FrameSize';
@@ -40,6 +40,8 @@ end
 
 
 function [x type] = init(x,option,frame)
+    x = sig.signal(x,'Frame','FrameSize',frame.size.value,frame.size.unit,...
+                             'FrameHop',frame.hop.value,frame.hop.unit);
     type = 'sig.Signal';
 end
 
