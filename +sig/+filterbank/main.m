@@ -47,7 +47,7 @@ end
 
 
 function [y Hd] = subroutine(x,Hd)
-    y = zeros(size(x,1),length(Hd));
+    y = zeros(size(x,1),length(Hd),size(x,3));
     for k = 1:length(Hd)
         Hdk = Hd{k};
         if ~iscell(Hdk)
@@ -61,6 +61,6 @@ function [y Hd] = subroutine(x,Hd)
                 yk = Hdk{h}.filter(yk);
             end
         end
-        y(:,k) = yk;
+        y(:,k,:) = yk;
     end
 end
