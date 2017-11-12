@@ -589,7 +589,7 @@ function out = main(o,option)
     if isa(o,'sig.Envelope') && option.minlog
         o = sig.envelope(o,'MinLog',option.minlog);
     end
-    o = sig.framenow(o,option);
+    o = sig.framenow(o,option.frame);
     if ischar(option.detect)
         if isnan(option.cthr) || not(option.cthr)
             if ischar(option.attack) || option.decay
@@ -956,5 +956,5 @@ function out = symbolic(x,option)
     %%
     d = sig.data(g,{'sample'});
     out = {sig.Envelope(d,'Srate',ndivs,'Sstart',0,'Ssize',length(g))};
-    out = sig.framenow(out,option);
+    out = sig.framenow(out,option.frame);
 end
