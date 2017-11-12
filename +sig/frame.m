@@ -40,13 +40,12 @@ end
 
 
 function [x type] = init(x,option,frame)
-    x = sig.signal(x,'Frame','FrameSize',frame.size.value,frame.size.unit,...
-                             'FrameHop',frame.hop.value,frame.hop.unit);
     type = 'sig.Signal';
 end
 
 
 function x = main(x,frame)
+    x = sig.framenow(x,frame);
 end
 
 
