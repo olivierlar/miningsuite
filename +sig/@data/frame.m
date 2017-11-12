@@ -49,36 +49,54 @@ function [data nfr] = main(data,param,sr)
         end
         switch olddim
             case 1
-                if size(oldcontent,2) == 1
-                    newcontent = zeros(l,nfr);
-                    for i = 1:nfr % For each frame, ...
-                        st = floor((i-1)*h+1);
-                        newcontent(:,i) = oldcontent(st:st+l-1);
+                if length(size(oldcontent)) == 2 
+                    if size(oldcontent,2) == 1
+                        newcontent = zeros(l,nfr);
+                        for i = 1:nfr % For each frame, ...
+                            st = floor((i-1)*h+1);
+                            newcontent(:,i) = oldcontent(st:st+l-1);
+                        end
+                        data.dims{2} = 'frame';
+                    else
+                        newcontent = zeros(l,size(oldcontent,2),nfr);
+                        for i = 1:nfr % For each frame, ...
+                            st = floor((i-1)*h+1);
+                            newcontent(:,:,i) = oldcontent(st:st+l-1,:);
+                        end
+                        data.dims{3} = 'frame';
                     end
-                    data.dims{2} = 'frame';
                 else
-                    newcontent = zeros(l,size(oldcontent,2),nfr);
+                    newcontent = zeros(l,size(oldcontent,2),size(oldcontent,3),nfr);
                     for i = 1:nfr % For each frame, ...
                         st = floor((i-1)*h+1);
-                        newcontent(:,:,i) = oldcontent(st:st+l-1,:);
+                        newcontent(:,:,:,i) = oldcontent(st:st+l-1,:,:);
                     end
-                    data.dims{3} = 'frame';
+                    data.dims{4} = 'frame';
                 end
             case 2
-                if size(oldcontent,1) == 1
-                    newcontent = zeros(nfr,l);
-                    for i = 1:nfr % For each frame, ...
-                        st = floor((i-1)*h+1);
-                        newcontent(i,:) = oldcontent(1,st:st+l-1);
+                if length(size(oldcontent)) == 2 
+                    if size(oldcontent,1) == 1
+                        newcontent = zeros(nfr,l);
+                        for i = 1:nfr % For each frame, ...
+                            st = floor((i-1)*h+1);
+                            newcontent(i,:) = oldcontent(1,st:st+l-1);
+                        end
+                        data.dims{1} = 'frame';
+                    else
+                        newcontent = zeros(size(oldcontent,1),l,nfr);
+                        for i = 1:nfr % For each frame, ...
+                            st = floor((i-1)*h+1);
+                            newcontent(:,:,i) = oldcontent(:,st:st+l-1);
+                        end
+                        data.dims{3} = 'frame';
                     end
-                    data.dims{1} = 'frame';
                 else
-                    newcontent = zeros(size(oldcontent,1),l,nfr);
+                    newcontent = zeros(size(oldcontent,1),l,size(oldcontent,3),nfr);
                     for i = 1:nfr % For each frame, ...
                         st = floor((i-1)*h+1);
-                        newcontent(:,:,i) = oldcontent(:,st:st+l-1);
+                        newcontent(:,:,:,i) = oldcontent(:,st:st+l-1,:);
                     end
-                    data.dims{3} = 'frame';
+                    data.dims{4} = 'frame';
                 end
         end
     end
