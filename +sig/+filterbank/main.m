@@ -11,6 +11,8 @@ function x = main(x,option,filterspecif)
     [x{1}.Ydata,x{2},x{1}.fbchannels] = ...
         sig.compute(@routine,x{1}.Ydata,x{1}.Srate,x{1}.fbchannels,...
                     option,filterspecif);
+
+    x = sig.framenow(x,option.frame);
 end
 
 
