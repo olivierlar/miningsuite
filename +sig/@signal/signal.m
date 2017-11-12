@@ -42,7 +42,7 @@ classdef Signal
         Ssize
         
         Frate
-        fnumber
+        Flength
         
         celllayers
         peak
@@ -106,7 +106,7 @@ classdef Signal
             s.Ssize = options.ssize;
             
             s.Frate = options.frate;
-            s.fnumber = options.fnumber;
+            s.Flength = options.flength;
             
             s.fbchannels = options.fbchannels;
             
@@ -187,14 +187,14 @@ classdef Signal
             if isempty(obj.faxis)
                 f = [];
             else
-                f = obj.faxis.data([1 obj.Ydata.size('frame')]) + obj.fnumber;
+                f = obj.faxis.data([1 obj.Ydata.size('frame')]) + obj.Flength;
             end
         end
         function f = get.fcenters(obj)
             if isempty(obj.faxis)
                 f = [];
             else
-                f = obj.faxis.data([1 obj.Ydata.size('frame')]) + obj.fnumber/2;
+                f = obj.faxis.data([1 obj.Ydata.size('frame')]) + obj.Flength/2;
             end
         end
         
@@ -374,10 +374,10 @@ function options = constructoptions
         frate.default = 0;
     options.frate = frate;
         
-        fnumber.key = 'fnumber';
-        fnumber.type = 'Numeric';
-        fnumber.default = 0;
-    options.fnumber = fnumber;
+        flength.key = 'flength';
+        flength.type = 'Numeric';
+        flength.default = 0;
+    options.flength = flength;
     
         fbchannels.key = 'FbChannels';
         fbchannels.default = [];

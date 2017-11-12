@@ -73,11 +73,16 @@ if isempty(design.main)
         
         if ~isempty(frame) && frame.toggle
             frate = sig.compute(@sig.getfrate,sr,frame);
+            if strcmpi(frame.size.unit,'s')
+                fl = frame.size.value;
+            elseif strcmpi(frame.size.unit,'sp')
+                fl = frame.size.value/sr;
+            end
             data = data.frame(frame,sr);
             y = {sig.Signal(data,'Xsampling',1/sr,'Name','waveform',...
                 'Sstart',(window(1)-1)/sr,'Srate',sr,...
                 'Ssize',data.size('sample'),...
-                'Frate',frate,'fnumber',data.size('frame'))};
+                'Frate',frate,'Flength',fl)};
         else
             y = {sig.Signal(data,'Name','waveform',...
                 'Sstart',(window(1)-1)/sr,'Srate',sr,...
