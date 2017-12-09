@@ -108,7 +108,12 @@ function display(obj)
                     
                 end
             else
-                ydatai.apply(@draw,{obj.(abscissa),obj.Frate,'index'},{'sample','channel'},2);
+                if strcmp(abscissa,'xdata')
+                    dim = 'element';
+                elseif strcmp(abscissa,'sdata')
+                    dim = 'sample';
+                end
+                ydatai.apply(@draw,{obj.(abscissa),obj.Frate,'index'},{dim,'channel'},2);
             end
         elseif iscell(ydatai.content)
             for j = 1:length(ydatai.content)
