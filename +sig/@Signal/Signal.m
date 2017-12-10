@@ -411,47 +411,6 @@ function [options,frame] = classoptions(mode,fsize,fhop,when)
         mix.type = 'Boolean';
         mix.default = sig.Signal.default.Mix;
     options.mix = mix;
-
-        center.key = 'Center';
-        center.type = 'Boolean';
-        center.default = sig.Signal.default.Center;
-    options.center = center;
-
-%        normal.key = 'Normal';
-%        normal.type = 'Boolean';
-%        normal.default = 0;
-%    options.normal = normal;
-    
-       channel.key = {'Channel','Channels'};
-       channel.type = 'Numeric';
-       channel.default = [];
-    options.channel = channel;
-    
-        sampling.key = 'Sampling';
-        sampling.type = 'Numeric';
-    options.sampling = sampling;
-
-        extract.key = {'Extract','Excerpt'};
-        extract.type = 'Unit';
-        extract.number = 2;
-        extract.default = [];
-        extract.unit = {'s','sp'};
-    options.extract = extract;
-    
-        trim.key = {'Trim'};
-        trim.type = 'Boolean';
-        trim.default = 0;
-    options.trim = trim;
-    
-        trimwhere.type = 'String';
-        trimwhere.choice = {'JustStart','JustEnd','BothEnds'};
-        trimwhere.default = 'BothEnds';
-    options.trimwhere = trimwhere;
-    
-        trimthreshold.key = 'TrimThreshold';
-        trimthreshold.type = 'Numeric';
-        trimthreshold.default = .06;
-    options.trimthreshold = trimthreshold;
 end
 
 
