@@ -40,7 +40,7 @@ function out = routine_filter(in,sampling,option)
         b = b(ceil(length(b)/2):end);
     elseif strcmpi(option.filter,'Butter')
         % From Timbre Toolbox
-        w = 5 / ( sampling/2 );
+        w = option.cutoff / ( sampling/2 );
         [b,a] = butter(3, w);
     end
     

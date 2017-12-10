@@ -36,6 +36,12 @@ function options = options
             tau.type = 'Numeric';
             tau.default = .02;
     options.tau = tau;
+    
+            %% options related to 'Butter': 
+            cutoff.key = 'CutOff';
+            cutoff.type = 'Numeric';
+            cutoff.default = 37;
+    options.cutoff = cutoff;
 
         ds.key = {'Down','PostDecim'};
         ds.type = 'Numeric';
