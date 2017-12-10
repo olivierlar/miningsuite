@@ -18,7 +18,6 @@ end
 
 function out = routine(in,sampling,ch,option,filterspecif)
     if in.size('freqband') > 1
-        %warning('WARNING IN SIG.FILTERBANK: The input data is already decomposed into channels. No more channel decomposition.');
         if option.Ch
             in = in.extract('freqband',option.Ch);
             out = {in [] option.Ch};
@@ -26,9 +25,8 @@ function out = routine(in,sampling,ch,option,filterspecif)
             out = {in [] ch};
         end
     else
-        nCh = option.nCh;
         ch = option.Ch;
-        
+        nCh = option.nCh;
         if isfield(option,'tmp')
             tmp = option.tmp;
         else
@@ -41,16 +39,16 @@ function out = routine(in,sampling,ch,option,filterspecif)
             Hd = tmp;
         end
         
-        [out{1},out{2}] = in.apply(@subroutine,{Hd},...
+        [out{1},out{2}] = in.apply(@subroutine,{Hd,ch},...
                                    {'sample','freqband'},Inf);
         out{3} = ch;
     end
 end
 
 
-function [y Hd] = subroutine(x,Hd)
-    y = zeros(size(x,1),length(Hd),size(x,3));
-    for k = 1:length(Hd)
+function [y,Hd] = subroutine(x,Hd,ch)
+    y = zeros(size(x,1),length(ch),size(x,3));
+    for k = 1:length(ch)
         Hdk = Hd{k};
         if ~iscell(Hdk)
             Hdk = {Hdk};
