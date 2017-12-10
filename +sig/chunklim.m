@@ -4,9 +4,11 @@ function cl = chunklim(lim)
 %   decomposed into chunks of that size, before being analyzed in the 
 %   different functions on the toolbox.
 % sig.chunklim(c) specifies a new maximal chunk size.
-%   If The MiningSuite tends to use more memory than what is available in the
+%   If the MiningSuite tends to use more memory than what is available in the
 %   RAM of your computer, you should decrease the maximal chunk size.
 % sig.chunklim(Inf) toggles off the automated chunk decomposition.
+%
+% Copyright (C) 2014, 2017 Olivier Lartillot
 
 persistent chunklim
 
@@ -17,7 +19,7 @@ if nargin
     chunklim = lim;
 else
     if isempty(chunklim)
-        chunklim = 5e5;
+        chunklim = 5e6;
     end
 end
 
