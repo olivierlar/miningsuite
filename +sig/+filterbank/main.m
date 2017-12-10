@@ -48,6 +48,9 @@ end
 
 function [y,Hd] = subroutine(x,Hd,ch)
     y = zeros(size(x,1),length(ch),size(x,3));
+    if ch == 0
+        ch = 1:length(Hd);
+    end
     for k = 1:length(ch)
         Hdk = Hd{k};
         if ~iscell(Hdk)
