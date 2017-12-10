@@ -55,7 +55,7 @@ function out = routine_filter(in,sampling,option)
     in = in.apply(@abs,{},{'sample'});
     
     if option.decim
-        in = in.apply(@decimate,{option.decim},{'sample'});
+        in = in.apply(@decimate,{option.decim},{'sample'},1);
     end
     
     out = in.apply(@filtfilt,{b,a,'self'},{'sample'});
