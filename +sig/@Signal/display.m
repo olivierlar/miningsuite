@@ -17,6 +17,12 @@ function display(obj)
     
     xdata = obj.xdata;
     sdata = obj.sdata;
+    
+    nchans = obj.Ydata.size('freqband');
+    if iscell(nchans)
+        nchans = nchans{1};
+    end
+    
     %%    
     if ~obj.Srate || isequal(obj.Ydata.size('sample',1), 1)
         if isempty(xdata) || length(xdata) == 1
@@ -28,14 +34,14 @@ function display(obj)
         ydata = obj.Ydata;
         iscurve = (length(obj.Sstart) == 1);  
         
-    elseif length(xdata) < 2   
+    elseif length(xdata) < 2
         switch length(xdata)
             case 0
                 % Variable number of data points per sample
                 iscurve = -1;
             case 1
                 iscurve = 1;
-        end            
+        end
         abscissa = 'sdata';
         Xaxis = obj.saxis;
         ydata = obj.Ydata;
@@ -56,128 +62,129 @@ function display(obj)
     figure
     hold on
     
-    nchans = obj.Ydata.size('freqband');
-    if iscell(nchans)
-        nchans = nchans{1};
-    end
-    for i = 1:nchans
-        if nchans > 1
-            subplot(nchans,1,nchans-i+1,'align');
-            hold on
-            ydatai = ydata.extract('freqband',i);
-        else
-            ydatai = ydata;
-        end
-        
-        if iscurve
-            if iscurve == -1 && iscell(ydatai.content)
-                varpeaks = 0;
-                for j = 1:length(ydatai.content)
-                    if length(ydatai.content{j}) > 1
-                        varpeaks = 1;
-                        break
-                    end
-                end
-                if ~varpeaks
-                    iscurve = 1;
-                    d = zeros(1,length(ydatai.content));
+    if iscurve && nchans > 20
+        ydata.apply(@drawmat,{sdata,nchans},{'sample','freqband'},2);
+        set(gca,'YDir','normal');   
+        title(obj.yname);
+    else
+        for i = 1:nchans
+            if nchans > 1
+                subplot(nchans,1,nchans-i+1,'align');
+                hold on
+                ydatai = ydata.extract('freqband',i);
+            else
+                ydatai = ydata;
+            end
+            
+            if iscurve
+                if iscurve == -1 && iscell(ydatai.content)
+                    varpeaks = 0;
                     for j = 1:length(ydatai.content)
-                        if isempty(ydatai.content{j})
-                            d(j) = NaN;
-                        else
-                            d(j) = ydatai.content{j};
+                        if length(ydatai.content{j}) > 1
+                            varpeaks = 1;
+                            break
                         end
                     end
-                    ydatai.content = d;
+                    if ~varpeaks
+                        iscurve = 1;
+                        d = zeros(1,length(ydatai.content));
+                        for j = 1:length(ydatai.content)
+                            if isempty(ydatai.content{j})
+                                d(j) = NaN;
+                            else
+                                d(j) = ydatai.content{j};
+                            end
+                        end
+                        ydatai.content = d;
+                    end
                 end
-            end
-            if iscell(ydatai.content)
-                if strcmp(abscissa,'sdata')
-                    if iscell(sdata)
-                        for j = 1:length(ydata.content)
-                            plot(sdata{j},squeeze(ydatai.content{j}));
+                if iscell(ydatai.content)
+                    if strcmp(abscissa,'sdata')
+                        if iscell(sdata)
+                            for j = 1:length(ydata.content)
+                                plot(sdata{j},squeeze(ydatai.content{j}));
+                            end
+                        else
+                            for j = 1:length(ydata.content)
+                                if ~isempty(ydatai.content{j})
+                                    plot(sdata(j),squeeze(ydatai.content{j}),'+');
+                                end
+                            end
                         end
                     else
-                        for j = 1:length(ydata.content)
-                            if ~isempty(ydatai.content{j})
-                                plot(sdata(j),squeeze(ydatai.content{j}),'+');
+                        
+                    end
+                else
+                    if strcmp(abscissa,'xdata')
+                        dim = 'element';
+                    elseif strcmp(abscissa,'sdata')
+                        dim = 'sample';
+                    end
+                    ydatai.apply(@draw,{obj.(abscissa),obj.Frate,'index'},{dim,'channel'},2);
+                end
+            elseif iscell(ydatai.content)
+                for j = 1:length(ydatai.content)
+                    x = obj.Sstart(j) + [0, obj.Ssize(j)];
+                    y = xdata{j}';
+                    y(end+1) = 2 * y(end) - y(end-1);
+                    surfplot(x,y,ydatai.content{j});
+                end
+            else
+                surfplot(t,x,ydatai.content)
+                set(gca,'YDir','normal');
+            end
+            
+            if ~isempty(obj.peak)
+                if nchans == 1
+                    p = obj.peak;
+                else
+                    p = obj.peak.extract('freqband',i);
+                end
+                
+                if iscurve
+                    pi = p.content{1};
+                    px = Xaxis.data(pi);
+                    py = ydatai.content(pi);
+                    plot(px,squeeze(py),'or');
+                elseif iscell(ydatai.content)
+                    for k = 1:length(ydatai.content)
+                        pk = p;
+                        pk.content = p.content{k};
+                        if pk.size('sample') == 1
+                            pk = pk.content{1};
+                            if ~isempty(pk)
+                                py = obj.Xaxis.data(pk+.5);
+                                px = obj.Sstart(k) + obj.Ssize(k) / 2;
+                                plot(px,py,'+k');
+                            end
+                        else
+                            for j = 1:pk.size('sample')
+                                pj = pk.view('sample',j);
+                                if ~isempty(pj{1})
+                                    px = obj.saxis.data(j+.5);
+                                    py = obj.Xaxis.data(pj{1});
+                                    plot(px,py,'+k');
+                                end
                             end
                         end
                     end
                 else
-                    
-                end
-            else
-                if strcmp(abscissa,'xdata')
-                    dim = 'element';
-                elseif strcmp(abscissa,'sdata')
-                    dim = 'sample';
-                end
-                ydatai.apply(@draw,{obj.(abscissa),obj.Frate,'index'},{dim,'channel'},2);
-            end
-        elseif iscell(ydatai.content)
-            for j = 1:length(ydatai.content)
-                x = obj.Sstart(j) + [0, obj.Ssize(j)];
-                y = xdata{j}';
-                y(end+1) = 2 * y(end) - y(end-1);
-                surfplot(x,y,ydatai.content{j});
-            end
-        else
-            surfplot(t,x,ydatai.content)
-            set(gca,'YDir','normal');
-        end
-                
-        if ~isempty(obj.peak)
-            if nchans == 1
-                p = obj.peak;
-            else
-                p = obj.peak.extract('freqband',i);
-            end
-            
-            if iscurve
-                pi = p.content{1};
-                px = Xaxis.data(pi);
-                py = ydatai.content(pi);
-                plot(px,squeeze(py),'or');
-            elseif iscell(ydatai.content)
-                for k = 1:length(ydatai.content)
-                    pk = p;
-                    pk.content = p.content{k};
-                    if pk.size('sample') == 1
-                        pk = pk.content{1};
-                        if ~isempty(pk)
-                            py = obj.Xaxis.data(pk+.5);
-                            px = obj.Sstart(k) + obj.Ssize(k) / 2;
+                    for j = 1:obj.peak.size('sample')
+                        pj = p.view('sample',j);
+                        if ~isempty(pj{1})
+                            px = obj.saxis.data(j+.5);
+                            py = obj.Xaxis.data(pj{1});
                             plot(px,py,'+k');
                         end
-                    else
-                        for j = 1:pk.size('sample')
-                            pj = pk.view('sample',j);
-                            if ~isempty(pj{1})
-                                px = obj.saxis.data(j+.5);
-                                py = obj.Xaxis.data(pj{1});
-                                plot(px,py,'+k');
-                            end
-                        end
-                    end
-                end
-            else
-                for j = 1:obj.peak.size('sample')
-                    pj = p.view('sample',j);
-                    if ~isempty(pj{1})
-                        px = obj.saxis.data(j+.5);
-                        py = obj.Xaxis.data(pj{1});
-                        plot(px,py,'+k');
                     end
                 end
             end
-        end
-        
-        if i == 1
-            xlabel(Xaxis.name);
+            
+            if i == 1
+                xlabel(Xaxis.name);
+            end
         end
         axis tight
-        
         title(obj.yname);
     end
     fig = gcf;
@@ -212,4 +219,20 @@ function draw(y,x,frate,index)
     else
         plot(x,y);
     end
+end
+
+
+function drawmat(y,x,nchans)
+    x(end+1) = 2*x(end) - x(end-1);
+    surfplot(x,(0:nchans)',y')
+end
+
+
+function surfplot(x,y,c)
+    cax = newplot([]);
+    surface(x,y,zeros(size(y,1),size(x,2)),c,'parent',cax,'EdgeColor','none');  % Here are the modification
+    lims = [min(min(x)) max(max(x)) min(min(y)) max(max(y))];
+    set(cax,'View',[0 90]);
+    set(cax,'Box','on');
+    axis(cax,lims);
 end
