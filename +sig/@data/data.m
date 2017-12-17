@@ -177,13 +177,32 @@ classdef data
             end
         end
         %%
-        function obj = sum(obj,field)
+        function obj = sum(obj,field,adjacent)
+            if nargin<3
+                adjacent = 1;
+            end
             if nargin<2
                 field = 'element';
             end
             dim = obj.whichdim(field);
             for i = 1:length(dim)
-                obj.content = sum(obj.content,dim(i));
+                if adjacent < 2
+                    obj.content = sum(obj.content,dim(i));
+                else
+                    nc1 = size(obj.content,dim(i));
+                    nc2 = ceil(nc1/adjacent);
+%                     res = zeros(size(dh{i},1),size(dh{i},2),nc2);
+                    for j = 1:nc2
+                        d = obj.extract(field,[(j-1)*adjacent+1,min(j*adjacent,nc1)]);
+                        d = d.sum(field);
+                        if j == 1
+                            res = d;
+                        else
+                            res = res.concat(d,field);
+                        end
+                    end
+                    obj = res;
+                end
             end
         end
         
