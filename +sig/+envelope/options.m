@@ -150,11 +150,6 @@ function options = options
         diffhwr.keydefault = 1;
     options.diffhwr = diffhwr;
 
-        lambda.key = 'Lambda';
-        lambda.type = 'Numeric';
-        lambda.default = 1;
-    options.lambda = lambda;
-
         aver.key = 'Smooth';
         aver.type = 'Numeric';
         aver.default = 0;
