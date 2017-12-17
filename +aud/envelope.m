@@ -106,6 +106,11 @@ function out = after(x,option)
     
     x = sig.envelope.after(x,option);
     
+    if isfield(option,'presel') && ischar(option.presel) && ...
+            strcmpi(option.presel,'Klapuri06')
+        x = sig.sum(x,'Adjacent',10);
+    end
+    
     out = {x};
 end
 
