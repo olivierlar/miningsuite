@@ -1,7 +1,7 @@
 % SIG.ENVELOPE.UPSAMPLE
 %
 % Copyright (C) 2014, 2017 Olivier Lartillot
-% © 2007-2009 Olivier Lartillot & University of Jyvaskyla
+% ? 2007-2009 Olivier Lartillot & University of Jyvaskyla
 % All rights reserved.
 % License: New BSD License. See full text of the license in LICENSE.txt in
 % the main folder of the MiningSuite distribution.
@@ -18,7 +18,7 @@ end
 
 
 function d = main(d,Hd,N)
-    d = d.apply(@routine,{Hd,N},{'sample','','channel'},3);
+    d = d.apply(@routine,{Hd,N},{'sample','','freqband'},3);
 end
 
 
