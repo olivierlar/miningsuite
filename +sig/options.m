@@ -65,7 +65,7 @@ while i <= length(args)
                 end
                 if strcmpi(type,'String')
                     if length(args) > i && ...
-                            (ischar(args{i+1}) || args{i+1} == 0)
+                            (ischar(args{i+1}) || args{i+1} == 0 || args{i+1} == 1)
                         if isfield(specif.(field),'choice')
                             match2 = 0;
                             arg2 = args{i+1};
