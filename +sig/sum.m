@@ -31,6 +31,11 @@ function options = options
         type.choice = {'channel','freqband'};
         type.default = 'freqband';
     options.type = type;
+    
+        adj.key = 'Adjacent';
+        adj.type = 'Numeric';
+        adj.default = 1;
+    options.adj = adj;
 end
 
 
@@ -43,18 +48,18 @@ end
 function out = main(x,option)
     x = x{1};
     if option.mean
-        norm = x.Ydata.size('freqband');
+        norm = x.Ydata.size(option.type);
     else
         norm = 1;
     end
-    x.Ydata = sig.compute(@routine,x.Ydata,norm,option.type);
+    x.Ydata = sig.compute(@routine,x.Ydata,norm,option.type,option.adj);
     x.fbchannels = 1;
     out = {x};
 end
 
 
-function out = routine(in,norm,type)
-    out = in.sum(type);
+function out = routine(in,norm,type,adjacent)
+    out = in.sum(type,adjacent);
     if norm ~= 1
         out.content = out.content / norm;
     end
