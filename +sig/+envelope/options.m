@@ -168,7 +168,7 @@ function options = options
    % option.iir = iir;
 
         norm.key = 'Normal';
-        %norm.type = 'String';
+        norm.type = 'String';
         norm.choice = {0,1,'AcrossSegments'};
         norm.default = 0;
         norm.keydefault = 1;
