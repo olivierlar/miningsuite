@@ -48,12 +48,12 @@ function display(obj)
         
     else
         iscurve = 0;
-        f = sdata;
-        t = [f 2*f(end)-f(end-1)];
-        x = xdata(:);
-        x = [ 1.5*x(1) - 0.5*x(2); ...
-              (x(1:end-1) + x(2:end)) / 2; ...
-              1.5*x(end) - 0.5*x(end-1) ];
+%         f = sdata;
+%         t = [f 2*f(end)-f(end-1)];
+%         x = xdata(:);
+%         x = [ 1.5*x(1) - 0.5*x(2); ...
+%               (x(1:end-1) + x(2:end)) / 2; ...
+%               1.5*x(end) - 0.5*x(end-1) ];
         Xaxis = obj.saxis;
         ydata = obj.Ydata.format({'element','sample'});
     end
@@ -63,7 +63,7 @@ function display(obj)
     hold on
     
     if iscurve && nchans > 20
-        ydata.apply(@drawmat,{sdata,nchans},{'sample','freqband'},2);
+        ydata.apply(@drawmat,{sdata,(1:nchans)'},{'sample','freqband'},2);
         set(gca,'YDir','normal');   
         title(obj.yname);
     else
@@ -130,7 +130,7 @@ function display(obj)
                     surfplot(x,y,ydatai.content{j});
                 end
             else
-                surfplot(t,x,ydatai.content)
+                ydatai.apply(@drawmat,{sdata,xdata(:)},{'sample','element'},2);
                 set(gca,'YDir','normal');
             end
             
@@ -222,9 +222,10 @@ function draw(y,x,frate,index)
 end
 
 
-function drawmat(y,x,nchans)
+function drawmat(z,x,y)
     x(end+1) = 2*x(end) - x(end-1);
-    surfplot(x,(0:nchans)',y')
+    y(end+1) = 2*y(end) - y(end-1);
+    surfplot(x,y,z')
 end
 
 
