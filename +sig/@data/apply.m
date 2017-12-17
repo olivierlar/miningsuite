@@ -6,15 +6,16 @@
 % License: New BSD License. See full text of the license in LICENSE.txt in
 % the main folder of the MiningSuite distribution.
 
-function [obj varargout] = apply(obj,func,argin,dimfunc,ndimfunc,type)
+function [obj varargout] = apply(obj,func,argin,dimfunc,maxdimfunc,type)
     if nargin<5
-        ndimfunc = Inf;
+        maxdimfunc = Inf;
     end
 
     if nargin<6
         type = '()';
     end
     
+    mindimfunc = length(dimfunc);
     multioutput = 0;
     data = obj.content;
     if isempty(data)
@@ -23,8 +24,8 @@ function [obj varargout] = apply(obj,func,argin,dimfunc,ndimfunc,type)
     dimdata = size(data);
     ndimdata = length(dimdata);
     ordim = zeros(1,ndimdata);
-    if isinf(ndimfunc)
-        ndimfunc = min(ndimfunc,ndimdata);
+    if isinf(maxdimfunc)
+        maxdimfunc = min(maxdimfunc,ndimdata);
     end
     
     for i = 1:length(dimfunc)
@@ -50,7 +51,7 @@ function [obj varargout] = apply(obj,func,argin,dimfunc,ndimfunc,type)
     dimdata = dimdata(ordim);
 
     start = cell(1,ndimdata);
-    for i = 1:ndimfunc
+    for i = 1:maxdimfunc
         start{i} = ':';
     end
 %     if iscell(data)
@@ -58,7 +59,7 @@ function [obj varargout] = apply(obj,func,argin,dimfunc,ndimfunc,type)
 %     else
         oldtype = '()';
 %     end
-    args = recurse(data,start,ndimfunc+1,ndimdata,{},oldtype);
+    args = recurse(data,start,maxdimfunc+1,ndimdata,{},oldtype);
     argsin = {};
     for j = 1:length(argin)
         if isa(argin{j},'sig.data')
@@ -69,7 +70,7 @@ function [obj varargout] = apply(obj,func,argin,dimfunc,ndimfunc,type)
             %else
                 oldtype = '()';
             %end
-            argsin{j} = recurse(argin{j},start,ndimfunc+1,ndimdata,{},...
+            argsin{j} = recurse(argin{j},start,maxdimfunc+1,ndimdata,{},...
                                 oldtype);
         end
     end
@@ -118,10 +119,10 @@ function [obj varargout] = apply(obj,func,argin,dimfunc,ndimfunc,type)
                 if strcmp(type,'{}')
                     dimdata(~dimdata) = 1;
                     newdata = cell(dimdata);
-                    for j = 1:ndimfunc
+                    for j = 1:maxdimfunc
                         start{j} = 1;
                     end
-                    newargs = recurse(data,start,ndimfunc+1,ndimdata,{},'{}');
+                    newargs = recurse(data,start,maxdimfunc+1,ndimdata,{},'{}');
 
                     if iscell(newdatai)
                         maindata = newdata;
@@ -132,9 +133,9 @@ function [obj varargout] = apply(obj,func,argin,dimfunc,ndimfunc,type)
                         end
                     end
 
-                elseif ~isequal(size(olddatai),size(newdatai)) && ndimdata>ndimfunc
-                    extradims = sortedim((ndimfunc+1:ndimdata)-ndimfunc);
-                    if ndims(newdatai) == 2 && size(newdatai,2) == 1
+                elseif ~isequal(size(olddatai),size(newdatai)) && ndimdata>maxdimfunc
+                    extradims = sortedim((maxdimfunc+1:ndimdata)-mindimfunc);
+                    if ismatrix(newdatai) && size(newdatai,2) == 1
                         newdata = zeros([length(newdatai),extradims]);
                     else
                         newdata = zeros([size(newdatai),extradims]);
@@ -142,7 +143,7 @@ function [obj varargout] = apply(obj,func,argin,dimfunc,ndimfunc,type)
                     if strcmp(type,args{1}.type)
                         newargs = args;
                     else
-                        newargs = recurse(data,start,ndimfunc+1,ndimdata,{},type);
+                        newargs = recurse(data,start,maxdimfunc+1,ndimdata,{},type);
                     end                
 
                 else
@@ -150,7 +151,7 @@ function [obj varargout] = apply(obj,func,argin,dimfunc,ndimfunc,type)
                     if strcmp(type,args{1}.type)
                         newargs = args;
                     else
-                        newargs = recurse(data,start,ndimfunc+1,ndimdata,{},type);
+                        newargs = recurse(data,start,maxdimfunc+1,ndimdata,{},type);
                     end   
                 end
 
