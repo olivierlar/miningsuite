@@ -24,12 +24,14 @@ function options = initoptions
     
         mu.key = 'Mu';
         mu.type = 'Numeric';
-        mu.default = 100;
+        mu.default = 0;
+        mu.keydefault = 100;
     options.mu = mu;
     
         lambda.key = 'Lambda';
         lambda.type = 'Numeric';
-        lambda.default = .8;
+        lambda.default = 0;
+        lambda.keydefault = .8;
     options.lambda = lambda;
 end
 
