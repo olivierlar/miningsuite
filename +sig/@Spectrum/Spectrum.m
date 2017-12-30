@@ -50,6 +50,13 @@ classdef Spectrum < sig.Signal
             s.phase = ph;
             s.inputsampling = is;
         end
+        function d = get(obj,field)
+            if strcmpi(field,'phase')
+                d = obj.phase;
+            else
+                error(['SYNTAX ERROR IN GET: Unknown parameter ''',field,'''.']);
+            end
+        end
     end
 end
 
