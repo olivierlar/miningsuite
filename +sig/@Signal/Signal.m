@@ -266,8 +266,10 @@ classdef Signal
             end
         end
         function d = get(obj,field)
-            if strcmpi(field,'Sampling')
+            if strcmpi(field,'Srate')
                 d = obj.Srate;
+            elseif strcmpi(field,'Sdata')
+                d = obj.sdata;
             else
                 error(['SYNTAX ERROR IN GET: Unknown parameter ''',field,'''.']);
             end
