@@ -181,6 +181,10 @@ classdef design
             v = obj.eval;
             v = v{1}.getpeakval;
         end
+        function r = get(obj,field)
+            v = obj.eval;
+            r = v{1}.get(field);
+        end
         function show(obj,varargin)
             obj = obj(1);
             if isempty(obj.input)
