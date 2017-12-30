@@ -265,6 +265,13 @@ classdef Signal
                 v = v{1};
             end
         end
+        function d = get(obj,field)
+            if strcmpi(field,'Sampling')
+                d = obj.Srate;
+            else
+                error(['SYNTAX ERROR IN GET: Unknown parameter ''',field,'''.']);
+            end
+        end
         function b = istype(obj,type)
             b = strcmp(class(obj),type);
         end
