@@ -38,7 +38,7 @@ function out = after(x,option)
         x = sig.envelope.upsample(x,option);
         x.processed = 1;
     end
-    x.Ydata = sig.envelope.diff(x,option);
+    x = sig.envelope.diff(x,option);
     x = sig.envelope.after(x,option);
     out = {x};
 end

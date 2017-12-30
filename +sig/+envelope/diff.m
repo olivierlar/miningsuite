@@ -5,33 +5,38 @@
 % License: New BSD License. See full text of the license in LICENSE.txt in
 % the main folder of the MiningSuite distribution.
 
-function d = diff(e,postoption)
 
-    d = e.Ydata;
+function e = diff(e,postoption)
     if (postoption.diffhwr || postoption.diff) && ~e.diff
-        order = max(postoption.diffhwr,postoption.diff);
-        if postoption.complex
-            dph = diff(ph{k}{i},2);
-            dph = dph/(2*pi);% - round(dph/(2*pi));
-            ddki = sqrt(d{k}{i}(3:end,:,:).^2 + d{k}{i}(2:end-1,:,:).^2 ...
-                                      - 2.*d{k}{i}(3:end,:,:)...
-                                         .*d{k}{i}(2:end-1,:,:)...
-                                         .*cos(dph));
-            d{k}{i} = d{k}{i}(2:end,:,:); 
-            tp{k}{i} = tp{k}{i}(2:end,:,:);
-        elseif order == 1
-            d = d.apply(@zdiff,{},{'sample'});
-        else
-            b = firls(order,[0 0.9],[0 0.9*pi],'differentiator');
-            ddki = filter(b,1,...
-                [repmat(d{k}{i}(1,:,:),[order,1,1]);...
-                 d{k}{i};...
-                 repmat(d{k}{i}(end,:,:),[order,1,1])]);
-            ddki = ddki(order+1:end-order-1,:,:);
-        end
-        if postoption.diffhwr
-            d = d.apply(@hwr,{},{'sample'});
-        end
+        e.Ydata = sig.compute(@main,e.Ydata,postoption);
+        e.diff = 1;
+    end
+end
+
+
+function d = main(d,postoption)
+    order = max(postoption.diffhwr,postoption.diff);
+    if postoption.complex
+        dph = diff(ph{k}{i},2);
+        dph = dph/(2*pi);% - round(dph/(2*pi));
+        ddki = sqrt(d{k}{i}(3:end,:,:).^2 + d{k}{i}(2:end-1,:,:).^2 ...
+                                  - 2.*d{k}{i}(3:end,:,:)...
+                                     .*d{k}{i}(2:end-1,:,:)...
+                                     .*cos(dph));
+        d{k}{i} = d{k}{i}(2:end,:,:); 
+        tp{k}{i} = tp{k}{i}(2:end,:,:);
+    elseif order == 1
+        d = d.apply(@zdiff,{},{'sample'});
+    else
+        b = firls(order,[0 0.9],[0 0.9*pi],'differentiator');
+        ddki = filter(b,1,...
+            [repmat(d{k}{i}(1,:,:),[order,1,1]);...
+             d{k}{i};...
+             repmat(d{k}{i}(end,:,:),[order,1,1])]);
+        ddki = ddki(order+1:end-order-1,:,:);
+    end
+    if postoption.diffhwr
+        d = d.apply(@hwr,{},{'sample'});
     end
 end
 
