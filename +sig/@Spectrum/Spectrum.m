@@ -54,7 +54,7 @@ classdef Spectrum < sig.Signal
             if strcmpi(field,'phase')
                 d = obj.phase;
             else
-                error(['SYNTAX ERROR IN GET: Unknown parameter ''',field,'''.']);
+                d = get@sig.Signal(obj,field);
             end
         end
     end
