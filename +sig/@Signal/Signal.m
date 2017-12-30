@@ -69,7 +69,6 @@ classdef Signal
         fends
         fcenters
         
-        framed
         polyfile
         combinables
         files

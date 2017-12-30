@@ -46,7 +46,6 @@ classdef Video
         fends
         fcenters
         
-        framed
         polyfile
         combinables
         files
