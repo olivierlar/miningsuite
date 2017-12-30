@@ -270,6 +270,10 @@ classdef Signal
                 d = obj.Srate;
             elseif strcmpi(field,'Sdata')
                 d = obj.sdata;
+            elseif strcmpi(field,'Fstarts')
+                d = obj.fstarts;
+            elseif strcmpi(field,'Fends')
+                d = obj.fends;
             else
                 error(['SYNTAX ERROR IN GET: Unknown parameter ''',field,'''.']);
             end
