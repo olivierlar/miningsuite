@@ -12,27 +12,14 @@ classdef Envelope < sig.Signal
         processed = 0
         log = 0
         diff = 0
-        method
     end
 %%
     methods
         function e = Envelope(varargin)
-            i = 1;
-            method = '';
-            while i < length(varargin)
-                if strcmpi(varargin{i},'Method')
-                    varargin(i) = [];
-                    method = varargin{i};
-                    varargin(i) = [];
-                else
-                    i = i+1;
-                end
-            end
             e = e@sig.Signal(varargin{:});
             if strcmp(e.yname,'Signal')
                 e.yname = 'Envelope';
             end
-            e.method = method;
         end
         
         playclass(obj,options)
