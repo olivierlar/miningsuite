@@ -139,15 +139,13 @@ function options = options
     options.power = oppow;
 
         diff.key = 'Diff';
-        diff.type = 'Numeric';
+        diff.type = 'Boolean';
         diff.default = 0;
-        diff.keydefault = 1;
     options.diff = diff;
     
         diffhwr.key = 'HalfwaveDiff';
-        diffhwr.type = 'Numeric';
+        diffhwr.type = 'Boolean';
         diffhwr.default = 0;
-        diffhwr.keydefault = 1;
     options.diffhwr = diffhwr;
 
         aver.key = 'Smooth';
