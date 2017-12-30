@@ -40,6 +40,16 @@ classdef Envelope < sig.Signal
         function func = sonifier(obj)
             func = @sonify;
         end
+
+        function d = get(obj,field)
+            if strcmpi(field,'log')
+                d = obj.log;
+            elseif strcmpi(field,'diff')
+                d = obj.diff;
+            else
+                d = get@sig.Signal(obj,field);
+            end
+        end
     end
 end
 
