@@ -96,8 +96,6 @@ else
     if isempty(frame) || ~frame.toggle
         % Not already in a frame decomposition process
         frame = design.frame;
-    else
-        1
     end
     if chunking % Already in a chunk decomposition process
         input = design.input;
