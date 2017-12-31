@@ -89,18 +89,16 @@ if isempty(design.main)
                 'Ssize',data.size('sample'))};
         end
         
-        
-        %if not(isempty(d.postoption)) && d.postoption.mono
-        %    y = miraudio(y,'Mono',1);
-        %end
         %y = set(y,'AcrossChunks',get(d,'AcrossChunks'));
     end
     
 else
-    %if isempty(frame) || ~frame.toggle
+    if isempty(frame) || ~frame.toggle
         % Not already in a frame decomposition process
         frame = design.frame;
-   % end    
+    else
+        1
+    end
     if chunking % Already in a chunk decomposition process
         input = design.input;
         if iscell(input)
@@ -132,10 +130,10 @@ else
             if iscell(input)
                 input = input{1};
             end
-            y = sig.evaleach(input,filename,window,sr,1,[],chunking);
+            y = sig.evaleach(input,filename,window,sr,1,frame,chunking);
         else
-            y = [sig.evaleach(design.input{1},filename,window,sr,1,[],chunking),...
-                 sig.evaleach(design.input{2},filename,window,sr,1,[],chunking)];
+            y = [sig.evaleach(design.input{1},filename,window,sr,1,frame,chunking),...
+                 sig.evaleach(design.input{2},filename,window,sr,1,frame,chunking)];
         end
         main = design.main;
         if iscell(main)
