@@ -1,7 +1,7 @@
 % MiningSuite
 % Version 0.9.2 (Third alpha version) 6-August-2017
 %
-% Copyright (C) 2014-2015, 2017 Olivier Lartillot and the MiningSuite
+% Copyright (C) 2014-2015, 2017-2018 Olivier Lartillot and the MiningSuite
 % contributors
 % All rights reserved
 % License: New BSD License. See full text of the license in LICENSE.txt in

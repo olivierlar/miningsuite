@@ -4,7 +4,7 @@ Version 0.9.2 (Third alpha version) released on August 6 2017
 
 Open-source project hosted at http://olivierlar.github.io/miningsuite/
 
-Copyright (C) 2014—2015, 2017 Olivier Lartillot and the MiningSuite contributors
+Copyright (C) 2014—2015, 2017-2018 Olivier Lartillot and the MiningSuite contributors
 All rights reserved.
 License: New BSD License. See full text of the license in LICENSE.txt.
 
