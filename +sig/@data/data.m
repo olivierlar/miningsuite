@@ -261,14 +261,13 @@ classdef data
                 end
             end
             if different
-%                 if length(found) < max(found)
-%                     for i = 1:max(found)
-%                         if ~ismember(i,found)
-%                             found(end+1) = i;
-%                             obj.dims{end+1} = dims{i};
-%                         end
-%                     end
-%                 end
+                if length(found) < max(found)
+                    for i = 1:max(found)
+                        if ~ismember(i,found)
+                            found(end+1) = i;
+                        end
+                    end
+                end
                 obj.content = permute(obj.content,found);
                 obj.dims = obj.dims(found);
             end
