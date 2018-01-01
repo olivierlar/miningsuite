@@ -3,7 +3,7 @@
 % settings), and providing standard post-processing operations, as well as
 % by sig.evaleach.
 %
-% Copyright (C) 2014, 2017 Olivier Lartillot
+% Copyright (C) 2014, 2017-2018 Olivier Lartillot
 % All rights reserved.
 % License: New BSD License. See full text of the license in LICENSE.txt in
 % the main folder of the MiningSuite distribution.
@@ -277,6 +277,8 @@ classdef Signal
                 d = obj.fstarts;
             elseif strcmpi(field,'Fends')
                 d = obj.fends;
+            elseif strcmpi(field,'xdata')
+                d = obj.xdata;
             else
                 error(['SYNTAX ERROR IN GET: Unknown parameter ''',field,'''.']);
             end
