@@ -1,6 +1,6 @@
 % SIG.SPECTRUM.OPTIONS
 %
-% Copyright (C) 2014, 2017 Olivier Lartillot
+% Copyright (C) 2014, 2017-2018 Olivier Lartillot
 %
 % All rights reserved.
 % License: New BSD License. See full text of the license in LICENSE.txt in
@@ -67,11 +67,6 @@ function options = options
         alongbands.type = 'Boolean';
         alongbands.default = 0;
     options.alongbands = alongbands;
-
-        ni.key = 'NormalInput';
-        ni.type = 'Boolean';
-        ni.default = 0;
-    options.ni = ni;
     
         nl.key = 'NormalLength';
         nl.type = 'Boolean';
