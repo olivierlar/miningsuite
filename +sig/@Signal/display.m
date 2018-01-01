@@ -1,6 +1,6 @@
 % SIG.SIGNAL.DISPLAY
 %
-% Copyright (C) 2014, 2017 Olivier Lartillot
+% Copyright (C) 2014, 2017-2018 Olivier Lartillot
 %
 % All rights reserved.
 % License: New BSD License. See full text of the license in LICENSE.txt in
@@ -63,7 +63,11 @@ function display(obj)
     hold on
     
     if iscurve && nchans > 20
-        ydata.apply(@drawmat,{sdata,(1:nchans)'},{'sample','freqband'},2);
+        if obj.Srate
+            ydata.apply(@drawmat,{sdata,(1:nchans)'},{'sample','freqband'},2);
+        else
+            ydata.apply(@drawmat,{xdata,(1:nchans)'},{'element','freqband'},2);
+        end
         set(gca,'YDir','normal');   
         title(obj.yname);
     else
