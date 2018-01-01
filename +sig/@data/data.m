@@ -4,7 +4,7 @@
 % AudMinr, VocMinr and audio-based approaches in MusMinr, as well as by
 % sig.read
 %
-% Copyright (C) 2014, 2017 Olivier Lartillot
+% Copyright (C) 2014, 2017-2018 Olivier Lartillot
 % All rights reserved.
 % License: New BSD License. See full text of the license in LICENSE.txt in
 % the main folder of the MiningSuite distribution.
@@ -246,13 +246,13 @@ classdef data
         end
         %%
         function obj = format(obj,dims)
-            found = zeros(1,length(obj.dims));
+            found = zeros(1,length(dims));
             different = 0;
-            for i = 1:length(obj.dims)
-                foundi = find(strcmpi(obj.dims{i},dims));
+            for i = 1:length(dims)
+                foundi = find(strcmpi(dims{i},obj.dims));
                 if isempty(foundi)
-                    dims{end+1} = obj.dims{i};
-                    found(i) = length(dims);
+                    obj.dims{end+1} = dims{i};
+                    found(i) = length(obj.dims);
                 else
                     found(i) = foundi;
                 end
@@ -261,14 +261,14 @@ classdef data
                 end
             end
             if different
-                if length(found) < max(found)
-                    for i = 1:length(found)
-                        if ~ismember(i,found)
-                            found(end+1) = i;
-                            obj.dims{end+1} = dims{i};
-                        end
-                    end
-                end
+%                 if length(found) < max(found)
+%                     for i = 1:max(found)
+%                         if ~ismember(i,found)
+%                             found(end+1) = i;
+%                             obj.dims{end+1} = dims{i};
+%                         end
+%                     end
+%                 end
                 obj.content = permute(obj.content,found);
                 obj.dims = obj.dims(found);
             end
