@@ -1,7 +1,7 @@
 % SIG.SPECTRUM.AFTER1
 %
-% Copyright (C) 2017 Olivier Lartillot
-% © 2007-2009 Olivier Lartillot & University of Jyvaskyla
+% Copyright (C) 2017-2018 Olivier Lartillot
+% Copyright (C) 2007-2009 Olivier Lartillot & University of Jyvaskyla
 %
 % All rights reserved.
 % License: New BSD License. See full text of the license in LICENSE.txt in
@@ -61,7 +61,7 @@ function out = extract(d,x,start,postoption)
     if ~isempty(range)
         d = d.extract('element',range([1,end]));
     end
-    start = start + range(1);
+    start = start + range(1) - 1;
     out = {d,start};
 end
 
