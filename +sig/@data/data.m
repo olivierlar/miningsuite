@@ -282,17 +282,33 @@ classdef data
             obj1.content = bsxfun(func,obj1.content,d);
         end
         function obj1 = plus(obj1,obj2)
-            obj1 = obj1.bsxfun(obj2,@plus);
+            if verLessThan('matlab', 'R2016b')
+                obj1 = obj1.bsxfun(obj2,@plus);
+            else
+                obj1 = obj1 + obj2;
+            end
         end
         function obj1 = minus(obj1,obj2)
-            obj1 = obj1.bsxfun(obj2,@minus);
+            if verLessThan('matlab', 'R2016b')
+                obj1 = obj1.bsxfun(obj2,@minus);
+            else
+                obj1 = obj1 - obj2;
+            end
         end
         function obj1 = times(obj1,obj2)
-            obj1 = obj1.bsxfun(obj2,@times);
+            if verLessThan('matlab', 'R2016b')
+                obj1 = obj1.bsxfun(obj2,@times);
+            else
+                obj1 = obj1 .* obj2;
+            end
         end
         function obj1 = divide(obj1,obj2)
             if isa(obj2,'sig.data')
-                obj1 = obj1.bsxfun(obj2,@rdivide);
+                if verLessThan('matlab', 'R2016b')
+                    obj1 = obj1.bsxfun(obj2,@rdivide);
+                else
+                    obj1 = obj1 ./ obj2;
+                end
             else
                 obj1.content = obj1.content/obj2;
             end
