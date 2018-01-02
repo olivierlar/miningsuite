@@ -2,7 +2,7 @@
 % generates on the fly axis information such as time positions in signal.
 % Internally called by sig.Signal
 %
-% Copyright (C) 2014, Olivier Lartillot
+% Copyright (C) 2014, 2018 Olivier Lartillot
 % All rights reserved.
 % License: New BSD License. See full text of the license in LICENSE.txt in
 % the main folder of the MiningSuite distribution.
@@ -60,7 +60,11 @@ classdef axis
             x = obj.unit.generate(obj.index(sd,segment),segment);
             if ~isempty(obj.subunit) && ...
                     strcmpi(obj.name,obj.subunit.dimname)
-                x = obj.subunit.converter(x);
+                if ~isnan(obj.subunit.parameter)
+                    x = obj.subunit.converter(x,obj.subunit.parameter);
+                else
+                    x = obj.subunit.converter(x);
+                end
             end
         end
         
