@@ -23,6 +23,7 @@ classdef Spectrum < sig.Signal
             il = NaN;
             ph = [];
             is = [];
+            cq = [];
             while i < length(varargin)
                 if strcmpi(varargin{i},'InputLength')
                     varargin(i) = [];
@@ -36,6 +37,10 @@ classdef Spectrum < sig.Signal
                     varargin(i) = [];
                     is = varargin{i};
                     varargin(i) = [];
+                elseif strcmpi(varargin{i},'ConstantQ')
+                    varargin(i) = [];
+                    cq = varargin{i};
+                    varargin(i) = [];
                 else
                     i = i+1;
                 end
@@ -44,8 +49,13 @@ classdef Spectrum < sig.Signal
             if strcmp(s.yname,'Signal')
                 s.yname = 'Spectrum';
             end
-            s.xname = 'Frequency';
-            s.xunit = 'Hz';
+            if isempty(cq)
+                s.xname = 'Frequency';
+                s.xunit = 'Hz';
+            else
+                s.Xaxis.subunit = sig.subunit('Frequency','Hz',@exp2freq,cq);
+            end
+            s.Xaxis.name = 'Frequency';
             s.inputlength = il;
             s.phase = ph;
             s.inputsampling = is;
@@ -60,6 +70,13 @@ classdef Spectrum < sig.Signal
             end
         end
     end
+end
+
+
+function f = exp2freq(t,param)
+    f_min = param(1);
+    r = param(2);
+    f = f_min * r .^ t;
 end
 
 
