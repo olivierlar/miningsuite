@@ -89,7 +89,7 @@ function out = routine(in,sampling,option)
             ink = ink.times(w);
             exq = exp(j2piQn(1:Nkcq)/Nkcq);
             exq = sig.data(exq,{'sample'});
-            ink = ink.times(exq).divide(Nkcq).sum('sample');
+            ink = ink.times(exq).sum('sample').divide(Nkcq);
             ink = ink.apply(@abs,{},{'sample'});
             out = out.edit('element',kcq,ink);
         end
