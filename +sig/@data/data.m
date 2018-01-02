@@ -285,21 +285,39 @@ classdef data
             if verLessThan('matlab', 'R2016b')
                 obj1 = obj1.bsxfun(obj2,@plus);
             else
-                obj1 = obj1 + obj2;
+                if isa(obj2,'sig.data')
+                    obj2 = format(obj2,obj1.dims);
+                    d = obj2.content;
+                else
+                    d = obj2;
+                end
+                obj1.content = obj1.content + d;
             end
         end
         function obj1 = minus(obj1,obj2)
             if verLessThan('matlab', 'R2016b')
                 obj1 = obj1.bsxfun(obj2,@minus);
             else
-                obj1 = obj1 - obj2;
+                if isa(obj2,'sig.data')
+                    obj2 = format(obj2,obj1.dims);
+                    d = obj2.content;
+                else
+                    d = obj2;
+                end
+                obj1.content = obj1.content - d;
             end
         end
         function obj1 = times(obj1,obj2)
             if verLessThan('matlab', 'R2016b')
                 obj1 = obj1.bsxfun(obj2,@times);
             else
-                obj1 = obj1 .* obj2;
+                if isa(obj2,'sig.data')
+                    obj2 = format(obj2,obj1.dims);
+                    d = obj2.content;
+                else
+                    d = obj2;
+                end
+                obj1.content = obj1.content .* d;
             end
         end
         function obj1 = divide(obj1,obj2)
@@ -307,10 +325,22 @@ classdef data
                 if verLessThan('matlab', 'R2016b')
                     obj1 = obj1.bsxfun(obj2,@rdivide);
                 else
-                    obj1 = obj1 ./ obj2;
+                    if isa(obj2,'sig.data')
+                        obj2 = format(obj2,obj1.dims);
+                        d = obj2.content;
+                    else
+                        d = obj2;
+                    end
+                    obj1.content = obj1.content ./ d;
                 end
             else
-                obj1.content = obj1.content/obj2;
+                if isa(obj2,'sig.data')
+                    obj2 = format(obj2,obj1.dims);
+                    d = obj2.content;
+                else
+                    d = obj2;
+                end
+                obj1.content = obj1.content / d;
             end
         end
         
