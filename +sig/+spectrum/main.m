@@ -1,7 +1,7 @@
 % SIG.SPECTRUM.MAIN
 %
-% Copyright (C) 2014, 2017 Olivier Lartillot
-% © 2007-2009 Olivier Lartillot & University of Jyvaskyla
+% Copyright (C) 2014, 2017-2018 Olivier Lartillot
+% Copyright (C) 2007-2009 Olivier Lartillot & University of Jyvaskyla
 %
 % All rights reserved.
 % License: New BSD License. See full text of the license in LICENSE.txt in
@@ -18,32 +18,44 @@ function out = main(x,option)
             || option.aver || option.gauss)
         option.phase = 0;
     end
-    [d,ph] = sig.compute(@routine,x{1}.Ydata,x{1}.Srate,option,'sample');
+    [d,ph,constq] = sig.compute(@routine,x{1}.Ydata,x{1}.Srate,option);
 
     dsize = d.size('element');
-    if iscell(dsize)
-        xrate = zeros(1,length(dsize));
-        for i = 1:length(xrate)
-            xrate(i) = x{1}.Srate/2/dsize{i};
-        end
+    if option.constq
+        if iscell(dsize)
+            xrate = zeros(1,length(dsize));
+            for i = 1:length(xrate)
+                xrate(i) = 1;
+            end
+        else
+            xrate = 1;
+        end 
     else
-        xrate = x{1}.Srate/2/dsize;
+        if iscell(dsize)
+            xrate = zeros(1,length(dsize));
+            for i = 1:length(xrate)
+                xrate(i) = x{1}.Srate/2/dsize{i};
+            end
+        else
+            xrate = x{1}.Srate/2/dsize;
+        end
     end
     if iscell(dsize)
         il = zeros(size(dsize));
         for i = 1:length(dsize)
             il(i) = dsize{i}./x{1}.Srate;
         end
-    else 
+    else
         il = dsize./x{1}.Srate;
     end
     out = {sig.Spectrum(d,'Phase',ph,'xsampling',xrate,'Deframe',x{1},...
-                        'InputSampling',x{1}.Srate,...
-                        'InputLength',il)};
+                        'InputSampling',x{1}.Srate,'InputLength',il,...
+                        'ConstantQ',constq)};
 end
 
 
-function [out,phase] = routine(in,sampling,option,dim)
+function out = routine(in,sampling,option)
+    dim = 'sample';
     N = in.size(dim);
 
     if option.constq
@@ -82,6 +94,7 @@ function [out,phase] = routine(in,sampling,option,dim)
             out = out.edit('element',kcq,ink);
         end
         phase = [];
+        param = [f_min, r];
     else
         if ischar(option.win) 
             if strcmpi(option.win,'Rectangular')
@@ -164,6 +177,7 @@ function [out,phase] = routine(in,sampling,option,dim)
             phase = [];
             out = out.apply(@abs,{},{'element'});
         end
+        param = [];
     end
-    out = {out phase};
+    out = {out phase param};
 end
