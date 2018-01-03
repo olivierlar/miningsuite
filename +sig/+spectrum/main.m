@@ -40,14 +40,17 @@ function out = main(x,option)
             xrate = x{1}.Srate/2/dsize;
         end
     end
-    if iscell(dsize)
-        il = zeros(size(dsize));
-        for i = 1:length(dsize)
-            il(i) = dsize{i}./x{1}.Srate;
+    
+    xsize = x{1}.Ssize;
+    if iscell(xsize)
+        il = zeros(size(xsize));
+        for i = 1:length(xsize)
+            il(i) = xsize{i}./x{1}.Srate;
         end
     else
-        il = dsize./x{1}.Srate;
+        il = xsize./x{1}.Srate;
     end
+    
     out = {sig.Spectrum(d,'Phase',ph,'xsampling',xrate,'Deframe',x{1},...
                         'InputSampling',x{1}.Srate,'InputLength',il,...
                         'ConstantQ',constq)};
