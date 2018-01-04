@@ -279,6 +279,10 @@ classdef Signal
                 d = obj.fends;
             elseif strcmpi(field,'xdata')
                 d = obj.xdata;
+            elseif strcmpi(field,'Xname')
+                d = obj.xname;
+            elseif strcmpi(field,'Ydata')
+                d = obj.Ydata;    
             else
                 error(['SYNTAX ERROR IN GET: Unknown parameter ''',field,'''.']);
             end
