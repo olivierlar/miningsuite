@@ -82,14 +82,14 @@ function options = options
     options.norm = norm;
 
         mprod.key = 'Prod';
-        mprod.type = 'Integers';
+        mprod.type = 'Numeric';
         mprod.default = [];
         mprod.keydefault = 2:6;
         mprod.when = 'After';
     options.mprod = mprod;
 
         msum.key = 'Sum';
-        msum.type = 'Integers';
+        msum.type = 'Numeric';
         msum.default = [];
         msum.keydefault = 2:6;
         msum.when = 'After';
