@@ -121,17 +121,9 @@ while i <= length(args)
                         i = i+1;
                         optionvalue = args{i};
                     elseif isfield(specif.(field),'keydefault')
-                        if strcmpi(type,'Integers')
-                            optionvalue = specif.(field).keydefault;
-                        else
-                            optionvalue = specif.(field).keydefault(1);
-                        end
+                        optionvalue = specif.(field).keydefault;
                     elseif isfield(specif.(field),'default')
-                        if strcmpi(type,'Integers')
-                            optionvalue = specif.(field).default;
-                        else
-                            optionvalue = specif.(field).default(1);
-                        end
+                        optionvalue = specif.(field).default;
                     else
                         error(['SYNTAX ERROR IN ',func2str(method),...
                             ': An integer should follow the key ',arg'.']);
