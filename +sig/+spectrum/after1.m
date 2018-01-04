@@ -41,7 +41,7 @@ function [x,tmp] = after1(x,option)
     
     if any(option.msum)
         x.Ydata = sig.compute(@routine_mprodsum,x.Ydata,...
-                              option.msum,@sum);
+                              option.msum,@plus);
         x.yname = 'Spectral sum';
     end
     
@@ -102,7 +102,7 @@ function y = mprodsum(x,coefs,func)
         if mpr
             xi = ones(size(x));
             xi(1:floor(end/mpr)) = x(mpr:mpr:end);
-            x = func(x,xi);
+            y = func(y,xi);
         end
     end
 end
