@@ -1,8 +1,8 @@
 % MUS.SPECTRUM
 % music-theoretical representation of spectrum decomposition
 %
-% Copyright (C) 2014, 2017 Olivier Lartillot
-% © 2007-2012 Olivier Lartillot & University of Jyvaskyla
+% Copyright (C) 2014, 2017-2018 Olivier Lartillot
+% Copyright (C) 2007-2012 Olivier Lartillot & University of Jyvaskyla
 %
 % All rights reserved.
 % License: New BSD License. See full text of the license in LICENSE.txt in
@@ -81,6 +81,8 @@ function out = after(x,option)
         octaves = octaves(select);
         x.Ydata = x.Ydata.apply(@interp,{f,f2cents},{'element'});
         x.xname = 'cents';
+        x.Xaxis.name = 'Pitch';
+        x.Xaxis.start = 0;
         x.Xaxis.unit.origin = octaves(1)*1200 + cents(1) + 6900;
         x.Xaxis.unit.rate = 1;
         % Now the cent range is expressed in midicent
