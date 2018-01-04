@@ -65,6 +65,12 @@ classdef Spectrum < sig.Signal
                 d = obj.phase;
             elseif strcmpi(field,'frequency')
                 d = obj.xdata;
+            elseif strcmpi(field,'power')
+                d = obj.power;
+            elseif strcmpi(field,'log')
+                d = obj.log;
+            elseif strcmpi(field,'scale')
+                d = obj.xname;
             else
                 d = get@sig.Signal(obj,field);
             end
