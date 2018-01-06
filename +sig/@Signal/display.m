@@ -16,6 +16,10 @@ function display(obj)
     end
     
     xdata = obj.xdata;
+    if isempty(xdata)
+        disp(['The ' obj.yname ' is empty.']);
+        return
+    end
     sdata = obj.sdata;
     
     nchans = obj.Ydata.size('freqband');
