@@ -1,6 +1,6 @@
 % SIG.AUTOCOR.MAIN
 %
-% Copyright (C) 2014, 2017 Olivier Lartillot
+% Copyright (C) 2014, 2017-2018 Olivier Lartillot
 % All rights reserved.
 % License: New BSD License. See full text of the license in LICENSE.txt in
 % the main folder of the MiningSuite distribution.
@@ -177,7 +177,7 @@ function out = routine(in,sampling,option)
             c = compute(x,mint,maxt,option.scaleopt);
         end
         if ~isempty(w)
-            w = compute(w,mint,maxt,option.scaleopt);
+            w = compute(w,mint,maxt,'coeff');
         end
     else
         c = compute_gen(x,mint,maxt,option.gener);
