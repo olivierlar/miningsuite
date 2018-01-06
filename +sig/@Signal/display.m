@@ -31,6 +31,8 @@ function display(obj)
         end
         abscissa = 'xdata';
         Xaxis = obj.Xaxis;
+        yname = '';
+        yunit = '';
         ydata = obj.Ydata;
         iscurve = (length(obj.Sstart) == 1);  
         
@@ -44,6 +46,8 @@ function display(obj)
         end
         abscissa = 'sdata';
         Xaxis = obj.saxis;
+        yname = '';
+        yunit = '';
         ydata = obj.Ydata;
         
     else
@@ -55,6 +59,8 @@ function display(obj)
 %               (x(1:end-1) + x(2:end)) / 2; ...
 %               1.5*x(end) - 0.5*x(end-1) ];
         Xaxis = obj.saxis;
+        yname = obj.Xaxis.name;
+        yunit = obj.Xaxis.unit.name;
         ydata = obj.Ydata.format({'element','sample'});
     end
 
@@ -185,7 +191,22 @@ function display(obj)
             end
             
             if i == 1
-                xlabel(Xaxis.name);
+                xunit = Xaxis.unit.name;
+                if ~isempty(xunit)
+                    label = [Xaxis.name,' (',xunit,')'];
+                else
+                    label = Xaxis.name;
+                end
+                xlabel(label);
+            end
+            
+            if i-1 == floor((nchans-1)/2) && ~isempty(yname)
+                if ~isempty(yunit)
+                    label = [yname,' (',yunit,')'];
+                else
+                    label = yname;
+                end
+                ylabel(label);
             end
         end
         axis tight
