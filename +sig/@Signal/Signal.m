@@ -31,7 +31,6 @@ classdef Signal
         Ydata
         
         Xaxis
-        xname
         xstart
         xunit
         xsampling
@@ -60,6 +59,7 @@ classdef Signal
     end
     properties (Dependent)
     	xdata
+        xname
         
         saxis
         sdata
@@ -93,7 +93,6 @@ classdef Signal
             
             s.Xaxis = sig.axis(options.xname,options.xstart,...
                                options.xunit,0,options.xsampling);
-            s.xname = options.xname;
             s.xstart = options.xstart;
             s.xunit = options.xunit;
             s.xsampling = options.xsampling;
@@ -147,6 +146,9 @@ classdef Signal
             else
                 x = obj.Xaxis.data([1 obj.Ydata.size('element')]);
             end
+        end
+        function n = get.xname(obj)
+            n = obj.Xaxis.name;
         end
         
         function s = get.saxis(obj)

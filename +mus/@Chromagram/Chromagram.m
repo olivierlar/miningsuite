@@ -1,6 +1,6 @@
 % mus.Chromagram class
 %
-% Copyright (C) 2014, 2017 Olivier Lartillot
+% Copyright (C) 2014, 2017-2018 Olivier Lartillot
 %
 % All rights reserved.
 % License: New BSD License. See full text of the license in LICENSE.txt in
@@ -53,7 +53,7 @@ classdef Chromagram < sig.Signal
             if strcmp(c.yname,'Signal')
                 c.yname = 'Chromagram';
             end
-            c.xname = 'Chroma';    
+            c.Xaxis.name = 'Chroma';    
             c.xsampling = 1;
             
             c.plabel = plabel;

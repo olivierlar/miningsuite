@@ -1,6 +1,6 @@
 % AUD.MFCC CLASS
 %
-% Copyright (C) 2014, 2017 Olivier Lartillot
+% Copyright (C) 2014, 2017-2018 Olivier Lartillot
 %
 % All rights reserved.
 % License: New BSD License. See full text of the license in LICENSE.txt in
@@ -29,7 +29,7 @@ classdef Mfcc < sig.Signal
             if strcmp(c.yname,'Signal')
                 c.yname = 'Mel-frequency cepstrum coefficient';
             end
-            c.xname = 'Rank';
+            c.Xaxis.name = 'Rank';
             c.delta = delta;
         end
     end

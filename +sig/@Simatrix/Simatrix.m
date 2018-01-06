@@ -1,6 +1,6 @@
 % sig.Simatrix class
 %
-% Copyright (C) 2017, Olivier Lartillot
+% Copyright (C) 2017-2018, Olivier Lartillot
 %
 % All rights reserved.
 % License: New BSD License. See full text of the license in LICENSE.txt in
@@ -19,7 +19,7 @@ classdef Simatrix < sig.Signal
             if strcmp(s.yname,'Signal')
                 s.yname = 'Dissimilarity Matrix';
             end
-            s.xname = '?';    
+            s.Xaxis.name = '?';    
             s.xsampling = 1;
         end
         display(obj)

@@ -1,6 +1,6 @@
 % mus.Keystrength class
 %
-% Copyright (C) 2014, 2017 Olivier Lartillot
+% Copyright (C) 2014, 2017-2018 Olivier Lartillot
 %
 % All rights reserved.
 % License: New BSD License. See full text of the license in LICENSE.txt in
@@ -18,7 +18,7 @@ classdef Keystrength < sig.Signal
             if strcmp(s.yname,'Signal')
                 s.yname = 'Keystrength';
             end
-            s.xname = 'Keys';    
+            s.Xaxis.name = 'Keys';    
             s.xsampling = 1;
         end
     end

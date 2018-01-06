@@ -1,7 +1,7 @@
 % AUD.SPECTRUM.AFTER
 % auditory modeling of spectrum decomposition
 %
-% Copyright (C) 2014, 2017 Olivier Lartillot
+% Copyright (C) 2014, 2017-2018 Olivier Lartillot
 % Copyright (C) 1998 Malcolm Slaney, Interval Research Corporation
 %
 % All rights reserved.
@@ -21,7 +21,7 @@ function out = after(x,option)
         meth = meth{1};
     end
     if ~isempty(meth)
-        x.xname = [meth, ' bands'];
+        x.Xaxis.name = [meth, ' bands'];
         x.Xaxis.unit.origin = 1;
         x.Xaxis.unit.rate = 1;
         x.yname = [meth, '-Spectrum'];

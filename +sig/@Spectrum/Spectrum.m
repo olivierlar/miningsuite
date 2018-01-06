@@ -50,7 +50,6 @@ classdef Spectrum < sig.Signal
                 s.yname = 'Spectrum';
             end
             if isempty(cq)
-                s.xname = 'Frequency';
                 s.xunit = 'Hz';
             else
                 s.Xaxis.subunit = sig.subunit('Frequency','Hz',@exp2freq,cq);
