@@ -45,6 +45,13 @@ classdef Cepstrum < sig.Signal
             c.Xaxis.name = c.xname;
             c.phase = ph;
         end
+        function d = get(obj,field)
+            if strcmpi(field,'phase')
+                d = obj.phase;
+            else
+                d = get@sig.Signal(obj,field);
+            end
+        end
     end
 end
 
