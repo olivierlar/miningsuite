@@ -16,33 +16,35 @@ function out = after(x,option)
         tmp = [];
     end
 
-    if isstruct(option.min) || isstruct(option.max)
-        if ~isstruct(option.min)
-            option.min.value = -Inf;
-            option.min.unit = 's';
+    if ~x.isempty
+        if isstruct(option.min) || isstruct(option.max)
+            if ~isstruct(option.min)
+                option.min.value = -Inf;
+                option.min.unit = 's';
+            end
+            if ~isstruct(option.max)
+                option.max.value = Inf;
+                option.max.unit = 's';
+            end
+            param.value = [option.min.value,option.max.value];
+            param.unit = option.min.unit;
+            x = x.extract(param,'element','Xaxis','Ydata'); %,'window');
         end
-        if ~isstruct(option.max)
-            option.max.value = Inf;
-            option.max.unit = 's';
+        
+        if not(isequal(x.normwin,0) || strcmpi(x.normwin,'No') || ...
+                strcmpi(x.normwin,'Off') || x.normalized)
+            x = x.normalize;
         end
-        param.value = [option.min.value,option.max.value];
-        param.unit = option.min.unit;
-        x = x.extract(param,'element','Xaxis','Ydata'); %,'window');
-    end
-
-    if not(isequal(x.normwin,0) || strcmpi(x.normwin,'No') || ...
-           strcmpi(x.normwin,'Off') || x.normalized)
-        x = x.normalize;
-    end
-    if option.hwr
-        x = x.hwr;
-    end
-    
-    if isequal(option.enhance,1)
-        option.enhance = 2:10;
-    end
-    if max(option.enhance)>1
-        x = x.enhance(option.enhance);
+        if option.hwr
+            x = x.hwr;
+        end
+        
+        if isequal(option.enhance,1)
+            option.enhance = 2:10;
+        end
+        if max(option.enhance)>1
+            x = x.enhance(option.enhance);
+        end
     end
 
     if option.freq
