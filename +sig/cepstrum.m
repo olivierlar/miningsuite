@@ -116,17 +116,17 @@ end
 
 %%
 function d = routine_real(d,len,start)
-    d = d.apply(@real_cepstrum,{len,start},{'element'});
+    d = d.apply(@real_cepstrum,{len,start},{'element'},5);
 end
 
 
 function y = real_cepstrum(x,len,start)
-    x = [x(1:end-1,:) ; flipud(x)];
+    x = [x(1:end-1,:,:,:,:) ; flipud(x)];
         % Reconstitution of the complete abs(FFT)
     y = log(x + 1e-12);
     y = fft(y);
     len = min(len,floor(size(y,1)/2));
-    y = abs(y(start:len,:,:));
+    y = abs(y(start:len,:,:,:,:));
 end
 
 
