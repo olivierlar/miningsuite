@@ -18,9 +18,9 @@ function out = main(x,option)
             if ~strcmpi(option.max.unit,'Hz')
                 error('Syntax error...');
             end
-            omax = 1/option.min;
+            omax = 1/option.min.value;
             option.min.value = 1/option.max.value;
-            option.max = omax;
+            option.max.value = omax;
             option.min.unit = 's';
             option.max.unit = 's';
         else
