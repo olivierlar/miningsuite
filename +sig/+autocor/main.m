@@ -32,7 +32,13 @@ function out = main(x,option)
     elseif isstruct(option.max) && strcmpi(option.max.unit,'Hz')
         option.min.value = 1/option.max.value;
         option.min.unit = 's';
-        option.max.value = 0.05;
+        if isa(x,'sig.Envelope')
+            option.max.value = 2;
+        elseif x.Srate > 1000
+            option.max.value = 0.05;
+        else
+            option.max.value = Inf;
+        end
         option.max.unit = 's';
     else
         if isempty(option.min)
@@ -40,7 +46,7 @@ function out = main(x,option)
             option.min.unit = 's';
         end
         if isempty(option.max)
-            if isa(x,'sig.Envelope') %% should find another way..
+            if isa(x,'sig.Envelope')
                 option.max.value = 2;
             elseif x.Srate > 1000
                 option.max.value = 0.05;
