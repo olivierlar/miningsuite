@@ -294,6 +294,9 @@ classdef Signal
         function b = istype(obj,type)
             b = strcmp(class(obj),type);
         end
+        function b = isempty(obj)
+            b = obj.Ydata.isempty;
+        end
         %%
         
         function obj = deframe(obj,in)
