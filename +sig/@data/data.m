@@ -344,6 +344,9 @@ classdef data
                 obj1.content = obj1.content / d;
             end
         end
+        function b = isempty(obj)
+            b = isempty(obj.content);
+        end
         
         function d = findglobal(obj,func)
             d = obj.content;
