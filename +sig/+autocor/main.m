@@ -52,24 +52,27 @@ function out = main(x,option)
     end
     
     if isa(x,'sig.Spectrum')
+        ofspectrum = 1;
         x.Ydata = x.Ydata.reframe;
         x.Frate = x.Srate;
-        x.Srate = x.xsampling;
+        x.Srate = 1/x.xsampling;
         if strcmpi(option.normwin,'')
             option.normwin = 0;
         end
-        warning('Work in progress')
-    elseif isa(x,'sig.Envelope') || x.Srate < 1000
-        if strcmpi(option.normwin,'') || isequal(option.normwin,1) || ...
-                       strcmpi(option.normwin,'On') || ...
-                       strcmpi(option.normwin,'Yes')
-            option.normwin = 'Rectangular';
-        end
     else
-        if strcmpi(option.normwin,'') || isequal(option.normwin,1) || ...
-                       strcmpi(option.normwin,'On') || ...
-                       strcmpi(option.normwin,'Yes')
-            option.normwin = 'hanning';
+        ofspectrum = 0;
+        if isa(x,'sig.Envelope') || x.Srate < 1000
+            if strcmpi(option.normwin,'') || isequal(option.normwin,1) || ...
+                    strcmpi(option.normwin,'On') || ...
+                    strcmpi(option.normwin,'Yes')
+                option.normwin = 'Rectangular';
+            end
+        else
+            if strcmpi(option.normwin,'') || isequal(option.normwin,1) || ...
+                    strcmpi(option.normwin,'On') || ...
+                    strcmpi(option.normwin,'Yes')
+                option.normwin = 'hanning';
+            end
         end
     end
     if isnan(option.win) 
@@ -87,11 +90,11 @@ function out = main(x,option)
     end
 
     [d,w,xstart] = sig.compute(@routine,x.Ydata,x.Srate,option);
-    y = sig.Autocor(d,'xsampling',1/x.Srate,'Deframe',x);
+    y = sig.Autocor(d,'xsampling',1/x.Srate,'Deframe',x,'ofSpectrum',ofspectrum);
     y.window = w;
     y.normwin = option.normwin;
     y.Xaxis.start = xstart;
-
+    
     out = {y};
 end
 
