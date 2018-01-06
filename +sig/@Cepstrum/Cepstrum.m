@@ -42,6 +42,7 @@ classdef Cepstrum < sig.Signal
                 c.xname = 'Quefrency';
                 c.xunit = 's';
             end
+            c.Xaxis.name = c.xname;
             c.phase = ph;
         end
     end
