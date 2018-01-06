@@ -191,7 +191,11 @@ function display(obj)
             end
             
             if i == 1
-                xunit = Xaxis.unit.name;
+                if ~isempty(Xaxis.subunit) && strcmp(Xaxis.subunit.dimname,Xaxis.name)
+                    xunit = Xaxis.subunit.unitname;
+                else
+                    xunit = Xaxis.unit.name;
+                end
                 if ~isempty(xunit)
                     label = [Xaxis.name,' (',xunit,')'];
                 else
