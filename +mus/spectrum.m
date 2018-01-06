@@ -80,8 +80,8 @@ function out = after(x,option)
         cents = cents(select);
         octaves = octaves(select);
         x.Ydata = x.Ydata.apply(@interp,{f,f2cents},{'element'});
-        x.xname = 'cents';
         x.Xaxis.name = 'Pitch';
+        x.Xaxis.unit.name = 'cents';
         x.Xaxis.start = 0;
         x.Xaxis.unit.origin = octaves(1)*1200 + cents(1) + 6900;
         x.Xaxis.unit.rate = 1;
@@ -90,11 +90,11 @@ function out = after(x,option)
         x.phase = [];
     end
     
-    if strcmp(x.xname,'cents') && option.collapsed
+    if strcmp(x.Xaxis.unit.name,'Pitch') && option.collapsed
         f = x.xdata;
         centclass = rem(f,1200);
         x.Ydata = x.Ydata.apply(@collapse,{centclass},{'element'});
-        x.xname = 'cents (collapsed)';
+        x.Xaxis.unit.name = 'cents (collapsed)';
         x.Xaxis.unit.origin = 0;
         x.Xaxis.unit.rate = 1;
     end
