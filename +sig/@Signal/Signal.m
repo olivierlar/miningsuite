@@ -32,7 +32,6 @@ classdef Signal
         
         Xaxis
         xstart
-        xunit
         xsampling
         xunsampled
                 
@@ -60,6 +59,7 @@ classdef Signal
     properties (Dependent)
     	xdata
         xname
+        xunit
         
         saxis
         sdata
@@ -94,7 +94,6 @@ classdef Signal
             s.Xaxis = sig.axis(options.xname,options.xstart,...
                                options.xunit,0,options.xsampling);
             s.xstart = options.xstart;
-            s.xunit = options.xunit;
             s.xsampling = options.xsampling;
             
             s.xunsampled = options.xdata;
@@ -149,6 +148,9 @@ classdef Signal
         end
         function n = get.xname(obj)
             n = obj.Xaxis.name;
+        end
+        function n = get.xunit(obj)
+            n = obj.Xaxis.unit.name;
         end
         
         function s = get.saxis(obj)

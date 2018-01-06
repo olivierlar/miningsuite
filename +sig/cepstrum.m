@@ -143,8 +143,8 @@ function out = after(in,option)
     x.Ydata = sig.compute(@extract,x.Ydata,newlen,x.xstart,idx);
     
     if option.fr
-        x.xunit = 'Hz';
         x.Xaxis.name = 'Frequency';
+        x.Xaxis.unit.name = 'Hz';
         x.Xaxis.unit.generator = @freq;
     end
 

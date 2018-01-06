@@ -35,12 +35,12 @@ classdef Cepstrum < sig.Signal
                 c.yname = 'Cepstrum';
             end
             if f
-                c.xunit = 'Hz';
                 c.Xaxis.name = 'Frequency';
+                c.Xaxis.unit.name = 'Hz';
                 c.Xaxis.unit.generator = @freq;
             else
-                c.xunit = 's';
                 c.Xaxis.name = 'Quefrency';
+                c.Xaxis.unit.name = 's';
             end
             c.phase = ph;
         end
