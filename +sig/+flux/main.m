@@ -1,6 +1,6 @@
 % SIG.FLUX.MAIN
 %
-% Copyright (C) 2014, 2017 Olivier Lartillot
+% Copyright (C) 2014, 2017-2018 Olivier Lartillot
 % ? 2007-2009 Olivier Lartillot & University of Jyvaskyla
 %
 % All rights reserved.
@@ -30,7 +30,9 @@ function out = main(x,option)
         end
         res = sig.compute(@routine,x.Ydata,option,method);
     end
-    x = sig.Signal(res,'Name',name,'Srate',x.Srate,'Ssize',x.Ssize,'FbChannels',x.fbchannels);
+    x = sig.Signal(res,'Name',name,'Srate',x.Srate,'Ssize',x.Ssize,...
+                       'Sstart',x.Sstart + 1/x.Srate,...
+                       'FbChannels',x.fbchannels);
     out = {x};
 end
 
