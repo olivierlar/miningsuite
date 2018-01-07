@@ -2,7 +2,7 @@
 % estimates a temporal curve where peaks relate to the temporal position of 
 % events, and estimates those event time positions.
 %
-% Copyright (C) 2017 Olivier Lartillot
+% Copyright (C) 2017-2018 Olivier Lartillot
 % Code for envelope generation from MIDI file is taken from onsetacorr.m
 %   and duraccent.m, part of MIDI Toolbox. Copyright (C) 2004, University of 
 %   Jyvaskyla, Finland
