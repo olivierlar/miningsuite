@@ -216,7 +216,6 @@ function display(obj)
                 end
                 ylabel(label);
             end
-            axis tight
         end
         title(obj.yname);
     end
