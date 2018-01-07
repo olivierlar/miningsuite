@@ -1,18 +1,19 @@
 % SIG.FILTERBANK.MAIN
 % Main routine of sig.filterbank, also called by aud.filterbank
 %
-% Copyright (C) 2014, 2017 Olivier Lartillot
+% Copyright (C) 2014, 2017-2018 Olivier Lartillot
 %
 % All rights reserved.
 % License: New BSD License. See full text of the license in LICENSE.txt in
 % the main folder of the MiningSuite distribution.
 
-function x = main(x,option,filterspecif)
+function out = main(x,option,filterspecif)
     [x{1}.Ydata,x{2},x{1}.fbchannels] = ...
         sig.compute(@routine,x{1}.Ydata,x{1}.Srate,x{1}.fbchannels,...
                     option,filterspecif);
 
     x = sig.framenow(x,option.frame);
+    out = {x};
 end
 
 
