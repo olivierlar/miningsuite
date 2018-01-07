@@ -171,6 +171,7 @@ function out = routine(in,sampling,option)
     if option.gener == 2
         if strcmpi(option.scaleopt,'coeff')
             c = compute(x,mint,maxt,'none');
+            x = x.sum('freqband');
             c0 = compute(x,1,1,'none');
             c = c.divide(c0);
         else
