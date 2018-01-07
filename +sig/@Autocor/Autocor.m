@@ -1,6 +1,6 @@
 % SIG.AUTOCOR CLASS
 %
-% Copyright (C) 2014, 2017 Olivier Lartillot
+% Copyright (C) 2014, 2017-2018 Olivier Lartillot
 %
 % All rights reserved.
 % License: New BSD License. See full text of the license in LICENSE.txt in
@@ -12,6 +12,9 @@ classdef Autocor < sig.Signal
         window
         normwin
         ofSpectrum = 0;
+        
+        % Should ideally be a property of a subclass mus.Autocor, but it seems too complex to do that in Matlab...
+        resonance = ''; 
     end
     methods
         function s = Autocor(varargin)
@@ -45,6 +48,8 @@ classdef Autocor < sig.Signal
                 d = obj.ofSpectrum;
             elseif strcmpi(field,'window')
                 d = obj.window;
+            elseif strcmpi(field,'resonance')
+                d = obj.resonance;
             else
                 d = get@sig.Signal(obj,field);
             end
