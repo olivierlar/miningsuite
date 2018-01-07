@@ -1,8 +1,8 @@
 % MUS.AUTOCOR
 % music-theoretical representation of autocorrelation function
 %
-% Copyright (C) 2014, 2017 Olivier Lartillot
-% © 2007-2012 Olivier Lartillot & University of Jyvaskyla
+% Copyright (C) 2014, 2017-2018 Olivier Lartillot
+% ? 2007-2012 Olivier Lartillot & University of Jyvaskyla
 %
 % All rights reserved.
 % License: New BSD License. See full text of the license in LICENSE.txt in
@@ -31,8 +31,16 @@ end
 function out = after(x,option)
     x = sig.autocor.after(x,option);
     x = x{1};    
-    if option.reso
+    if ischar(option.reso) && ...
+            ~strcmpi(option.reso,'no') && ~strcmpi(option.reso,'off') && ...
+            ...(~isa(x,'mus.Autocor') || 
+            isempty(x.resonance)%)
         x.Ydata = sig.compute(@resonance,x.Ydata,x.xdata,option.reso);
+        %if isa(x,'mus.Autocor')
+            x.resonance = option.reso;
+%         else
+%             x = mus.Autocor(x,'Resonance',option.reso);
+%         end
     end
     out = {x};
 end
