@@ -932,7 +932,7 @@ end
 function out = symbolic(x,option)
     % Code adapted from onsetacorr.m and duraccent.m in MIDItoolbox
     % NDIVS = divisions in Hz (default = 4);
-    ndivs = 4;
+    ndivs = 10;
     tau=0.5;
     accent_index=2;
     l = length(x.content);
@@ -955,6 +955,6 @@ function out = symbolic(x,option)
     end
     %%
     d = sig.data(g,{'sample'});
-    out = {sig.Envelope(d,'Srate',ndivs,'Sstart',0,'Ssize',length(g))};
-    out = sig.framenow(out,option.frame);
+    out = sig.Envelope(d,'Srate',ndivs,'Sstart',0,'Ssize',length(g));
+    out = {sig.framenow(out,option.frame)};
 end

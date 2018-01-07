@@ -44,8 +44,9 @@ function [x type] = init(x,option,frame)
 end
 
 
-function x = main(x,frame)
+function out = main(x,frame)
     x = sig.framenow(x,frame);
+    out = {x};
 end
 
 
