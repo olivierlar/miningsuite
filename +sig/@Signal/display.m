@@ -216,8 +216,8 @@ function display(obj)
                 end
                 ylabel(label);
             end
+            axis tight
         end
-        axis tight
         title(obj.yname);
     end
     fig = gcf;
