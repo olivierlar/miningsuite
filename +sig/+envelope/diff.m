@@ -1,6 +1,6 @@
 % SIG.ENVELOPE.DIFF
 %
-% Copyright (C) 2014, 2017 Olivier Lartillot
+% Copyright (C) 2014, 2017-2018 Olivier Lartillot
 % All rights reserved.
 % License: New BSD License. See full text of the license in LICENSE.txt in
 % the main folder of the MiningSuite distribution.
@@ -21,14 +21,8 @@ function d = main(d,postoption)
         d = d.apply(@zdiff,{},{'sample'});
     end
     if postoption.diffhwr
-        d = d.apply(@hwr,{},{'sample'});
+        d = d.hwr;
     end
-end
-
-
-function y = hwr(x)
-    % Half-Wave Rectifier
-    y = 0.5 * (x + abs(x));
 end
 
 

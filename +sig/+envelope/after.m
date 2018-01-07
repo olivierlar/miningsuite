@@ -1,6 +1,6 @@
 % SIG.ENVELOPE.AFTER
 %
-% Copyright (C) 2014, 2017 Olivier Lartillot
+% Copyright (C) 2014, 2017-2018 Olivier Lartillot
 % All rights reserved.
 % License: New BSD License. See full text of the license in LICENSE.txt in
 % the main folder of the MiningSuite distribution.
@@ -23,11 +23,11 @@ function d = main(d,postoption,elog)
     
     if postoption.chwr
         d = d.center('sample');
-        d = d.apply(@hwr,{},{'sample'});
+        d = d.hwr;
     end
     
     if postoption.hwr
-        d = d.apply(@hwr,{},{'sample'});
+        d = d.hwr;
     end
     
     if postoption.center
@@ -44,12 +44,6 @@ function d = main(d,postoption,elog)
             strcmpi(postoption.norm,'AcrossSegments')
         d = d./repmat(mdk,[size(d,1),1,1]); % not ready yet!
     end
-end
-
-
-function y = hwr(x)
-    % Half-Wave Rectifier
-    y = 0.5 * (x + abs(x));
 end
 
 

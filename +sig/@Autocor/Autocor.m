@@ -55,7 +55,6 @@ classdef Autocor < sig.Signal
             end
         end        
         obj = normalize(obj,win);
-        obj = hwr(obj);
         obj = enhance(obj,param);
     end
 end

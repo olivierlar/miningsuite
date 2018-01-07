@@ -36,7 +36,7 @@ function out = after(x,option)
             x = x.normalize;
         end
         if option.hwr
-            x = x.hwr;
+            x = x.halfwave;
         end
         
         if isequal(option.enhance,1)
