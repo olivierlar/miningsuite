@@ -1,14 +1,20 @@
 % SIG.FLUX
 %
-% Copyright (C) 2014, 2017 Olivier Lartillot
+% Copyright (C) 2014, 2017-2018 Olivier Lartillot
 %
 % All rights reserved.
 % License: New BSD License. See full text of the license in LICENSE.txt in
 % the main folder of the MiningSuite distribution.
 
 function varargout = flux(varargin)
-    varargout = sig.operate('sig','flux',sig.flux.options,...
-                            @init,@sig.flux.main,@after,varargin);
+    varargout = sig.operate('sig','flux',options,@init,@sig.flux.main,...
+                            @after,varargin);
+end
+
+
+function options = options    
+    options = sig.Signal.signaloptions('FrameAuto',.05,.5);
+    options = sig.flux.options(options);
 end
 
 

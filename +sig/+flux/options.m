@@ -1,14 +1,12 @@
 % SIG.FLUX.OPTIONS
 %
-% Copyright (C) 2014, 2017 Olivier Lartillot
+% Copyright (C) 2014, 2017-2018 Olivier Lartillot
 %
 % All rights reserved.
 % License: New BSD License. See full text of the license in LICENSE.txt in
 % the main folder of the MiningSuite distribution.
 
-function options = options    
-    options = sig.Signal.signaloptions('FrameAuto',.05,.5);
-
+function options = options(options) 
         dist.key = 'Dist';
         dist.type = 'String';
         dist.default = 'Euclidean';

@@ -8,7 +8,9 @@
 % the main folder of the MiningSuite distribution.
 
 function out = main(x,option)
-    x = x{1};
+    if iscell(x)
+        x = x{1};
+    end
     name = x.yname;
     if isa(x,'sig.Spectrum')
         name = 'Spectral flux';

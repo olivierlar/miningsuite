@@ -1,7 +1,7 @@
 % AUD.FLUX
 % auditory modeling of spectral flux
 %
-% Copyright (C) 2014, 2017 Olivier Lartillot
+% Copyright (C) 2014, 2017-2018 Olivier Lartillot
 %
 % All rights reserved.
 % License: New BSD License. See full text of the license in LICENSE.txt in
@@ -9,12 +9,13 @@
 
 function varargout = flux(varargin)
     varargout = sig.operate('aud','flux',options,...
-                            @init,@sig.flux.main,@after,varargin);
+                            @init,@main,@after,varargin);
 end
 
 
 function options = options    
-    options = sig.flux.options;
+    options = sig.Signal.signaloptions('FrameManual',.05,.5,'After');
+    options = sig.flux.options(options);
 
         sb.key = 'SubBand';
         sb.type = 'String';
@@ -24,7 +25,7 @@ function options = options
 end
 
 
-function [x type] = init(x,option,frame)
+function [x,type] = init(x,option,frame)
     if x.istype('sig.Signal')
         if strcmpi(option.sb,'Manual')
             x = sig.filterbank(x,'Cutoff',[-Inf 50*2.^(0:1:8) Inf],...
@@ -32,10 +33,17 @@ function [x type] = init(x,option,frame)
         else
             x = aud.filterbank(x,option.sb);
         end
-        frame.toggle = 1;
-        x = sig.spectrum(x,'FrameConfig',frame);
     end
     type = 'sig.Signal';
+end
+
+
+function out = main(x,option)
+    x = x{1};
+    option.frame.toggle = 1;
+    x = sig.framenow(x,option.frame);
+    x = sig.spectrum(x);
+    out = sig.flux.main(x,option);
 end
 
 
