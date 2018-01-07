@@ -25,7 +25,7 @@ function out = after(x,option)
         x.Xaxis.unit.origin = 1;
         x.Xaxis.unit.rate = 1;
         x.yname = [meth, '-Spectrum'];
-        %x.Ydata = x.Ydata.rename('element','channels');
+        x.Xaxis.unit.name = '';
         x.phase = [];
     end
     
