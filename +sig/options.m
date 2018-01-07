@@ -1,6 +1,6 @@
 % SIG.OPTIONS
 %
-% Copyright (C) 2014, 2017 Olivier Lartillot
+% Copyright (C) 2014, 2017-2018 Olivier Lartillot
 % All rights reserved.
 % License: New BSD License. See full text of the license in LICENSE.txt in
 % the main folder of the MiningSuite distribution.
@@ -80,6 +80,8 @@ while i <= length(args)
                             if not(match2)
                                 if isfield(specif.(field),'keydefault')
                                     optionvalue = specif.(field).keydefault;
+                                elseif isfield(specif.(field),'default')
+                                    optionvalue = specif.(field).default;
                                 else
                                     error(['SYNTAX ERROR IN ',name,...
                                         ': Unexpected keyword after key ',arg'.']);
