@@ -27,6 +27,7 @@ classdef Autocor < sig.Signal
                 end
             end
             s = s@sig.Signal(varargin{:});
+            s.ofSpectrum = ofspectrum;
             
             if strcmp(s.yname,'Signal')
                 s.yname = 'Autocor';
@@ -39,7 +40,15 @@ classdef Autocor < sig.Signal
                 s.Xaxis.unit.name = 's';
             end
         end
-        
+        function d = get(obj,field)
+            if strcmpi(field,'ofSpectrum')
+                d = obj.ofSpectrum;
+            elseif strcmpi(field,'window')
+                d = obj.window;
+            else
+                d = get@sig.Signal(obj,field);
+            end
+        end        
         obj = normalize(obj,win);
         obj = hwr(obj);
         obj = enhance(obj,param);
