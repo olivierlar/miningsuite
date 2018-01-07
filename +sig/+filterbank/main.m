@@ -41,7 +41,7 @@ function out = routine(in,sampling,ch,option,filterspecif)
         end
         
         [out{1},out{2}] = in.apply(@subroutine,{Hd,ch},...
-                                   {'sample','freqband'},Inf);
+                                   {'sample','freqband'},3);
         out{3} = ch;
     end
 end
