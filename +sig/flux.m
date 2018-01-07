@@ -27,5 +27,29 @@ function [x,type] = init(x,option,frame)
 end
 
 
-function x = after(x,option)
+function out = after(x,option)
+    x = x{1};
+    if option.median(1)
+        lr = round(option.median(1)*x.Srate);
+        x.Ydata = sig.compute(@median_routine,x.Ydata,lr,option.median(2));
+    end
+    if option.hwr
+        x = x.halfwave;
+    end
+    out = {x};
+end
+
+
+function out = median_routine(d,winlength,scalfact)
+    d = d.apply(@routine,{winlength,scalfact},{'sample'},2);
+    out = {d};
+end
+
+
+function y = routine(x,wl,scalfact)
+    y = zeros(size(x));
+    l = size(x,1);
+    for i = 1:size(x,1)
+        y(i,:) = x(i,:) - scalfact * median(x(max(1,i-wl):min(l,i+wl),:));
+    end
 end

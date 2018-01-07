@@ -30,19 +30,19 @@ function options = options(options)
     options.complex = complex;
     
         gap.key = 'Gaps';
-        gap.type = 'Integer';
+        gap.type = 'Numeric';
         gap.default = 0;
         gap.keydefault = .2;
     options.gap = gap;
         
-        h.key = 'Halfwave';
-        h.type = 'Boolean';
-        h.default = 0;
-        h.when = 'After';
-    options.h = h;
+        hwr.key = 'Halfwave';
+        hwr.type = 'Boolean';
+        hwr.default = 0;
+        hwr.when = 'After';
+    options.hwr = hwr;
     
         median.key = 'Median';
-        median.type = 'Integer';
+        median.type = 'Numeric';
         median.number = 2;
         median.default = [0 0];
         median.keydefault = [.2 1.3];
