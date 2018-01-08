@@ -288,7 +288,13 @@ classdef Signal
             elseif strcmpi(field,'Ydata')
                 d = obj.Ydata;   
             elseif strcmpi(field,'PeakPos')
-                d = obj.peakpos;   
+                d = obj.peakpos;  
+            elseif strcmpi(field,'PeakVal')
+                d = obj.peakval;
+            elseif strcmpi(field,'PeakPrecisePos')
+                d = obj.peakprecisepos;  
+            elseif strcmpi(field,'PeakPreciseVal')
+                d = obj.peakpreciseval;
             else
                 error(['SYNTAX ERROR IN GET: Unknown parameter ''',field,'''.']);
             end
