@@ -40,7 +40,10 @@ classdef axis
                     x = x(segment);
                 end
             end
-            if length(sd) == 2
+            if size(sd,2) > 1
+                if size(sd,2) > 2 || size(sd,1) > 1
+                    error('Error in sig.axis: invalid format.')
+                end
                 sd = sd(1):sd(2);
             end
             x = x + sd - 1;

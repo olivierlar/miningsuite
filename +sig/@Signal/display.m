@@ -176,7 +176,7 @@ function display(obj)
                                 pj = pk.view('sample',j);
                                 if ~isempty(pj{1})
                                     px = obj.saxis.data(j+.5);
-                                    py = obj.Xaxis.data(pj{1});
+                                    py = obj.Xaxis.data(pj{1}');
                                     plot(px,py,'+k');
                                 end
                             end
@@ -187,7 +187,7 @@ function display(obj)
                         pj = p.view('sample',j);
                         if ~isempty(pj{1})
                             px = obj.saxis.data(j+.5);
-                            py = obj.Xaxis.data(pj{1});
+                            py = obj.Xaxis.data(pj{1}');
                             plot(px,py,'+k');
                         end
                     end
