@@ -1,7 +1,7 @@
 % SIG.PEAKS
 %
-% Copyright (C) 2014, 2017 Olivier Lartillot
-% © 2007-2009 Olivier Lartillot & University of Jyvaskyla
+% Copyright (C) 2014, 2017-2018 Olivier Lartillot
+% Copyright (C) 2007-2009 Olivier Lartillot & University of Jyvaskyla
 %
 % All rights reserved.
 % License: New BSD License. See full text of the license in LICENSE.txt in
@@ -303,7 +303,7 @@ function out = search(y,x,option,interpol)
             end
             jj = jj+1;
         end
-        if bufmax - oldbufmin >= option.cthr && ...
+        if (isempty(oldbufmin) || bufmax - oldbufmin >= option.cthr) && ...
                 (p(j) == length(y) || ...
                  bufmax - min(y(p(j)+1:end)) >= option.cthr)
             % The last peak candidate is OK and stored
