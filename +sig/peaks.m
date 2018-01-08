@@ -74,8 +74,7 @@ function options = initoptions
     options.interpol = interpol;
     
         reso.key = 'Reso';
-        %reso.type = 'String';
-        %reso.choice = {0,'SemiTone'};
+        reso.type = 'Numeric';
         reso.default = 0;
     options.reso = reso;
     
@@ -83,11 +82,6 @@ function options = initoptions
         resofirst.type = 'Boolean';
         resofirst.default = 0;
     options.resofirst = resofirst;
-    
-        resoloose.key = 'Loose';
-        resoloose.type = 'Boolean';
-        resoloose.default = 0;
-    options.resoloose = resoloose;
         
         c.key = 'Pref';
         c.type = 'Integer';
@@ -304,6 +298,28 @@ function out = search(y,x,option,interpol)
         p = finalm;
     end
     
+    if option.reso % Removing peaks too close to higher peaks
+        [unused,idx] = sort(y(p+1),'descend');
+        p = p(idx);
+        del = [];
+        j = 1;
+        while j < length(p)
+            jj = j+1;
+            while jj <= length(p)
+                if abs(x(p(jj)) - x(p(j))) < option.reso
+                    if option.resofirst && p(j)>p(jj)
+                        del = [del j];
+                    else
+                        del = [del jj];
+                    end
+                end
+                jj = jj+1;
+            end
+            j = j+1;
+        end
+        p(del) = [];
+    end
+    
     idx = [];
     if length(p) > option.m
         [unused,idx] = sort(y(p+1),'descend');
@@ -341,6 +357,9 @@ function out = search(y,x,option,interpol)
     end
     out = {p pp pv};
 end
+
+
+
 
 
 function x = after(x,option)
