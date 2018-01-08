@@ -156,10 +156,12 @@ function display(obj)
                 end
                 
                 if iscurve
-                    pi = p.content{1};
-                    px = Xaxis.data(pi);
-                    py = ydatai.content(pi);
-                    plot(px,squeeze(py),'or');
+                    for j = 1:length(p.content)
+                        pj = p.content{j};
+                        px = Xaxis.data(pj);
+                        py = ydatai.content(pj,j);
+                        plot(px,squeeze(py),'or');
+                    end
                 elseif iscell(ydatai.content)
                     for k = 1:length(ydatai.content)
                         pk = p;
@@ -256,7 +258,9 @@ end
 
 function drawmat(z,x,y)
     x(end+1) = 2*x(end) - x(end-1);
-    y(end+1) = 2*y(end) - y(end-1);
+    y = [1.5*y(1)-0.5*y(2);...
+         (y(1:end-1)+y(2:end))/2;...
+         1.5*y(end)-0.5*y(end-1)];
     surfplot(x,y,z')
 end
 
