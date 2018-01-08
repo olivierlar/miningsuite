@@ -158,9 +158,11 @@ function display(obj)
                 if iscurve
                     for j = 1:length(p.content)
                         pj = p.content{j};
-                        px = Xaxis.data(pj);
-                        py = ydatai.content(pj,j);
-                        plot(px,squeeze(py),'or');
+                        if ~isempty(pj)
+                            px = Xaxis.data(pj');
+                            py = ydatai.content(pj,j);
+                            plot(px,squeeze(py),'or');
+                        end
                     end
                 elseif iscell(ydatai.content)
                     for k = 1:length(ydatai.content)
@@ -169,7 +171,7 @@ function display(obj)
                         if pk.size('sample') == 1
                             pk = pk.content{1};
                             if ~isempty(pk)
-                                py = obj.Xaxis.data(pk+.5);
+                                py = obj.Xaxis.data(pk'+.5);
                                 px = obj.Sstart(k) + obj.Ssize(k) / 2;
                                 plot(px,py,'+k');
                             end
