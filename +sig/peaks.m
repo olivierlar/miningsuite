@@ -224,22 +224,24 @@ end
 function out = search(y,x,option,interpol)
     pp = [];
     pv = [];
+    
+    if option.nobegin
+        y = [Inf;y];
+    else
+        y = [-Inf;y];
+    end
+    
+    if option.noend
+        y(end+1) = Inf;
+    else
+        y(end+1) = -Inf;
+    end
 
     dy = diff(y);
+
     % Let's find the local maxima
     p = find(y(2:end-1) >= max(option.cthr,option.thr) & ...     
              dy(1:end-1) > 0 & dy(2:end) <= 0);
-    p = p+1;
-    
-    if ~option.nobegin && y(1) >= max(option.cthr,option.thr) && ...
-            dy(1) < 0
-        p = [1; p];
-    end
-    
-    if ~option.noend && y(end) >= max(option.cthr,option.thr) && ...
-            dy(end) > 0
-        p(end+1) = length(y);
-    end
     
     if isempty(p)
         out = {p pp pv};
@@ -256,19 +258,19 @@ function out = search(y,x,option,interpol)
         mj = p(1); % The current peak
         jj = j+1;
         bufmin = Inf;
-        bufmax = y(mj);
-        oldbufmin = min(y(1:p(1)-1));
+        bufmax = y(mj+1);
+        oldbufmin = min(y(1:p(1)));
         while jj <= length(p)
             if isa(wait,'matlab.ui.Figure') && not(mod(jj,5000))
                 waitbar(jj/length(p),wait,['Selecting peaks... (',...
                                             num2str(length(finalm)),...
                                             ' out of ',num2str(jj),')']);
             end
-            bufmin = min(bufmin,min(y(p(jj-1)+1:p(jj)-1)));
+            bufmin = min(bufmin,min(y(p(jj-1)+2:p(jj))));
             if bufmax - bufmin < option.cthr
                 % There is no contrastive notch
-                if y(p(jj)) > bufmax && ...
-                        (y(p(jj)) - bufmax > option.first ...
+                if y(p(jj)+1) > bufmax && ...
+                        (y(p(jj)+1) - bufmax > option.first ...
                         || (bufmax - oldbufmin < option.cthr))
                     % If the new peak is significantly
                     % higher than the previous one,
@@ -276,11 +278,11 @@ function out = search(y,x,option,interpol)
                     % position
                     j = jj;
                     mj = p(j); % The current peak
-                    bufmax = y(mj);
+                    bufmax = y(mj+1);
                     oldbufmin = min(oldbufmin,bufmin);
                     bufmin = Inf;
-                elseif y(p(jj)) - bufmax <= option.first
-                    bufmax = max(bufmax,y(p(jj)));
+                elseif y(p(jj)+1) - bufmax <= option.first
+                    bufmax = max(bufmax,y(p(jj)+1));
                     oldbufmin = min(oldbufmin,bufmin);
                 end
             else
@@ -296,7 +298,7 @@ function out = search(y,x,option,interpol)
                     finalm(end+1) = mj;
                     oldbufmin = bufmin;
                 end
-                bufmax = y(p(jj));
+                bufmax = y(p(jj)+1);
                 j = jj;
                 mj = p(j); % The current peak
                 bufmin = Inf;
@@ -305,7 +307,7 @@ function out = search(y,x,option,interpol)
         end
         if (isempty(oldbufmin) || bufmax - oldbufmin >= option.cthr) && ...
                 (p(j) == length(y) || ...
-                 bufmax - min(y(p(j)+1:end)) >= option.cthr)
+                 bufmax - min(y(p(j)+2:end)) >= option.cthr)
             % The last peak candidate is OK and stored
             finalm(end+1) = p(j);
         end
@@ -318,14 +320,14 @@ function out = search(y,x,option,interpol)
     end
     
     if length(p) > option.m
-        [unused,idx] = sort(y(p),'descend');
+        [unused,idx] = sort(y(p+1),'descend');
         idx = idx(1:option.m);
         p = p(idx);
     end
     if strcmpi(option.order,'Abscissa')
         p = sort(p);
     else
-        [unused,idx] = sort(y(p),'descend');
+        [unused,idx] = sort(y(p+1),'descend');
         p = p(idx);
     end
     
@@ -335,9 +337,9 @@ function out = search(y,x,option,interpol)
         for i = 1:length(p)
             if p(i) > 2 && p(i) < length(y)
                 % More precise peak position
-                y0 = y(p(i));
-                ym = y(p(i)-1);
-                yp = y(p(i)+1);
+                y0 = y(p(i)+1);
+                ym = y(p(i));
+                yp = y(p(i)+2);
                 r = (yp-ym)/(2*(2*y0-yp-ym));
                 pv(i) = y0 - 0.25*(ym-yp)*r;
                 if r >= 0
@@ -346,8 +348,8 @@ function out = search(y,x,option,interpol)
                     pp(i) = (1+r)*x(p(i))-r*x(p(i)-1);
                 end
             else
-                pv(i) = y(p(i));
-                pp(i) = x(p(i));
+                pv(i) = y(p(i)+1);
+                pp(i) = x(p(i)+1);
             end
         end
     end
