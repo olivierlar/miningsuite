@@ -34,16 +34,6 @@ function options = initoptions
         order.choice = {'Amplitude','Abscissa'};
         order.default = 'Amplitude';
     options.order = order;
-    
-        chro.key = 'Chrono'; % obsolete, corresponds to 'Order','Abscissa'
-        chro.type = 'Boolean';
-        chro.default = 0;
-    options.chro = chro;
-    
-        ranked.key = 'Ranked'; % obsolete, corresponds to 'Order','Amplitude'
-        ranked.type = 'Boolean';
-        ranked.default = 0;
-    options.ranked = ranked;
         
         vall.key = 'Valleys';
         vall.type = 'Boolean';
@@ -160,11 +150,6 @@ end
 
 
 function out = main(s,option)
-    if option.chro
-        option.order = 'Abscissa';
-    elseif option.ranked
-        option.order = 'Amplitude';
-    end
     if not(isnan(option.near)) && option.m == 1
         option.m = Inf;
     end
@@ -319,6 +304,7 @@ function out = search(y,x,option,interpol)
         p = finalm;
     end
     
+    idx = [];
     if length(p) > option.m
         [unused,idx] = sort(y(p+1),'descend');
         idx = idx(1:option.m);
@@ -326,7 +312,7 @@ function out = search(y,x,option,interpol)
     end
     if strcmpi(option.order,'Abscissa')
         p = sort(p);
-    else
+    elseif isempty(idx)
         [unused,idx] = sort(y(p+1),'descend');
         p = p(idx);
     end
