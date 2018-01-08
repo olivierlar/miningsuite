@@ -335,7 +335,7 @@ function out = search(y,x,option,interpol)
                 end
             else
                 pv(i) = y(p(i)+1);
-                pp(i) = x(p(i)+1);
+                pp(i) = x(p(i));
             end
         end
     end
