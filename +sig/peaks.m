@@ -83,17 +83,6 @@ function options = initoptions
         resofirst.default = 0;
     options.resofirst = resofirst;
         
-        c.key = 'Pref';
-        c.type = 'Integer';
-        c.number = 2;
-        c.default = [0 0];
-    options.c = c;
-        
-        near.key = 'Nearest';
-        near.type = 'Integer';
-        near.default = NaN;
-    options.near = near;
-        
         logsc.type = 'String';
         logsc.choice = {'Lin','Log',0};
         logsc.default = 'Lin';
@@ -144,9 +133,6 @@ end
 
 
 function out = main(s,option)
-    if not(isnan(option.near)) && option.m == 1
-        option.m = Inf;
-    end
     if isnan(option.thr)
         option.thr = 0;
     elseif option.vall
@@ -185,9 +171,11 @@ function out = routine(y,x,dim,option,interpol)
     if option.vall
         y = y.apply(@uminus,{},{dim});
     end
-    maxy = y.findglobal(@max);
-    miny = y.findglobal(@min);
-    y = y.minus(miny).divide(maxy-miny);
+    if strcmpi(option.normal,'Global')
+        maxy = y.findglobal(@max);
+        miny = y.findglobal(@min);
+        y = y.minus(miny).divide(maxy-miny);
+    end
     
     out = y.apply(@search,{x,option,interpol},{dim},1,'{}');
     p = out;
@@ -203,6 +191,11 @@ end
 function out = search(y,x,option,interpol)
     pp = [];
     pv = [];
+    
+    if strcmpi(option.normal,'Local')
+        miny = min(y);
+        y = (y - miny) / (max(y) - miny);
+    end
     
     if option.nobegin
         y = [Inf;y];
