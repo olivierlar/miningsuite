@@ -1,6 +1,6 @@
 % MUS.KEY
 %
-% Copyright (C) 2017, Olivier Lartillot
+% Copyright (C) 2017-2018, Olivier Lartillot
 % All rights reserved.
 % License: New BSD License. See full text of the license in LICENSE.txt in
 % the main folder of the MiningSuite distribution.
@@ -50,10 +50,10 @@ function x = main(x,option)
     x{2} = x{1};
     x{3} = x{1};
     x{1}.Ydata = sig.compute(@routine,x{1}.peakpos);
-    x{1}.peak = [];
+    x{1}.peakindex = [];
     x{1}.yname = 'Key';
     x{2}.Ydata = sig.compute(@routine,x{2}.peakval);
-    x{2}.peak = [];
+    x{2}.peakindex = [];
     x{2}.yname = 'Key clarity';
 end
 

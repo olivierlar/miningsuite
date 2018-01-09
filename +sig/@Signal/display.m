@@ -148,11 +148,11 @@ function display(obj)
                 set(gca,'YDir','normal');
             end
             
-            if ~isempty(obj.peak)
+            if ~isempty(obj.peakindex)
                 if nchans == 1
-                    p = obj.peak;
+                    p = obj.peakindex;
                 else
-                    p = obj.peak.extract('freqband',i);
+                    p = obj.peakindex.extract('freqband',i);
                 end
                 
                 if iscurve
@@ -187,7 +187,7 @@ function display(obj)
                         end
                     end
                 else
-                    for j = 1:obj.peak.size('sample')
+                    for j = 1:obj.peakindex.size('sample')
                         pj = p.view('sample',j);
                         if ~isempty(pj{1})
                             px = obj.saxis.data(j+.5);

@@ -43,7 +43,7 @@ classdef Signal
         Flength
         
         celllayers
-        peak
+        peakindex
         peakprecisepos
         peakpreciseval
         peakdim
@@ -224,7 +224,7 @@ classdef Signal
             end
         end    
         function p = get.peakpos(obj)
-            if isempty(obj.peak)
+            if isempty(obj.peakindex)
                 p = [];
                 return
             end
@@ -233,10 +233,10 @@ classdef Signal
             else
                 pos = obj.xdata;
             end
-            p = sig.compute(@peakpos,obj.peak,pos);
+            p = sig.compute(@peakpos,obj.peakindex,pos);
         end
         function p = get.peakval(obj)
-            p = sig.compute(@peakval,obj.peak,obj.Ydata);
+            p = sig.compute(@peakval,obj.peakindex,obj.Ydata);
         end
         function p = getpeakpos(obj)
             p = obj.peakpos;
