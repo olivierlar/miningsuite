@@ -287,6 +287,8 @@ classdef Signal
                 d = obj.xname;
             elseif strcmpi(field,'Ydata')
                 d = obj.Ydata;   
+            elseif strcmpi(field,'PeakIndex')
+                d = obj.peakindex;  
             elseif strcmpi(field,'PeakPos')
                 d = obj.peakpos;  
             elseif strcmpi(field,'PeakVal')
