@@ -45,7 +45,12 @@ end
 
 
 function out = main(x,frame)
-    x = sig.framenow(x,frame);
+    if iscell(x)
+        x = x{1};
+    end
+    if isempty(x.fcenters)
+        x = sig.framenow(x,frame);
+    end
     out = {x};
 end
 
