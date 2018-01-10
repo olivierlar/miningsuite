@@ -162,7 +162,7 @@ function out = main(in,option)
     else
         pos = option.pos;
         if isa(pos,'sig.design')
-            pos = pos.eval;
+            pos = pos.eval(x.files);
             if iscell(pos)
                 pos = pos{1};
             end
