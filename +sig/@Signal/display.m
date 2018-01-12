@@ -160,7 +160,7 @@ function display(obj)
                         pj = p.content{j};
                         if ~isempty(pj)
                             px = Xaxis.data(pj');
-                            py = ydatai.content(pj,j);
+                            py = ydatai.view(dim,pj(:),'channel',j);
                             plot(px,squeeze(py),'or');
                         end
                     end
