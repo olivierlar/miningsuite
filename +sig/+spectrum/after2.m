@@ -1,7 +1,7 @@
 % SIG.SPECTRUM.AFTER2
 %
-% Copyright (C) 2017 Olivier Lartillot
-% © 2007-2009 Olivier Lartillot & University of Jyvaskyla
+% Copyright (C) 2017-2018 Olivier Lartillot
+% ? 2007-2009 Olivier Lartillot & University of Jyvaskyla
 %
 % All rights reserved.
 % License: New BSD License. See full text of the license in LICENSE.txt in
@@ -38,7 +38,7 @@ end
 
 %%
 function d = routine_log(d)
-    d = d.sum(1e-16).apply(@log10,{},{'element'});
+    d = d.plus(1e-16).apply(@log10,{},{'element'});
 end
 
 

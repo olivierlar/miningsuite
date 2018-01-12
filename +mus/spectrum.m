@@ -10,7 +10,7 @@
 
 function varargout = spectrum(varargin)
     varargout = sig.operate('mus','spectrum',initoptions,...
-                            @sig.spectrum.init,@main,@after,varargin,'sum');
+                            @sig.spectrum.init,@main,@after,varargin,'plus');
 end
 
 
