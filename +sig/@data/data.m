@@ -185,6 +185,9 @@ classdef data
                 field = 'element';
             end
             dim = obj.whichdim(field);
+            if isempty(dim)
+                error('Error in sig.data.sum');
+            end
             for i = 1:length(dim)
                 if adjacent < 2
                     obj.content = sum(obj.content,dim(i));
