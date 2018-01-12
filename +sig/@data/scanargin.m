@@ -34,8 +34,12 @@ function [args content] = scanargin(obj,argin)
             end
         elseif length(argini)==1
             args{dim} = argini;
-        else
+        elseif size(argini,2)==2 && size(argini,1)==1
             args{dim} = argini(1):argini(2);
+        elseif size(argini,2)==1
+            args{dim} = argini;
+        else
+            error('Error in sig.data.scanargin');
         end
     end
     
