@@ -1,6 +1,6 @@
 % MUS.CHROMAGRAM
 %
-% Copyright (C) 2014, 2017 Olivier Lartillot
+% Copyright (C) 2014, 2017-2018 Olivier Lartillot
 % ? 2007-2012 Olivier Lartillot & University of Jyvaskyla
 %
 % All rights reserved.
@@ -83,6 +83,11 @@ end
 %%
 function [x type] = init(x,option,frame)
     if ~isa(x,'mus.Sequence') && ~istype(x,'mus.Chromagram')
+        if x.istype('sig.Signal')
+            if option.frame
+                x = sig.frame(x,'FrameSize',option.fsize.value,option.fsize.unit,...
+                    'FrameHop',option.fhop.value,option.fhop.unit);
+            end
         end
         
         freqmin = option.min;
@@ -90,10 +95,8 @@ function [x type] = init(x,option,frame)
         while freqmax < option.max
             freqmax = freqmax*2;
         end
-        x = {sig.spectrum(x,'FrameConfig',frame,...
-                           'dB',option.thr,'Min',freqmin,'Max',freqmax,...
-                          'NormalInput','MinRes',option.res,'OctaveRatio',.85),...
-             x};
+        x = sig.spectrum(x,'dB',option.thr,'Min',freqmin,'Max',freqmax,...
+                           'MinRes',option.res,'OctaveRatio',.85);  % NormalInput missing
     end
     type = {'mus.Chromagram','sig.Spectrum'};
 end

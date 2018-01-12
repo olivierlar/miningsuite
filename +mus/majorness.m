@@ -30,6 +30,7 @@ function [x,type] = init(x,option,frame)
                 'FrameHop',option.fhop.value,option.fhop.unit);
         end
     end
+    x = mus.keystrength(x);
     type = {'sig.Signal'};
 end
 
