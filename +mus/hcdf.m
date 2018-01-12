@@ -1,6 +1,6 @@
 % MUS.HCDF
 %
-% Copyright (C) 2017 Olivier Lartillot
+% Copyright (C) 2017-2018 Olivier Lartillot
 % All rights reserved.
 % License: New BSD License. See full text of the license in LICENSE.txt in
 % the main folder of the MiningSuite distribution.
@@ -19,10 +19,13 @@ end
 
 %%
 function [x,type] = init(x,option,frame)
-    if ~istype(x,'mus.tonalcentroid')
-        frame.toggle = 1;
-        x = mus.tonalcentroid(x,'FrameConfig',frame);
+    if x.istype('sig.Signal')
+        if option.frame
+            x = sig.frame(x,'FrameSize',option.fsize.value,option.fsize.unit,...
+                'FrameHop',option.fhop.value,option.fhop.unit);
+        end
     end
+    x = mus.tonalcentroid(x);
     x = sig.flux(x);
     type = {'sig.Signal'};
 end

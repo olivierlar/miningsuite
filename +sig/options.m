@@ -11,18 +11,10 @@
 % + pattern mining + ...", AES 53RD INTERNATIONAL CONFERENCE, London, UK,
 % 2014
 
-function [options frame extract] = options(specif,args,name)
+function [options,extract] = options(specif,args,name)
 
 options = struct;
 extract = [];
-
-if isfield(specif,'fsize')
-    frame.toggle = specif.frame.default;
-    frame.size = specif.fsize.default;
-    frame.hop = specif.fhop.default;
-else
-    frame = [];
-end
 
 if isa(specif,'function_handle')
     specif = specif(.05,.5);
@@ -30,12 +22,10 @@ end
 fields = fieldnames(specif);
 for i = 1:length(fields)
     field = fields{i};
-    if ~max(strcmpi(field,{'frame','fsize','fhop'}))
-        if isfield(specif.(field),'default')
-            options.(field) = specif.(field).default;
-        else
-            options.(field) = 0;
-        end
+    if isfield(specif.(field),'default')
+        options.(field) = specif.(field).default;
+    else
+        options.(field) = 0;
     end
 end
 
@@ -163,6 +153,9 @@ while i <= length(args)
                         if ~found
                             optionvalue.unit = unit{1};
                         end
+                        if strcmp(field,'fsize') || strcmp(field,'fhop')
+                            options.frame = 1;
+                        end
                     end
                 else
                     if length(args) > i
@@ -188,26 +181,9 @@ while i <= length(args)
                     optionvalue = arg;
                 end
             end
-        elseif strcmpi(field,'frame')
-            match = 0;
-        elseif i == 2
-            match = 1;
-            optionvalue = arg;
         end    
         if match
-            if strcmpi(field,'frame') % && options.frame.auto
-                frame.toggle = optionvalue;
-            elseif strcmpi(field,'fsize')
-                frame.size = optionvalue;
-                frame.toggle = 1;
-            elseif strcmpi(field,'fhop')
-                frame.hop = optionvalue;
-                frame.toggle = 1;
-            elseif strcmpi(field,'frameconfig')
-                frame = optionvalue;
-            else
-                options.(field) = optionvalue;
-            end
+            options.(field) = optionvalue;
         end
     end
     if ~match
@@ -218,8 +194,4 @@ while i <= length(args)
             ': Unknown parameter ',arg'.']);
     end
     i = i+1;
-end
-if isfield(specif,'frame') && isfield(specif.frame,'when') && strcmpi(specif.frame.when,'After')
-    options.frame = frame;
-    frame = [];
 end

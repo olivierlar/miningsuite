@@ -51,8 +51,12 @@ end
 
 %%
 function [x,type] = init(x,option,frame)
-    if ~x.istype('sig.Cepstrum')
-        x = sig.spectrum(x,'FrameConfig',frame);
+    if x.istype('sig.Signal')
+        if option.frame
+            x = sig.frame(x,'FrameSize',option.fsize.value,option.fsize.unit,...
+                'FrameHop',option.fhop.value,option.fhop.unit);
+        end
+        x = sig.spectrum(x);   
     end
     type = 'sig.Cepstrum';
 end

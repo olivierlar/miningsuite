@@ -1,6 +1,6 @@
 % AUD.MFCC
 %
-% Copyright (C) 2014, 2017 Olivier Lartillot
+% Copyright (C) 2014, 2017-2018 Olivier Lartillot
 % Copyright (C) 1998, Malcolm Slaney, Interval Research Corporation
 %
 % All rights reserved.
@@ -44,9 +44,12 @@ end
 
 %%
 function [x type] = init(x,option,frame)
-    if ~x.istype('aud.mfcc')
-        x = aud.spectrum(x,'FrameConfig',frame,...
-                         'Mel','log','Bands',option.nbbands);
+    if x.istype('sig.Signal')
+        if option.frame
+            x = sig.frame(x,'FrameSize',option.fsize.value,option.fsize.unit,...
+                'FrameHop',option.fhop.value,option.fhop.unit);
+        end
+        x = aud.spectrum(x,'Mel','log','Bands',option.nbbands);
     end
     type = {'aud.mfcc','sig.Spectrum'};
 end

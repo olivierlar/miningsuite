@@ -83,6 +83,8 @@ end
 %%
 function [x type] = init(x,option,frame)
     if ~isa(x,'mus.Sequence') && ~istype(x,'mus.Chromagram')
+        end
+        
         freqmin = option.min;
         freqmax = freqmin*2;
         while freqmax < option.max

@@ -1,6 +1,6 @@
 % VID.VIDEO
 %
-% Copyright (C) 2017 Olivier Lartillot
+% Copyright (C) 2017-2018 Olivier Lartillot
 % All rights reserved.
 % License: New BSD License. See full text of the license in LICENSE.txt in
 % the main folder of the MiningSuite distribution.
@@ -317,10 +317,6 @@ function options = initframes(size,hop,when)
         fhop.default.value = hop;
         fhop.unit = {'/1','s','sp','Hz'};
     options.fhop = fhop;
-    
-        frameconfig.key = 'FrameConfig';
-        frameconfig.type = 'Other';
-    options.frameconfig = frameconfig;
 end
     
 

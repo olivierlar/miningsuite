@@ -1,6 +1,6 @@
 % SIG.SIMATRIX
 %
-% Copyright (C) 2014, 2017 Olivier Lartillot
+% Copyright (C) 2014, 2017-2018 Olivier Lartillot
 %
 % All rights reserved.
 % License: New BSD License. See full text of the license in LICENSE.txt in
@@ -75,8 +75,9 @@ end
 
 function [x,type] = init(x,option,frame)
     if x.istype('sig.Signal')
-        frame.toggle = 1;
-        x = sig.spectrum(x,'FrameConfig',frame);
+        x = sig.frame(x,'FrameSize',option.fsize.value,option.fsize.unit,...
+            'FrameHop',option.fhop.value,option.fhop.unit);
+        x = sig.spectrum(x);   
     end
     type = 'sig.simatrix';
 end

@@ -1,7 +1,7 @@
 % SIG.FILTERBANK
 % performs a filterbank decomposition of an audio waveform
 %
-% Copyright (C) 2014, 2017 Olivier Lartillot
+% Copyright (C) 2014, 2017-2018 Olivier Lartillot
 %
 % All rights reserved.
 % License: New BSD License. See full text of the license in LICENSE.txt in
@@ -15,6 +15,9 @@ end
 
 %%
 function [x type] = init(x,option,frame)
+    if option.frame && isa(x,'sig.design')
+        x.overlap = option.fsize;
+    end
     type = 'sig.Signal';
 end
 

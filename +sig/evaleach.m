@@ -14,16 +14,13 @@
 % + pattern mining + ...", AES 53RD INTERNATIONAL CONFERENCE, London, UK,
 % 2014
 
-function y = evaleach(design,filename,window,sr,nargout,frame,chunking,nbsamples) %,single,name
+function y = evaleach(design,filename,window,sr,nargout,chunking,nbsamples) %,single,name
 % The last three arguments are not used when sig.evaleach is called for the
 % first time, by sig.design.eval.
 if nargin<6
-    frame = [];
-end
-if nargin<7
     chunking = 0;
 end
-if nargin<8 && length(window) > 1
+if nargin<7 && length(window) > 1
     nbsamples = window(2)-window(1)+1;
 end
 
@@ -71,38 +68,20 @@ if isempty(design.main)
         %    warning('Inner frame has not been executed.');
         %end
         
-        if ~isempty(frame) && frame.toggle
-            frate = sig.compute(@sig.getfrate,sr,frame);
-            if strcmpi(frame.size.unit,'s')
-                fl = frame.size.value;
-            elseif strcmpi(frame.size.unit,'sp')
-                fl = frame.size.value/sr;
-            end
-            data = data.frame(frame,sr);
-            y = {sig.Signal(data,'Xsampling',1/sr,'Name','waveform',...
-                'Sstart',(window(1)-1)/sr,'Srate',sr,...
-                'Ssize',data.size('sample'),...
-                'Frate',frate,'Flength',fl)};
-        else
-            y = {sig.Signal(data,'Name','waveform',...
-                'Sstart',window(1),'Srate',sr,...
-                'Ssize',data.size('sample'))};
-        end
+        y = {sig.Signal(data,'Name','waveform',...
+            'Sstart',window(1),'Srate',sr,...
+            'Ssize',data.size('sample'))};
         
         %y = set(y,'AcrossChunks',get(d,'AcrossChunks'));
     end
     
 else
-    if isempty(frame) || ~frame.toggle
-        % Not already in a frame decomposition process
-        frame = design.frame;
-    end
     if chunking % Already in a chunk decomposition process
         input = design.input;
         if iscell(input)
             input = input{1};
         end
-        y = sig.evaleach(input,filename,window,sr,1,frame,chunking);
+        y = sig.evaleach(input,filename,window,sr,1,chunking);
         main = design.main;
         if iscell(main)
             main = main{1};
@@ -116,10 +95,7 @@ else
         if iscell(input)
             input = input{end};
         end
-        y = sig.evaleach(input,filename,window,sr,1,[],chunking);
-        if ~isfield(design.options,'frame')
-            design.options.frame = frame;
-        end
+        y = sig.evaleach(input,filename,window,sr,1,chunking);
         y = design.main(y,design.options);
         y = design.after(y,design.options);
     elseif design.nochunk || strcmpi(design.combine,'no')
@@ -128,10 +104,10 @@ else
             if iscell(input)
                 input = input{1};
             end
-            y = sig.evaleach(input,filename,window,sr,1,frame,chunking);
+            y = sig.evaleach(input,filename,window,sr,1,chunking);
         else
-            y = [sig.evaleach(design.input{1},filename,window,sr,1,frame,chunking),...
-                 sig.evaleach(design.input{2},filename,window,sr,1,frame,chunking)];
+            y = [sig.evaleach(design.input{1},filename,window,sr,1,chunking),...
+                 sig.evaleach(design.input{2},filename,window,sr,1,chunking)];
         end
         main = design.main;
         if iscell(main)
@@ -140,19 +116,17 @@ else
         y = main(y,design.options);
         y = design.after(y,design.options);
     else
-        %frnochunk = isfield(d.frame,'dontchunk');
-        %frchunkbefore = isfield(d.frame,'chunkbefore');
-        if ~isempty(frame) && frame.toggle % && ~frame.inner
-            chunks = compute_frames(frame,sr,window,nbsamples,sig.chunklim,design.overlap);
-        else
-            if nbsamples > sig.chunklim
-                % The required memory exceed the max memory threshold.
-                nch = ceil(nbsamples/sig.chunklim);
-                chunks = max(0,nbsamples-sig.chunklim*(nch:-1:1))+window(1);
-                chunks(2,:) = nbsamples-max( sig.chunklim*(nch-1:-1:0)-design.overlap(1) , 0)+window(1)-1;
-            else
-                chunks = [];
+        if nbsamples > sig.chunklim
+            % The required memory exceed the max memory threshold.
+            nch = ceil(nbsamples/sig.chunklim);
+            chunks = max(0,nbsamples-sig.chunklim*(nch:-1:1))+window(1);
+            overlap = design.overlap.value;
+            if strcmpi(design.overlap.unit,'s')
+                overlap = overlap*sr - 1; % The -1 is used solely for sig.frame. If other operators need 's', decompose into 2 cases
             end
+            chunks(2,:) = nbsamples-max( sig.chunklim*(nch-1:-1:0)-overlap , 0)+window(1)-1;
+        else
+            chunks = [];
         end
         
         if not(isempty(chunks))
@@ -199,12 +173,10 @@ else
             for i = 1:size(chunks,2)
                 disp(['Chunk ',num2str(i),'/',num2str(nch),'...'])
                 window = [chunks(1,i) chunks(2,i) (i == size(chunks,2))];
-                if isempty(frame) || ~frame.toggle
-                    options.missing = max(diffchunks) - diffchunks(i);
-                end
+                options.missing = max(diffchunks) - diffchunks(i);
                 chunking = 1;
                 ss = sig.evaleach(design.input,filename,window,sr,1,...
-                    frame,chunking,nbsamples);
+                    chunking,nbsamples);
                 
                 main = design.main;
                 if iscell(main)
@@ -212,11 +184,15 @@ else
                 end
                 ss = main(ss,options);
                 
+                if isempty(ss{1})
+                    break
+                end
+                
                 if length(ss)>1
                     options.tmp = ss{2};
                 end
                 
-                y = combinechunks(y,ss,i,design,chunks,nargout);
+                y = combinechunks(y,ss{1},i,design,chunks,nargout);
                 
                 clear ss
                 if ~isempty(h)
@@ -232,6 +208,10 @@ else
             
             y = design.after(y,design.options);
             
+            if ~iscell(y)
+                y = {y};
+            end
+            
             if 0 %isa(d,'mirstruct') && ...
                 (isempty(d.frame) || isfield(d.frame,'dontchunk'))
                 y = evalbranches(d,y);
@@ -243,7 +223,7 @@ else
             
         else
             % No chunk decomposition
-            y = sig.evaleach(design.input,filename,window,sr,1,frame);
+            y = sig.evaleach(design.input,filename,window,sr,1);
             design.options.extract = [];
             main = design.main;
             if iscell(main)
@@ -298,108 +278,46 @@ if 0 %iscell(y)
 end
 
 
-function chunks = compute_frames(fr,sr,w,lsz,CHUNKLIM,frov)
-if strcmpi(fr.size.unit,'s')
-    fl = fr.size.value*sr;
-elseif strcmpi(fr.size.unit,'sp')
-    fl = fr.size.value;
-end
-if strcmpi(fr.hop.unit,'/1')
-    h = fr.hop.value*fl;
-elseif strcmpi(fr.hop.unit,'%')
-    h = fr.hop.value*fl*.01;
-elseif strcmpi(fr.hop.unit,'s')
-    h = fr.hop.value*sr;
-elseif strcmpi(fr.hop.unit,'sp')
-    h = fr.hop.value;
-elseif strcmpi(fr.hop.unit,'Hz')
-    h = sr/fr.hop.value;
-end
-n = floor((lsz-fl)/h)+1;   % Number of frames
-if n < 1
-    %warning('WARNING IN MIRFRAME: Frame length longer than total sequence size. No frame decomposition.');
-    fp = w;
-else
-    st = floor(((1:n)-1)*h)+w(1);
-    fp = [st; floor(st+fl-1)];
-    fp(:,fp(2,:)>w(2)) = [];
-end
-fpsz = (fp(2,1)-fp(1,1)) * n;      % Total number of samples
-if fpsz > CHUNKLIM
-    % The required memory exceed the max memory threshold.
-    nfr = size(fp,2);                     % Total number of frames
-    frch = max(ceil(CHUNKLIM/(fp(2,1)-fp(1,1))),2); % Number of frames per chunk
-    frch = max(frch,frov*2);
-    nch = ceil((nfr-frch)/(frch-frov))+1; % Number of chunks
-    chbeg = (frch-frov)*(0:nch-1)+1;    % First frame in the chunk
-    chend = (frch-frov)*(0:nch-1)+frch; % Last frame in the chunk
-    chend = min(chend,nfr);
-    if frov > 1
-        chbeg = chend-frch+1;
-    end
-    chunks = [fp(1,chbeg) ; fp(2,chend)+1]; % After resampling, one sample may be missing, leading to a complete frame drop.
-    chunks(end) = min(chunks(end),fp(end)); % Last chunk should not extend beyond audio size.
-else
-    chunks = [];
-end
-
-
 %%
 function res = combinechunks(old,new,i,design,chunks,nargout) %,sg,single)
 if i == 1
     res = new;
 else
-    if iscell(old{1})
-        old{1} = old{1}{1}; % This needs to be properly studied..
-    end
-    if iscell(new{1})
-        new{1} = new{1}{1};
-    end
-    
-    if old{1}.Frate
+    if old.Frate
         res = combineframes(old,new);
-    elseif old{1}.Srate
-        res = combinesamples(old,new,design.overlap(1));
+    elseif old.Srate
+        overlap = design.overlap.value;
+        if strcmp(design.overlap.unit,'s')
+            overlap = 0; % Used solely for sig.frame. If other operators need 's', decompose into 2 cases
+        end
+        res = combinesamples(old,new,overlap);
     else
         res = old;
-        for z = 1:length(old)
-            %if 0 %isframed(old{z})
-            %    res(z) = combineframes(old{z},new{z});
-            %else
-            if ischar(design.combine)
-                %if strcmpi(design.combine,'Concat')
-                %    res{z} = concatchunk(old{z},new{z},d2.ascending);
-                %elseif strcmpi(design.combine,'Sum')
-                res{z}.Ydata = old{z}.Ydata.(design.combine)(new{z}.Ydata);
-                %else
-                %    error(['SYNTAX ERROR: ',design.combine,...
-                %           ' is not a known keyword for combinechunk.']);
-                %end
-            else
-                res{z} = design.combine(old{z},new{z});
-            end
+        if ischar(design.combine)
+            res.Ydata = old.Ydata.(design.combine)(new.Ydata);
+            
+        else
+            res = design.combine(old,new);
         end
-        res{z}.Ssize = old{z}.Ssize + new{z}.Ssize;
+        res.Ssize = old.Ssize + new.Ssize;
     end
 end
 
 
 function old = combineframes(old,new)
-old{1}.Ydata = old{1}.Ydata.concat(new{1}.Ydata,'frame');
-if ~isempty(old{1}.peakindex)
-    old{1}.peakindex = old{1}.peakindex.concat(new{1}.peak,'frame');
+old.Ydata = old.Ydata.concat(new.Ydata,'frame');
+if ~isempty(old.peakindex)
+    old.peakindex = old.peakindex.concat(new{1}.peak,'frame');
 end
 
 
 function old = combinesamples(old,new,delta)
-for i = 1:length(new)
-    if ~isa(old{i},'sig.Signal')
-        continue
-    end
-    old{i}.Ydata = old{i}.Ydata.concat(new{i}.Ydata,'sample',delta/2);
-    if ~isempty(old{i}.peakindex)
-        old{i}.peakindex = old{i}.peakindex.concat(new{i}.peak,'sample');
-    end
+old.Ydata = old.Ydata.concat(new.Ydata,'sample',delta/2);
+if ~isempty(old.peakindex)
+    old.peakindex = old.peakindex.concat(new.peak,'sample');
+end
+if isa(old,'sig.Spectrum')
+    old.phase = old.phase.concat(new.phase,'sample');
 end
       
 

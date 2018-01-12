@@ -11,9 +11,13 @@ function out = main(x,option,filterspecif)
     [x{1}.Ydata,x{2},x{1}.fbchannels] = ...
         sig.compute(@routine,x{1}.Ydata,x{1}.Srate,x{1}.fbchannels,...
                     option,filterspecif);
-
-    x = sig.framenow(x,option.frame);
-    out = {x};
+    if option.frame
+        x = sig.frame(x,'FrameSize',option.fsize.value,option.fsize.unit,...
+                        'FrameHop',option.fhop.value,option.fhop.unit);
+        out = {x};
+    else
+        out = x;
+    end
 end
 
 

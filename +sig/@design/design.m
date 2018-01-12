@@ -3,7 +3,7 @@
 % wants to display the results.
 % Internally called by sig.operate and seq.Sequence.
 %
-% Copyright (C) 2014, 2017 Olivier Lartillot
+% Copyright (C) 2014, 2017-2018 Olivier Lartillot
 % All rights reserved.
 % License: New BSD License. See full text of the license in LICENSE.txt in
 % the main folder of the MiningSuite distribution.
@@ -28,7 +28,6 @@ classdef design
         
         options
         
-        frame
         combine
         
         evaluate = 0;
@@ -39,16 +38,13 @@ classdef design
         
         extensive = 0
         nochunk = 0
-        overlap = 0
-%         tmpfile
-    %end
-    %properties (Dependent)
+        overlap = struct('value',0,'unit','sp');
         files
     end
 %%
     methods
-        function obj = design(pack,name,input,type,main,after,options,...
-                              frame,combine,argin,extract,extensive,nochunk)
+        function obj = design(pack,name,input,type,main,after,options,...frame,
+                              combine,argin,extract,extensive,nochunk)
             if nargin<11
                 extract = 0;
             end
@@ -61,7 +57,6 @@ classdef design
             obj.after = after;
             obj.options = options;
             if nargin>7
-                obj.frame = frame;
                 obj.combine = combine;
                 obj.argin = argin;
                 obj.extract = extract;
@@ -88,15 +83,12 @@ classdef design
                 res = strcmpi(obj.type,type);
             end
         end
-        function out = eval(obj,arg,nargout,folder)
+        function out = eval(obj,arg,nargout)
             if nargin<2
                 arg = obj.files;
             end
             if nargin<3
                 nargout = 1;
-            end
-            if nargin<4
-                folder = 0;
             end
 
             if strcmpi(obj.package,'vid')
@@ -136,13 +128,13 @@ classdef design
                         return
                     end
                     for i = 1:length(files)
-                        out = obj.eval(files{i},1,1);
+                        out = obj.eval(files{i},1);
                         if ~isempty(out) && isa(out{1},'sig.Signal')
                             out{1}.display;
                         end
                     end
                 else
-                    out = obj.eval(obj.files,1,0);
+                    out = obj.eval(obj.files,1);
                     for i = 1:length(out)
                         if isa(out{i},'mus.Sequence')
                             out{i}.display;
@@ -202,8 +194,6 @@ classdef design
                 arg = obj.argin{i};
                 if isnumeric(arg)
                     arg = num2str(arg);
-                elseif isstruct(arg)
-                    arg = '(frame config)';
                 else
                     arg = ['''',arg,''''];
                 end

@@ -1,6 +1,6 @@
 % SIG.GETFRATE
 %
-% Copyright (C) 2014, Olivier Lartillot
+% Copyright (C) 2014, 2018, Olivier Lartillot
 % All rights reserved.
 % License: New BSD License. See full text of the license in LICENSE.txt in
 % the main folder of the MiningSuite distribution.
@@ -12,21 +12,21 @@
 % 2014
 
 function frate = getfrate(sr,param)
-if strcmpi(param.hop.unit,'/1') || strcmpi(param.hop.unit,'%')
-    if strcmpi(param.size.unit,'s')
-        l = param.size.value*sr;
-    elseif strcmpi(param.size.unit,'sp')
-        l = param.size.value;
+if strcmpi(param.fhop.unit,'/1') || strcmpi(param.fhop.unit,'%')
+    if strcmpi(param.fsize.unit,'s')
+        l = param.fsize.value*sr;
+    elseif strcmpi(param.fsize.unit,'sp')
+        l = param.fsize.value;
     end
-    if strcmpi(param.hop.unit,'/1')
-        frate = sr/param.hop.value/l;
+    if strcmpi(param.fhop.unit,'/1')
+        frate = sr/param.fhop.value/l;
     else
-        frate = sr/param.hop.value/l/.01;
+        frate = sr/param.fhop.value/l/.01;
     end
-elseif strcmpi(param.hop.unit,'s')
-    frate = 1/param.hop.value;
-elseif strcmpi(param.hop.unit,'sp')
-    frate = sr/param.hop.value;
-elseif strcmpi(param.hop.unit,'Hz')
-    frate = param.hop.value;
+elseif strcmpi(param.fhop.unit,'s')
+    frate = 1/param.fhop.value;
+elseif strcmpi(param.fhop.unit,'sp')
+    frate = sr/param.fhop.value;
+elseif strcmpi(param.fhop.unit,'Hz')
+    frate = param.fhop.value;
 end

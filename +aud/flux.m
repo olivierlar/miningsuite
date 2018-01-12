@@ -40,8 +40,7 @@ end
 
 function out = main(x,option)
     x = x{1};
-    option.frame.toggle = 1;
-    x = sig.framenow(x,option.frame);
+    x = sig.frame(x,option.frame);
     x = sig.spectrum(x);
     out = sig.flux.main(x,option);
 end

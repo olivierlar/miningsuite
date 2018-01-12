@@ -360,9 +360,7 @@ classdef data
         
         [obj varargout] = apply(obj,func,argin,dimfunc,ndimfunc,varargin)
         obj = select(obj,pos,dim,type)
-        
-        obj = frame(obj,param,sr)
-        
+                
         obj = median(obj,field,order,offset)
     end
 end

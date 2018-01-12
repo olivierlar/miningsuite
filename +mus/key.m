@@ -39,8 +39,13 @@ end
 
 %%
 function [p,type] = init(x,option,frame)
-    s = mus.keystrength(x,'FrameConfig',frame,...
-        'Weight',option.wth,'Triangle',option.tri);
+     if x.istype('sig.Signal')
+        if option.frame
+            x = sig.frame(x,'FrameSize',option.fsize.value,option.fsize.unit,...
+                'FrameHop',option.fhop.value,option.fhop.unit);
+        end
+    end
+    s = mus.keystrength(x,'Weight',option.wth,'Triangle',option.tri);
     p = sig.peaks(s,'Total',option.tot,'Contrast',option.thr);
     type = {'sig.Signal','sig.Signal','mus.Keystrength'};
 end

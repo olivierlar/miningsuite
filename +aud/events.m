@@ -589,7 +589,7 @@ function out = main(o,option)
     if isa(o,'sig.Envelope') && option.minlog
         o = sig.envelope(o,'MinLog',option.minlog);
     end
-    o = sig.framenow(o,option.frame);
+    o = sig.frame(o,option.frame);
     if ischar(option.detect)
         if isnan(option.cthr) || not(option.cthr)
             if ischar(option.attack) || option.decay

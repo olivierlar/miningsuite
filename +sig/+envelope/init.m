@@ -1,6 +1,6 @@
 % SIG.ENVELOPE.INIT
 %
-% Copyright (C) 2014, 2017 Olivier Lartillot
+% Copyright (C) 2014, 2017-2018 Olivier Lartillot
 % All rights reserved.
 % License: New BSD License. See full text of the license in LICENSE.txt in
 % the main folder of the MiningSuite distribution.
@@ -34,7 +34,8 @@ function x = init_audio(x,option)
             if ~decim
                 decim = 1;
             end
-            x.overlap = [6400,decim]; %3200
+            x.overlap.value = 6400;%,decim]; %3200
+            x.overlap.unit = 'sp';
         end
     elseif strcmpi(option.method,'Spectro')
         x = aud.spectrum(x,'FrameSize',option.spectroframe(1),...

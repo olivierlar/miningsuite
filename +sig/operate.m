@@ -4,7 +4,7 @@
 % Internally called by all operators available to users in SigMinr,
 % AudMinr, VocMinr and audio-based approaches in MusMinr.
 %
-% Copyright (C) 2014, 2017 Olivier Lartillot
+% Copyright (C) 2014, 2017-2018 Olivier Lartillot
 % All rights reserved.
 % License: New BSD License. See full text of the license in LICENSE.txt in
 % the main folder of the MiningSuite distribution.
@@ -29,12 +29,7 @@ else
     extensive = strcmpi(extensive,'extensive');
 end
 
-[options,frame,extract] = sig.options(options,argin,[pack,'.',name]);
-
-if ~isempty(frame) && ~frame.toggle && ...
-        ~ischar(arg) && isa(arg,'sig.design') && ~isempty(arg.frame)
-    frame = arg.frame;
-end
+[options,extract] = sig.options(options,argin,[pack,'.',name]);
 
 if ischar(arg)
     filename = arg;
@@ -43,13 +38,9 @@ elseif isa(arg,'sig.design')
     filename = arg.files;
 end
 
-[arg,type] = init(arg,options,frame);
+[arg,type] = init(arg,options);
 if ~iscell(arg)
     arg = {arg};
-end
-
-if isempty(frame) && ~ischar(arg{1}) && isa(arg{1},'sig.design')
-    frame = arg{1}.frame;
 end
 
 if isa(arg{1},'sig.design')
@@ -68,7 +59,7 @@ if isa(arg{1},'sig.design')
     else
         argin1 = arg;
     end
-    design = sig.design(pack,name,argin1,type,main,after,options,frame,...
+    design = sig.design(pack,name,argin1,type,main,after,options,...
                         combine,argin(2:end),extract,extensive,nochunk);
     
     %if ischar(arg)
@@ -86,11 +77,6 @@ if isa(arg{1},'sig.design')
         out = design.eval(filename);
     end
 elseif isa(arg{1},'sig.Signal')
-    if ~isempty(frame) && frame.toggle
-        frate = sig.compute(@sig.getfrate,arg{1}.Srate,frame);
-        arg{1}.Ydata = arg{1}.Ydata.frame(frame,arg{1}.Srate);
-        arg{1}.Frate = frate;
-    end
     if iscell(main)
         main = main{1};
     end
@@ -100,7 +86,7 @@ elseif isa(arg{1},'sig.Signal')
         out = {out};
     end
     out{1}.design = sig.design(pack,name,arg{1},type,main,after,options,...
-                               frame,combine,argin(2:end),[],0,0);
+                               combine,argin(2:end),[],0,0);
     out{1}.design.evaluated = 1;
 elseif isa(arg{1},'mus.Sequence')
     out = main(arg{1},options);

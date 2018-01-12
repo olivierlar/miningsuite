@@ -121,7 +121,7 @@ function out = routine(in,sampling,option)
             in = in.times(w);
         end
         
-        if isfield(option,'missing') && option.missing
+        if isfield(option,'missing') && option.missing && ~in.size('frame')
             option.zp = option.zp + option.missing;
         end
         

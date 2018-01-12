@@ -326,8 +326,7 @@ classdef Signal
             obj.Sstart = Sstart;
             obj.Ssize = Ssize / in.Srate;
         end
-                    
-%         obj = sum(obj,dim)
+        
         obj = center(obj,dim)
         obj = halfwave(obj)
         obj = median(obj,field,order,offset)
@@ -474,10 +473,6 @@ function options = initframes(size,hop,when)
         fhop.default.value = hop;
         fhop.unit = {'/1','s','sp','Hz'};
     options.fhop = fhop;
-    
-        frameconfig.key = 'FrameConfig';
-        frameconfig.type = 'Other';
-    options.frameconfig = frameconfig;
 end
     
 

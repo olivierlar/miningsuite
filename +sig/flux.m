@@ -20,8 +20,9 @@ end
 
 function [x,type] = init(x,option,frame)
     if x.istype('sig.Signal')
-        frame.toggle = 1;
-        x = sig.spectrum(x,'FrameConfig',frame);
+        x = sig.frame(x,'FrameSize',option.fsize.value,option.fsize.unit,...
+            'FrameHop',option.fhop.value,option.fhop.unit);
+        x = sig.spectrum(x);   
     end
     type = 'sig.Signal';
 end

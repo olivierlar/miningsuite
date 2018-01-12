@@ -1,6 +1,6 @@
 % MUS.KEYSTRENGTH
 %
-% Copyright (C) 2014, 2017 Olivier Lartillot
+% Copyright (C) 2014, 2017-2018 Olivier Lartillot
 %
 % All rights reserved.
 % License: New BSD License. See full text of the license in LICENSE.txt in
@@ -35,9 +35,14 @@ end
 
 %%
 function [x type] = init(x,option,frame)
+    if x.istype('sig.Signal')
+        if option.frame
+            x = sig.frame(x,'FrameSize',option.fsize.value,option.fsize.unit,...
+                'FrameHop',option.fhop.value,option.fhop.unit);
+        end
+    end
     if ~istype(x,'mus.Keystrength')
-        x = mus.chromagram(x,'FrameConfig',frame,'Weight',option.wth,...
-            'Triangle',option.tri,'Normal');
+        x = mus.chromagram(x,'Weight',option.wth,'Triangle',option.tri,'Normal');
     end
     type = {'mus.Keystrength','sig.Spectrum'};
 end
