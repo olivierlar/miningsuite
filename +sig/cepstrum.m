@@ -10,7 +10,7 @@
 
 function varargout = cepstrum(varargin)
     out = sig.operate('sig','cepstrum',options,...
-                            @init,@main,@after,varargin,'sum');
+                            @init,@main,@after,varargin);
 %     if isa(out{1},'sig.design')
 %         out{1}.nochunk = 1;
 %     end
