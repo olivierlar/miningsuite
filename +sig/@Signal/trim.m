@@ -52,5 +52,5 @@ function out = main(d,t,where,threshold)
     end
     
     d = d.extract('sample',[n1,n2]);    
-    out = {d t(n1)};
+    out = {d n1};
 end
