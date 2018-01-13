@@ -1,6 +1,6 @@
 % SIG.SEGMENT
 %
-% Copyright (C) 2014, 2017 Olivier Lartillot
+% Copyright (C) 2014, 2017-2018 Olivier Lartillot
 % All rights reserved.
 % License: New BSD License. See full text of the license in LICENSE.txt in
 % the main folder of the MiningSuite distribution.
@@ -16,13 +16,12 @@ function options = initoptions
     options = sig.Signal.signaloptions('FrameAuto',.05,1);
     
         mfc.key = {'Rank','MFCC'};
-        mfc.type = 'Integers';
-        mfc.default = 0;
-        mfc.keydefault = 1:13;
+        mfc.type = 'Numeric';
+        mfc.default = 1:13;
     options.mfc = mfc;
 
         K.key = 'KernelSize';
-        K.type = 'Integer';
+        K.type = 'Numeric';
         K.default = 128;
     options.K = K;
     
@@ -37,12 +36,12 @@ function options = initoptions
     options.measure = measure;
 
         tot.key = 'Total';
-        tot.type = 'Integer';
+        tot.type = 'Numeric';
         tot.default = Inf;
     options.tot = tot;
 
         cthr.key = 'Contrast';
-        cthr.type = 'Integer';
+        cthr.type = 'Numeric';
         cthr.default = .1;
     options.cthr = cthr;
 
@@ -59,12 +58,12 @@ function options = initoptions
         options.band = band;
 
             mi.key = 'Min';
-            mi.type = 'Integer';
+            mi.type = 'Numeric';
             mi.default = 0;
         options.mi = mi;
 
             ma.key = 'Max';
-            ma.type = 'Integer';
+            ma.type = 'Numeric';
             ma.default = 0;
         options.ma = ma;
 
@@ -81,12 +80,12 @@ function options = initoptions
 %       f = mirsegment(...,'Silence')    
     
             throff.key = 'Off';
-            throff.type = 'Integer';
+            throff.type = 'Numeric';
             throff.default = .01;
         options.throff = throff;
 
             thron.key = 'On';
-            thron.type = 'Integer';
+            thron.type = 'Numeric';
             thron.default = .02;
         options.thron = thron;
 
@@ -95,8 +94,8 @@ function options = initoptions
         strat.position = 2;
     options.strat = strat;
     
-        pos.type = 'Numeric';
         pos.default = [];
+        pos.position = 2;
     options.pos = pos;
 end
 
@@ -109,41 +108,19 @@ function [out type] = init(x,option,frame)
         end
         if ischar(option.strat)
             if strcmpi(option.strat,'Novelty')
-                if ~frame.size.value
-                    if strcmpi(option.ana,'Keystrength')
-                        frame.size.value = .5;
-                        frame.hop.value = .2;
-                    elseif strcmpi(option.ana,'AutocorPitch') ...
-                            || strcmpi(option.ana,'Pitch')
-                        frame.size.value = .05;
-                        frame.hop.value = .01;
-                    else
-                        frame.size.value = .05;
-                        frame.hop.value = 1;
-                    end
-                end
-                frame.toggle = 1;
-                if not(isequal(option.mfc,0))
-                    fe = aud.mfcc(x,'FrameConfig',frame,'Rank',option.mfc);
-                elseif strcmpi(option.ana,'Spectrum')
-                    fe = mirspectrum(fr,'Min',option.mi,'Max',option.ma,...
-                        'Normal',option.norm,option.band,...
-                        'Window',option.win);
-                elseif strcmpi(option.ana,'Keystrength')
-                    fe = mirkeystrength(fr);
-                elseif strcmpi(option.ana,'AutocorPitch') ...
-                        || strcmpi(option.ana,'Pitch')
-                    [unused,fe] = mirpitch(x,'Frame');
+                if x.istype('sig.Signal')
+                    y = sig.frame(x,'FrameSize',option.fsize.value,option.fsize.unit,...
+                        'FrameHop',option.fhop.value,option.fhop.unit);
                 else
-                    fe = x;
+                    y = x;
                 end
+                fe = aud.mfcc(y,'Rank',option.mfc);
                 n = sig.novelty(fe,'Distance',option.distance,...
-                                'FrameConfig',frame,...
                                 'Measure',option.measure,...
                                 'KernelSize',option.K);
                 p = sig.peaks(n,'Total',option.tot,...
                                 'Contrast',option.cthr,...
-                                'Chrono','NoBegin','NoEnd');
+                                'Order','Abscissa','NoBegin','NoEnd');
             end
         end
         out = {x,p};
@@ -168,12 +145,12 @@ function out = main(in,option)
             end
         end
         if isa(pos,'sig.Signal')
-            if isempty(pos.peakpos)
+            if isempty(pos.peakindex)
                 pos = sig.peaks(pos,'Total',option.tot,...
                                     'Contrast',option.cthr,...
                                     'Chrono','NoBegin','NoEnd');
             end
-            pos = sort(pos.peakpos.content{1});
+            pos = sort(pos.peakprecisepos.content{1});
         end
     end
     
@@ -194,7 +171,7 @@ function out = main(in,option)
 %    elseif strcmp(type,'s')
         s = {};
         Sstart = x.Sstart;
-        si1 = 0;
+        si1 = 1;
         pos(end+1) = Inf;
         for i = 1:length(pos)
             si2 = find(x.sdata > pos(i),1);
@@ -208,14 +185,12 @@ function out = main(in,option)
                 end
                 break
             end
-            if si1
+            if si2 > si1
                 s{end+1} = x.Ydata.view('sample',[si1,si2-1]);
-            elseif si2 > 1
-                s{end+1} = x.Ydata.view('sample',[1,si2-1]);
             end
             si1 = si2;
             if i < length(pos)
-                Sstart(end+1) = pos(i);
+                Sstart(end+1) = si1;
             end
         end
 %    end
