@@ -181,6 +181,10 @@ while i <= length(args)
                     optionvalue = arg;
                 end
             end
+        elseif isfield(specif.(field),'position') && ...
+                specif.(field).position == i
+             match = 1;
+             optionvalue = arg;
         end    
         if match
             options.(field) = optionvalue;
