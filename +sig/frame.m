@@ -49,7 +49,7 @@ function out = main(x,frame)
         return
     end
     frate = sig.compute(@sig.getfrate,x.Srate,frame);
-    data = sig.compute(@routine,x.Ydata,x.Sstart,frame,x.Srate);
+    data = sig.compute(@routine,x.Ydata,x.Sstart,length(x.Sstart)>1,frame,x.Srate);
     if isempty(data)
         out = {[]};
     else
@@ -60,7 +60,7 @@ function out = main(x,frame)
 end
 
 
-function data = routine(data,start,param,sr)
+function data = routine(data,start,segmented,param,sr)
     if strcmpi(param.fsize.unit,'s')
         l = param.fsize.value*sr;
     elseif strcmpi(param.fsize.unit,'sp')
@@ -80,8 +80,12 @@ function data = routine(data,start,param,sr)
     l = floor(l);
     
     sf = ceil((start-1)/h)+1; %Starting frame
-    fstart = floor((sf-1)*h) + 1; %Actual sample where we should start
-    offset = fstart - start;
+    if segmented
+        offset = 0;
+    else
+        fstart = floor((sf-1)*h) + 1; %Actual sample where we should start
+        offset = fstart - start;
+    end
     
     olddim = data.whichdim('sample');
     oldcontent = data.content;
