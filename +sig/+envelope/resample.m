@@ -1,12 +1,13 @@
 % SIG.ENVELOPE.RESAMPLE
 %
-% Copyright (C) 2014, 2017 Olivier Lartillot
+% Copyright (C) 2014, 2017-2018 Olivier Lartillot
 % All rights reserved.
 % License: New BSD License. See full text of the license in LICENSE.txt in
 % the main folder of the MiningSuite distribution.
 
 function e = resample(e,postoption)
     sr = e.Srate;
+    ss = e.Sstart;
 
     if postoption.sampling
         newsr = postoption.sampling;
@@ -38,6 +39,7 @@ function e = resample(e,postoption)
         e.Ydata = sig.compute(@routine_downsample,e.Ydata,postoption.ds);
     end
     e.Srate = newsr;
+    e.Sstart = (ss-1) * newsr/sr + 1;
 end
 
 
