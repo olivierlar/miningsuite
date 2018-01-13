@@ -6,8 +6,13 @@
 % the main folder of the MiningSuite distribution.
 
 function varargout = segment(varargin)
-    varargout = sig.operate('sig','segment',initoptions,...
+    out = sig.operate('sig','segment',initoptions,...
                      @init,@main,@after,varargin);
+    if isa(out{1},'sig.design')
+        out{1}.nochunk = 1;
+    end
+    varargout = out;
+                 
 end
                     
                     
