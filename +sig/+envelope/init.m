@@ -11,11 +11,11 @@ function [x,type] = init(x,option,frame)
         return
     end
     if ~isa(x,'seq.Sequence')
-        if isa(x,'sig.Signal')
+%         if isa(x,'sig.Signal')
             x = init_audio(x,option);
-        elseif isa(x,'sig.design')
-            x = {init_audio(x,option),x};
-        end
+%         elseif isa(x,'sig.design')
+%             x = {init_audio(x,option),x};
+%         end
     end
 end
 
