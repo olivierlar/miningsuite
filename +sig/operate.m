@@ -33,7 +33,8 @@ end
 
 if ischar(arg)
     filename = arg;
-    arg = sig.design('sig','input',arg,'sig.Signal',[],[],options); %%%% why options???
+    optionmix = struct('mix',options.mix);
+    arg = sig.design('sig','signal',arg,'sig.Signal',[],[],optionmix);
 elseif isa(arg,'sig.design')
     filename = arg.files;
 end
