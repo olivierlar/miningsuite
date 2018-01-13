@@ -117,13 +117,7 @@ function display(obj)
                 elseif strcmp(abscissa,'sdata')
                     dim = 'sample';
                 end
-                if iscell(ydatai.content)
-                    for j = 1:length(ydatai.content)
-                        ydatai.apply(@draw,{obj.(abscissa),obj.Frate,'index',j},{dim,'channel'},2);
-                    end
-                else
-                    ydatai.apply(@draw,{obj.(abscissa),obj.Frate,'index',0},{dim,'channel'},2);
-                end
+                ydatai.apply(@draw,{obj.(abscissa),obj.Frate,'index'},{dim,'channel'},2);
             elseif iscell(ydatai.content)
                 for j = 1:length(ydatai.content)
                     x = obj.Sstart(j) + [0, obj.Ssize(j)];
@@ -225,7 +219,7 @@ function textual(name,data)
 end
 
 
-function draw(y,x,frate,index,segment)
+function draw(y,x,frate,index)
     if frate
         if iscell(x)
             x = x{1};
@@ -246,8 +240,6 @@ function draw(y,x,frate,index,segment)
                 'EdgeColor','k',...
                 'Curvature',.1,'LineWidth',1)
         end
-    elseif segment
-        plot(x{segment},y{segment});
     else
         plot(x,y);
     end

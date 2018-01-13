@@ -1,12 +1,12 @@
 % SIG.DATA.APPLY
 %
-% Copyright (C) 2014, 2017 Olivier Lartillot
+% Copyright (C) 2014, 2017-2018 Olivier Lartillot
 %
 % All rights reserved.
 % License: New BSD License. See full text of the license in LICENSE.txt in
 % the main folder of the MiningSuite distribution.
 
-function [obj varargout] = apply(obj,func,argin,dimfunc,maxdimfunc,type)
+function [obj,varargout] = apply(obj,func,argin,dimfunc,maxdimfunc,type)
     if nargin<5
         maxdimfunc = Inf;
     end
@@ -15,8 +15,27 @@ function [obj varargout] = apply(obj,func,argin,dimfunc,maxdimfunc,type)
         type = '()';
     end
     
+    if obj.layers == 2
+        obji = obj;
+        obji.layers = 1;
+        argini = argin;
+        for i = 1:length(obj.content)
+            obji.content = obj.content{i};
+            if iscell(argin{1})
+                argini{1} = argin{1}{i};
+            end
+            if nargout == 0
+                apply(obji,func,argini,dimfunc,maxdimfunc,type);
+            else
+                obj.content{i} = apply(obji,func,argini,dimfunc,maxdimfunc,type);
+            end
+        end
+        return
+    end
+    
     mindimfunc = length(dimfunc);
     multioutput = 0;
+    
     data = obj.content;
     if isempty(data)
         return
@@ -31,8 +50,6 @@ function [obj varargout] = apply(obj,func,argin,dimfunc,maxdimfunc,type)
     for i = 1:length(dimfunc)
         foundim = obj.whichdim(dimfunc{i});
         if isempty(foundim)
-            %varargout = {};
-            %return
             ndimdata = ndimdata+1;
             foundim = ndimdata;
             obj.dims{foundim} = dimfunc{i};
@@ -54,23 +71,15 @@ function [obj varargout] = apply(obj,func,argin,dimfunc,maxdimfunc,type)
     for i = 1:maxdimfunc
         start{i} = ':';
     end
-%     if iscell(data)
-%         oldtype = '{}';
-%     else
-        oldtype = '()';
-%     end
+    oldtype = '()';
     args = recurse(data,start,maxdimfunc+1,ndimdata,{},oldtype);
     argsin = {};
-    for j = 1:length(argin)
-        if isa(argin{j},'sig.data')
-            argin{j} = argin{j}.content;
-            argin{j} = permute(argin{j},ordim);
-            %if iscell(argin{j})
-            %    oldtype = '{}';
-            %else
-                oldtype = '()';
-            %end
-            argsin{j} = recurse(argin{j},start,maxdimfunc+1,ndimdata,{},...
+    for i = 1:length(argin)
+        if isa(argin{i},'sig.data')
+            argin{i} = argin{i}.content;
+            argin{i} = permute(argin{i},ordim);
+            oldtype = '()';
+            argsin{i} = recurse(argin{i},start,maxdimfunc+1,ndimdata,{},...
                                 oldtype);
         end
     end
