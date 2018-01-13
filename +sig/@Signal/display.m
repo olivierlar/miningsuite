@@ -112,29 +112,17 @@ function display(obj)
                         ydatai.content = d;
                     end
                 end
+                if strcmp(abscissa,'xdata')
+                    dim = 'element';
+                elseif strcmp(abscissa,'sdata')
+                    dim = 'sample';
+                end
                 if iscell(ydatai.content)
-                    if strcmp(abscissa,'sdata')
-                        if iscell(sdata)
-                            for j = 1:length(ydata.content)
-                                plot(sdata{j},squeeze(ydatai.content{j}));
-                            end
-                        else
-                            for j = 1:length(ydata.content)
-                                if ~isempty(ydatai.content{j})
-                                    plot(sdata(j),squeeze(ydatai.content{j}),'+');
-                                end
-                            end
-                        end
-                    else
-                        
+                    for j = 1:length(ydatai.content)
+                        ydatai.apply(@draw,{obj.(abscissa),obj.Frate,'index',j},{dim,'channel'},2);
                     end
                 else
-                    if strcmp(abscissa,'xdata')
-                        dim = 'element';
-                    elseif strcmp(abscissa,'sdata')
-                        dim = 'sample';
-                    end
-                    ydatai.apply(@draw,{obj.(abscissa),obj.Frate,'index'},{dim,'channel'},2);
+                    ydatai.apply(@draw,{obj.(abscissa),obj.Frate,'index',0},{dim,'channel'},2);
                 end
             elseif iscell(ydatai.content)
                 for j = 1:length(ydatai.content)
@@ -237,8 +225,14 @@ function textual(name,data)
 end
 
 
-function draw(y,x,frate,index)
+function draw(y,x,frate,index,segment)
     if frate
+        if iscell(x)
+            x = x{1};
+        end
+        if iscell(y)
+            y = y{1};
+        end
         x = x + (index-1) / frate;
         plot(x,y,'k');
         y(isnan(y)) = [];
@@ -252,6 +246,8 @@ function draw(y,x,frate,index)
                 'EdgeColor','k',...
                 'Curvature',.1,'LineWidth',1)
         end
+    elseif segment
+        plot(x{segment},y{segment});
     else
         plot(x,y);
     end
