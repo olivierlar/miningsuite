@@ -194,6 +194,8 @@ classdef design
                 arg = obj.argin{i};
                 if isnumeric(arg)
                     arg = num2str(arg);
+                elseif isa(arg,'sig.design')
+                    arg = '(sig.design)';
                 else
                     arg = ['''',arg,''''];
                 end
