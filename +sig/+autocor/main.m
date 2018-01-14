@@ -59,9 +59,10 @@ function out = main(x,option)
     
     if isa(x,'sig.Spectrum')
         ofspectrum = 1;
+        
         x.Ydata = x.Ydata.reframe;
         x.Frate = x.Srate;
-        x.Srate = 1/x.xsampling;
+        x.Srate = 1./x.xsampling;
         if strcmpi(option.normwin,'')
             option.normwin = 0;
         end
@@ -96,7 +97,7 @@ function out = main(x,option)
     end
 
     [d,w,xstart] = sig.compute(@routine,x.Ydata,x.Srate,option);
-    y = sig.Autocor(d,'xsampling',1/x.Srate,'Deframe',x,'ofSpectrum',ofspectrum);
+    y = sig.Autocor(d,'xsampling',1./x.Srate,'Deframe',x,'ofSpectrum',ofspectrum);
     y.window = w;
     y.normwin = option.normwin;
     y.Xaxis.start = xstart;
