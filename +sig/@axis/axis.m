@@ -31,7 +31,7 @@ classdef axis
             end
         end
         %%
-        function x = index(obj,sd,segment)
+        function x = index(obj,sd,sd2,segment)
             x = obj.start;
             if length(x) > 1
                 if iscell(x)
@@ -40,27 +40,27 @@ classdef axis
                     x = x(segment);
                 end
             end
-            if size(sd,2) > 1
-                if size(sd,2) > 2 || size(sd,1) > 1
-                    error('Error in sig.axis: invalid format.')
+            if nargin > 2 && ~isempty(sd2)
+                if length(sd) > 1
+                    error('Error in sig.axis.index')
                 end
-                sd = sd(1):sd(2);
+                sd = sd:sd2;
             end
             x = x + sd; % - 1;
         end
         
-        function x = data(obj,sd,segment)
-            if iscell(sd)
-                x = cell(1,length(sd));
-                for i = 1:length(sd)
-                    x{i} = data(obj,sd{i},i);
+        function x = data(obj,sd,sd2,segment)
+            if iscell(sd2)
+                x = cell(1,length(sd2));
+                for i = 1:length(sd2)
+                    x{i} = data(obj,sd,sd2{i},i);
                 end
                 return
             end
-            if nargin < 3
+            if nargin < 4
                 segment = 1;
             end
-            x = obj.unit.generate(obj.index(sd,segment),segment);
+            x = obj.unit.generate(obj.index(sd,sd2,segment),segment);
             if ~isempty(obj.subunit) && ...
                     strcmpi(obj.name,obj.subunit.dimname)
                 if ~isnan(obj.subunit.parameter)

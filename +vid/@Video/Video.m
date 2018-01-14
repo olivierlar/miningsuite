@@ -107,10 +107,10 @@ classdef Video
                 if iscell(ysize)
                     s = cell(1,length(ysize));
                     for i = 1:length(ysize)
-                        s{i} = obj.saxis.data([1 ysize{i}],i);
+                        s{i} = obj.saxis.data(1,ysize{i},i);
                     end
                 else
-                    s = obj.saxis.data([1 ysize]);
+                    s = obj.saxis.data(1,ysize);
                 end
             end
         end
@@ -126,21 +126,21 @@ classdef Video
             if isempty(obj.faxis)
                 f = [];
             else
-                f = obj.faxis.data([1 obj.Ydata.size('frame')]);
+                f = obj.faxis.data(1,obj.Ydata.size('frame'));
             end
         end
         function f = get.fends(obj)
             if isempty(obj.faxis)
                 f = [];
             else
-                f = obj.faxis.data([1 obj.Ydata.size('frame')]) + obj.fnumber;
+                f = obj.faxis.data(1,obj.Ydata.size('frame')) + obj.fnumber;
             end
         end
         function f = get.fcenters(obj)
             if isempty(obj.faxis)
                 f = [];
             else
-                f = obj.faxis.data([1 obj.Ydata.size('frame')]) + obj.fnumber/2;
+                f = obj.faxis.data(1,obj.Ydata.size('frame')) + obj.fnumber/2;
             end
         end
         
