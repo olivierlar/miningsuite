@@ -19,6 +19,9 @@ function out = main(x,option)
         option.phase = 0;
     end
     [d,ph,constq] = sig.compute(@routine,x{1}.Ydata,x{1}.Srate,option);
+    if iscell(constq)
+        constq = constq{1};
+    end
 
     dsize = d.size('element');
     if option.constq
