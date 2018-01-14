@@ -130,8 +130,8 @@ function display(obj)
                     y = xdata{j}';
                     y(end+1) = 2 * y(end) - y(end-1);
                     surfplot(x,y,ydatai.content{j}(:,1));
-                    axis tight
                 end
+                axis tight
             else
                 ydatai.apply(@drawmat,{sdata,xdata(:)},{'sample','element'},2);
                 set(gca,'YDir','normal');
