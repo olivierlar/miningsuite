@@ -126,7 +126,11 @@ function display(obj)
                 ydatai.apply(@draw,{obj.(abscissa),obj.Frate,'index'},{dim,'channel'},2);
             elseif iscell(ydatai.content)
                 for j = 1:length(ydatai.content)
-                    x = obj.Sstart(j) + [0, obj.Ssize(j)];
+                    Ssize = obj.Ssize;
+                    if length(Ssize) > 1
+                        Ssize = Ssize(j);
+                    end
+                    x = obj.Sstart(j) + [0, Ssize];
                     y = xdata{j}';
                     y(end+1) = 2 * y(end) - y(end-1);
                     surfplot(x,y,ydatai.content{j}(:,1));
