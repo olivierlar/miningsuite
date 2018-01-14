@@ -54,7 +54,12 @@ function x = defaultval(unit,index,segment)
     else
         rate = unit.rate(segment);
     end
-    x = (index - 1 + unit.origin) * rate;
+    if iscell(unit.origin)
+        origin = unit.origin{segment};
+    else
+        origin = unit.origin;
+    end
+    x = (index - 1 + origin) * rate;
 end
 
 
