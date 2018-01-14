@@ -15,7 +15,7 @@ function out = after(x,option)
     
     [x,tmp] = sig.spectrum.after1(x,option);
     
-    [x.Ydata, meth] = sig.compute(@routine,x.xdata,x.Ydata,x.xname,option);
+    [x.Ydata, meth] = sig.compute(@routine,x.Ydata,x.xdata,x.xname,option);
     
     if iscell(meth)
         meth = meth{1};
@@ -36,7 +36,7 @@ end
 
 
 %%
-function out = routine(f,d,xname,option)
+function out = routine(d,f,xname,option)
     meth = '';
 
     if option.terhardt
