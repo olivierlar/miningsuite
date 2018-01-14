@@ -7,7 +7,6 @@
 
 function e = resample(e,postoption)
     sr = e.Srate;
-    ss = e.Sstart;
 
     if postoption.sampling
         newsr = postoption.sampling;
@@ -39,7 +38,6 @@ function e = resample(e,postoption)
         e.Ydata = sig.compute(@routine_downsample,e.Ydata,postoption.ds);
     end
     e.Srate = newsr;
-    e.Sstart = (ss-1) * newsr/sr + 1;
 end
 
 

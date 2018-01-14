@@ -955,6 +955,6 @@ function out = symbolic(x,option)
     end
     %%
     d = sig.data(g,{'sample'});
-    out = sig.Envelope(d,'Srate',ndivs,'Sstart',1,'Ssize',length(g));
+    out = sig.Envelope(d,'Srate',ndivs,'Sstart',0,'Ssize',length(g));
     out = {sig.framenow(out,option.frame)};
 end

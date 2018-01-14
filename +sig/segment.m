@@ -195,7 +195,7 @@ function out = main(in,option)
             end
             si1 = si2;
             if i < length(pos)
-                Sstart(end+1) = si1;
+                Sstart(end+1) = pos(i);
             end
         end
 %    end

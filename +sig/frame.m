@@ -79,6 +79,7 @@ function data = routine(data,start,segmented,param,sr)
     end
     l = floor(l);
     
+    start = start * sr + 1;
     sf = ceil((start-1)/h)+1; %Starting frame
     if segmented
         offset = 0;
