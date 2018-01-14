@@ -154,7 +154,7 @@ classdef Signal
         end
         
         function s = get.saxis(obj)
-            s = sig.axis('time',obj.Sstart*obj.Srate+1,'s',0,1/obj.Srate);
+            s = sig.axis('time',obj.Sstart.*obj.Srate+1,'s',0,1./obj.Srate);
         end
         function s = get.sdata(obj)
             if ~obj.Srate
