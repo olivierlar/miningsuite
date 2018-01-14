@@ -16,13 +16,13 @@ function e = resample(e,postoption)
         newsr = sr;
     end
         
-    if isfield(postoption,'norm') && ...
-            ischar(postoption.norm) && ...
-            strcmpi(postoption.norm,'AcrossSegments')
-        abse = e.Ydata.apply(@abs,{},{'sample'});
-        maxe = e.Ydata.apply(@max,{},{'sample'});
-        % Check code in mirenvelope.
-    end
+%     if isfield(postoption,'norm') && ...
+%             ischar(postoption.norm) && ...
+%             strcmpi(postoption.norm,'AcrossSegments')
+%         abse = e.Ydata.apply(@abs,{},{'sample'});
+%         maxe = e.Ydata.apply(@max,{},{'sample'});
+%         % Check code in mirenvelope.
+%     end
 
     if postoption.sampling
         if sr ~= newsr
