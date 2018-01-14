@@ -64,10 +64,8 @@ function out = after(x,option)
         x.phase = [];
     end
     
-    if strcmp(x.Xaxis.unit.name,'Pitch') && option.collapsed
-        f = x.xdata;
-        centclass = rem(f,1200);
-        x.Ydata = x.Ydata.apply(@collapse,{centclass},{'element'});
+    if strcmp(x.Xaxis.name,'Pitch') && option.collapsed
+        x.Ydata = sig.compute(@pitch,x.Ydata,x.xdata);
         x.Xaxis.unit.name = 'cents (collapsed)';
         x.Xaxis.unit.origin = 0;
         x.Xaxis.unit.rate = 1;
@@ -105,6 +103,13 @@ function out = cents(d,f)
     d = d.apply(@interp,{f,f2cents},{'element'});
     origin = octaves(1)*1200 + cents(1) + 6900;
     out = {d,origin};
+end
+
+
+function out = pitch(d,f)
+    centclass = rem(f,1200);
+    d = d.apply(@collapse,{centclass},{'element'});
+    out = {d};
 end
 
 
