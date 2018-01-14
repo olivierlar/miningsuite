@@ -28,7 +28,13 @@ function display(obj)
     end
     
     %%    
-    if ~obj.Srate || isequal(obj.Ydata.size('sample',1), 1)
+    if length(obj.Sstart) > 1 && iscell(xdata)
+        iscurve = 0;
+        Xaxis = obj.saxis;
+        yname = obj.Xaxis.name;
+        yunit = obj.Xaxis.unit.name;
+        ydata = obj.Ydata;
+    elseif ~obj.Srate || isequal(obj.Ydata.size('sample',1), 1)
         if isempty(xdata) || length(xdata) == 1
             textual(obj.yname,obj.Ydata.content);
             return
@@ -123,7 +129,8 @@ function display(obj)
                     x = obj.Sstart(j) + [0, obj.Ssize(j)];
                     y = xdata{j}';
                     y(end+1) = 2 * y(end) - y(end-1);
-                    surfplot(x,y,ydatai.content{j});
+                    surfplot(x,y,ydatai.content{j}(:,1));
+                    axis tight
                 end
             else
                 ydatai.apply(@drawmat,{sdata,xdata(:)},{'sample','element'},2);
