@@ -122,7 +122,7 @@ else
             chunks = max(0,nbsamples-sig.chunklim*(nch:-1:1))+window(1);
             overlap = design.overlap.value;
             if strcmpi(design.overlap.unit,'s')
-                overlap = overlap*sr - 1; % The -1 is used solely for sig.frame. If other operators need 's', decompose into 2 cases
+                overlap = round(overlap*sr) - 1; % The -1 is used solely for sig.frame. If other operators need 's', decompose into 2 cases
             end
             chunks(2,:) = nbsamples-max( sig.chunklim*(nch-1:-1:0)-overlap , 0)+window(1)-1;
         else
@@ -316,7 +316,7 @@ old.Ydata = old.Ydata.concat(new.Ydata,'sample',delta/2);
 if ~isempty(old.peakindex)
     old.peakindex = old.peakindex.concat(new.peak,'sample');
 end
-if isa(old,'sig.Spectrum')
+if isa(old,'sig.Spectrum') && ~isempty(old.phase)
     old.phase = old.phase.concat(new.phase,'sample');
 end
       
