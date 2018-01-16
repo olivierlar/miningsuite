@@ -1,7 +1,7 @@
 % SIG.ENVELOPE
 % extracts the envelope, showing the global shape of the waveform
 %
-% Copyright (C) 2014, 2017 Olivier Lartillot
+% Copyright (C) 2014, 2017-2018 Olivier Lartillot
 %
 % All rights reserved.
 % License: New BSD License. See full text of the license in LICENSE.txt in
@@ -40,5 +40,11 @@ function out = after(x,option)
     end
     x = sig.envelope.diff(x,option);
     x = sig.envelope.after(x,option);
+    
+    if option.frame
+        x = sig.frame(x,'FrameSize',option.fsize.value,option.fsize.unit,...
+                        'FrameHop',option.fhop.value,option.fhop.unit);
+    end
+    
     out = {x};
 end

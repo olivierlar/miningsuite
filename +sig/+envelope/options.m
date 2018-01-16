@@ -1,12 +1,12 @@
 % SIG.ENVELOPE.OPTIONS
 %
-% Copyright (C) 2014, 2017 Olivier Lartillot
+% Copyright (C) 2014, 2017-2018 Olivier Lartillot
 % All rights reserved.
 % License: New BSD License. See full text of the license in LICENSE.txt in
 % the main folder of the MiningSuite distribution.
 
 function options = options
-    [options,spectroframe] = sig.Signal.signaloptions('FrameManual');
+    [options,spectroframe] = sig.Signal.signaloptions('FrameManual',1,.5,'After');
     
         method.type = 'String';
         method.choice = {'Filter','Spectro'};
@@ -89,7 +89,7 @@ function options = options
         terhardt.default = 0;
     options.terhardt = terhardt;
 
-        spectroframe.key = 'Frame';
+        spectroframe.key = 'SpectroFrame';
         spectroframe.type = 'Numeric';
         spectroframe.number = 2;
         spectroframe.default = [.1 .1];
