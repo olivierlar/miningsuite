@@ -50,15 +50,17 @@ classdef axis
         end
         
         function x = data(obj,sd,sd2,segment)
-            if iscell(sd2)
-                x = cell(1,length(sd2));
-                for i = 1:length(sd2)
-                    x{i} = data(obj,sd,sd2{i},i);
-                end
-                return
-            end
             if nargin < 4
                 segment = 1;
+                if nargin < 3
+                    sd2 = [];
+                elseif iscell(sd2)
+                    x = cell(1,length(sd2));
+                    for i = 1:length(sd2)
+                        x{i} = data(obj,sd,sd2{i},i);
+                    end
+                    return
+                end
             end
             x = obj.unit.generate(obj.index(sd,sd2,segment),segment);
             if ~isempty(obj.subunit) && ...
