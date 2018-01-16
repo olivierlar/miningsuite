@@ -89,7 +89,7 @@ function varargout = playfile(d,name,rate,synth)
             idealtime = length(s)/rate;
             practime = toc;
             if practime < idealtime
-                pause(idealtime-practime)
+                pause(idealtime - practime + .1)
             end
         end
     end
