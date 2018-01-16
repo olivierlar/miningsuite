@@ -21,8 +21,10 @@ function [obj,varargout] = apply(obj,func,argin,dimfunc,maxdimfunc,type)
         argini = argin;
         for i = 1:length(obj.content)
             obji.content = obj.content{i};
-            if iscell(argin{1})
-                argini{1} = argin{1}{i};
+            for j = 1:length(argin)
+                if iscell(argin{j})
+                    argini{j} = argin{j}{i};
+                end
             end
             if nargout == 0
                 apply(obji,func,argini,dimfunc,maxdimfunc,type);
