@@ -125,16 +125,7 @@ function display(obj)
                 end
                 ydatai.apply(@draw,{obj.(abscissa),obj.Frate,'index'},{dim,'channel'},2);
             elseif iscell(ydatai.content)
-                for j = 1:length(ydatai.content)
-                    Ssize = obj.Ssize;
-                    if length(Ssize) > 1
-                        Ssize = Ssize(j);
-                    end
-                    x = obj.Sstart(j) + [0, Ssize];
-                    y = xdata{j}';
-                    y(end+1) = 2 * y(end) - y(end-1);
-                    surfplot(x,y,ydatai.content{j}(:,1));
-                end
+                ydatai.apply(@drawmatseg,{xdata,num2cell(obj.Sstart),obj.Srate,num2cell(obj.Ssize)},{'sample','element'},2);
                 axis tight
             else
                 ydatai.apply(@drawmat,{sdata,xdata(:)},{'sample','element'},2);
@@ -263,6 +254,17 @@ function drawmat(z,x,y)
          (y(1:end-1)+y(2:end))/2;...
          1.5*y(end)-0.5*y(end-1)];
     surfplot(x,y,z')
+end
+
+
+function drawmatseg(z,y,Sstart,Srate,Ssize)
+    if Srate
+        x = Sstart + (0:size(z,1))/Srate;
+    else
+        x = Sstart + [0, Ssize];
+    end
+    y(end+1) = 2 * y(end) - y(end-1);
+    surfplot(x,y',z')
 end
 
 
