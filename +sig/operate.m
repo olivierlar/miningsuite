@@ -70,13 +70,8 @@ if isa(arg{1},'sig.design')
     %end
     
     design.overlap = arg{1}.overlap;
-    
-    if strcmpi(filename,'Design') || ~strcmp(name,'play')
-        design.evaluate = 1;
-        out = {design};
-    else
-        out = design.eval(filename);
-    end
+    design.evaluate = 1;
+    out = {design};
 elseif isa(arg{1},'sig.Signal')
     if iscell(main)
         main = main{1};
