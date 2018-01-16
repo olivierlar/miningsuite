@@ -10,37 +10,37 @@ function varargout = play(varargin)
 
     options = sig.Signal.signaloptions();
 
-        ch.key = 'Channel';
-        ch.type = 'Integer';
-        ch.default = 0;
-    options.ch = ch;
-
-        sg.key = 'Segment';
-        sg.type = 'Integer';
-        sg.default = 0;
-    options.sg = sg;
-
-        se.key = 'Sequence';
-        se.type = 'Integer';
-        se.default = 0;
-    options.se = se;
-
-        inc.key = 'Increasing';
-        inc.type = 'MIRtb';
-    options.inc = inc;
-
-        dec.key = 'Decreasing';
-        dec.type = 'MIRtb';
-    options.dec = dec;
-
-        every.key = 'Every';
-        every.type = 'Integer';
-    options.every = every;
-
-        burst.key = 'Burst';
-        burst.type = 'Boolean';
-        burst.default = 1;
-    options.burst = burst;
+%         ch.key = 'Channel';
+%         ch.type = 'Integer';
+%         ch.default = 0;
+%     options.ch = ch;
+% 
+%         sg.key = 'Segment';
+%         sg.type = 'Integer';
+%         sg.default = 0;
+%     options.sg = sg;
+% 
+%         se.key = 'Sequence';
+%         se.type = 'Integer';
+%         se.default = 0;
+%     options.se = se;
+% 
+%         inc.key = 'Increasing';
+%         inc.type = 'MIRtb';
+%     options.inc = inc;
+% 
+%         dec.key = 'Decreasing';
+%         dec.type = 'MIRtb';
+%     options.dec = dec;
+% 
+%         every.key = 'Every';
+%         every.type = 'Integer';
+%     options.every = every;
+% 
+%         burst.key = 'Burst';
+%         burst.type = 'Boolean';
+%         burst.default = 1;
+%     options.burst = burst;
 
 
     varargout = sig.operate('sig','play',options,@init,@main,@after,varargin);
