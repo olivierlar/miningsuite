@@ -9,10 +9,17 @@ function out = main(x,option)
     if iscell(x)
         x = x{1};
     end
+    
     if isa(x,'sig.Autocor')
         out = {x};
         return
     end
+    
+    if isa(x,'sig.Envelope') && option.frame
+        x = sig.frame(x,'FrameSize',option.fsize.value,option.fsize.unit,...
+                        'FrameHop',option.fhop.value,option.fhop.unit);
+    end
+    
     if isstruct(option.min) && strcmpi(option.min.unit,'Hz')
         if isstruct(option.max)
             if ~strcmpi(option.max.unit,'Hz')
