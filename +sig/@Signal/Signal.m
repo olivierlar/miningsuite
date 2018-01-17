@@ -36,6 +36,7 @@ classdef Signal
         xunsampled
                 
         Sstart
+        Send
         Srate
         Ssize
         
@@ -99,6 +100,7 @@ classdef Signal
             s.xunsampled = options.xdata;
             
             s.Sstart = options.sstart;
+            s.Send = options.send;
             s.Srate = options.srate;
             s.Ssize = options.ssize;
             
@@ -154,11 +156,22 @@ classdef Signal
         end
         
         function s = get.saxis(obj)
-            s = sig.axis('time',obj.Sstart.*obj.Srate+1,'s',0,1./obj.Srate);
+            Sstart = obj.Sstart;
+            if iscell(Sstart)
+                Sstart = cell2mat(Sstart);
+            end
+            s = sig.axis('time',Sstart.*obj.Srate+1,'s',0,1./obj.Srate);
         end
         function s = get.sdata(obj)
             if ~obj.Srate
-                s = obj.xdata(1);
+                if iscell(obj.Sstart)
+                    s = cell(1,length(obj.Sstart));
+                    for i = 1:length(obj.Sstart)
+                        s{i} = obj.Sstart{i};
+                    end
+                else
+                    s = obj.Sstart;
+                end
             else 
                 ysize = obj.Ydata.size('sample',1);
                 if iscell(ysize)
@@ -396,7 +409,12 @@ function options = constructoptions
         sstart.type = 'Numeric';
         sstart.default = 0;
     options.sstart = sstart;
-    
+
+        send.key = 'Send';
+        send.type = 'Numeric';
+        send.default = 0;
+    options.send = send;
+
         srate.key = 'Srate';
         srate.type = 'Numeric';
         srate.default = 1;
