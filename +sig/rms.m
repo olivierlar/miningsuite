@@ -1,6 +1,6 @@
 % SIG.RMS
 %
-% Copyright (C) 2014, 2017, Olivier Lartillot
+% Copyright (C) 2014, 2017-2018, Olivier Lartillot
 %
 % All rights reserved.
 % License: New BSD License. See full text of the license in LICENSE.txt in
@@ -19,7 +19,11 @@ end
 
 
 %%
-function [x type] = init(x,option,frame)
+function [x,type] = init(x,option)
+    if option.frame
+        x = sig.frame(x,'FrameSize',option.fsize.value,option.fsize.unit,...
+                        'FrameHop',option.fhop.value,option.fhop.unit);
+    end
     type = 'sig.Signal';
 end
 
@@ -27,8 +31,9 @@ end
 function out = main(in,option)
     x = in{1};
     if ~strcmpi(x.yname,'RMS')
-        d = sig.compute(@routine,x.Ydata);
+        [d,Sstart,Send] = sig.compute(@routine,x.Ydata,x.Sstart,x.Send);
         x = sig.Signal(d,'Name','RMS',...
+                       'Sstart',Sstart,'Send',Send,...
                        'Srate',x.Frate,'Ssize',x.Ssize,...
                        'FbChannels',x.fbchannels);
     end
@@ -36,15 +41,15 @@ function out = main(in,option)
 end
 
 
-function out = routine(d)
+function out = routine(d,ss,se)
     if find(strcmp('element',d.dims))
         dim = 'element';
     else
         dim = 'sample';
     end
-    e = d.apply(@algo,{},{dim},1);
-    e = e.deframe;
-    out = {e};
+    d = d.apply(@algo,{},{dim},1);
+    d = d.deframe;
+    out = {d,ss,se};
 end
 
 
