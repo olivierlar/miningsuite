@@ -31,15 +31,15 @@ end
 
 function out = main(in,option)
     x = in{1};
-    res = sig.compute(@routine,x.Ydata,x.Srate,option);
-    out = {sig.Signal(res,'Name','Length','Srate',0,'Ssize',1,...
-                      'FbChannels',x.fbchannels)};
+    [d Sstart Send] = sig.compute(@routine,x.Ydata,x.Srate,x.Sstart,option,x.Send);
+    out = {sig.Signal(d,'Name','Length','Srate',0,'Send',Send,...
+                      'Sstart',Sstart,'FbChannels',x.fbchannels)};
 end
 
 
-function out = routine(d,sr,option)
-    e = d.apply(@algo,{sr,option},{'sample'},1);
-    out = {e};
+function out = routine(d,sr,ss,option,sl)
+    d = d.apply(@algo,{sr,option},{'sample'},1);
+    out = {d ss sl};
 end
 
 
