@@ -14,7 +14,12 @@ end
 
 %%
 function options = initoptions
-    options = sig.Signal.signaloptions('FrameAuto',.05,.5);    
+    options = sig.Signal.signaloptions('FrameAuto',.05,.5);
+    
+        median.key = 'Median';
+        median.type = 'Boolean';
+        median.default = 0;
+    options.median = median;
 end
 
 
@@ -24,6 +29,9 @@ function [x,type] = init(x,option)
         x = sig.frame(x,'FrameSize',option.fsize.value,option.fsize.unit,...
                         'FrameHop',option.fhop.value,option.fhop.unit);
     end
+    if isa(x,'sig.design') && option.median
+        x.nochunk = 1;
+    end
     type = 'sig.Signal';
 end
 
@@ -31,7 +39,7 @@ end
 function out = main(in,option)
     x = in{1};
     if ~strcmpi(x.yname,'RMS')
-        [d,Sstart,Send] = sig.compute(@routine,x.Ydata,x.Sstart,x.Send);
+        [d,Sstart,Send] = sig.compute(@routine,x.Ydata,x.Sstart,x.Send,option.median);
         x = sig.Signal(d,'Name','RMS',...
                        'Sstart',Sstart,'Send',Send,...
                        'Srate',x.Frate,'Ssize',x.Ssize,...
@@ -41,31 +49,45 @@ function out = main(in,option)
 end
 
 
-function out = routine(d,ss,se)
+function out = routine(d,ss,se,optionmedian)
     if find(strcmp('element',d.dims))
         dim = 'element';
     else
         dim = 'sample';
     end
-    d = d.apply(@algo,{},{dim},1);
+    if optionmedian
+        meth = @rmedians;
+    else
+        meth = @rmeans;
+    end
+    d = d.apply(meth,{},{dim},1);
     d = d.deframe;
     out = {d,ss,se};
 end
 
 
-function y = algo(x)
+function y = rmeans(x)
     y = x'*x;
 end
 
 
-function out = after(in,option)
-    x = in{1};
-    if find(strcmp('element',x.Ydata.dims))
-        dim = 'element';
-    else
-        dim = 'sample';
+function y = rmedians(x)
+    y = sqrt(median(x.^2));
+end
+
+
+function out = after(x,option)
+    if iscell(x)
+        x = x{1};
     end
-    x.Ydata = sig.compute(@routine_norm,x.Ydata,x.Ssize,dim);
+    if ~option.median
+        if find(strcmp('element',x.Ydata.dims))
+            dim = 'element';
+        else
+            dim = 'sample';
+        end
+        x.Ydata = sig.compute(@routine_norm,x.Ydata,x.Ssize,dim);
+    end
     out = {x};
 end
 
