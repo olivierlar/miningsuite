@@ -202,6 +202,7 @@ function out = main(in,option)
     x.Ydata.content = s;
     x.Ydata.layers = 2;
     x.Sstart = Sstart;
+    x.Send = [Sstart(2:end),x.Send];
     out = {x};
 end
 
