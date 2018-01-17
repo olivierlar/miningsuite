@@ -286,6 +286,8 @@ classdef Signal
                 d = obj.Srate;
             elseif strcmpi(field,'Sdata')
                 d = obj.sdata;
+            elseif strcmpi(field,'Ssize')
+                d = obj.Ssize;
             elseif strcmpi(field,'Frate')
                 d = obj.Frate;
             elseif strcmpi(field,'Flength')
