@@ -40,9 +40,7 @@ function out = main(in,option)
     x = in{1};
     if ~strcmpi(x.yname,'RMS')
         [d,Sstart,Send] = sig.compute(@routine,x.Ydata,x.Sstart,x.Send,option.median);
-        x = sig.Signal(d,'Name','RMS',...
-                       'Sstart',Sstart,'Send',Send,...
-                       'Srate',x.Frate,'Ssize',x.Ssize,...
+        x = sig.Signal(d,'Name','RMS','Deframe',x,...
                        'FbChannels',x.fbchannels);
     end
     out = {x};
@@ -60,14 +58,14 @@ function out = routine(d,ss,se,optionmedian)
     else
         meth = @rmeans;
     end
-    d = d.apply(meth,{},{dim},1);
+    d = d.apply(meth,{},{dim},2);
     d = d.deframe;
     out = {d,ss,se};
 end
 
 
 function y = rmeans(x)
-    y = x'*x;
+    y = sum(x.^2);
 end
 
 
