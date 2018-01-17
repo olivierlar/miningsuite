@@ -37,9 +37,9 @@ function out = main(in,option)
 end
 
 
-function out = routine(d,sr,ss,option,sl)
+function out = routine(d,sr,ss,option,se)
     d = d.apply(@algo,{sr,option},{'sample'},1);
-    out = {d ss sl};
+    out = {d,ss,se};
 end
 
 
