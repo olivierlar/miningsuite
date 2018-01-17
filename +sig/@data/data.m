@@ -53,7 +53,7 @@ classdef data
                 if strcmp(obj.dims{i},'sample')
                     obj = obj.rename('element','nothing');
                     obj.dims{i} = 'element';
-                    return
+                    break
                 end
             end
             obj = obj.rename('frame','sample');
