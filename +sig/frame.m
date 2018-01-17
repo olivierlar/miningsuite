@@ -31,7 +31,7 @@ function options = options
 end
 
 
-function [x,type] = init(x,option,frame)
+function [x,type] = init(x,option)
     if isa(x,'sig.design')
         x.overlap = option.fsize;
     end

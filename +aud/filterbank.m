@@ -38,7 +38,7 @@ end
     
 
 %%
-function [x type] = init(x,option,frame)
+function [x,type] = init(x,option)
     type = 'sig.Signal';
 end
 

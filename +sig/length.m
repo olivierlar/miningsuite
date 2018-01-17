@@ -1,7 +1,7 @@
 % SIG.LENGTH
 % indicates the temporal length of x.
 %
-% Copyright (C) 2017, Olivier Lartillot
+% Copyright (C) 2017-2018, Olivier Lartillot
 %
 % All rights reserved.
 % License: New BSD License. See full text of the license in LICENSE.txt in
@@ -24,14 +24,14 @@ function options = options
 end
 
 
-function [x type] = init(x,option,frame)
+function [x,type] = init(x,option)
     type = 'sig.Signal';
 end
 
 
 function out = main(in,option)
     x = in{1};
-    [d Sstart Send] = sig.compute(@routine,x.Ydata,x.Srate,x.Sstart,option,x.Send);
+    [d,Sstart,Send] = sig.compute(@routine,x.Ydata,x.Srate,x.Sstart,option,x.Send);
     out = {sig.Signal(d,'Name','Length','Srate',0,'Send',Send,...
                       'Sstart',Sstart,'FbChannels',x.fbchannels)};
 end

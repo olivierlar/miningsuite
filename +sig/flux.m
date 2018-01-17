@@ -18,7 +18,7 @@ function options = options
 end
 
 
-function [x,type] = init(x,option,frame)
+function [x,type] = init(x,option)
     if x.istype('sig.Signal')
         x = sig.frame(x,'FrameSize',option.fsize.value,option.fsize.unit,...
             'FrameHop',option.fhop.value,option.fhop.unit);

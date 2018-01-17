@@ -1,7 +1,7 @@
 % AUD.ENVELOPE
 % auditory modeling of envelope extraction
 %
-% Copyright (C) 2014, 2017 Olivier Lartillot
+% Copyright (C) 2014, 2017-2018 Olivier Lartillot
 %
 % All rights reserved.
 % License: New BSD License. See full text of the license in LICENSE.txt in
@@ -36,7 +36,7 @@ function options = initoptions
 end
 
 
-function [x,type] = init(x,option,frame)
+function [x,type] = init(x,option)
     if ischar(option.presel) && strcmpi(option.presel,'Klapuri06')
         option.method = 'Spectro';
     end

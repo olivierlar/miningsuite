@@ -106,7 +106,7 @@ end
 
 
 %%
-function [out type] = init(x,option,frame)
+function [out,type] = init(x,option)
     if isempty(option.pos)
         if iscell(x)
             x = x{1};

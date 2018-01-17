@@ -25,7 +25,7 @@ function options = options
 end
 
 
-function [x,type] = init(x,option,frame)
+function [x,type] = init(x,option)
     if x.istype('sig.Signal')
         if strcmpi(option.sb,'Manual')
             x = sig.filterbank(x,'Cutoff',[-Inf 50*2.^(0:1:8) Inf],...

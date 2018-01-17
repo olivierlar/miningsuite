@@ -5,7 +5,7 @@
 % License: New BSD License. See full text of the license in LICENSE.txt in
 % the main folder of the MiningSuite distribution.
 
-function [x,type] = init(x,option,frame)
+function [x,type] = init(x,option)
     if option.frame
         x = sig.frame(x,'FrameSize',option.fsize.value,option.fsize.unit,...
                         'FrameHop',option.fhop.value,option.fhop.unit);
