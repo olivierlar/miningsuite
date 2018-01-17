@@ -29,7 +29,7 @@ function [x,type] = init(x,option)
         x = sig.frame(x,'FrameSize',option.fsize.value,option.fsize.unit,...
                         'FrameHop',option.fhop.value,option.fhop.unit);
     end
-    if isa(x,'sig.design') && option.median
+    if isa(x,'sig.design') && option.median && ~option.frame
         x.nochunk = 1;
     end
     type = 'sig.Signal';
