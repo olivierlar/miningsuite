@@ -337,7 +337,7 @@ classdef Signal
                 Ssize = size(in.Ydata.content,1);
             end
             obj.Sstart = Sstart;
-            obj.Ssize = Ssize / in.Srate;
+            obj.Ssize = Ssize;
         end
         
         obj = center(obj,dim)
