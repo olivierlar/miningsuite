@@ -34,6 +34,13 @@ function display(obj)
         yname = obj.Xaxis.name;
         yunit = obj.Xaxis.unit.name;
         ydata = obj.Ydata;
+    elseif length(obj.Sstart) > 1 && iscell(obj.Sstart)
+        iscurve = 2;
+        abscissa = 'sdata';
+        Xaxis = obj.saxis;
+        yname = '';
+        yunit = '';
+        ydata = obj.Ydata;
     elseif ~obj.Srate || isequal(obj.Ydata.size('sample',1), 1)
         if isempty(xdata) || length(xdata) == 1
             textual(obj.yname,obj.Ydata.content);
@@ -123,7 +130,11 @@ function display(obj)
                 elseif strcmp(abscissa,'sdata')
                     dim = 'sample';
                 end
-                ydatai.apply(@draw,{obj.(abscissa),obj.Frate,'index'},{dim,'channel'},2);
+                if iscurve == 2
+                    ydatai.apply(@drawpointseg,{obj.Sstart,obj.Send},{'sample'},1);
+                else
+                    ydatai.apply(@draw,{obj.(abscissa),obj.Frate,'index'},{dim,'channel'},2);
+                end
             elseif iscell(ydatai.content)
                 ydatai.apply(@drawmatseg,{xdata,num2cell(obj.Sstart),obj.Srate,num2cell(obj.Ssize)},{'sample','element'},2);
                 axis tight
@@ -242,6 +253,8 @@ function draw(y,x,frate,index)
                 'EdgeColor','k',...
                 'Curvature',.1,'LineWidth',1)
         end
+    elseif length(x) == 1
+        plot(x,y,'+');
     else
         plot(x,y);
     end
@@ -254,6 +267,11 @@ function drawmat(z,x,y)
          (y(1:end-1)+y(2:end))/2;...
          1.5*y(end)-0.5*y(end-1)];
     surfplot(x,y,z')
+end
+
+
+function drawpointseg(y,x1,x2)
+    plot([x1,x2],[y,y]);
 end
 
 
