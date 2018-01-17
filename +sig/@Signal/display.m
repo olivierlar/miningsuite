@@ -34,7 +34,7 @@ function display(obj)
         yname = obj.Xaxis.name;
         yunit = obj.Xaxis.unit.name;
         ydata = obj.Ydata;
-    elseif length(obj.Sstart) > 1 && iscell(obj.Sstart)
+    elseif length(obj.Sstart) > 1 && iscell(obj.Sstart) && ~obj.Srate
         iscurve = 2;
         abscissa = 'sdata';
         Xaxis = obj.saxis;
