@@ -123,12 +123,20 @@ function [out,type] = init(x,option)
                 n = sig.novelty(fe,'Distance',option.distance,...
                                 'Measure',option.measure,...
                                 'KernelSize',option.K);
-                p = sig.peaks(n,'Total',option.tot,...
+                z = sig.peaks(n,'Total',option.tot,...
                                 'Contrast',option.cthr,...
                                 'Order','Abscissa','NoBegin','NoEnd');
+            elseif strcmpi(option.strat,'RMS')
+                if x.istype('sig.Signal')
+                    y = sig.frame(x,'FrameSize',option.fsize.value,option.fsize.unit,...
+                        'FrameHop',option.fhop.value,option.fhop.unit);
+                else
+                    y = x;
+                end
+                z = sig.rms(y);
             end
         end
-        out = {x,p};
+        out = {x,z};
     else
         out = x;
     end
@@ -140,7 +148,12 @@ function out = main(in,option)
     x = in{1};
     if length(in) > 1
         y = in{2};
-        pos = y.peakprecisepos.content{1};
+        if strcmpi(option.strat,'Novelty')
+            pos = y.peakprecisepos.content{1};
+        elseif strcmpi(option.strat,'RMS')
+            pos = sig.compute(@RMS,y.Ydata,y.sdata,option);
+            pos = pos.content;
+        end
     else
         pos = option.pos;
         if isa(pos,'sig.design')
@@ -206,6 +219,28 @@ function out = main(in,option)
     out = {x};
 end
 
+
+function out = RMS(d,fp,option)
+    d = d.apply(@findsilenceRMS,{fp,option.thron,option.throff},{'sample'},1);
+    out = {d};
+end
+
+
+function p = findsilenceRMS(d,t,throff,thron)
+    d = [0;d;0];
+    begseg = find(d(1:end-1)<thron & d(2:end)>=thron);
+    nseg = length(begseg);
+    endseg = zeros(1,nseg);
+    removed = [];
+    for i = 1:nseg
+        endseg(i) = begseg(i) + find(d(begseg(i)+1:end)<=throff, 1)-1;
+        if i>1 && endseg(i) == endseg(i-1)
+            removed = [removed i];
+        end
+    end
+    begseg(removed) = [];
+    p = t(begseg)';
+end
 
 function x = after(x,option)
 end
