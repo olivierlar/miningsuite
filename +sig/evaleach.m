@@ -295,7 +295,6 @@ else
         res = old;
         if ischar(design.combine)
             res.Ydata = old.Ydata.(design.combine)(new.Ydata);
-            
         else
             res = design.combine(old,new);
         end

@@ -7,6 +7,10 @@
 % License: New BSD License. See full text of the license in LICENSE.txt in
 % the main folder of the MiningSuite distribution.
 
+
+%% Check scaling issue
+
+
 function varargout = chromagram(varargin)
     varargout = sig.operate('mus','chromagram',initoptions,...
                             @init,@main,@after,varargin);

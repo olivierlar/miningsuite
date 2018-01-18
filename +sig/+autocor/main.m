@@ -193,9 +193,6 @@ function out = routine(in,sampling,option)
     else
         c = compute_gen(x,mint,maxt,option.gener);
         w = [];
-        %if ~isempty(w)
-        %    w = compute_gen(w,mint,maxt,option.gener);
-        %end
     end
     
     out = {c w mint};
@@ -206,8 +203,6 @@ function x = compute(x,mint,maxt,scaleopt)
     x = x.apply(@xcorr,{maxt-1,scaleopt},{'sample'},1);
     x = x.deframe;
     x = x.extract('element',[maxt+mint-1,2*maxt-1]);
-    %y = xcorr(x,maxt-1,scaleopt);
-    %y = flipud(y(maxt+mint-1:end));
 end
 
 
@@ -215,7 +210,6 @@ function x = compute_gen(x,mint,maxt,gener)
     x = x.apply(@subroutine,{gener},{'sample'},Inf);
     x = x.deframe;
     x = x.extract('element',[mint,maxt]);
-    %x = x.apply(@flipud,{},{'frame'},Inf);
 end
 
 
