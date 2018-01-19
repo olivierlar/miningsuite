@@ -46,7 +46,7 @@ classdef axis
                 end
                 sd = sd:sd2;
             end
-            x = x + sd; % - 1;
+            x = x + sd - 1;
         end
         
         function x = data(obj,sd,sd2,segment)
