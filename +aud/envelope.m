@@ -40,7 +40,7 @@ function [x,type] = init(x,option)
     if ischar(option.presel) && strcmpi(option.presel,'Klapuri06')
         option.method = 'Spectro';
     end
-    [x,type] = sig.envelope.init(x,option,frame);
+    [x,type] = sig.envelope.init(x,option);
 end
 
 
