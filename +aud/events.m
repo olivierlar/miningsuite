@@ -145,11 +145,6 @@ function options = initoptions
         oppow.default = 0;
     options.power = oppow;
     
-        diffenv.key = 'DiffEnvelope'; % obsolete, replaced by 'Diff'
-        diffenv.type = 'Boolean';
-        diffenv.default = 0;
-    options.diffenv = diffenv;
-
         diff.key = 'Diff';
         diff.type = 'Numeric';
         diff.default = 0;
@@ -347,9 +342,6 @@ function [y, type] = init(x,option,frame)
             option.mu = 100;
         end
     end
-    if option.diffenv
-        option.env = 1;
-    end
     if isnan(option.env)
         if option.flux || option.pitch || option.novelty || ...
                 (ischar(option.sgate) && ~isempty(option.sgate))
@@ -413,7 +405,8 @@ function [y, type] = init(x,option,frame)
                     end
                 end
                 y = aud.envelope(x,'Spectro',...
-                    'Frame',option.specframe(1),option.specframe(2),...
+                    'Frame','FrameSize',option.specframe(1),...
+                            'FrameHop',option.specframe(2),...
                     'PowerSpectrum',option.powerspectrum,...
                     'TimeSmooth',option.timesmooth,...
                     'Terhardt',option.terhardt);...,...
@@ -504,9 +497,6 @@ function out = main(o,option)
             o2 = o;
         end
     end
-    if option.diffenv
-        option.diff = 1;
-    end
     if isa(o,'sig.Envelope')
         if option.sampling
             o = sig.envelope(o,'Sampling',option.sampling);
@@ -589,7 +579,10 @@ function out = main(o,option)
     if isa(o,'sig.Envelope') && option.minlog
         o = sig.envelope(o,'MinLog',option.minlog);
     end
-    o = sig.frame(o,option.frame);
+    if option.frame
+        o = sig.frame(o,'FrameSize',option.fsize.value,option.fsize.unit,...
+                        'FrameHop',option.fhop.value,option.fhop,unit);
+    end
     if ischar(option.detect)
         if isnan(option.cthr) || not(option.cthr)
             if ischar(option.attack) || option.decay
