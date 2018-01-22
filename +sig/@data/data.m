@@ -212,6 +212,13 @@ classdef data
                     obj = res;
                 end
             end
+            if adjacent < 2
+                obj.dims(dim) = [];
+                order = 1:length(size(obj.content));
+                order(dim) = [];
+                order(end+1) = dim;
+                obj.content = permute(obj.content,order);
+            end
         end
         
         function obj = mean(obj,field)
