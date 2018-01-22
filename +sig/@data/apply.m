@@ -91,7 +91,9 @@ function [obj,varargout] = apply(obj,func,argin,dimfunc,maxdimfunc,type)
         
         argini = argin;
         for j = 1:min(length(argin),length(argsin))
-            argini{j} = subsref(argini{j},argsin{j}{i});
+            if ~isempty(argsin{j})
+                argini{j} = subsref(argini{j},argsin{j}{i});
+            end
         end
         
         f = find(strcmp('index',argin));
