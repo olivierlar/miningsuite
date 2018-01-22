@@ -323,7 +323,7 @@ end
 
 
 %%
-function [y, type] = init(x,option,frame)
+function [y,type] = init(x,option)
     type = 'sig.Envelope';
     if isa(x,'mus.Sequence')
         y = x;
@@ -463,12 +463,12 @@ function [y, type] = init(x,option,frame)
 %             (isamir(x,'mirspectrum') && ischar(option.sgate) && ~isempty(option.sgate))
 %         y = x;
     end
-%     if ischar(option.attack) || option.decay
-%         z = mironsets(x,option.envmeth,...
-%             'PreSilence',option.presilence,'PostSilence',option.postsilence);
-%         y = {y,z};
-%     end
-    y = {y,x};
+    if ischar(option.attack) || option.decay
+        z = aud.events(x,option.envmeth,...
+            'PreSilence',option.presilence,'PostSilence',option.postsilence);
+        y = {y,z};
+    end
+%     y = {y,x};
 end
 
 
@@ -617,46 +617,47 @@ function out = main(o,option)
 %         o.decays = nop;
     end
     if ischar(option.attack) || option.decay
-%         pp = get(o,'PeakPos');
-%         d = get(o,'Data');
-%         t = get(o,'Time');
-%         if ischar(postoption.attack)
-%             x = postoption.new;
-%             ppu = get(o,'PeakPosUnit');
-%             if isnumeric(x)
-%                 st = {{{}}};
-%                 ap = {{{}}};
-%             else
-%                 v = mirpeaks(x,'Total',Inf,'SelectFirst',0,...
-%                     'Contrast',.1,...postoption.cthr,...
-%                     'Threshold',.5,...
-%                     'Valleys','Order','Abscissa','NoEnd');
-%                 stu = get(v,'PeakPosUnit');
-%                 [st,ap] = mircompute(@startattack,d,t,pp,ppu,stu,postoption);
-%             end
-%         else
-%             st = {{{}}};
-%             ap = {{{}}};
-%         end
-%         if postoption.decay
-%             x = postoption.new;
-%             ppu = get(o,'PeakPosUnit');
-%             if isnumeric(x)
-%                 rl = {{{}}};
-%                 en = {{{}}};
-%             else
-%                 v = mirpeaks(x,'Total',Inf,'SelectFirst',0,...
-%                     'Contrast',.1,...postoption.cthr,
-%                     'Threshold',.5,...
-%                     'Valleys','Order','Abscissa','NoBegin');
-%                 rlu = get(v,'PeakPosUnit');
-%                 [rl,en] = mircompute(@enddecay,d,t,pp,ppu,rlu);
-%             end
-%         else
-%             rl = {{{}}};
-%             en = {{{}}};
-%         end
-%         o = set(o,'OnsetPos',st,'AttackPos',ap,'DecayPos',rl,'OffsetPos',en,'PeakPos',pp);
+        d = o.Ydata;
+        pp = o.peakindex;
+        if ischar(option.attack)
+            x = option.new;
+            if isnumeric(x)
+                st = [];
+                ap = [];
+            else
+                v = sig.peaks(x,'Total',Inf,'SelectFirst',0,...
+                    'Contrast',.1,...postoption.cthr,...
+                    'Threshold',.5,...
+                    'Valleys','Order','Abscissa','NoEnd');
+                [st,ap] = sig.compute(@startattack,d,o.sdata,pp,...
+                                      o.peakprecisepos,v.peakprecisepos,...
+                                      option);
+            end
+        else
+            st = [];
+            ap = [];
+        end
+        if option.decay
+            x = option.new;
+            if isnumeric(x)
+                rl = [];
+                en = [];
+            else
+                v = sig.peaks(x,'Total',Inf,'SelectFirst',0,...
+                    'Contrast',.1,...postoption.cthr,
+                    'Threshold',.5,...
+                    'Valleys','Order','Abscissa','NoBegin');
+                [rl,en] = sig.compute(@enddecay,d,o.sdata,pp,...
+                                      o.peakprecisepos,v.peakprecisepos);
+            end
+        else
+            rl = [];
+            en = [];
+        end
+        o = aud.Envelope(d,'Srate',o.Srate,'Sstart',o.Sstart,'Ssize',o.Ssize,...
+                         'Frate',o.Frate,'FbChannels',o.fbchannels,...
+                         'Onsets',st,'Attacks',ap,'Decays',rl,'Offsets',en);
+        o.peakindex = pp;
     end
     title = o.yname;
     if not(length(title)>11 && strcmp(title(1:11),'Onset curve'))
@@ -672,11 +673,21 @@ end
 
 
 %%
-function [st pp] = startattack(d,t,pp,ppu,stu,option)
-    pp = sort(pp{1});
+function out = startattack(d,t,pp,ppu,stu,option)
+    out = d.apply(@routine_attack,{t,pp,ppu,stu,option},{'sample'},1,'{}');
+    st = out;
+    st.content = st.content{1};
+    pp = out;
+    pp.content = pp.content{2};
+    out = {st pp};
+end
+
+
+function out = routine_attack(d,t,pp,ppu,stu,option)
+    pp = sort(pp{1})';
     ppu = sort(ppu{1});
     if isempty(pp)
-        st = {{} {}};
+        out = {[] []};
         return
     end
 
@@ -684,7 +695,7 @@ function [st pp] = startattack(d,t,pp,ppu,stu,option)
     if ~isempty(stu) && stu(1)>ppu(1)
         stu = [t(1) stu];
     end
-    st = zeros(1,length(stu));
+    st = zeros(length(stu),1);
 
     i = 0;
     while i < length(stu)
@@ -824,16 +835,27 @@ function [st pp] = startattack(d,t,pp,ppu,stu,option)
         end
     end
     pp(length(st)+1:end) = [];
-    st = {{st} {pp}};
+    out = {st,pp};
 end
 
 
 %%
-function [pp en] = enddecay(d,t,pp,ppu,rlu)
-    pp = sort(pp{1});
+%%
+function out = enddecay(d,t,pp,ppu,rlu)
+    out = d.apply(@routine_decay,{t,pp,ppu,rlu},{'sample'},1,'{}');
+    pp = out;
+    pp.content = pp.content{1};
+    rl = out;
+    rl.content = rl.content{2};
+    out = {pp rl};
+end
+
+
+function out = routine_decay(d,t,pp,ppu,rlu)
+    pp = sort(pp{1})';
     ppu = sort(ppu{1});
     if isempty(pp)
-        en = {{} {}};
+        out = {[] []};
         return
     end
 
@@ -841,7 +863,7 @@ function [pp en] = enddecay(d,t,pp,ppu,rlu)
     if ~isempty(rlu) && rlu(end)<ppu(end)
         rlu = [rlu t(end)];
     end
-    en = zeros(1,length(rlu));
+    en = zeros(length(rlu),1);
 
     i = 0;
     while i < length(rlu)
@@ -917,8 +939,7 @@ function [pp en] = enddecay(d,t,pp,ppu,rlu)
         en(i) = en(i) - f1;
     end
     pp(length(en)+1:end) = [];
-
-    pp = {{pp} {en}};
+    out = {pp,en};
 end
 
 
