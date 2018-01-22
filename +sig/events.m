@@ -3,9 +3,6 @@
 % events, and estimates those event time positions.
 %
 % Copyright (C) 2017-2018 Olivier Lartillot
-% Code for envelope generation from MIDI file is taken from onsetacorr.m
-%   and duraccent.m, part of MIDI Toolbox. Copyright (C) 2004, University of 
-%   Jyvaskyla, Finland
 %
 % All rights reserved.
 % License: New BSD License. See full text of the license in LICENSE.txt in
@@ -93,11 +90,6 @@ function options = initoptions
             timesmooth.keydefault = 10;
         options.timesmooth = timesmooth;        
 
-
-        sum.key = 'Sum';
-        sum.type = 'Boolean';
-        sum.default = 1;
-    options.sum = sum;
 
         chwr.key = 'HalfwaveCenter';
         chwr.type = 'Boolean';
@@ -339,10 +331,6 @@ function out = main(o,option)
         %                 o = mirenvelope(o,'Diff',postoption.diff,...
         %                     'Complex',postoption.complex);
         %             end
-    end
-    
-    if option.sum
-        o = sig.sum(o,'Type','freqband'); %'channel'); %,'Adjacent',option.sum);
     end
     
     if isa(o,'sig.Envelope') && ~isequal(option.normal,0) && ~o.log
