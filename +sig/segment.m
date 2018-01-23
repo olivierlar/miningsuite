@@ -163,12 +163,17 @@ function out = main(in,option)
             end
         end
         if isa(pos,'sig.Signal')
-            if isempty(pos.peakindex)
-                pos = sig.peaks(pos,'Total',option.tot,...
-                                    'Contrast',option.cthr,...
-                                    'Chrono','NoBegin','NoEnd');
+            if isa(pos,'aud.Envelope') && ~isempty(pos.attacks)
+                ap = pos.attacks.content{1};
+                pos = pos.saxis.data(ap);
+            else
+                if isempty(pos.peakindex)
+                    pos = sig.peaks(pos,'Total',option.tot,...
+                        'Contrast',option.cthr,...
+                        'Chrono','NoBegin','NoEnd');
+                end
+                pos = sort(pos.peakprecisepos.content{1});
             end
-            pos = sort(pos.peakprecisepos.content{1});
         end
     end
     
