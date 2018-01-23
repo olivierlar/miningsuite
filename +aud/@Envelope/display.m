@@ -25,7 +25,7 @@ function display(obj)
     
     de = obj.decays;
     of = obj.offsets;
-    if ~isempty(on)
+    if ~isempty(of)
         de.apply(@drawdecays,{of,obj.sdata,obj.Ydata},{'sample'},1);
     end
 end
