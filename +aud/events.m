@@ -695,7 +695,6 @@ function out = routine_attack(d,t,pp,ppu,stu,option)
     if ~isempty(stu) && stu(1)>ppu(1)
         stu = [t(1) stu];
     end
-    st = zeros(length(stu),1);
 
     i = 0;
     while i < length(stu)
@@ -835,7 +834,7 @@ function out = routine_attack(d,t,pp,ppu,stu,option)
         end
     end
     pp(length(st)+1:end) = [];
-    out = {st,pp};
+    out = {st',pp};
 end
 
 
@@ -863,7 +862,6 @@ function out = routine_decay(d,t,pp,ppu,rlu)
     if ~isempty(rlu) && rlu(end)<ppu(end)
         rlu = [rlu t(end)];
     end
-    en = zeros(length(rlu),1);
 
     i = 0;
     while i < length(rlu)
@@ -939,7 +937,7 @@ function out = routine_decay(d,t,pp,ppu,rlu)
         en(i) = en(i) - f1;
     end
     pp(length(en)+1:end) = [];
-    out = {pp,en};
+    out = {pp,en'};
 end
 
 
