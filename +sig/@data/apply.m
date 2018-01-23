@@ -64,17 +64,23 @@ function [obj,varargout] = apply(obj,func,argin,dimfunc,maxdimfunc,type)
     notherdims = ndimdata-length(dimfunc);
     if notherdims
         ordim(length(dimfunc)+1:ndimdata) = bestdim(1:notherdims);
+        for i = length(obj.dims)+1:ndimdata
+            obj.dims{i} = '';
+        end
     end
     
+    objdims = obj.dims;
+
     data = permute(data,ordim);
     dimdata = dimdata(ordim);
+    objdims = objdims(ordim);
 
     start = cell(1,ndimdata);
     for i = 1:maxdimfunc
         start{i} = ':';
     end
     oldtype = '()';
-    args = recurse(data,start,maxdimfunc+1,ndimdata,{},oldtype);
+    [args,indices] = recurse(data,start,maxdimfunc+1,ndimdata,{},[],[],oldtype);
     argsin = {};
     for i = 1:length(argin)
         if isa(argin{i},'sig.data')
@@ -82,7 +88,7 @@ function [obj,varargout] = apply(obj,func,argin,dimfunc,maxdimfunc,type)
             argin{i} = permute(argin{i},ordim);
             oldtype = '()';
             argsin{i} = recurse(argin{i},start,maxdimfunc+1,ndimdata,{},...
-                                oldtype);
+                                             [],[],oldtype);
         end
     end
     
@@ -96,9 +102,11 @@ function [obj,varargout] = apply(obj,func,argin,dimfunc,maxdimfunc,type)
             end
         end
         
-        f = find(strcmp('index',argin));
-        if f
-            argini{f} = i;
+        for j = 1:length(objdims)
+            f = find(strcmp(objdims{j},argin));
+            if f
+                argini{f} = indices(j,i);
+            end
         end
                 
         f = find(strcmp('self',argin));
@@ -135,7 +143,7 @@ function [obj,varargout] = apply(obj,func,argin,dimfunc,maxdimfunc,type)
                     for j = 1:maxdimfunc
                         start{j} = 1;
                     end
-                    newargs = recurse(data,start,maxdimfunc+1,ndimdata,{},'{}');
+                    newargs = recurse(data,start,maxdimfunc+1,ndimdata,{},[],[],'{}');
 
                     if iscell(newdatai)
                         maindata = newdata;
@@ -156,7 +164,7 @@ function [obj,varargout] = apply(obj,func,argin,dimfunc,maxdimfunc,type)
                     if strcmp(type,args{1}.type)
                         newargs = args;
                     else
-                        newargs = recurse(data,start,maxdimfunc+1,ndimdata,{},type);
+                        newargs = recurse(data,start,maxdimfunc+1,ndimdata,{},[],[],type);
                     end                
 
                 else
@@ -164,7 +172,7 @@ function [obj,varargout] = apply(obj,func,argin,dimfunc,maxdimfunc,type)
                     if strcmp(type,args{1}.type)
                         newargs = args;
                     else
-                        newargs = recurse(data,start,maxdimfunc+1,ndimdata,{},type);
+                        newargs = recurse(data,start,maxdimfunc+1,ndimdata,{},[],[],type);
                     end   
                 end
 
@@ -197,13 +205,19 @@ function [obj,varargout] = apply(obj,func,argin,dimfunc,maxdimfunc,type)
 end
 
 
-function args = recurse(data,current,d,ndim,args,type)
+function [args,indices] = recurse(data,current,d,ndim,args,current_indices,indices,type)
     if d > ndim
         args{end+1} = substruct(type,current);
+        if isempty(indices)
+            indices = current_indices';
+        else
+            indices(:,end+1) = current_indices';
+        end
     else
         for i = 1:size(data,d)
             current{d} = i;
-            args = recurse(data,current,d+1,ndim,args,type);
+            current_indices(d) = i;
+            [args,indices] = recurse(data,current,d+1,ndim,args,current_indices,indices,type);
         end
     end
 end
