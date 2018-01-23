@@ -581,7 +581,7 @@ function out = main(o,option)
     end
     if option.frame
         o = sig.frame(o,'FrameSize',option.fsize.value,option.fsize.unit,...
-                        'FrameHop',option.fhop.value,option.fhop,unit);
+                        'FrameHop',option.fhop.value,option.fhop.unit);
     end
     if ischar(option.detect)
         if isnan(option.cthr) || not(option.cthr)
