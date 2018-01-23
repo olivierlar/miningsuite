@@ -133,7 +133,7 @@ function display(obj)
                 if iscurve == 2
                     ydatai.apply(@drawpointseg,{obj.Sstart,obj.Send},{'sample'},1);
                 else
-                    ydatai.apply(@draw,{obj.(abscissa),obj.Frate,'index'},{dim,'channel'},2);
+                    ydatai.apply(@draw,{obj.(abscissa),obj.Frate,'frame'},{dim,'channel'},2);
                 end
             elseif iscell(ydatai.content)
                 ydatai.apply(@drawmatseg,{xdata,num2cell(obj.Sstart),obj.Srate,num2cell(obj.Ssize)},{'sample','element'},2);
@@ -151,14 +151,7 @@ function display(obj)
                 end
                 
                 if iscurve
-                    for j = 1:length(p.content)
-                        pj = p.content{j};
-                        if ~isempty(pj)
-                            px = Xaxis.data(pj');
-                            py = ydatai.view(dim,pj(:),'channel',j);
-                            plot(px,squeeze(py),'or');
-                        end
-                    end
+                    p.apply(@drawpeaks,{obj.(abscissa),obj.Ydata,obj.Frate,'frame'},{dim,'channel'},1);
                 elseif iscell(ydatai.content)
                     for k = 1:length(ydatai.content)
                         pk = p;
@@ -293,4 +286,17 @@ function surfplot(x,y,c)
     set(cax,'View',[0 90]);
     set(cax,'Box','on');
     axis(cax,lims);
+end
+
+
+function drawpeaks(p,x,y,frate,index)
+    if frate
+        if iscell(p)
+            p = p{1};
+        end
+        x = x + (index-1) / frate;
+        plot(x(p),y(p),'or')
+    else
+        plot(x(p),y(p),'or');
+    end
 end
