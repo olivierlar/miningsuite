@@ -64,7 +64,7 @@ end
 
 
 function p = routine(f)
-    p = f.apply(@freq2chro,{},{'element'},1,'{}');
+    p = f.apply(@freq2chro,{},{'element'},1,'()');
 end
 
 
