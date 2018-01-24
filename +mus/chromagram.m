@@ -99,8 +99,12 @@ function [x type] = init(x,option,frame)
         while freqmax < option.max
             freqmax = freqmax*2;
         end
-        x = sig.spectrum(x,'dB',option.thr,'Min',freqmin,'Max',freqmax,...
-                           'MinRes',option.res,'OctaveRatio',.85);  % NormalInput missing
+        x = {sig.spectrum(x,'dB',option.thr,'Min',freqmin,'Max',freqmax,...
+                          'MinRes',option.res,'OctaveRatio',.85),...  % NormalInput missing
+             x};
+        if isa(x{2},'sig.design')
+            x{2}.symbolicinput = 1;
+        end
     end
     type = {'mus.Chromagram','sig.Spectrum'};
 end
@@ -137,22 +141,22 @@ function out = main(in,option)
         end
         chro = min(c):max(c);
         c = c - chro(1) + 1;
-        if option.frame.toggle
-            if strcmpi(option.frame.size.unit,'s')
-                l = option.frame.size.value;
-            elseif strcmpi(option.frame.size.unit,'sp')
+        if option.frame
+            if strcmpi(option.fsize.unit,'s')
+                l = option.fsize.value;
+            elseif strcmpi(option.fsize.unit,'sp')
                 error('Error: ''sp'' not adequate for symbolic data');
             end
-            if strcmpi(option.frame.hop.unit,'/1')
-                h = option.frame.hop.value*l;
-            elseif strcmpi(option.frame.hop.unit,'%')
-                h = option.frame.hop.value*l*.01;
-            elseif strcmpi(option.frame.hop.unit,'s')
-                h = option.frame.hop.value;
-            elseif strcmpi(option.frame.hop.unit,'sp')
+            if strcmpi(option.fhop.unit,'/1')
+                h = option.fhop.value*l;
+            elseif strcmpi(option.fhop.unit,'%')
+                h = option.fhop.value*l*.01;
+            elseif strcmpi(option.fhop.unit,'s')
+                h = option.fhop.value;
+            elseif strcmpi(option.fhop.unit,'sp')
                 error('Error: ''sp'' not adequate for symbolic data');
-            elseif strcmpi(option.frame.hop.unit,'Hz')
-                h = 1/option.frame.hop.value;
+            elseif strcmpi(option.fhop.unit,'Hz')
+                h = 1/option.fhop.value;
             end
             nfr = floor((max(off)-l)/h)+1; % Number of frames
         else
