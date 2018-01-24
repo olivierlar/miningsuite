@@ -215,7 +215,9 @@ classdef data
             if adjacent < 2
                 obj.dims(dim) = [];
                 order = 1:length(size(obj.content));
-                order(dim) = [];
+                if length(order) >= dim
+                    order(dim) = [];
+                end
                 order(end+1) = dim;
                 obj.content = permute(obj.content,order);
             end
