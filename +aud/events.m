@@ -466,9 +466,10 @@ function [y,type] = init(x,option)
     if ischar(option.attack) || option.decay
         z = aud.events(x,option.envmeth,...
             'PreSilence',option.presilence,'PostSilence',option.postsilence);
-        y = {y,z};
+        y = {y,z,x};
+    else
+        y = {y,x};
     end
-%     y = {y,x};
 end
 
 
