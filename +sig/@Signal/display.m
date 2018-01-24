@@ -249,6 +249,17 @@ function draw(y,x,frate,index)
     elseif length(x) == 1
         plot(x,y,'+');
     else
+        if iscell(y)
+            yc = zeros(length(y),1);
+            for i = 1:length(y)
+                if isempty(y{i})
+                    yc(i) = NaN;
+                else
+                    yc(i) = y{i};
+                end
+            end
+            y = yc;
+        end
         plot(x,y);
     end
 end
