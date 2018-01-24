@@ -1,7 +1,7 @@
 % MUS.TEMPO 
 % estimates tempo
 %
-% Copyright (C) 2014, 2017, Olivier Lartillot
+% Copyright (C) 2014, 2017-2018, Olivier Lartillot
 % All rights reserved.
 % License: New BSD License. See full text of the license in LICENSE.txt in
 % the main folder of the MiningSuite distribution.
@@ -30,9 +30,9 @@ end
 
 
 %%
-function [x, type] = init(x,option,frame)
+function [x, type] = init(x,option)
     if strcmpi(option.method,'Signal')
-        [x, type] = aud.tempo.init(x,option,frame,@mus_autocor,@mus_spectrum);
+        [x, type] = aud.tempo.init(x,option,@mus_autocor,@mus_spectrum);
     elseif strcmpi(option.method,'Pattern')
         x = mus.score(x,'Metre');
         type = {'sig.Signal','mus.Sequence'};
