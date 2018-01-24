@@ -1,13 +1,13 @@
 % AUD.TEMPO.INIT
 %
-% Copyright (C) 2014, 2017 Olivier Lartillot
+% Copyright (C) 2014, 2017-2018 Olivier Lartillot
 %
 % All rights reserved.
 % License: New BSD License. See full text of the license in LICENSE.txt in
 % the main folder of the MiningSuite distribution.
 
-function [y, type] = init(x,option,frame,autocor,spectrum)
-    if nargin < 4
+function [y, type] = init(x,option,autocor,spectrum)
+    if nargin < 3
         autocor = @aud_autocor;
         spectrum = @aud_spectrum;
     end
@@ -23,7 +23,7 @@ function [y, type] = init(x,option,frame,autocor,spectrum)
         else
             optionsum = 0;
         end
-        if ~isempty(frame) && frame.toggle
+        if option.frame
             x = aud.events(x,option.fea,'Filterbank',option.fb,...
                         'FilterbankType',option.fbtype,...
                         'FilterType',option.ftype,...
@@ -36,8 +36,8 @@ function [y, type] = init(x,option,frame,autocor,spectrum)
                         'Median',option.median(1),option.median(2),...
                         'Halfwave',option.hw,'Detect',0,...
                         'Mu',option.mu,'Log',option.log,...
-                        'Frame','FrameSize',frame.size.value,frame.size.unit,...
-                                'FrameHop',frame.hop.value,frame.hop.unit);
+                        'Frame','FrameSize',option.fsize.value,option.fsize.unit,...
+                                'FrameHop',option.fhop.value,option.fhop.unit);
         else
             x = aud.events(x,option.fea,'Filterbank',option.fb,...
                         'FilterbankType',option.fbtype,...
