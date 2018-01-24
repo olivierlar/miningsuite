@@ -290,10 +290,10 @@ end
 
 
 function drawpeaks(p,x,y,frate,index)
+    if iscell(p)
+        p = p{1};
+    end
     if frate
-        if iscell(p)
-            p = p{1};
-        end
         x = x + (index-1) / frate;
         plot(x(p),y(p),'or')
     else
