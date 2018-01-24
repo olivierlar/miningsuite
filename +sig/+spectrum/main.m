@@ -8,8 +8,12 @@
 % the main folder of the MiningSuite distribution.
 
 function out = main(x,option)
-    if isa(x{1},'sig.Spectrum') && (isempty(option) || ~option.alongbands)
-        out = x;
+    if iscell(x)
+        x = x{1};
+    end
+
+    if isa(x,'sig.Spectrum') && (isempty(option) || ~option.alongbands)
+        out = {x};
         return
     end
     
@@ -18,7 +22,7 @@ function out = main(x,option)
             || option.aver || option.gauss)
         option.phase = 0;
     end
-    [d,ph,constq] = sig.compute(@routine,x{1}.Ydata,x{1}.Srate,option);
+    [d,ph,constq] = sig.compute(@routine,x.Ydata,x.Srate,option);
     if iscell(constq)
         constq = constq{1};
     end
@@ -37,25 +41,25 @@ function out = main(x,option)
         if iscell(dsize)
             xrate = zeros(1,length(dsize));
             for i = 1:length(xrate)
-                xrate(i) = x{1}.Srate/2/dsize{i};
+                xrate(i) = x.Srate/2/dsize{i};
             end
         else
-            xrate = x{1}.Srate/2/dsize;
+            xrate = x.Srate/2/dsize;
         end
     end
     
-    xsize = x{1}.Ssize;
+    xsize = x.Ssize;
     if iscell(xsize)
         il = zeros(size(xsize));
         for i = 1:length(xsize)
-            il(i) = xsize{i}./x{1}.Srate;
+            il(i) = xsize{i}./x.Srate;
         end
     else
-        il = xsize./x{1}.Srate;
+        il = xsize./x.Srate;
     end
     
-    out = {sig.Spectrum(d,'Phase',ph,'xsampling',xrate,'Deframe',x{1},...
-                        'InputSampling',x{1}.Srate,'InputLength',il,...
+    out = {sig.Spectrum(d,'Phase',ph,'xsampling',xrate,'Deframe',x,...
+                        'InputSampling',x.Srate,'InputLength',il,...
                         'ConstantQ',constq)};
 end
 
