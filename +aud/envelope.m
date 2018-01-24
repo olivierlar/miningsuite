@@ -98,7 +98,7 @@ function out = after(x,option)
         if isfield(option,'lambda') && not(option.lambda)
             option.lambda = 1;
         end
-        x.Ydata = sig.envelope.diff(x,option);
+        x = sig.envelope.diff(x,option);
         
         x.Ydata = sig.compute(@routine_lambda,x.Ydata,...
                               option.lambda,x.Srate);
