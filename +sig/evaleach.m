@@ -95,7 +95,16 @@ else
         if iscell(input)
             input = input{end};
         end
-        y = sig.evaleach(input,filename,window,sr,1,chunking);
+        if input.symbolicinput
+            y = mus.score(filename);
+            if strcmp(input.name,'frame')
+                design.options.frame = 1;
+                design.options.fsize = input.options.fsize;
+                design.options.fhop = input.options.fhop;
+            end
+        else
+            y = sig.evaleach(input,filename,window,sr,1,chunking);
+        end
         y = design.main(y,design.options);
         y = design.after(y,design.options);
     elseif design.nochunk || strcmpi(design.combine,'no')
