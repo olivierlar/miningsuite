@@ -969,5 +969,9 @@ function out = symbolic(x,option)
     %%
     d = sig.data(g,{'sample'});
     out = sig.Envelope(d,'Srate',ndivs,'Sstart',0,'Ssize',length(g));
-    out = {sig.framenow(out,option.frame)};
+    if option.frame
+        out = sig.frame(out,'FrameSize',option.fsize.value,option.fsize.unit,...
+                        'FrameHop',option.fhop.value,option.fhop.unit);
+    end
+    out = {out};
 end
