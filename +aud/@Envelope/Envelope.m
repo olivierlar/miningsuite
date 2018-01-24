@@ -55,6 +55,10 @@ classdef Envelope < sig.Envelope
                 d = obj.attacks;
             elseif strcmpi(field,'decays')
                 d = obj.decays;
+            elseif strcmpi(field,'onsets')
+                d = obj.onsets;
+            elseif strcmpi(field,'offsets')
+                d = obj.offsets;
             else
                 d = get@sig.Envelope(obj,field);
             end
