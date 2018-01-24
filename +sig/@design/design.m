@@ -40,6 +40,7 @@ classdef design
         nochunk = 0
         overlap = struct('value',0,'unit','sp');
         files
+        symbolicinput = 0;
     end
 %%
     methods
