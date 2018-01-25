@@ -84,7 +84,7 @@ classdef Signal
                                          'sig.Signal');
             
             data = varargin{1};
-            if isnumeric(data)
+            if ~isa(data,'sig.data')
                 data = sig.data(data,{'sample'});
             end
             s.Ydata = data;
