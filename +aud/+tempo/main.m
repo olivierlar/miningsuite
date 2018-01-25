@@ -12,15 +12,7 @@ function out = main(in,option)
         out = in;
     else
         p = sig.compute(@routine,x.peakpos,x.Xaxis.name);
-        pc = zeros(1,length(p.content));
-        for i = 1:length(p.content)
-            if isempty(p.content{i})
-                pc(i) = NaN;
-            else
-                pc(i) = p.content{i};
-            end
-        end
-        t = sig.Signal(pc','Name','Tempo','Srate',in{1}.Srate,'FbChannels',in{1}.fbchannels);
+        t = sig.Signal(p,'Name','Tempo','Srate',in{1}.Srate,'FbChannels',in{1}.fbchannels);
         out = {t in{1}};
     end
 end
