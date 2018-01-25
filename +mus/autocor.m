@@ -35,7 +35,7 @@ function out = after(x,option)
             ~strcmpi(option.reso,'no') && ~strcmpi(option.reso,'off') && ...
             ...(~isa(x,'mus.Autocor') || 
             isempty(x.resonance)%)
-        x.Ydata = sig.compute(@resonance,x.Ydata,x.xdata,option.reso);
+        x.Ydata = sig.compute(@resonance,x.Ydata,x.xdata,x.Xaxis.name,option.reso);
         %if isa(x,'mus.Autocor')
             x.resonance = option.reso;
 %         else
@@ -46,7 +46,10 @@ function out = after(x,option)
 end
 
 
-function d = resonance(d,f,type)
+function d = resonance(d,f,xname,type)
+    if strcmp(xname,'Frequency')
+        f = 1./f;
+    end
     if strcmpi(type,'ToiviainenSnyder')
         w = max(0, 1 - 0.25*(log2(max(f,1e-12)/0.5)).^2);
     elseif strcmpi(type,'vanNoorden')
