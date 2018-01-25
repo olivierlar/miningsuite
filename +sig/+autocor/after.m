@@ -28,7 +28,7 @@ function out = after(x,option)
             end
             param.value = [option.min.value,option.max.value];
             param.unit = option.min.unit;
-            x = x.extract(param,'element','Xaxis','Ydata'); %,'window');
+            x = x.extract(param,'element','Xaxis','Ydata','window');
         end
         
         if not(isequal(x.normwin,0) || strcmpi(x.normwin,'No') || ...
