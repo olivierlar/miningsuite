@@ -100,7 +100,6 @@ function data = routine(data,start,segmented,param,sr)
             if ~offset
                 disp('Frame length longer than total sequence size. No frame decomposition.');
             end
-            data = [];
             return
         end
         switch olddim
