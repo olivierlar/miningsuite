@@ -1,6 +1,6 @@
 % AUD.TEMPO.MAIN
 %
-% Copyright (C) 2014, 2017 Olivier Lartillot
+% Copyright (C) 2014, 2017-2018 Olivier Lartillot
 %
 % All rights reserved.
 % License: New BSD License. See full text of the license in LICENSE.txt in
@@ -11,7 +11,7 @@ function out = main(in,option)
     if strcmpi(x.yname,'Tempo')
         out = in;
     else
-        p = sig.compute(@routine,x.peakpos);
+        p = sig.compute(@routine,x.peakpos,x.Xaxis.name);
         pc = zeros(1,length(p.content));
         for i = 1:length(p.content)
             if isempty(p.content{i})
@@ -26,12 +26,22 @@ function out = main(in,option)
 end
 
 
-function out = routine(d)
-    e = d.apply(@convert,{},{'element'},1,'{}');
+function out = routine(d,xname)
+    if strcmp(xname,'Lag')
+        method = @lag2bpm;
+    else
+        method = @freq2bpm;
+    end
+    e = d.apply(method,{},{'element'},1,'{}');
     out = {e};
 end
 
 
-function y = convert(x)
+function y = lag2bpm(x)
     y = 60./x{1};
+end
+
+
+function y = freq2bpm(x)
+    y = 60.*x{1};
 end
