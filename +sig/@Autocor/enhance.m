@@ -1,7 +1,7 @@
 % SIG.AUTOCOR.ENHANCE
 %
-% Copyright (C) 2014, 2017 Olivier Lartillot
-% © 2007-2009 Olivier Lartillot & University of Jyvaskyla
+% Copyright (C) 2014, 2017-2018 Olivier Lartillot
+% ? 2007-2009 Olivier Lartillot & University of Jyvaskyla
 %
 % All rights reserved.
 % License: New BSD License. See full text of the license in LICENSE.txt in
@@ -11,7 +11,12 @@ function obj = enhance(obj,e)
     p = sig.peaks(obj,'NoBegin','NoEnd','Contrast',.01,...
                   'Normalize','Local');
     v = sig.peaks(obj,'Valleys','Contrast',.01,'Normalize','Local');
-    obj.Ydata = sig.compute(@main,obj.Ydata,p.peakval,v.peakval,e,obj.xdata);
+    xdata = obj.xdata(:);
+    if strcmp(obj.Xaxis.name,'Frequency')
+        xdata = 1./xdata;
+    end
+    obj.Ydata = sig.compute(@main,obj.Ydata,p.peakval,v.peakval,e,...
+                            xdata);
 end
 
 
@@ -23,8 +28,7 @@ function out = main(d,p,v,e,t)
 end
 
 
-function y = routine(x,p,v,e,t)
-    t = t(:);
+function y = routine(x,p,v,e,t)    
     mv = [];
     p = p{1};
     v = v{1};
