@@ -1,6 +1,6 @@
 % SIG.SIGNAL.EXTRACT
 %
-% Copyright (C) 2014, 2017 Olivier Lartillot
+% Copyright (C) 2014, 2017-2018 Olivier Lartillot
 %
 % All rights reserved.
 % License: New BSD License. See full text of the license in LICENSE.txt in
@@ -70,7 +70,9 @@ function out = main(d,param,dim,axis,fields)
     
     d = d.extract(dim,[x1,x2]);
     for i = 1:length(fields)
-        fields{i} = fields{i}.extract(dim,[x1,x2]);
+        if ~isempty(fields{i})
+            fields{i} = fields{i}.extract(dim,[x1,x2]);
+        end
     end
     
     out = {d fields{:} x1};
