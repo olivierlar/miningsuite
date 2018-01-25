@@ -279,7 +279,7 @@ classdef data
             end
             if different
                 ndims = length(size(obj.content));
-                if length(found) < ndims
+                if length(found) < max(ndims,max(found))
                     for i = 1:ndims
                         if ~ismember(i,found)
                             found(end+1) = i;
