@@ -133,7 +133,7 @@ function display(obj)
                 if iscurve == 2
                     ydatai.apply(@drawpointseg,{obj.Sstart,obj.Send},{'sample'},1);
                 else
-                    ydatai.apply(@draw,{obj.(abscissa),obj.Frate,'frame'},{dim,'channel'},2);
+                    ydatai.apply(@draw,{obj.(abscissa),obj.Frate,'frame'},{dim,'channel'},1);
                 end
             elseif iscell(ydatai.content)
                 ydatai.apply(@drawmatseg,{xdata,num2cell(obj.Sstart),obj.Srate,num2cell(obj.Ssize)},{'sample','element'},2);
@@ -248,18 +248,11 @@ function draw(y,x,frate,index)
         end
     elseif length(x) == 1
         plot(x,y,'+');
-    else
-        if iscell(y)
-            yc = zeros(length(y),1);
-            for i = 1:length(y)
-                if isempty(y{i})
-                    yc(i) = NaN;
-                else
-                    yc(i) = y{i};
-                end
-            end
-            y = yc;
+    elseif iscell(y)
+        for i = 1:length(y)
+            plot(x(i),y{i},'+');
         end
+    else
         plot(x,y);
     end
 end
