@@ -357,7 +357,7 @@ function [y,type] = init(x,option)
             option.kernelsize = 64;
         end
     end
-    if x.istype('sig.Signal') || x.istype('sig.Envelope')
+    if x.istype('sig.Signal') % || x.istype('sig.Envelope')
         y = [];
         if option.env
             if strcmpi(option.envmeth,'Filter')
@@ -462,6 +462,8 @@ function [y,type] = init(x,option)
 %     elseif isamir(x,'mirscalar') || isamir(x,'mirenvelope') || ...
 %             (isamir(x,'mirspectrum') && ischar(option.sgate) && ~isempty(option.sgate))
 %         y = x;
+    else
+        y = x;
     end
     if ischar(option.attack) || option.decay
         z = aud.events(x,option.envmeth,...
