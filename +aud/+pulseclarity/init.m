@@ -1,13 +1,13 @@
 % AUD.PULSECLARITY.INIT
 %
-% Copyright (C) 2017 Olivier Lartillot
+% Copyright (C) 2017-2018 Olivier Lartillot
 %
 % All rights reserved.
 % License: New BSD License. See full text of the license in LICENSE.txt in
 % the main folder of the MiningSuite distribution.
 
-function [x, type] = init(x,option,frame,tempo_frame,tempo_noframe)
-    if nargin < 4
+function [x, type] = init(x,option,tempo_frame,tempo_noframe)
+    if nargin < 3
         tempo_frame = @aud_tempo_frame;
         tempo_noframe = @aud_tempo_noframe;
     end
@@ -41,8 +41,8 @@ function [x, type] = init(x,option,frame,tempo_frame,tempo_noframe)
             if strcmpi(option.stratg,'MinAutocor')
                 option.enh = 0;
             end
-            if ~isempty(frame) && frame.toggle
-                x = tempo_frame(x,option,frame);
+            if option.frame
+                x = tempo_frame(x,option);
             else
                 x = tempo_noframe(x,option);
             end
@@ -52,7 +52,7 @@ function [x, type] = init(x,option,frame,tempo_frame,tempo_noframe)
 end
 
 
-function y = aud_tempo_frame(x,option,frame)
+function y = aud_tempo_frame(x,option)
     y = aud.tempo(x,option.fea,'Method',option.envmeth,...
                     option.band,...
                     'Sum',option.sum,'Enhanced',option.enh,...
@@ -67,8 +67,8 @@ function y = aud_tempo_frame(x,option,frame)
                     'Median',option.median(1),option.median(2),...
                     'Min',option.mi,'Max',option.ma,...
                     'Total',option.m,'Contrast',option.thr,...
-                    'Frame','FrameSize',frame.size.value,frame.size.unit,...
-                    'FrameHop',frame.hop.value,frame.hop.unit);
+                    'Frame','FrameSize',option.fsize.value,option.fsize.unit,...
+                            'FrameHop',option.fhop.value,option.fhop.unit);
 end
 
 
