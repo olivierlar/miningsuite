@@ -34,13 +34,22 @@ function display(obj)
         yname = obj.Xaxis.name;
         yunit = obj.Xaxis.unit.name;
         ydata = obj.Ydata;
-    elseif length(obj.Sstart) > 1 && iscell(obj.Sstart) && ~obj.Srate
-        iscurve = 2;
-        abscissa = 'sdata';
-        Xaxis = obj.saxis;
-        yname = '';
-        yunit = '';
-        ydata = obj.Ydata;
+    elseif length(obj.Sstart) > 1 && ~obj.Srate
+        if iscell(obj.Sstart) 
+            iscurve = 2;
+            abscissa = 'sdata';
+            Xaxis = obj.saxis;
+            yname = '';
+            yunit = '';
+            ydata = obj.Ydata;
+        else
+            iscurve = 1;
+            abscissa = 'sdata';
+            Xaxis = obj.saxis;
+            yname = '';
+            yunit = '';
+            ydata = obj.Ydata;
+        end
     elseif ~obj.Srate || isequal(obj.Ydata.size('sample',1), 1)
         if isempty(xdata) || length(xdata) == 1
             textual(obj.yname,obj.Ydata.content);
@@ -249,8 +258,12 @@ function draw(y,x,frate,index)
     elseif length(x) == 1
         plot(x,y,'+');
     elseif iscell(y)
-        for i = 1:length(y)
-            plot(x(i),y{i},'+');
+        if length(y) == 1 && length(x) > 1
+            plot(x,y{1});
+        else
+            for i = 1:length(y)
+                plot(x(i),y{i},'+');
+            end
         end
     else
         plot(x,y);
