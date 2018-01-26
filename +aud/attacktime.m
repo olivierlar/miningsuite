@@ -97,7 +97,7 @@ function [x,type] = init(x,option)
                      'Log',option.log,'MinLog',option.minlog,...
                      'Presilence',option.presilence,...
                      'PostSilence',option.postsilence,...
-                     'Normal',...'AcrossSegments',
+                     ...'Normal','AcrossSegments',...
                      'CutOff',option.cutoff);
     type = 'sig.Signal';
 end
@@ -108,7 +108,7 @@ function out = main(in,option)
     if ~strcmpi(x.yname,'AttackTime')
         res = sig.compute(@routine,x.onsets_s,x.attacks_s,option.scale);
         x = sig.Signal(res,'Name','Attack Time',...
-                       'Srate',0,'Sstart',x.onsets_s.content{1},'Ssize',x.Ssize); % Does not work for multi-channel
+                       'Srate',0,'Sstart',x.onsets_s.content{1}); % Does not work for multi-channel
     end
     out = {x in{1}};
 end
