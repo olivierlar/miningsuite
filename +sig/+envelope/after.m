@@ -42,7 +42,8 @@ function d = main(d,postoption,elog)
             d = d.apply(@norm,{},{'sample'},1);
     elseif ischar(postoption.norm) && ...
             strcmpi(postoption.norm,'AcrossSegments')
-        d = d./repmat(mdk,[size(d,1),1,1]); % not ready yet!
+        warning('WARNING IN SIG.ENVELOPE: ''AcrossSegments'' not available yet');
+        %d = d./repmat(mdk,[size(d,1),1,1]);
     end
 end
 
