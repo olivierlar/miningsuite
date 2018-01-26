@@ -331,14 +331,14 @@ classdef Signal
                 Sstart = zeros(1,length(in.sdata));
                 Ssize = zeros(1,length(in.sdata));
                 for i = 1:length(in.sdata)
-                    Sstart(i) = in.sdata{i}(1);
+                    Sstart(i) = in.sdata{i}(1) + in.Flength/2;
                     Ssize(i) = size(in.Ydata.content{i},1);
                 end
             else
                 Sstart = in.sdata(1);
                 Ssize = size(in.Ydata.content,1);
             end
-            obj.Sstart = Sstart;
+            obj.Sstart = Sstart + in.Flength/2;
             obj.Ssize = Ssize;
         end
         
