@@ -49,12 +49,14 @@ function out = main(x,frame)
         return
     end
     frate = sig.compute(@sig.getfrate,x.Srate,frame);
+    flength = sig.compute(@sig.getflength,x.Srate,frame);
     data = sig.compute(@routine,x.Ydata,x.Sstart,length(x.Sstart)>1,frame,x.Srate);
     if isempty(data)
         out = {[]};
     else
         x.Ydata = data;
         x.Frate = frate;
+        x.Flength = flength;
         out = {x};
     end
 end
