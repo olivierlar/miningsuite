@@ -876,7 +876,9 @@ function out = routine_decay(d,t,pp,ppu,rlu)
         j = find(rlu(i:end) > ppu(i),1);
         if j > 1
             rlu(i:i+j-2) = [];
-            en(i:i+j-2) = [];
+            if length(en) >= i
+                en(i:i+j-2) = [];
+            end
         end
 
         % Taking the latest possible peak before current offset time rlu(i)
