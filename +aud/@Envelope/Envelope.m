@@ -14,6 +14,12 @@ classdef Envelope < sig.Envelope
         decays = []
         offsets = []
     end
+    properties (Dependent)
+        onsets_s
+        attacks_s
+        decays_s
+        offsets_s
+    end
 %%
     methods
         function e = Envelope(varargin)
@@ -50,6 +56,19 @@ classdef Envelope < sig.Envelope
             e.offsets = of;
         end
         
+        function t = get.onsets_s(obj)
+            t = sig.compute(@inseconds,obj.onsets,obj.sdata);
+        end
+        function t = get.attacks_s(obj)
+            t = sig.compute(@inseconds,obj.attacks,obj.sdata);
+        end
+        function t = get.decays_s(obj)
+            t = sig.compute(@inseconds,obj.decays,obj.sdata);
+        end
+        function t = get.offsets_s(obj)
+            t = sig.compute(@inseconds,obj.offsets,obj.sdata);
+        end
+        
         function d = get(obj,field)
             if strcmpi(field,'attacks')
                 d = obj.attacks;
@@ -66,4 +85,17 @@ classdef Envelope < sig.Envelope
         
         display(obj)
     end
+end
+
+
+function out = inseconds(i,t)
+    d = i.apply(@routine,{t},{'element'},1,'{}');
+    out = {d};
+end
+
+
+function d = routine(i,t)
+    i = i{1};
+    d = t(i);
+    d = d(:);
 end
