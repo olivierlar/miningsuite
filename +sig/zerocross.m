@@ -78,7 +78,7 @@ end
 
 
 function d = routine_norm(d,Ssize)
-    d = d.apply(@afternorm,{Ssize},{'sample'},Inf);
+    d = d.apply(@afternorm,{Ssize},{'element'},Inf);
 end
 
 
