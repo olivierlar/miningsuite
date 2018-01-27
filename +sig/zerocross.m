@@ -33,6 +33,10 @@ end
 
 %%
 function [x type] = init(x,option,frame)
+    if option.frame
+        x = sig.frame(x,'FrameSize',option.fsize.value,option.fsize.unit,...
+                      'FrameHop',option.fhop.value,option.fhop.unit);
+    end
     type = 'sig.Signal';
 end
 
