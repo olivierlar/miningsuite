@@ -145,7 +145,7 @@ function display(obj)
                     ydatai.apply(@draw,{obj.(abscissa),obj.Frate,'frame'},{dim,'channel'},1);
                 end
             elseif iscell(ydatai.content)
-                ydatai.apply(@drawmatseg,{xdata,num2cell(obj.Sstart),obj.Srate,num2cell(obj.Ssize)},{'sample','element'},2);
+                ydatai.apply(@drawmatseg,{xdata,obj.Sstart,obj.Srate,num2cell(obj.Ssize)},{'sample','element'},2);
                 axis tight
             else
                 ydatai.apply(@drawmat,{sdata,xdata(:)},{'sample','element'},2);

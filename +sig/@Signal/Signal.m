@@ -332,17 +332,21 @@ classdef Signal
             obj.Srate = in.Frate;
             
             if iscell(in.sdata)
-                Sstart = zeros(1,length(in.sdata));
+                Sstart = cell(1,length(in.sdata));
+                Send = cell(1,length(in.sdata));
                 Ssize = zeros(1,length(in.sdata));
                 for i = 1:length(in.sdata)
-                    Sstart(i) = in.sdata{i}(1) + in.Flength/2;
+                    Sstart{i} = in.sdata{i}(1) + in.Flength/2;
+                    Send{i} = in.sdata{i}(end) - in.Flength/2;
                     Ssize(i) = size(in.Ydata.content{i},1);
                 end
             else
-                Sstart = in.sdata(1);
+                Sstart = in.sdata(1) + in.Flength/2;
+                Send = in.sdata(end) - in.Flength/2;;
                 Ssize = size(in.Ydata.content,1);
             end
-            obj.Sstart = Sstart + in.Flength/2;
+            obj.Sstart = Sstart;
+            obj.Send = Send;
             obj.Ssize = Ssize;
         end
         

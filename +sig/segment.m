@@ -219,8 +219,8 @@ function out = main(in,option)
 %    end
     x.Ydata.content = s;
     x.Ydata.layers = 2;
-    x.Sstart = Sstart;
-    x.Send = [Sstart(2:end),x.Send];
+    x.Sstart = num2cell(Sstart);
+    x.Send = num2cell([Sstart(2:end),x.Send]);
     out = {x};
 end
 
