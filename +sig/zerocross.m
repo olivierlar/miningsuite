@@ -1,7 +1,7 @@
 % SIG.ZEROCROSS
 %
-% Copyright (C) 2014, 2017 Olivier Lartillot
-% ? 2007-2009 Olivier Lartillot & University of Jyvaskyla
+% Copyright (C) 2014, 2017-2018 Olivier Lartillot
+% Copyright (C) 2007-2009 Olivier Lartillot & University of Jyvaskyla
 %
 % All rights reserved.
 % License: New BSD License. See full text of the license in LICENSE.txt in
@@ -55,8 +55,8 @@ end
 
 function y = algo(x,option,sr)
     y = sum(x(2:end,:,:).*x(1:end-1,:,:) < 0);
-    if strcmp(option.per,'Sample')
-        y = y / sr;
+    if strcmp(option.per,'Second')
+        y = y * sr;
     end
     if strcmp(option.dir,'One')
         y = y / 2;
@@ -64,8 +64,10 @@ function y = algo(x,option,sr)
 end
 
 
-function out = after(in,option)
-    x = in{1};
+function out = after(x,option)
+    if iscell(x)
+        x = x{1};
+    end
     x.Ydata = sig.compute(@routine_norm,x.Ydata,x.Ssize);
     out = {x};
 end
