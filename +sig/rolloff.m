@@ -35,7 +35,7 @@ function [x,type] = init(x,option,frame)
     if x.istype('sig.Signal')
         if option.frame
             x = sig.frame(x,'FrameSize',option.fsize.value,option.fsize.unit,...
-                'FrameHop',option.fhop.value,option.fhop.unit);
+                            'FrameHop',option.fhop.value,option.fhop.unit);
         end
         x = sig.spectrum(x);   
     end
@@ -51,8 +51,8 @@ function out = main(in,option)
     if ~strcmpi(x.yname,'Roll-off')
         res = sig.compute(@routine,x.Ydata,x.xdata,option.p);
         x = sig.Signal(res,'Name','Roll-off','Unit','Hz.',...
-                       'Srate',x.Srate,'Ssize',x.Ssize,...
-                       'FbChannels',x.fbchannels);
+                           'Srate',x.Srate,'Sstart',x.Sstart,'Send',x.Send,...
+                           'Ssize',x.Ssize,'FbChannels',x.fbchannels);
     end
     out = {x};
 end
