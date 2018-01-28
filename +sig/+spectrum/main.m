@@ -60,7 +60,7 @@ function out = main(x,option)
     
     out = {sig.Spectrum(d,'Phase',ph,'xsampling',xrate,'Deframe',x,...
                         'InputSampling',x.Srate,'InputLength',il,...
-                        'ConstantQ',constq)};
+                        'ConstantQ',constq,'FBChannels',x.fbchannels)};
 end
 
 
