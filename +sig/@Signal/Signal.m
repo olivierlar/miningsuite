@@ -316,6 +316,8 @@ classdef Signal
                 d = obj.peakprecisepos;  
             elseif strcmpi(field,'PeakPreciseVal')
                 d = obj.peakpreciseval;
+            elseif strcmpi(field,'FBChannels')
+                d = obj.fbchannels;
             else
                 error(['SYNTAX ERROR IN GET: Unknown parameter ''',field,'''.']);
             end
