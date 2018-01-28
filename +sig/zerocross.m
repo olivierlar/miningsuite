@@ -9,7 +9,10 @@
 
 function varargout = zerocross(varargin)
     varargout = sig.operate('sig','zerocross',...
-                            initoptions,@init,@main,@after,varargin,'plus');
+                            initoptions,@init,@main,@after,varargin); 
+                        %,'plus'); Chunk works if input is sig.Signal but
+                        % not if for instance it is sig.Autocor. Needs to
+                        % adapt chunk strategy based on input 
 end
 
 
@@ -35,7 +38,7 @@ end
 function [x type] = init(x,option,frame)
     if option.frame
         x = sig.frame(x,'FrameSize',option.fsize.value,option.fsize.unit,...
-                      'FrameHop',option.fhop.value,option.fhop.unit);
+                        'FrameHop',option.fhop.value,option.fhop.unit);
     end
     type = 'sig.Signal';
 end
@@ -43,16 +46,25 @@ end
 
 function out = main(in,option)
     x = in{1};
-    res = sig.compute(@routine,x.Ydata,x.Srate,option);
-    x = sig.Signal(res,'Name','Zero-crossing rate',...
-        'Deframe',x);
+    if x.xsampling
+        res = sig.compute(@routine,x.Ydata,1/x.xsampling,'element',option);
+        x = sig.Signal(res,'Name','Zero-crossing rate');
+    elseif x.Srate
+        res = sig.compute(@routine,x.Ydata,x.Srate,'sample',option);
+        x = sig.Signal(res,'Name','Zero-crossing rate',...
+            'Deframe',x);
+    else
+        warning ('WARNING IN ZEROCROSS: Unrecognized input. Nothing done');
+    end
     out = {x};
 end
 
 
-function out = routine(d,sr,option)
-    d = d.apply(@algo,{option,sr},{'sample'},3);
-    d = d.deframe;
+function out = routine(d,rate,dim,option)
+    d = d.apply(@algo,{option,rate},{dim},3);
+    if strcmp(dim,'sample')
+        d = d.deframe;
+    end
     out = {d};
 end
 
@@ -65,23 +77,25 @@ function y = algo(x,option,sr)
     if strcmp(option.dir,'One')
         y = y / 2;
     end
+    
+    y = y / size(x,1);      % replace afternorm for the moment
 end
 
 
-function out = after(x,option)
-    if iscell(x)
-        x = x{1};
-    end
-    x.Ydata = sig.compute(@routine_norm,x.Ydata,x.Ssize);
-    out = {x};
+function x = after(x,option)
+%     if iscell(x)
+%         x = x{1};
+%     end
+%     x.Ydata = sig.compute(@routine_norm,x.Ydata,x.Ssize);
+%     out = {x};
 end
 
 
-function d = routine_norm(d,Ssize)
-    d = d.apply(@afternorm,{Ssize},{'element'},Inf);
-end
-
-
-function d = afternorm(d,l)
-    d = d/l;
-end
+% function d = routine_norm(d,Ssize)
+%     d = d.apply(@afternorm,{Ssize},{'element'},Inf);
+% end
+% 
+% 
+% function d = afternorm(d,l)
+%     d = d/l;
+% end
