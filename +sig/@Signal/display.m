@@ -145,7 +145,7 @@ function display(obj)
                     ydatai.apply(@draw,{obj.(abscissa),obj.Frate,'frame'},{dim,'channel'},1);
                 end
             elseif iscell(ydatai.content)
-                ydatai.apply(@drawmatseg,{xdata,obj.Sstart,obj.Srate,num2cell(obj.Ssize)},{'sample','element'},2);
+                ydatai.apply(@drawmatseg,{xdata,obj.Sstart,obj.Send,obj.Srate},{'sample','element'},2);
                 axis tight
             else
                 ydatai.apply(@drawmat,{sdata,xdata(:)},{'sample','element'},2);
@@ -285,11 +285,11 @@ function drawpointseg(y,x1,x2)
 end
 
 
-function drawmatseg(z,y,Sstart,Srate,Ssize)
+function drawmatseg(z,y,Sstart,Send,Srate)
     if Srate
         x = Sstart + (0:size(z,1))/Srate;
     else
-        x = Sstart + [0, Ssize];
+        x = [Sstart,Send];
     end
     y(end+1) = 2 * y(end) - y(end-1);
     surfplot(x,y',z')
