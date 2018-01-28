@@ -52,8 +52,17 @@ function display(obj)
         end
     elseif ~obj.Srate || isequal(obj.Ydata.size('sample',1), 1)
         if isempty(xdata) || length(xdata) == 1
-            textual(obj.yname,obj.Ydata.content);
-            return
+            if length(obj.fbchannels) > 1
+                figure
+                obj.Ydata.apply(@drawchannel,{obj.fbchannels},{'freqband'});
+                title(obj.yname);
+                xlabel('Channels');
+                ylabel(['(' obj.yunit ')'])
+                return
+            else
+                textual(obj.yname,obj.Ydata.content,obj.yunit,obj.files);
+                return
+            end
         end
         abscissa = 'xdata';
         Xaxis = obj.Xaxis;
@@ -228,9 +237,13 @@ function display(obj)
 end
 
 
-function textual(name,data)
-    disp(['The ' name ' is:']);
-    display(data);
+function textual(name,data,unit,files)
+    if isnumeric(data)
+        disp(['The ' name ' related to file ' files ' is ' num2str(data) ' ' unit]);
+    else
+        disp(['The ' name ' related to file ' files ' is :']);
+        display(data);
+    end
 end
 
 
@@ -316,4 +329,9 @@ function drawpeaks(p,x,y,frate,index)
     else
         plot(x(p),y(p),'or');
     end
+end
+
+
+function drawchannel(y,x)
+    plot(x,y,'+');
 end
