@@ -48,11 +48,13 @@ function out = main(in,option)
     x = in{1};
     if x.xsampling
         res = sig.compute(@routine,x.Ydata,1/x.xsampling,'element',option);
-        x = sig.Signal(res,'Name','Zero-crossing rate');
+        x = sig.Signal(res,'Name','Zero-crossing rate',...
+                           'Srate',x.Srate,'Sstart',x.Sstart,'Send',x.Send,...
+                           'Ssize',x.Ssize,'FbChannels',x.fbchannels);
     elseif x.Srate
         res = sig.compute(@routine,x.Ydata,x.Srate,'sample',option);
-        x = sig.Signal(res,'Name','Zero-crossing rate',...
-            'Deframe',x);
+        x = sig.Signal(res,'Name','Zero-crossing rate','Deframe',x,...
+                           'FbChannels',x.fbchannels);
     else
         warning ('WARNING IN ZEROCROSS: Unrecognized input. Nothing done');
     end
