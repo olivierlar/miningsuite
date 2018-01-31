@@ -32,8 +32,8 @@ end
 function out = main(in,option)
     x = in{1};
     [d,Sstart,Send] = sig.compute(@routine,x.Ydata,x.Srate,x.Sstart,option,x.Send);
-    out = {sig.Signal(d,'Name','Length','Srate',0,'Send',Send,...
-                      'Sstart',Sstart,'FbChannels',x.fbchannels)};
+    out = {sig.Signal(d,'Name','Length','Unit','s','Srate',0,'Send',Send,...
+                        'Sstart',Sstart,'FbChannels',x.fbchannels)};
 end
 
 
