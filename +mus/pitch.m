@@ -1,6 +1,6 @@
 % MUS.PITCH
 %
-% Copyright (C) 2014, 2017 Olivier Lartillot
+% Copyright (C) 2014, 2017-2018 Olivier Lartillot
 % All rights reserved.
 % License: New BSD License. See full text of the license in LICENSE.txt in
 % the main folder of the MiningSuite distribution.
@@ -68,7 +68,7 @@ function out = main(in,option)
             d.content = d.content';
             out = {sig.Signal(d,'Name',nam,'Srate',1/option.sampling)}; %'FbChannels',x.fbchannels??
         else
-            out = {sig.Signal(d,'Name',nam,'Xdata',t,'Srate',0)}; %'FbChannels',x.fbchannels??
+            out = {sig.Signal(d,'Name',nam,'Sstart',t,'Srate',0)}; %'FbChannels',x.fbchannels??
         end
     end
 end
