@@ -66,13 +66,16 @@ function [n, xout] = hist(x,nbins)
     if iscell(x)
         x = cell2mat(x);
     end
-    h = histogram(x,nbins);
-    n = h.Values';
-    xout = h.BinEdges(1:end-1) + h.BinWidth/2;
+    [n,edges] = histcounts(x,nbins);
+    n = n';
+    xout = edges(1:end-1) + (edges(2)-edges(1))/2;
 end
 
 
 function [n, xout] = inthist(x)
+    if ~isinteger(x)
+        error('ERROR IN SIG.HISTOGRAM: Input values should be of type integer. Don''t use ''Integer'' option.');
+    end
     minx = min(x);
     xout = (min(x):max(x))';
     n = zeros(size(xout));
