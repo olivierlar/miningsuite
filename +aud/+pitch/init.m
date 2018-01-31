@@ -1,12 +1,12 @@
 % AUD.PITCH.INIT
 %
-% Copyright (C) 2014, 2017 Olivier Lartillot
+% Copyright (C) 2014, 2017-2018 Olivier Lartillot
 %
 % All rights reserved.
 % License: New BSD License. See full text of the license in LICENSE.txt in
 % the main folder of the MiningSuite distribution.
 
-function [x, type] = init(x,option,frame)
+function [x, type] = init(x,option)
 
     if option.tolo
         option.enh = 2:10;
@@ -18,9 +18,9 @@ function [x, type] = init(x,option,frame)
     if not(strcmpi(option.filtertype,'NoFilterBank'))
         x = aud.filterbank(x,option.filtertype);
     end
-    if ~isempty(frame) && frame.toggle
-        x = sig.frame(x,'FrameSize',frame.size.value,frame.size.unit,...
-                        'FrameHop',frame.hop.value,frame.hop.unit);
+    if option.frame
+        x = sig.frame(x,'FrameSize',option.fsize.value,option.fsize.unit,...
+                        'FrameHop',option.fhop.value,option.fhop.unit);
     end
     x = sig.autocor(x,'Generalized',option.gener);
     if option.sum
