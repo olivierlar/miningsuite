@@ -1,6 +1,6 @@
 % SIG.HIST
 %
-% Copyright (C) 2017 Olivier Lartillot
+% Copyright (C) 2017-2018 Olivier Lartillot
 %
 % All rights reserved.
 % License: New BSD License. See full text of the license in LICENSE.txt in
@@ -30,9 +30,9 @@ end
 function out = main(in,option)
     x = in{1};
     if ~strcmpi(x.yname,'Histogram')
-        res = sig.compute(@routine,x.Ydata,option.n);
+        [res xout] = sig.compute(@routine,x.Ydata,option.n);
         x = sig.Signal(res,'Name','Histogram',...
-                       'Xsampling',1,'Xstart',1,...res{2},...
+                       'Xsampling',0,'Xstart',xout,...
                        'Srate',x.Frate,'Ssize',x.Ssize);
     end
     out = {x};
@@ -45,15 +45,16 @@ function out = routine(d,nbins)
     else
         dim = 'sample';
     end
-    out = d.apply(@algo,{nbins},{dim},1);
+    [out,xout] = d.apply(@algo,{nbins},{dim},1);
     if strcmp(dim,'sample')
         out = out.deframe;
     end
+    out = {out,xout};
 end
 
 
 function [n, xout] = algo(x,nbins)
-    [n xout] = hist(x,nbins);
+    [n,xout] = hist(x,nbins);
     n = n';
 end
 
