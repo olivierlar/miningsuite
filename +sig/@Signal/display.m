@@ -40,7 +40,7 @@ function display(obj)
             abscissa = 'sdata';
             Xaxis = obj.saxis;
             yname = '';
-            yunit = '';
+            yunit = obj.yunit;
             ydata = obj.Ydata;
         else
             iscurve = 1;
@@ -57,7 +57,9 @@ function display(obj)
                 obj.Ydata.apply(@drawchannel,{obj.fbchannels},{'freqband'});
                 title(obj.yname);
                 xlabel('Channels');
-                ylabel(['(' obj.yunit ')'])
+                if ~isempty(obj.yunit)
+                    ylabel(['(' obj.yunit ')'])
+                end
                 return
             else
                 textual(obj.yname,obj.Ydata.content,obj.yunit,obj.files);
@@ -218,13 +220,19 @@ function display(obj)
                 xlabel(label);
             end
             
-            if i-1 == floor((nchans-1)/2) && ~isempty(yname)
-                if ~isempty(yunit)
-                    label = [yname,' (',yunit,')'];
+            if i-1 == floor((nchans-1)/2)
+                if isempty(yname)
+                    if ~isempty(yunit)
+                        ylabel(['(',yunit,')'])
+                    end
                 else
-                    label = yname;
+                    if ~isempty(yunit)
+                        label = [yname,' (',yunit,')'];
+                    else
+                        label = yname;
+                    end
+                    ylabel(label);
                 end
-                ylabel(label);
             end
         end
         title(obj.yname);
