@@ -1,6 +1,6 @@
 % MUS.SCORE
 %
-% Copyright (C) 2014-2015, 2017 Olivier Lartillot
+% Copyright (C) 2014-2015, 2017-2018 Olivier Lartillot
 % All rights reserved.
 % License: New BSD License. See full text of the license in LICENSE.txt in
 % the main folder of the MiningSuite distribution.
@@ -147,14 +147,13 @@ if strcmp(type,'audio')
         p = mireval(p,name);
         p = p{1};
     else
-        e = sig.envelope(name);
-        t = sig.peaks(e,'Threshold',.5);
-        s = sig.segment(name,t);
+        t = aud.events(name,'Attacks','Mix');
         t = t.eval;
         t = t{1};
+        s = sig.segment(name,t);
         
         p = aud.pitch(s,'Total',1);
-        p = p.Ydata.content;
+        p = p.getdata;
         pp = zeros(1,length(p));
         for i = 1:length(p)
             pp(i) = p{i}{1};
@@ -324,7 +323,7 @@ end
 function out = transcribe(out,in,options,concept)
 ps = mus.paramstruct(options);
 if iscell(in)
-    t = sort(in{1}.peakpos.content{1});
+    t = sort(in{1}.sdata(in{1}.attacks.content{1}));
     p = in{2};
     memory = [];
     note = [];
@@ -338,7 +337,7 @@ if iscell(in)
         end
     end
 elseif isa(in,'sig.Envelope')
-    t = sort(in.peakpos.content{1});
+    t = sort(in.sdata(in.attacks.content{1}));
     memory = [];
     note = [];
     for i = 1:length(t)
