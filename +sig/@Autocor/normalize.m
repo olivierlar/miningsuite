@@ -15,6 +15,8 @@ end
 
 
 function out = main(d,win)
-    d = d.divide(win);
+    if ~isempty(win)
+        d = d.divide(win);
+    end
     out = {d};
 end
