@@ -660,6 +660,7 @@ function out = main(o,option)
                          'Frate',o.Frate,'FbChannels',o.fbchannels,...
                          'Onsets',st,'Attacks',ap,'Decays',rl,'Offsets',en);
         o.peakindex = pp;
+        o.peakdim = 'sample';
     end
     title = o.yname;
     if not(length(title)>11 && strcmp(title(1:11),'Onset curve'))
