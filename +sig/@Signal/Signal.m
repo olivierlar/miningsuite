@@ -340,12 +340,12 @@ classdef Signal
                 for i = 1:length(in.sdata)
                     Sstart{i} = in.sdata{i}(1) + in.Flength/2;
                     Send{i} = in.sdata{i}(end) - in.Flength/2;
-                    Ssize(i) = size(in.Ydata.content{i},1);
+                    Ssize(i) = size(in.Ydata.content{i},1) / obj.Srate;
                 end
             else
                 Sstart = in.sdata(1) + in.Flength/2;
                 Send = in.sdata(end) - in.Flength/2;;
-                Ssize = size(in.Ydata.content,1);
+                Ssize = size(in.Ydata.content,1) / obj.Srate;
             end
             obj.Sstart = Sstart;
             obj.Send = Send;
