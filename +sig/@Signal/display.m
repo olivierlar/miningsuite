@@ -32,7 +32,12 @@ function display(obj)
         iscurve = 0;
         Xaxis = obj.saxis;
         yname = obj.Xaxis.name;
-        yunit = obj.Xaxis.unit.name;
+        if ~isempty(obj.Xaxis.subunit) && ...
+                strcmp(obj.Xaxis.subunit.dimname,obj.Xaxis.name)
+            yunit = obj.Xaxis.subunit.unitname;
+        else
+            yunit = obj.Xaxis.unit.name;
+        end
         ydata = obj.Ydata;
     elseif length(obj.Sstart) > 1 && ~obj.Srate
         if iscell(obj.Sstart) 
@@ -180,7 +185,11 @@ function display(obj)
                             pk = pk.content{1};
                             if ~isempty(pk)
                                 py = obj.Xaxis.data(pk'+.5);
-                                px = obj.Sstart(k) + obj.Ssize(k) / 2;
+                                sstart = obj.Sstart(k);
+                                if iscell(sstart)
+                                    sstart = sstart{1};
+                                end
+                                px = sstart + obj.Ssize(k) / 2;
                                 plot(px,py,'+k');
                             end
                         else
@@ -302,6 +311,9 @@ end
 
 
 function drawpointseg(y,x1,x2)
+    if iscell(y)
+        y = y{1};
+    end
     plot([x1,x2],[y,y]);
 end
 
