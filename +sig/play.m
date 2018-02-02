@@ -53,7 +53,9 @@ end
 
 
 function out = main(x,option)
-    x = x{1};
+    if iscell(x)
+        x = x{1};
+    end
     if iscell(x.design)
         filenames = x.design;
     else
