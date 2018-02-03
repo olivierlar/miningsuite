@@ -8,7 +8,7 @@
 
 function varargout = brightness(varargin)
     out = sig.operate('aud','brightness',...
-                            initoptions,@init,@main,@after,varargin);
+                      initoptions,@init,@main,@after,varargin);
     if isa(out{1},'sig.design')
         out{1}.nochunk = 1;
     end
@@ -28,11 +28,11 @@ end
 
 
 %%
-function [x type] = init(x,option,frame)
+function [x type] = init(x,option)
     if x.istype('sig.Signal')
         if option.frame
             x = sig.frame(x,'FrameSize',option.fsize.value,option.fsize.unit,...
-                'FrameHop',option.fhop.value,option.fhop.unit);
+                          'FrameHop',option.fhop.value,option.fhop.unit);
         end
         x = sig.spectrum(x);   
     end
@@ -45,8 +45,8 @@ function out = main(in,option)
     if ~strcmpi(x.yname,'Brightness')
         res = sig.compute(@routine,x.Ydata,x.xdata,option.cutoff);
         x = sig.Signal(res,'Name','Brightness',...
-                       'Srate',x.Srate,'Ssize',x.Ssize,...
-                       'FbChannels',x.fbchannels);
+                       'Srate',x.Srate,'Sstart',x.Sstart,'Send',x.Send,...
+                       'Ssize',x.Ssize,'FbChannels',x.fbchannels);
     end
     out = {x};
 end
