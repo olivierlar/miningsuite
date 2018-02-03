@@ -22,11 +22,11 @@ function options = initoptions
         p.default = 85;
     options.p = p;
 
-        minrms.key = 'MinRMS';
-        minrms.when = 'After';
-        minrms.type = 'Numerical';
-        minrms.default = .005;
-    options.minrms = minrms;
+%         minrms.key = 'MinRMS';
+%         minrms.when = 'After';
+%         minrms.type = 'Numerical';
+%         minrms.default = .005;
+%     options.minrms = minrms;
 end
 
 
