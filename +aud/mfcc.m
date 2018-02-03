@@ -62,8 +62,10 @@ function out = main(in,option)
         out = in;
     else
         res = sig.compute(@routine,x.Ydata,option.rank);
-        x = aud.Mfcc(res,'Srate',x.Srate,'Ssize',x.Ssize,...
-                     'FbChannels',x.fbchannels);
+        x = aud.Mfcc(res,'xsampling',1,'FbChannels',x.fbchannels,...
+                     'Srate',x.Srate,'Ssize',x.Ssize,...
+                     'Sstart',x.Sstart,'Send',x.Send);
+        x.Xaxis.unit.origin = option.rank(1);
         out = {x in{1}};
     end
 end
@@ -90,7 +92,10 @@ end
 function x = after(x,option)
     if option.delta
         x{1}.Ydata = sig.compute(@delta,x{1}.Ydata,option.delta,option.radius);
-        x{1}.yname = ['Delta-',x{1}.yname];
+        for i = 1:option.delta
+            x{1}.yname = ['Delta-',x{1}.yname];
+        end
+        x{1}.delta = option.delta;
     end
 end
 
@@ -100,11 +105,13 @@ function x = delta(x,delta,radius)
 end
 
 
-function y = delta_algo(x,delta,M)
-    nc = size(x,2) - 2*M;
-    y = zeros(size(x,1),nc);
-    for i = 1:delta
-        y = y + i * (x(:,M+i+(1:nc)) - x(:,M-i+(1:nc)));
+function x = delta_algo(x,delta,M)
+    for j = 1:delta
+        nc = size(x,2) - 2*M;
+        y = zeros(size(x,1),nc);
+        for i = 1:M
+            y = y + i * (x(:,M+i+(1:nc)) - x(:,M-i+(1:nc)));
+        end
+        x = y / 2 / sum((1:M).^2); % MULTIPLY BY 2 INSTEAD OF SQUARE FOR NORMALIZATION ?
     end
-    y = y / 2 / sum((1:M).^2); % MULTIPLY BY 2 INSTEAD OF SQUARE FOR NORMALIZATION ?
 end
