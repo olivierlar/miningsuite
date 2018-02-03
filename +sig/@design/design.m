@@ -136,7 +136,7 @@ classdef design
                     end
                 else
                     out = obj.eval(obj.files,1);
-                    for i = 1:length(out)
+                    for i = length(out):-1:1
                         if isa(out{i},'mus.Sequence')
                             out{i}.display;
                         elseif isa(out{i},'sig.Signal')
