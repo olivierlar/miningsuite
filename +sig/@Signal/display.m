@@ -65,18 +65,17 @@ function display(obj)
                 if ~isempty(obj.yunit)
                     ylabel(['(' obj.yunit ')'])
                 end
-                return
             else
                 textual(obj.yname,obj.Ydata.content,obj.yunit,obj.files);
-                return
             end
+        else
+            abscissa = 'xdata';
+            Xaxis = obj.Xaxis;
+            yname = '';
+            yunit = '';
+            ydata = obj.Ydata;
+            iscurve = (length(obj.Sstart) == 1);  
         end
-        abscissa = 'xdata';
-        Xaxis = obj.Xaxis;
-        yname = '';
-        yunit = '';
-        ydata = obj.Ydata;
-        iscurve = (length(obj.Sstart) == 1);  
         
     elseif length(xdata) < 2
         switch length(xdata)
@@ -255,7 +254,7 @@ end
 
 
 function textual(name,data,unit,files)
-    if isnumeric(data)
+    if isnumeric(data) && length(data) == 1
         disp(['The ' name ' related to file ' files ' is ' num2str(data) ' ' unit]);
     else
         disp(['The ' name ' related to file ' files ' is :']);
