@@ -27,10 +27,19 @@ classdef Mfcc < sig.Signal
             end
             c = c@sig.Signal(varargin{:});
             if strcmp(c.yname,'Signal')
-                c.yname = 'Mel-frequency cepstrum coefficient';
+                c.yname = 'Mel-frequency cepstrum coefficients';
             end
             c.Xaxis.name = 'Rank';
             c.delta = delta;
+        end
+        function d = get(obj,field)
+            if strcmpi(field,'rank')
+                d = obj.xdata;
+            elseif strcmpi(field,'delta')
+                d = obj.delta;
+            else
+                d = get@sig.Signal(obj,field);
+            end
         end
     end
 end
