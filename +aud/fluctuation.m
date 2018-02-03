@@ -62,7 +62,7 @@ function [x type] = init(x,option,frame)
     end
     if ~istype(x,'sig.Spectrum')
         x = sig.frame(x,'FrameSize',option.inframe(1),'s',...
-                      'FrameHop',option.inframe(2),'Hz');
+                        'FrameHop',option.inframe(2),'Hz');
     end
     x = aud.spectrum(x,'Power','Terhardt',option.band,'dB','Mask');
     x = aud.spectrum(x,'AlongBands','Max',option.max,...

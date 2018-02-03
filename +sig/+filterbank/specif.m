@@ -2,7 +2,7 @@
 % Filterbank specification, called by sig.filterbank and aud.filterbank
 %
 % Copyright (C) 2014, 2017 Olivier Lartillot
-% ? 2007-2009 Olivier Lartillot & University of Jyvaskyla
+% Copyright (C) 2007-2009 Olivier Lartillot & University of Jyvaskyla
 %
 % All rights reserved.
 % License: New BSD License. See full text of the license in LICENSE.txt in

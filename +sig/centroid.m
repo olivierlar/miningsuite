@@ -20,11 +20,11 @@ end
 
 
 %%
-function [x type] = init(x,option)
+function [x,type] = init(x,option)
     if x.istype('sig.Signal')
         if option.frame
             x = sig.frame(x,'FrameSize',option.fsize.value,option.fsize.unit,...
-                'FrameHop',option.fhop.value,option.fhop.unit);
+                          'FrameHop',option.fhop.value,option.fhop.unit);
         end
         x = sig.spectrum(x);   
     end
