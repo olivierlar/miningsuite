@@ -40,11 +40,11 @@ end
 
 
 %%
-function [x type] = init(x,option,frame)
+function [x,type] = init(x,option)
     if x.istype('sig.Signal')
         if option.frame
             x = sig.frame(x,'FrameSize',option.fsize.value,option.fsize.unit,...
-                'FrameHop',option.fhop.value,option.fhop.unit);
+                          'FrameHop',option.fhop.value,option.fhop.unit);
         end
         x = sig.spectrum(x);   
     end
@@ -56,8 +56,9 @@ end
 function out = main(in,option)
     x = in{1};
     d = sig.compute(@routine,x.peakpos,x.peakval,x.Ydata,option);
-    x = sig.Signal(d,'Name','Roughness','Srate',x.Srate,'Ssize',x.Ssize,...
-                   'FbChannels',x.fbchannels);
+    x = sig.Signal(d,'Name','Roughness','Srate',x.Srate,...
+                   'Sstart',x.Sstart,'Send',x.Send,...
+                   'Ssize',x.Ssize,'FbChannels',x.fbchannels);
     out = {x};
 end
 
