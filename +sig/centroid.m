@@ -1,7 +1,7 @@
 % SIG.CENTROID
 %
 % Copyright (C) 2017-2018 Olivier Lartillot
-% ? 2007-2009 Olivier Lartillot & University of Jyvaskyla
+% Copyright (C) 2007-2009 Olivier Lartillot & University of Jyvaskyla
 %
 % All rights reserved.
 % License: New BSD License. See full text of the license in LICENSE.txt in
@@ -20,7 +20,7 @@ end
 
 
 %%
-function [x type] = init(x,option,frame)
+function [x type] = init(x,option)
     if x.istype('sig.Signal')
         if option.frame
             x = sig.frame(x,'FrameSize',option.fsize.value,option.fsize.unit,...
@@ -37,8 +37,8 @@ function out = main(in,option)
     if ~strcmpi(x.yname,'Centroid')
         res = sig.compute(@routine,x.Ydata,x.xdata);
         x = sig.Signal(res,'Name','Centroid',...
-                       'Srate',x.Srate,'Ssize',x.Ssize,...
-                       'FbChannels',x.fbchannels);
+                       'Srate',x.Srate,'Sstart',x.Sstart,'Send',x.Send,...
+                       'Ssize',x.Ssize,'FbChannels',x.fbchannels);
     end
     out = {x};
 end
