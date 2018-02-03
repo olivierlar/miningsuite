@@ -20,7 +20,7 @@ end
 
 
 %%
-function [x type] = init(x,option)
+function [x,type] = init(x,option)
     if x.istype('sig.Signal')
         if option.frame
             x = sig.frame(x,'FrameSize',option.fsize.value,option.fsize.unit,...
