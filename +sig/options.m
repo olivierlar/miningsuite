@@ -23,7 +23,12 @@ fields = fieldnames(specif);
 for i = 1:length(fields)
     field = fields{i};
     if isfield(specif.(field),'default')
-        options.(field) = specif.(field).default;
+        if isfield(specif.(field),'type') && strcmpi(specif.(field).type,'Unit') && isfield(specif.(field),'defaultunit')
+            options.(field).value = specif.(field).default;
+            options.(field).unit = specif.(field).defaultunit;
+        else
+            options.(field) = specif.(field).default;
+        end
     else
         options.(field) = 0;
     end
@@ -144,14 +149,24 @@ while i <= length(args)
                             for j = 1:length(unit)
                                 if strcmpi(args{i+1},unit{j})
                                     i = i+1;
-                                    optionvalue.unit = args{i};
+                                    if j == 2 && isfield(specif.(field),'opposite')
+                                        field = specif.(field).opposite;
+                                        optionvalue.value = 1/value;
+                                        optionvalue.unit = unit{1};
+                                    else
+                                        optionvalue.unit = args{i};
+                                    end
                                     found = 1;
                                     break
                                 end
                             end
                         end
                         if ~found
-                            optionvalue.unit = unit{1};
+                            if isfield(specif.(field),'defaultunit')
+                                optionvalue.unit = specif.(field).defaultunit;
+                            else
+                                optionvalue.unit = unit{1};
+                            end
                         end
                         if strcmp(field,'fsize') || strcmp(field,'fhop')
                             options.frame = 1;
