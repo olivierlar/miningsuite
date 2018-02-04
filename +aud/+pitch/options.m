@@ -7,28 +7,63 @@
 % the main folder of the MiningSuite distribution.
 
 function options = options
-    options = sig.Signal.signaloptions('FrameManual',.1,.1);
+    options = sig.Signal.signaloptions('FrameManual',.0464,.2);
    
-        enh.key = 'Enhanced';
-        enh.type = 'Numeric';
-        enh.default = 0; %2:10;
-    options.enh = enh;
-
-        filtertype.type = 'String';
-        filtertype.choice = {'NoFilterBank','2Channels','Gammatone'};
-        filtertype.default = '2Channels';
-    options.filtertype = filtertype;
-
-        sum.key = 'Sum';
-        sum.type = 'Boolean';
-        sum.default = 1;
-    options.sum = sum;
-
-        gener.key = {'Generalized','Compress'};
-        gener.type = 'Numeric';
-        gener.default = .5;
-    options.gener = gener;
+        ac.key = 'Autocor';
+        ac.type = 'Boolean';
+        ac.default = 0;
+    options.ac = ac;
     
+            enh.key = 'Enhanced';
+            enh.type = 'Numeric';
+            enh.default = 2:10;
+        options.enh = enh;
+
+            filtertype.type = 'String';
+            filtertype.choice = {'NoFilterBank','2Channels','Gammatone'};
+            filtertype.default = '2Channels';
+        options.filtertype = filtertype;
+
+            sum.key = 'Sum';
+            sum.type = 'Boolean';
+            sum.default = 1;
+        options.sum = sum;
+
+            gener.key = {'Generalized','Compress'};
+            gener.type = 'Numeric';
+            gener.default = .5;
+        options.gener = gener;
+        
+        as.key = 'AutocorSpectrum';
+        as.type = 'Boolean';
+        as.default = 0;
+    options.as = as;
+        
+        s.key = 'Spectrum';
+        s.type = 'Boolean';
+        s.default = 0;
+    options.s = s;
+
+            res.key = 'Res';
+            res.type = 'Numeric';
+            res.default = NaN;
+        options.res = res;
+  
+            db.key = 'dB';
+            db.type = 'Numeric';
+            db.default = 0;
+            db.keydefault = Inf;
+        options.db = db;
+    
+            norm.key = 'Normal';
+            norm.type = 'Boolean';
+            norm.default = 0;
+        options.norm = norm;
+    
+        ce.key = 'Cepstrum';
+        ce.type = 'Boolean';
+        ce.default = 0;
+    options.ce = ce;    
 %%
         m.key = 'Total';
         m.type = 'Numeric';
