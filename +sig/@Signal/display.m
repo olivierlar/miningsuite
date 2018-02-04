@@ -66,8 +66,21 @@ function display(obj)
                     ylabel(['(' obj.yunit ')'])
                 end
             else
-                textual(obj.yname,obj.Ydata.content,obj.yunit,obj.files);
+                ydata = obj.Ydata.content;
+                if iscell(ydata)
+                    figure, hold on
+                    for i = 1:length(ydata)
+                        plot(0,ydata{i},'+');
+                    end
+                    title(obj.yname);
+                    if ~isempty(obj.yunit)
+                        ylabel(['(' obj.yunit ')'])
+                    end
+                else
+                    textual(obj.yname,obj.Ydata.content,obj.yunit,obj.files);
+                end
             end
+            return
         else
             abscissa = 'xdata';
             Xaxis = obj.Xaxis;
@@ -289,9 +302,17 @@ function draw(y,x,frate,index)
     elseif iscell(y)
         if length(y) == 1 && length(x) > 1
             plot(x,y{1});
+        elseif iscell(x)
+            for i = 1:length(y)
+                if ~isempty(y{i})
+                    plot(x{i},y{i},'+');
+                end
+            end
         else
             for i = 1:length(y)
-                plot(x(i),y{i},'+');
+                if ~isempty(y{i})
+                    plot(x(i),y{i},'+');
+                end
             end
         end
     else
