@@ -29,6 +29,7 @@ end
 
 
 function y = routine(x,p,v,e,t)    
+    t = t(:);
     mv = [];
     p = p{1};
     v = v{1};
@@ -92,6 +93,7 @@ function y = routine(x,p,v,e,t)
 
             if not(isempty(be))
                 ic = interp1(t,y,t/i);
+                ic = ic(:);
                     % The scaled autocorrelation
                 ic(1:be-1) = 0;
                 ic(find(isnan(ic))) = Inf;
