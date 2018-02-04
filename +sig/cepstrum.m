@@ -22,7 +22,7 @@ function options = options
     options = sig.Signal.signaloptions('FrameAuto',.05,.5);
     
         mi.key = 'Min';
-        mi.type = 'Numeric';
+        mi.type = 'Unit';
         mi.default = 0.0002;
         mi.unit = {'s','Hz'};
         mi.defaultunit = 's';
@@ -30,7 +30,7 @@ function options = options
     options.mi = mi;
 
         ma.key = 'Max';
-        ma.type = 'Numeric';
+        ma.type = 'Unit';
         ma.default = .05;
         ma.unit = {'s','Hz'};
         ma.defaultunit = 's';
@@ -69,8 +69,8 @@ function out = main(x,option)
     else
         sr = x.inputsampling;
         ph = x.phase;
-        len = ceil(option.ma*sr);
-        start = ceil(option.mi*sr)+1;
+        len = ceil(option.ma.value*sr);
+        start = ceil(option.mi.value*sr)+1;
         if option.complex
             out = sig.compute(@routine_complex,x.Ydata,ph,len,start);
             
@@ -137,13 +137,13 @@ end
 %%
 function out = after(in,option)
     x = in{1};
-    start = ceil(option.mi/x.xsampling)+1;
+    start = ceil(option.mi.value/x.xsampling)+1;
     idx = max(start - x.xstart,0);
     if idx > 0
         x.xstart = start;
         x.Xaxis.start = start;
     end
-    newlen = ceil(option.ma/x.xsampling);
+    newlen = ceil(option.ma.value/x.xsampling);
     x.Ydata = sig.compute(@extract,x.Ydata,newlen,x.xstart,idx);
     
     if option.fr
