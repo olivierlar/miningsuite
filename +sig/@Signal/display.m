@@ -334,7 +334,9 @@ function drawpointseg(y,x1,x2)
     if iscell(y)
         y = y{1};
     end
-    plot([x1,x2],[y,y]);
+    for i = 1:length(y)
+        plot([x1,x2],[y(i),y(i)]);
+    end
 end
 
 
