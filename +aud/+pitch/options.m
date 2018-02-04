@@ -1,6 +1,6 @@
 % AUD.PITCH.OPTIONS
 %
-% Copyright (C) 2014, 2017 Olivier Lartillot
+% Copyright (C) 2014, 2017-2018 Olivier Lartillot
 %
 % All rights reserved.
 % License: New BSD License. See full text of the license in LICENSE.txt in
@@ -111,6 +111,19 @@ function options = options
         reso.choice = {0,'SemiTone'};
         reso.default = 0;
     options.reso = reso;
+    
+        stable.key = 'Stable';
+        stable.type = 'Numeric';
+        stable.number = 2;
+        stable.default = [Inf 0];
+        stable.keydefault = [.1 3];
+    options.stable = stable;
+    
+        median.key = 'Median';
+        median.type = 'Numeric';
+        median.default = 0;
+        median.keydefault = .1;
+    options.median = median;
         
         track.key = 'Track';        % Not used yet
         track.type = 'Boolean';
