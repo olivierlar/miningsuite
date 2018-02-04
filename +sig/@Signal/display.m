@@ -315,6 +315,10 @@ function draw(y,x,frate,index)
                 end
             end
         end
+    elseif iscell(x)
+        plot(y);
+        set(gca,'XTick',1:length(x));
+        set(gca,'XTickLabel',x);
     else
         plot(x,y);
     end
@@ -323,10 +327,20 @@ end
 
 function drawmat(z,x,y)
     x(end+1) = 2*x(end) - x(end-1);
+    if iscell(y)
+        l = y;
+        y = (1:length(y))';
+    else
+        l = {};
+    end
     y = [1.5*y(1)-0.5*y(2);...
          (y(1:end-1)+y(2:end))/2;...
          1.5*y(end)-0.5*y(end-1)];
     surfplot(x,y,z')
+    if ~isempty(l)
+        set(gca,'YTick',1:length(y));
+        set(gca,'YTickLabel',l);
+    end
 end
 
 
