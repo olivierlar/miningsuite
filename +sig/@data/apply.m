@@ -22,7 +22,7 @@ function [obj,varargout] = apply(obj,func,argin,dimfunc,maxdimfunc,type)
         for i = 1:length(obj.content)
             obji.content = obj.content{i};
             for j = 1:length(argin)
-                if iscell(argin{j})
+                if iscell(argin{j}) && size(argin{j},1) == 1
                     argini{j} = argin{j}{i};
                 end
             end
