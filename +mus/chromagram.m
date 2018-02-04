@@ -1,7 +1,7 @@
 % MUS.CHROMAGRAM
 %
 % Copyright (C) 2014, 2017-2018 Olivier Lartillot
-% ? 2007-2012 Olivier Lartillot & University of Jyvaskyla
+% Copyright (C) 2007-2012 Olivier Lartillot & University of Jyvaskyla
 %
 % All rights reserved.
 % License: New BSD License. See full text of the license in LICENSE.txt in
@@ -18,7 +18,7 @@ end
 
 
 function options = initoptions
-    options = sig.Signal.signaloptions('FrameAuto',2,.05);
+    options = sig.Signal.signaloptions('FrameAuto',.2,.05);
     
         cen.key = 'Center';
         cen.type = 'Boolean';
@@ -273,6 +273,12 @@ function x = after(x,option)
         x.Ydata = sig.compute(@wrap,x.Ydata,x.chromaclass,option.res);
         x.wrap = 1;
     end
+    if option.cen
+        x.Ydata = sig.compute(@center,x.Ydata);
+    end
+    if option.nor
+        x.Ydata = sig.compute(@norm,x.Ydata,option.nor);
+    end
     x = {x};
 end
 
@@ -286,5 +292,34 @@ function m2 = wrap_algo(m,cc,res)
     m2 = zeros(res,1);
     for i = 1:length(m)
         m2(cc(i)+1) = m2(cc(i)+1) + m(i);
+    end
+end
+
+
+function x = center(x)
+    x = x.apply(@center_algo,{},{'element'},1);
+end
+
+
+function m = center_algo(m)
+    m = m-mean(m);
+end
+
+
+function x = norm(x,p)
+    x = x.apply(@norm_algo,{p},{'element'},1);
+end
+
+
+function m = norm_algo(m,p)
+    m = m ./ (vectnorm(m,p) + 1e-6);
+end
+
+
+function y = vectnorm(x,p)
+    if isinf(p)
+        y = max(x);
+    else
+        y = sum(abs(x).^p).^(1/p);
     end
 end
