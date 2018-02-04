@@ -62,5 +62,25 @@ classdef Chromagram < sig.Signal
             c.chromafreq = chromafreq;
             c.register = register;
         end
+        
+        function d = get(obj,field)
+            if strcmpi(field,'magnitude')
+                d = obj.Ydata;
+            elseif strcmpi(field,'chroma')
+                d = obj.xdata;
+            elseif strcmpi(field,'chromaclass')
+                d = obj.chromaclass;
+            elseif strcmpi(field,'chromafreq')
+                d = obj.chromafreq;
+            elseif strcmpi(field,'register')
+                d = obj.register;
+            elseif strcmpi(field,'pitchlabel')
+                d = obj.plabel;
+            elseif strcmpi(field,'wrap')
+                d = obj.wrap;
+            else
+                d = get@sig.Signal(obj,field);
+            end
+        end
     end
 end
