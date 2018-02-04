@@ -29,9 +29,11 @@ end
 
 %%
 function [x,type] = init(x,option)
-    x = {aud.pitch.init(x,option),x};
-    if isa(x{2},'sig.design')
-        x{2}.symbolicinput = 1;
+    if ~isa(x,'mus.Sequence')
+        x = {aud.pitch.init(x,option),x};
+        if isa(x{2},'sig.design')
+            x{2}.symbolicinput = 1;
+        end
     end
     type = {'sig.Signal'};
 end
