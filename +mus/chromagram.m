@@ -123,7 +123,7 @@ function out = main(in,option)
                 option.plabel = 0;
             end
             [m,c,p,fc,on] = sig.compute(@routine,in.Ydata,in.xdata,option,chromascale);
-            chro = mus.Chromagram(m,'ChromaClass',c,...%'XData',p
+            chro = mus.Chromagram(m,'ChromaClass',c,'XData',p,...
                 'ChromaFreq',fc,'Register',on,...
                 'Srate',in.Srate,'Ssize',in.Ssize,...
                 'FbChannels',in.fbchannels);
@@ -272,6 +272,7 @@ function x = after(x,option)
     if option.wrp && ~x.wrap
         x.Ydata = sig.compute(@wrap,x.Ydata,x.chromaclass,option.res);
         x.wrap = 1;
+        x.xunsampled = {'C','C#','D','D#','E','F','F#','G','G#','A','A#','B'};
     end
     if option.cen
         x.Ydata = sig.compute(@center,x.Ydata);
