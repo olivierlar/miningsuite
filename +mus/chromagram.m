@@ -126,6 +126,7 @@ function out = main(in,option)
             chro = mus.Chromagram(m,'ChromaClass',c,'XData',p,...
                 'ChromaFreq',fc,'Register',on,...
                 'Srate',in.Srate,'Ssize',in.Ssize,...
+                'Sstart',in.Sstart,'Send',in.Send,...
                 'FbChannels',in.fbchannels);
             chro.Xaxis.unit.rate = 1;
             out = {chro in};
@@ -272,7 +273,7 @@ function x = after(x,option)
     if option.wrp && ~x.wrap
         x.Ydata = sig.compute(@wrap,x.Ydata,x.chromaclass,option.res);
         x.wrap = 1;
-        x.xunsampled = {'C','C#','D','D#','E','F','F#','G','G#','A','A#','B'};
+        x.xunsampled = {'C';'C#';'D';'D#';'E';'F';'F#';'G';'G#';'A';'A#';'B'};
     end
     if option.cen
         x.Ydata = sig.compute(@center,x.Ydata);
