@@ -20,25 +20,11 @@ function out = main(x,option)
                         'FrameHop',option.fhop.value,option.fhop.unit);
     end
     
-    if isstruct(option.min) && strcmpi(option.min.unit,'Hz')
-        if isstruct(option.max)
-            if ~strcmpi(option.max.unit,'Hz')
-                error('Syntax error...');
-            end
-            omax = 1/option.min.value;
-            option.min.value = 1/option.max.value;
-            option.max.value = omax;
-            option.min.unit = 's';
-            option.max.unit = 's';
-        else
-            option.max.value = 1/option.min.value;
-            option.max.unit = 's';
-            option.min.value = 0;
-            option.min.unit = 's';
-        end
-    elseif isstruct(option.max) && strcmpi(option.max.unit,'Hz')
-        option.min.value = 1/option.max.value;
+    if isempty(option.min)
+        option.min.value = 0;
         option.min.unit = 's';
+    end
+    if isempty(option.max)
         if isa(x,'sig.Envelope')
             option.max.value = 2;
         elseif x.Srate > 1000
@@ -47,21 +33,6 @@ function out = main(x,option)
             option.max.value = Inf;
         end
         option.max.unit = 's';
-    else
-        if isempty(option.min)
-            option.min.value = 0;
-            option.min.unit = 's';
-        end
-        if isempty(option.max)
-            if isa(x,'sig.Envelope')
-                option.max.value = 2;
-            elseif x.Srate > 1000
-                option.max.value = 0.05;
-            else
-                option.max.value = Inf;
-            end
-            option.max.unit = 's';
-        end
     end
     
     if isa(x,'sig.Spectrum')
