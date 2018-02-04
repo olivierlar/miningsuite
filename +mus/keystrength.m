@@ -57,7 +57,8 @@ function out = main(orig,option)
     load gomezprofs;
     s = sig.compute(@routine,orig.Ydata,gomezprofs');
     ks = mus.Keystrength(s,'Srate',orig.Srate,'Ssize',orig.Ssize,...
-        'FbChannels',orig.fbchannels);
+                           'Sstart',orig.Sstart,'Send',orig.Send,...
+                           'FbChannels',orig.fbchannels);
     ks.Xaxis.unit.rate = 1;
     ks = after(ks,option);
     out = {ks orig};
