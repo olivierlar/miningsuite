@@ -100,10 +100,6 @@ function out = routine(in,sampling,option)
     end
     
     if isstruct(option.max)
-        %if strcmpi(option.max.unit,'Hz')
-        %    option.max.value = 1/option.max.value;
-        %    option.max.unit = 's';
-        %end
         maxt = ceil(option.max.value*sampling)+1;
     else
         maxt = Inf;

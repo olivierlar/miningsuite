@@ -65,10 +65,10 @@ function options = options
         ce.default = 0;
     options.ce = ce;    
 %%
-        m.key = 'Total';
-        m.type = 'Numeric';
-        m.default = Inf;
-    options.m = m;
+        total.key = 'Total';
+        total.type = 'Numeric';
+        total.default = Inf;
+    options.total = total;
     
         multi.key = 'Multi';
         multi.type = 'Boolean';
