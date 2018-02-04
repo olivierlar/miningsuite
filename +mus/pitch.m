@@ -28,9 +28,10 @@ end
 
 
 %%
-function [x,type] = init(x,option,frame)
-    if iscell(x)
-        x = [aud.pitch.init(x,option,frame),x];
+function [x,type] = init(x,option)
+    x = {aud.pitch.init(x,option),x};
+    if isa(x{2},'sig.design')
+        x{2}.symbolicinput = 1;
     end
     type = {'sig.Signal'};
 end
@@ -80,7 +81,7 @@ end
 
 
 function y = freq2chro(x)
-    y = 12*log2(x{1});
+    y = 69 + 12*log2(x{1}/440);
 end
 
 
