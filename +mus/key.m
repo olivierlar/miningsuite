@@ -57,9 +57,11 @@ function x = main(x,option)
     x{1}.Ydata = sig.compute(@routine,x{1}.peakpos);
     x{1}.peakindex = [];
     x{1}.yname = 'Key';
+    x{1}.xunsampled = [];
     x{2}.Ydata = sig.compute(@routine,x{2}.peakval);
     x{2}.peakindex = [];
     x{2}.yname = 'Key clarity';
+    x{2}.xunsampled = [];
 end
 
 
