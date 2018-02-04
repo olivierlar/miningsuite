@@ -21,6 +21,7 @@ classdef Keystrength < sig.Signal
             s.Xaxis.name = 'Keys';    
             s.xsampling = 1;
             s.xunsampled = {'C','C#','D','D#','E','F','F#','G','G#','A','A#','B','c','c#','d','d#','e','f','f#','g','g#','a','a#','b'};
+            s.interpolable = 0;
         end
     
         function d = get(obj,field)
