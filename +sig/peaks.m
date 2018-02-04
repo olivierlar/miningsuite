@@ -178,6 +178,9 @@ function out = routine(y,x,dim,option,interpol)
     end
     
     out = y.apply(@search,{x,option,interpol},{dim},1,'{}');
+    
+    out.multioutput = 0; % Could we get rid of multioutput??
+    
     p = out;
     p.content = p.content{1};
     pp = out;
