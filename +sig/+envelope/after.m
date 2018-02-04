@@ -5,43 +5,43 @@
 % License: New BSD License. See full text of the license in LICENSE.txt in
 % the main folder of the MiningSuite distribution.
 
-function e = after(e,postoption)
-    e.Ydata = sig.compute(@main,e.Ydata,postoption,e.log);
+function e = after(e,option)
+    e.Ydata = sig.compute(@main,e.Ydata,option,e.log);
 end
 
 
-function d = main(d,postoption,elog)
-    if postoption.aver
-        d = d.apply(@smooth,{postoption.aver},{'sample'},1);
+function d = main(d,option,elog)
+    if option.aver
+        d = d.apply(@smooth,{option.aver},{'sample'},1);
     end
     
-    if postoption.gauss
-        sigma = postoption.gauss;
+    if option.gauss
+        sigma = option.gauss;
         gauss = 1/sigma/2/pi*exp(- (-4*sigma:4*sigma).^2 /2/sigma^2);
         d = d.apply(@gausssmooth,{sigma,gauss},{'sample'},1);
     end
     
-    if postoption.chwr
+    if option.chwr
         d = d.center('sample');
         d = d.hwr;
     end
     
-    if postoption.hwr
+    if option.hwr
         d = d.hwr;
     end
     
-    if postoption.center
+    if option.center
         d = d.center('sample');
     end
     
     if elog
-        if postoption.minlog
-            d = d.apply(@minlog,{postoption.minlog},{'sample'});
+        if option.minlog
+            d = d.apply(@minlog,{option.minlog},{'sample'});
         end
-    elseif postoption.norm == 1
+    elseif option.norm == 1
             d = d.apply(@norm,{},{'sample'},1);
-    elseif ischar(postoption.norm) && ...
-            strcmpi(postoption.norm,'AcrossSegments')
+    elseif ischar(option.norm) && ...
+            strcmpi(option.norm,'AcrossSegments')
         warning('WARNING IN SIG.ENVELOPE: ''AcrossSegments'' not available yet');
         %d = d./repmat(mdk,[size(d,1),1,1]);
     end
