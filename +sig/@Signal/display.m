@@ -68,13 +68,17 @@ function display(obj)
             else
                 ydata = obj.Ydata.content;
                 if iscell(ydata)
-                    figure, hold on
-                    for i = 1:length(ydata)
-                        plot(0,ydata{i},'+');
-                    end
-                    title(obj.yname);
-                    if ~isempty(obj.yunit)
-                        ylabel(['(' obj.yunit ')'])
+                    if isnumeric(ydata{1})
+                        figure, hold on
+                        for i = 1:length(ydata)
+                            plot(0,ydata{i},'+');
+                        end
+                        title(obj.yname);
+                        if ~isempty(obj.yunit)
+                            ylabel(['(' obj.yunit ')'])
+                        end
+                    else
+                        textual(obj.yname,obj.Ydata.content,obj.yunit,obj.files);
                     end
                 else
                     textual(obj.yname,obj.Ydata.content,obj.yunit,obj.files);
@@ -271,7 +275,13 @@ function textual(name,data,unit,files)
         disp(['The ' name ' related to file ' files ' is ' num2str(data) ' ' unit]);
     else
         disp(['The ' name ' related to file ' files ' is :']);
-        display(data);
+        if iscell(data)
+            for i = 1:length(data)
+                display(data{i});
+            end
+        else
+            display(data);
+        end
     end
 end
 
@@ -360,8 +370,18 @@ function drawmatseg(z,y,Sstart,Send,Srate)
     else
         x = [Sstart,Send];
     end
+    if iscell(y)
+        l = y;
+        y = (1:length(y))';
+    else
+        l = {};
+    end
     y(end+1) = 2 * y(end) - y(end-1);
-    surfplot(x,y',z')
+    surfplot(x,y(:),z')
+    if ~isempty(l)
+        set(gca,'YTick',1.5:length(y)+.5);
+        set(gca,'YTickLabel',l);
+    end
 end
 
 
@@ -379,11 +399,13 @@ function drawpeaks(p,x,y,frate,index)
     if iscell(p)
         p = p{1};
     end
-    if frate
+    if iscell(x)
+        plot(p,y(p),'or')
+    elseif frate
         x = x + (index-1) / frate;
         plot(x(p),y(p),'or')
     else
-        plot(x(p),y(p),'or');
+        plot(x(p),y(p),'or')
     end
 end
 
