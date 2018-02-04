@@ -8,7 +8,7 @@
 
 function out = main(x,option,postoption)
     x = x{1};
-    d = x.peakpos;
+    d = x.peakprecisepos;
     out = {sig.Signal(d,'Name','Pitch','Srate',x.Srate,...
                       'Sstart',x.Sstart,'Send',x.Send,...
                       'Ssize',x.Ssize,'FbChannels',x.fbchannels)};
