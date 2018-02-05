@@ -15,14 +15,14 @@ end
 function options = options
     options = sig.Signal.signaloptions();
     
-        fsize.key = 'FrameSize';
+        fsize.key = {'FrameSize','FrameLength'};
         fsize.type = 'Unit';
         fsize.default.unit = 's';
         fsize.default.value = .05;
         fsize.unit = {'s','sp'};
     options.fsize = fsize;
 
-        fhop.key = 'FrameHop';
+        fhop.key = {'FrameHop','Hop'};
         fhop.type = 'Unit';
         fhop.default.unit = '/1';
         fhop.default.value = .5;
