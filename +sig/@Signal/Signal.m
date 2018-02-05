@@ -568,6 +568,10 @@ end
 
 function d = peakroutine(d,v)
     d = d{1};
+    row = isrow(d);
     d = v(d);
     d = d(:);
+    if row
+        d = d';
+    end
 end
