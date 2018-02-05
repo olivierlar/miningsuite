@@ -85,6 +85,9 @@ classdef design
             end
         end
         function out = eval(obj,arg,nargout)
+            if strcmpi(obj.files,'Folder')
+                disp(arg)
+            end
             if nargin<2
                 arg = obj.files;
             end
