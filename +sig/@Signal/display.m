@@ -17,7 +17,7 @@ function display(obj)
     
     xdata = obj.xdata;
     if isempty(xdata)
-        disp(['The ' obj.yname ' is empty.']);
+        disp(['The ' obj.yname ' related to file ' obj.files ' is empty.']);
         return
     end
     sdata = obj.sdata;
@@ -260,13 +260,13 @@ function display(obj)
                 end
             end
         end
-        title(obj.yname);
+        title([obj.yname ', ' obj.files]);
     end
     fig = gcf;
     if isa(fig,'matlab.ui.Figure')
         fig = fig.Number;
     end
-    disp(['The ' obj.yname ' is displayed in Figure ',num2str(fig),'.']);
+    disp(['The ' obj.yname ' related to file ' obj.files ' is displayed in Figure ',num2str(fig),'.']);
 end
 
 
