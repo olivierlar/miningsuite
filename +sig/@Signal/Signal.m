@@ -246,10 +246,19 @@ classdef Signal
             else
                 pos = obj.xdata;
             end
-            p = sig.compute(@peakpos,obj.peakindex,pos);
+            p = sig.compute(@peakpos,obj.peakindex,pos,obj.peakdim);
         end
         function p = get.peakval(obj)
-            p = sig.compute(@peakval,obj.peakindex,obj.Ydata);
+            if isempty(obj.peakindex)
+                p = [];
+                return
+            end
+            if strcmp(obj.peakdim,'sample')
+                pos = obj.sdata;
+            else
+                pos = obj.xdata;
+            end
+            p = sig.compute(@peakval,obj.peakindex,obj.Ydata,obj.peakdim);
         end
         function p = getpeakpos(obj)
             p = obj.peakpos;
@@ -492,14 +501,14 @@ function options = initframes(size,hop,when)
         frame.when = when;
     options.frame = frame;
     
-        fsize.key = 'FrameSize';
+        fsize.key = {'FrameSize','FrameLength'};
         fsize.type = 'Unit';
         fsize.default.unit = 's';
         fsize.default.value = size;
         fsize.unit = {'s','sp'};
     options.fsize = fsize;
 
-        fhop.key = 'FrameHop';
+        fhop.key = {'FrameHop','Hop'};
         fhop.type = 'Unit';
         fhop.default.unit = '/1';
         fhop.default.value = hop;
@@ -554,14 +563,14 @@ function [d,sr] = sonify(d,sr)
 end
 
 
-function out = peakpos(d,p)
-    d = d.apply(@peakroutine,{p},{'element'},1,'{}');
+function out = peakpos(d,p,dim)
+    d = d.apply(@peakroutine,{p},{dim},1,'{}');
     out = {d};
 end
 
 
-function out = peakval(d,v)
-    d = d.apply(@peakroutine,{v},{'element'},1,'{}');
+function out = peakval(d,v,dim)
+    d = d.apply(@peakroutine,{v},{dim},1,'{}');
     out = {d};
 end
 
