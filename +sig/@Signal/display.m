@@ -91,7 +91,7 @@ function display(obj)
             yname = '';
             yunit = '';
             ydata = obj.Ydata;
-            iscurve = (length(obj.Sstart) == 1);  
+            iscurve = (length(obj.Sstart) <= 1);  
         end
         
     elseif length(xdata) < 2
