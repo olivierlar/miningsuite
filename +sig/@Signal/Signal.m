@@ -99,14 +99,6 @@ classdef Signal
             
             s.xunsampled = options.xdata;
             
-            s.Sstart = options.sstart;
-            s.Send = options.send;
-            s.Srate = options.srate;
-            s.Ssize = options.ssize;
-            
-            s.Frate = options.frate;
-            s.Flength = options.flength;
-            
             s.fbchannels = options.fbchannels;
             
             s.date = date;
@@ -114,6 +106,14 @@ classdef Signal
             
             if ~isempty(options.deframe)
                 s = s.deframe(options.deframe);
+            else
+                s.Sstart = options.sstart;
+                s.Send = options.send;
+                s.Srate = options.srate;
+                s.Ssize = options.ssize;
+                
+                s.Frate = options.frate;
+                s.Flength = options.flength;
             end
         end
         
@@ -351,12 +351,20 @@ classdef Signal
                 for i = 1:length(in.sdata)
                     Sstart{i} = in.sdata{i}(1) + in.Flength/2;
                     Send{i} = in.sdata{i}(end) - in.Flength/2;
-                    Ssize(i) = size(in.Ydata.content{i},1) / obj.Srate;
+                    if obj.Srate
+                        Ssize(i) = size(in.Ydata.content{i},1) / obj.Srate;
+                    else
+                        Ssize = 1;
+                    end
                 end
             else
                 Sstart = in.sdata(1) + in.Flength/2;
-                Send = in.sdata(end) - in.Flength/2;;
-                Ssize = size(in.Ydata.content,1) / obj.Srate;
+                Send = in.sdata(end) - in.Flength/2;
+                if obj.Srate
+                    Ssize = size(in.Ydata.content,1) / obj.Srate;
+                else
+                    Ssize = 1;
+                end
             end
             obj.Sstart = Sstart;
             obj.Send = Send;
