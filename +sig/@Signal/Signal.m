@@ -342,7 +342,11 @@ classdef Signal
         %%
         
         function obj = deframe(obj,in)
-            obj.Srate = in.Frate;
+            if isempty(in.Frate)
+                obj.Srate = 0;
+            else
+                obj.Srate = in.Frate;
+            end
             
             if iscell(in.sdata)
                 Sstart = cell(1,length(in.sdata));
