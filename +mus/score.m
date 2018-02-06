@@ -165,7 +165,7 @@ else
     fid = fopen(name);
     if fid<0
         if ~folder
-            error('incorrect file');
+            error('Unable to load the file');
         end
         return
     end
