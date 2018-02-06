@@ -70,8 +70,8 @@ end
 
 
 function rg = algo(pf,pv,d,option)
-    pf = pf{1};
-    pv = pv{1};
+    pf = pf{1}(:);
+    pv = pv{1}(:);
     f1 = repmat(pf,[1 length(pf)]);
     f2 = repmat(pf',[length(pf) 1]);
     v1 = repmat(pv,[1 length(pv)]);
