@@ -67,19 +67,20 @@ function display(obj)
                 end
             else
                 ydata = obj.Ydata.content;
-                if iscell(ydata)
-                    if isnumeric(ydata{1})
-                        figure, hold on
-                        for i = 1:length(ydata)
-                            plot(0,ydata{i},'+');
-                        end
-                        title(obj.yname);
-                        if ~isempty(obj.yunit)
-                            ylabel(['(' obj.yunit ')'])
-                        end
-                    else
-                        textual(obj.yname,obj.Ydata.content,obj.yunit,obj.files);
+                if iscell(ydata) && isnumeric(ydata{1}) && length(ydata) > 1
+                    figure, hold on
+                    for i = 1:length(ydata)
+                        plot(0,ydata{i},'+');
                     end
+                    title(obj.yname);
+                    if ~isempty(obj.yunit)
+                        ylabel(['(' obj.yunit ')'])
+                    end
+                    fig = gcf;
+                    if isa(fig,'matlab.ui.Figure')
+                        fig = fig.Number;
+                    end
+                    disp(['The ' obj.yname ' related to file ' obj.files ' is displayed in Figure ',num2str(fig),'.']);
                 else
                     textual(obj.yname,obj.Ydata.content,obj.yunit,obj.files);
                 end
