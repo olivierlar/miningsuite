@@ -56,7 +56,20 @@ if isempty(design.main)
     % Now the actual evaluation will be carried out bottom-up.
     
     if isempty(sr)
-        y = mus.score(filename);
+        fid = fopen(filename);
+        if fid<0
+            error('Unable to load the file');
+            return
+        end
+        head = fread(fid,'uint8');
+        fclose(fid);
+        if isequal(head(1:4)',[77 84 104 100])  % MIDI format
+            y = mus.score(filename);
+        else
+           T = readtable(filename);
+           d = sig.data(table2array(T),{'sample','dims'});
+           y = {sig.Signal(d,'Name','data','Ssize',height(T))};
+        end
     else
         data = sig.read(filename,window);
         
@@ -96,7 +109,20 @@ else
             input = input{end};
         end
         if input.symbolicinput
-            y = mus.score(filename);
+            fid = fopen(filename);
+            if fid<0
+                error('Unable to load the file');
+                return
+            end
+            head = fread(fid,'uint8');
+            fclose(fid);
+            if isequal(head(1:4)',[77 84 104 100])  % MIDI format
+                y = mus.score(filename);
+            else
+                T = readtable(filename);
+                d = sig.data(table2array(T),{'sample','dims'});
+                y = {sig.Signal(d,'Name','data','Ssize',height(T))};
+            end
             if strcmp(input.name,'frame')
                 design.options.frame = 1;
                 design.options.fsize = input.options.fsize;
