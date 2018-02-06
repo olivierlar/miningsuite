@@ -14,6 +14,8 @@ end
 
 
 function options = initoptions
+options = sig.Signal.signaloptions();
+
         m.key = 'Total';
         m.type = 'Integer';
         m.default = Inf;
