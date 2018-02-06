@@ -50,7 +50,10 @@ function out = main(x,frame)
     end
     frate = sig.compute(@sig.getfrate,x.Srate,frame);
     flength = sig.compute(@sig.getflength,x.Srate,frame);
-    data = sig.compute(@routine,x.Ydata,x.Sstart,length(x.Sstart)>1,frame,x.Srate);
+    [data,done] = sig.compute(@routine,x.Ydata,x.Sstart,length(x.Sstart)>1,frame,x.Srate);
+    if ~done
+        frate = 0;
+    end
     if isempty(data)
         out = {[]};
     else
@@ -62,7 +65,7 @@ function out = main(x,frame)
 end
 
 
-function data = routine(data,start,segmented,param,sr)
+function out = routine(data,start,segmented,param,sr)
     if strcmpi(param.fsize.unit,'s')
         l = param.fsize.value*sr;
     elseif strcmpi(param.fsize.unit,'sp')
@@ -80,6 +83,12 @@ function data = routine(data,start,segmented,param,sr)
         h = sr/param.fhop.value;
     end
     l = floor(l);
+    
+    if ~l
+        warning('WARNING IN SIG.FRAME: Frame length too short. No frame decomposition.');
+        out = {data,0};
+        return
+    end
     
     start = floor(start * sr) + 1;
     sf = ceil((start-1)/h)+1; %Starting frame
@@ -159,6 +168,7 @@ function data = routine(data,start,segmented,param,sr)
     end
     
     data.content = newcontent;
+    out = {data,1};
 end
 
 
