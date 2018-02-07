@@ -65,6 +65,10 @@ function display(obj)
                 if ~isempty(obj.yunit)
                     ylabel(['(' obj.yunit ')'])
                 end
+                if ~isempty(obj.label)
+                    set(gca,'YTick',1:length(obj.label));
+                    set(gca,'YTickLabel',obj.label);
+                end
             else
                 ydata = obj.Ydata.content;
                 if iscell(ydata) && isnumeric(ydata{1}) && length(ydata) > 1
@@ -76,13 +80,17 @@ function display(obj)
                     if ~isempty(obj.yunit)
                         ylabel(['(' obj.yunit ')'])
                     end
+                    if ~isempty(obj.label)
+                        set(gca,'YTick',1:length(obj.label));
+                        set(gca,'YTickLabel',obj.label);
+                    end
                     fig = gcf;
                     if isa(fig,'matlab.ui.Figure')
                         fig = fig.Number;
                     end
                     disp(['The ' obj.yname ' related to file ' obj.files ' is displayed in Figure ',num2str(fig),'.']);
                 else
-                    textual(obj.yname,obj.Ydata.content,obj.yunit,obj.files);
+                    textual(obj.yname,obj.Ydata.content,obj.yunit,obj.label,obj.files);
                 end
             end
             return
@@ -193,7 +201,7 @@ function display(obj)
                 end
                 
                 if iscurve
-                    p.apply(@drawpeaks,{obj.(abscissa),obj.Ydata,obj.Frate,'frame'},{dim,'channel'},1);
+                    p.apply(@drawpeaks,{obj.(abscissa),ydatai,obj.Frate,'frame'},{dim,'channel'},1);
                 elseif iscell(ydatai.content)
                     for k = 1:length(ydatai.content)
                         pk = p;
@@ -260,6 +268,12 @@ function display(obj)
                     ylabel(label);
                 end
             end
+            
+            if ~isempty(obj.label)
+                set(gca,'YTick',1:length(obj.label));
+                set(gca,'YTickLabel',obj.label);
+            end
+            
         end
         title([obj.yname ', ' obj.files]);
     end
@@ -271,8 +285,21 @@ function display(obj)
 end
 
 
-function textual(name,data,unit,files)
-    if isnumeric(data) && length(data) == 1
+function textual(name,data,unit,label,files)
+    if ~isempty(label)
+        if isnumeric(data) && length(data) == 1
+            disp(['The ' name ' related to file ' files ' is ' label{data}]);
+        else
+            disp(['The ' name ' related to file ' files ' is :']);
+            if iscell(data)
+                for i = 1:length(data)
+                    display(label{data{i}});
+                end
+            else
+                display(label{data});
+            end
+        end
+    elseif isnumeric(data) && length(data) == 1
         disp(['The ' name ' related to file ' files ' is ' num2str(data) ' ' unit]);
     else
         disp(['The ' name ' related to file ' files ' is :']);
@@ -412,5 +439,8 @@ end
 
 
 function drawchannel(y,x)
+    if iscell(y)
+        y = cell2mat(y);
+    end
     plot(x,y,'+');
 end
