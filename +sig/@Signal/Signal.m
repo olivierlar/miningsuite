@@ -29,6 +29,7 @@ classdef Signal
         yname
         yunit
         Ydata
+        label
         
         Xaxis
         xstart
@@ -91,6 +92,7 @@ classdef Signal
             
             s.yname = options.name;
             s.yunit = options.unit;
+            s.label = options.label;
             
             s.Xaxis = sig.axis(options.xname,options.xstart,...
                                options.xunit,0,options.xsampling);
@@ -409,7 +411,11 @@ function options = constructoptions
         unit.default = '';
     options.unit = unit;
     
-    
+        label.key = 'Label';
+        label.type = 'Cell';
+        label.default = '';
+    options.label = label;
+   
         xname.key = 'XName';
         xname.type = 'String';
         xname.default = '';
