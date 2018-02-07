@@ -51,7 +51,11 @@ function out = main(x,frame)
     frate = sig.compute(@sig.getfrate,x.Srate,frame);
     flength = sig.compute(@sig.getflength,x.Srate,frame);
     [data,done] = sig.compute(@routine,x.Ydata,x.Sstart,length(x.Sstart)>1,frame,x.Srate);
-    if ~done
+    if iscell(done)
+        if ~done{1}
+            frate = 0;
+        end
+    elseif ~done
         frate = 0;
     end
     if isempty(data)
