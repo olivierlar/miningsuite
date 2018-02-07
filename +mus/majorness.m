@@ -23,7 +23,7 @@ end
 
 
 %%
-function [x,type] = init(x,option,frame)
+function [x,type] = init(x,option)
     if x.istype('sig.Signal')
         if option.frame
             x = sig.frame(x,'FrameSize',option.fsize.value,option.fsize.unit,...
@@ -31,15 +31,18 @@ function [x,type] = init(x,option,frame)
         end
     end
     x = mus.keystrength(x);
-    type = {'sig.Signal'};
+    type = {'sig.Signal','mus.Keystrength'};
 end
 
 
-function x = main(x,option)
-    x{2} = x{1};
+function out = main(x,option)
+    x = x{1};
     f = str2func(['algo' lower(option.stra)]);
-    x{1}.Ydata = sig.compute(@routine,x{1}.Ydata,f);
-    x{1}.yname = 'Majorness';
+    d = sig.compute(@routine,x.Ydata,f);
+    m = sig.Signal(d,'Name','Majorness',...
+                    'Srate',x.Srate,'Sstart',x.Sstart,'Send',x.Send,...
+                    'Ssize',x.Ssize,'FbChannels',x.fbchannels);
+    out = {m,x};
 end
 
 
