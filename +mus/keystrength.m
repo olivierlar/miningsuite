@@ -60,6 +60,7 @@ function out = main(orig,option)
                            'Sstart',orig.Sstart,'Send',orig.Send,...
                            'FbChannels',orig.fbchannels);
     ks.Xaxis.unit.rate = 1;
+    ks.Xaxis.unit.origin = 1;
     ks = after(ks,option);
     out = {ks orig};
 end
