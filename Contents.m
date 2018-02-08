@@ -1,5 +1,5 @@
 % MiningSuite
-% Version 0.10  8-February-2018
+% Version 0.10.github After-8-February-2018
 %
 % Copyright (C) 2014-2015, 2017-2018 Olivier Lartillot and the MiningSuite
 % contributors
