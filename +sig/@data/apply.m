@@ -60,11 +60,22 @@ function [obj,varargout] = apply(obj,func,argin,dimfunc,maxdimfunc,type)
         dimdata(foundim) = 0;
     end
 
-    [sortedim bestdim] = sort(dimdata,'descend');
-    notherdims = ndimdata-length(dimfunc);
+    [sortedim,bestdim] = sort(dimdata,'descend');
+    maxdims = max(ndimdata,length(obj.dims));
+    notherdims = maxdims - length(dimfunc);
     if notherdims
-        ordim(length(dimfunc)+1:ndimdata) = bestdim(1:notherdims);
-        for i = length(obj.dims)+1:ndimdata
+        j = 1;
+        for i = length(dimfunc)+1:maxdims
+            if sortedim(j)
+                ordim(i) = bestdim(j);
+                j = j+1;
+            else
+                ndimdata = ndimdata+1;
+                ordim(i) = ndimdata;
+                dimdata(ndimdata) = 0;
+            end
+        end
+        for i = length(obj.dims)+1:maxdims
             obj.dims{i} = '';
         end
     end
