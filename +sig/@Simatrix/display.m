@@ -1,6 +1,6 @@
 % SIG.SIMATRIX.DISPLAY
 %
-% Copyright (C) 2017 Olivier Lartillot
+% Copyright (C) 2017-2018 Olivier Lartillot
 %
 % All rights reserved.
 % License: New BSD License. See full text of the license in LICENSE.txt in
@@ -12,10 +12,9 @@ function mov = display(obj)
 end
 
 
-function out = routine(obj,name)
+function out = routine(d,name)
     fig = figure;
-    d = obj.content;
-    imagesc(d);
+    d.apply(@imagesc,{},{'element','sample'},2);
     if isa(fig,'matlab.ui.Figure')
         fig = fig.Number;
     end
