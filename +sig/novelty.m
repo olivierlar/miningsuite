@@ -172,7 +172,7 @@ function score = algo_K(x,cg)
     x = (x-mi)/(ma-mi);
     x = 2*x-1;
     x(isnan(x)) = 0;
-    cv = convolve2(x,cg,'same');
+    cv = sig.convolve2(x,cg,'same');
     nl = size(cv,1);
     if nl == 0
         warning('WARNING IN NOVELTY: No frame decomposition. The novelty score cannot be computed.');
