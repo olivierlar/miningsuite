@@ -1,7 +1,7 @@
 % VID.EVALEACH performs the top-down traversal of the design flowchart, at 
 % the beginning of the evaluation phase.
 %
-% Copyright (C) 2014, 2017 Olivier Lartillot
+% Copyright (C) 2014, 2017-2018 Olivier Lartillot
 % All rights reserved.
 % License: New BSD License. See full text of the license in LICENSE.txt in
 % the main folder of the MiningSuite distribution.
@@ -12,11 +12,8 @@
 % + pattern mining + ...", AES 53RD INTERNATIONAL CONFERENCE, London, UK,
 % 2014
 
-function y = evaleach(design,filename,video,nargout,frame,y)
+function y = evaleach(design,filename,video,nargout,y)
 if nargin<5
-    frame = [];
-end
-if nargin<6
     y = [];
 end
 
@@ -45,13 +42,12 @@ if isempty(design.main)
         y.Ydata.content(:,:,:,2) = data;
     end
 else
-    frame = design.frame;
     if ~isempty(y) % Already in a chunk decomposition process
         input = design.input;
         if iscell(input)
             input = input{1};
         end
-        y = vid.evaleach(input,filename,video,1,frame,y);
+        y = vid.evaleach(input,filename,video,1,y);
         main = design.main;
         if iscell(main)
             main = main{1};
@@ -62,7 +58,7 @@ else
         f = figure;
         y = 0;
         while video.CurrentTime < video.Duration
-            y = vid.evaleach(design.input,filename,video,nargout,frame,y);
+            y = vid.evaleach(design.input,filename,video,nargout,y);
             main = design.main;
             if iscell(main)
                 main = main{1};
