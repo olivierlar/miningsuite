@@ -55,7 +55,7 @@ function display(obj)
             yunit = '';
             ydata = obj.Ydata;
         end
-    elseif ~obj.Srate || isequal(obj.Ydata.size('sample',1), 1)
+    elseif isempty(obj.Srate) || ~obj.Srate || isequal(obj.Ydata.size('sample',1), 1)
         if isempty(xdata) || length(xdata) == 1
             if length(obj.fbchannels) > 1
                 figure
@@ -183,7 +183,7 @@ function display(obj)
                 if iscurve == 2
                     ydatai.apply(@drawpointseg,{obj.Sstart,obj.Send},{'sample'},1);
                 else
-                    ydatai.apply(@draw,{obj.(abscissa),obj.Frate,'frame'},{dim,'channel'},1);
+                    ydatai.apply(@draw,{obj.(abscissa),obj.Frate,'frame'},{dim,'channel'},2);
                 end
             elseif iscell(ydatai.content)
                 ydatai.apply(@drawmatseg,{xdata,obj.Sstart,obj.Send,obj.Srate},{'sample','element'},2);
@@ -201,7 +201,7 @@ function display(obj)
                 end
                 
                 if iscurve
-                    p.apply(@drawpeaks,{obj.(abscissa),ydatai,obj.Frate,'frame'},{dim,'channel'},1);
+                    p.apply(@drawpeaks,{obj.(abscissa),ydatai,obj.Frate,'frame'},{dim,'channel'},1,'{}');
                 elseif iscell(ydatai.content)
                     for k = 1:length(ydatai.content)
                         pk = p;
