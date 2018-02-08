@@ -67,6 +67,12 @@ if isempty(design.main)
             y = mus.score(filename);
         else
            T = readtable(filename);
+           Tfields = fields(T);
+           for i = 1:length(Tfields)-1
+               if ~isnumeric(T.(Tfields{i}))
+                   T.(Tfields{i}) = [];
+               end
+           end
            d = sig.data(table2array(T),{'sample','dims'});
            y = {sig.Signal(d,'Name','data','Ssize',height(T))};
         end
@@ -100,7 +106,7 @@ else
             main = main{1};
         end
         y = main(y,design.options);
-        if chunking == 1
+        if chunking == 1 && ~isempty(y{1})
             y = design.after(y,design.options);
         end
     elseif isempty(sr)
@@ -212,6 +218,10 @@ else
                 chunking = 1;
                 ss = sig.evaleach(design.input,filename,window,sr,1,...
                     chunking,nbsamples);
+                
+                if isempty(ss{1})
+                    break
+                end
                 
                 main = design.main;
                 if iscell(main)
