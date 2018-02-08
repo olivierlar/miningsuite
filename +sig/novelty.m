@@ -96,7 +96,7 @@ function [x,type] = init(x,option,frame)
                            'Width',max(option.K),option.transf,...
                            'Half',option.half,'Cluster',option.cluster);
     end
-    type = 'sig.novelty';
+    type = {'sig.novelty','sig.Simatrix'};
 end
 
 
@@ -122,7 +122,7 @@ function out = main(x,option)
         d = sig.compute(@routine_K,x.Ydata,cg);
     end
     n = sig.Signal(d,'Name','Novelty','Srate',x.Srate,'Ssize',x.Ssize,'FbChannels',x.fbchannels);
-    out = {n};
+    out = {n,x};
 end
 
 
