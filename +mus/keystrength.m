@@ -34,7 +34,7 @@ end
 
 
 %%
-function [x type] = init(x,option,frame)
+function [x,type] = init(x,option)
     if x.istype('sig.Signal')
         if option.frame
             x = sig.frame(x,'FrameSize',option.fsize.value,option.fsize.unit,...
@@ -54,7 +54,8 @@ function out = main(orig,option)
         out = {orig};
         return
     end
-    load gomezprofs;
+    folder = fileparts(which('mus.score'));
+    load(fullfile(folder,'gomezprofs.mat'));
     s = sig.compute(@routine,orig.Ydata,gomezprofs');
     ks = mus.Keystrength(s,'Srate',orig.Srate,'Ssize',orig.Ssize,...
                            'Sstart',orig.Sstart,'Send',orig.Send,...
