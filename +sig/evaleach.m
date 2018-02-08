@@ -67,8 +67,8 @@ if isempty(design.main)
             y = mus.score(filename);
         else
            T = readtable(filename);
-           Tfields = fields(T);
-           for i = 1:length(Tfields)-1
+           Tfields = T.Properties.VariableNames;
+           for i = 1:length(Tfields)
                if ~isnumeric(T.(Tfields{i}))
                    T.(Tfields{i}) = [];
                end
