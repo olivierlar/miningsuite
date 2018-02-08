@@ -32,11 +32,8 @@ end
 [options,extract] = sig.options(options,argin,[pack,'.',name]);
 
 if ischar(arg)
-    filename = arg;
     optionmix = struct('mix',options.mix);
     arg = sig.design('sig','signal',arg,'sig.Signal',[],[],optionmix);
-elseif isa(arg,'sig.design')
-    filename = arg.files;
 end
 
 [arg,type] = init(arg,options);
