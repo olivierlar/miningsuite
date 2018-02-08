@@ -1,5 +1,5 @@
 % MiningSuite
-% Version 0.9.2.github  after-6-August-2017
+% Version 0.10  8-February-2018
 %
 % Copyright (C) 2014-2015, 2017-2018 Olivier Lartillot and the MiningSuite
 % contributors
@@ -7,7 +7,7 @@
 % License: New BSD License. See full text of the license in LICENSE.txt in
 % the main folder of the MiningSuite distribution.
 %
-% It is still an Alpha version, so the results cannot be trusted for the moment..
+% It is a Beta version, so the results cannot be trusted for the moment..
 %
 %
 % Sig.Minr: Signal processing package
@@ -20,6 +20,7 @@
 % sig.cepstrum: spectral analysis of spectrum
 % sig.autocor: autocorrelation function
 % sig.flux: contrast between successive frames
+% sig.events: event detection curve
 % sig.sum: channel summation
 % sig.peaks: peak picking
 % sig.segment: waveform segmentation
@@ -39,7 +40,7 @@
 % sig.mean: average along frames
 % sig.std: standard deviation along frames
 % sig.median: median along frames
-% sig.hist: histogram
+% sig.histogram: histogram
 %
 %
 % Aud.Minr: Auditory modelling package
@@ -50,6 +51,14 @@
 % aud.flux: subband flux
 % aud.fluctuation: rhythmic periodicities along auditory channels
 % aud.events: event detection curve
+% aud.eventdensity: average frequency of events
+% aud.attacktime: duration of attack phase
+% aud.attackslope: slope of attack phase
+% aud.attackleap: amplitude of attack phase
+% aud.decaytime: duration of decay phase
+% aud.decayslope: slope of decay phase
+% aud.decayleap: amplitude of decay phase
+% aud.duration: events duration
 % aud.tempo: temporal periodicity of events
 % aud.pulseclarity: pulse clarity, beat strength
 % aud.brightness: high-frequency ratio
@@ -73,6 +82,11 @@
 % mus.tonalcentroid: projection along circles of fifths and thirds
 % mus.hcdf: Harmonic Change Detection Function
 % mus.score: symbolic representation and analysis
+%
+%
+% Vid.Minr: Video analysis package
+% 
+% vid.video: video processing
 %
 %
 % SeqMinr: Sequence processing
