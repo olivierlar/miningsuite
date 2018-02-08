@@ -49,7 +49,7 @@ function x = defaultval(unit,index,segment)
     if nargin < 3
         segment = 1;
     end
-    if length(unit.rate) == 1
+    if length(unit.rate) <= 1
         rate = unit.rate;
     else
         rate = unit.rate(segment);
