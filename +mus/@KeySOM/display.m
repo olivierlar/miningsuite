@@ -1,6 +1,6 @@
 % MUS.KEYSOM.DISPLAY
 %
-% Copyright (C) 2017 Olivier Lartillot
+% Copyright (C) 2017-2018 Olivier Lartillot
 %
 % All rights reserved.
 % License: New BSD License. See full text of the license in LICENSE.txt in
@@ -10,7 +10,8 @@ function mov = display(obj)
 % KEYSOM/DISPLAY display of key som
 
     mov = [];
-    load keysomaudiodata;
+    folder = fileparts(which('mus.score'));
+    load(fullfile(folder,'keysomaudiodata.mat'));
     sig.compute(@routine,obj.Ydata,obj.files,keyx,keyy,keyN);
 end
 

@@ -33,7 +33,8 @@ end
 
 function out = main(orig,option)
     orig = orig{1};
-    load keysomaudiodata;
+    folder = fileparts(which('mus.score'));
+    load(fullfile(folder,'keysomaudiodata.mat'));
     z = sig.compute(@routine,orig.Ydata,somw);
     som = mus.KeySOM(z,'Srate',orig.Srate,'Ssize',orig.Ssize,...
                      'FbChannels',orig.fbchannels);
