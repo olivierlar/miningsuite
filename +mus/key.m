@@ -51,17 +51,18 @@ function [p,type] = init(x,option,frame)
 end
 
 
-function x = main(x,option)
-    x{2} = x{1};
-    x{3} = x{1};
-    x{1}.Ydata = sig.compute(@routine,x{1}.peakpos);
-    x{1}.peakindex = [];
-    x{1}.yname = 'Key';
-    x{1}.xunsampled = [];
-    x{2}.Ydata = sig.compute(@routine,x{2}.peakval);
-    x{2}.peakindex = [];
-    x{2}.yname = 'Key clarity';
-    x{2}.xunsampled = [];
+function out = main(x,option)
+    x = x{1};
+    k = sig.compute(@routine,x.peakindex);
+    k = sig.Signal(k,'Name','Key',...
+                        'Label',{'C';'C#';'D';'D#';'E';'F';'F#';'G';'G#';'A';'A#';'B';'c';'c#';'d';'d#';'e';'f';'f#';'g';'g#';'a';'a#';'b'},...
+                        'Srate',x.Srate,'Sstart',x.Sstart,'Send',x.Send,...
+                        'Ssize',x.Ssize,'FbChannels',x.fbchannels);
+    kc = sig.compute(@routine,x.peakval);
+    kc = sig.Signal(kc,'Name','Key Clarity',...
+                        'Srate',x.Srate,'Sstart',x.Sstart,'Send',x.Send,...
+                        'Ssize',x.Ssize,'FbChannels',x.fbchannels);
+    out = {k,kc,x};
 end
 
 
