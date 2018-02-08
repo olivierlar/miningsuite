@@ -51,16 +51,16 @@ function out = main(x,frame)
     frate = sig.compute(@sig.getfrate,x.Srate,frame);
     flength = sig.compute(@sig.getflength,x.Srate,frame);
     [data,done] = sig.compute(@routine,x.Ydata,x.Sstart,length(x.Sstart)>1,frame,x.Srate);
-    if iscell(done)
-        if ~done{1}
-            frate = 0;
-        end
-    elseif ~done
-        frate = 0;
-    end
     if isempty(data)
         out = {[]};
     else
+        if iscell(done)
+            if ~done{1}
+                frate = 0;
+            end
+        elseif ~done
+            frate = 0;
+        end
         x.Ydata = data;
         x.Frate = frate;
         x.Flength = flength;
@@ -115,6 +115,7 @@ function out = routine(data,start,segmented,param,sr)
             if ~offset
                 disp('Frame length longer than total sequence size. No frame decomposition.');
             end
+            out = {[],-1};                                
             return
         end
         switch olddim
