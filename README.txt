@@ -1,6 +1,6 @@
 MiningSuite
 
-Version 0.10 (First beta version) released on February 8 2018
+Current version of the repository. Last public release: Version 0.10 (First beta version) released on February 8 2018
 
 Open-source project hosted at http://olivierlar.github.io/miningsuite/
 
