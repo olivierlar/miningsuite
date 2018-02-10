@@ -17,9 +17,6 @@ if nargin<5
     y = [];
 end
 
-sr = video.FrameRate;
-d = video.Duration;
-
 if iscell(design)
     design = design{1};
 end
