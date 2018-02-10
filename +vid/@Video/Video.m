@@ -262,6 +262,11 @@ function [options,frame] = classoptions(mode,fsize,fhop,when)
         motion.key = 'Motion';
         motion.type = 'Boolean';
     options.motion = motion;
+    
+        color.key = 'Color';
+        color.type = 'Boolean';
+        color.default = 1;
+    options.color = color;
 
 %         center.key = 'Center';
 %         center.type = 'Boolean';
@@ -336,6 +341,10 @@ function obj = after(obj,option)
         if size(obj.Ydata.content,4) > 1
             obj.Ydata.content(:,:,:,3) = diff(obj.Ydata.content(:,:,:,1:2),1,4);
         end
+    end
+    
+    if isfield(option,'color') && ~option.color
+%         obj.Ydata.content = rgb2gray(obj.Ydata.content);
     end
 
 %     if option.center
