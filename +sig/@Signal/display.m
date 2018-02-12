@@ -15,9 +15,15 @@ function display(obj)
         return
     end
     
+    if isempty(obj.files)
+        filemessage = '';
+    else
+        filemessage = [' related to file ' obj.files];
+    end
+    
     xdata = obj.xdata;
     if isempty(xdata)
-        disp(['The ' obj.yname ' related to file ' obj.files ' is empty.']);
+        disp(['The ' obj.yname filemessage ' is empty.']);
         return
     end
     sdata = obj.sdata;
@@ -88,9 +94,9 @@ function display(obj)
                     if isa(fig,'matlab.ui.Figure')
                         fig = fig.Number;
                     end
-                    disp(['The ' obj.yname ' related to file ' obj.files ' is displayed in Figure ',num2str(fig),'.']);
+                    disp(['The ' obj.yname filemessage ' is displayed in Figure ',num2str(fig),'.']);
                 else
-                    textual(obj.yname,obj.Ydata.content,obj.yunit,obj.label,obj.files);
+                    textual(obj.yname,obj.Ydata.content,obj.yunit,obj.label,filemessage);
                 end
             end
             return
@@ -275,22 +281,26 @@ function display(obj)
             end
             
         end
-        title([obj.yname ', ' obj.files]);
+        if isempty(obj.files)
+            title(obj.yname)
+        else
+            title([obj.yname ', ' obj.files]);
+        end
     end
     fig = gcf;
     if isa(fig,'matlab.ui.Figure')
         fig = fig.Number;
     end
-    disp(['The ' obj.yname ' related to file ' obj.files ' is displayed in Figure ',num2str(fig),'.']);
+    disp(['The ' obj.yname filemessage ' is displayed in Figure ',num2str(fig),'.']);
 end
 
 
-function textual(name,data,unit,label,files)
+function textual(name,data,unit,label,filemessage)
     if ~isempty(label)
         if isnumeric(data) && length(data) == 1
-            disp(['The ' name ' related to file ' files ' is ' label{data}]);
+            disp(['The ' name filemessage ' is ' label{data}]);
         else
-            disp(['The ' name ' related to file ' files ' is :']);
+            disp(['The ' name filemessage ' is :']);
             if iscell(data)
                 for i = 1:length(data)
                     display(label{data{i}});
@@ -300,9 +310,9 @@ function textual(name,data,unit,label,files)
             end
         end
     elseif isnumeric(data) && length(data) == 1
-        disp(['The ' name ' related to file ' files ' is ' num2str(data) ' ' unit]);
+        disp(['The ' name filemessage ' is ' num2str(data) ' ' unit]);
     else
-        disp(['The ' name ' related to file ' files ' is :']);
+        disp(['The ' name filemessage ' is :']);
         if iscell(data)
             for i = 1:length(data)
                 display(data{i});
