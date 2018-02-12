@@ -66,7 +66,11 @@ classdef design
                 obj.extensive = extensive;
                 obj.nochunk = nochunk;
             end
-            obj.files = input;
+            if ischar(input)
+                obj.files = input;
+            else
+                obj.files = input.files;
+            end
             if iscell(input)
                 input = input{1};
             end
@@ -190,8 +194,10 @@ classdef design
             if iscell(input)
                 input = input{1};
             end
-            if ~ischar(input)
+            if isa(input,'sig.design')
                 input.show(0);
+            elseif isa(input,'sig.Signal')
+                disp(['> ',class(input)]);
             end
             str = '';
             for i = 1:length(obj.argin)
