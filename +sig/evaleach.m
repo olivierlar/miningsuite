@@ -66,15 +66,23 @@ if isempty(design.main)
         if isequal(head(1:4)',[77 84 104 100])  % MIDI format
             y = mus.score(filename);
         else
-           T = readtable(filename);
-           Tfields = T.Properties.VariableNames;
-           for i = 1:length(Tfields)
-               if ~isnumeric(T.(Tfields{i}))
-                   T.(Tfields{i}) = [];
-               end
-           end
-           d = sig.data(table2array(T),{'sample','dims'});
-           y = {sig.Signal(d,'Name','data','Ssize',height(T))};
+            try
+                T = readtable(filename);
+            catch
+                T = [];
+            end
+            if ~isempty(T)
+                Tfields = T.Properties.VariableNames;
+                for i = 1:length(Tfields)
+                    if ~isnumeric(T.(Tfields{i}))
+                        T.(Tfields{i}) = [];
+                    end
+                end
+                d = sig.data(table2array(T),{'sample','freqband'}); % 'dims'});
+                y = {sig.Signal(d,'Name','data','Ssize',height(T))};
+            else
+                y = [];
+            end
         end
     else
         data = sig.read(filename,window);

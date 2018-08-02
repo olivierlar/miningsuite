@@ -316,6 +316,11 @@ function [sz,sr] = audiofileinfo(file)
         info = audioinfo(file);
         sz = info.TotalSamples;
         sr = info.SampleRate;
+    catch
+        fid = fopen(file);
+        if fid >= 0
+            sz = 0;
+        end
     end
 end
 
