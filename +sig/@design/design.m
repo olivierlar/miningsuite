@@ -103,7 +103,7 @@ classdef design
                 v = VideoReader(arg);
                 out = vid.evaleach(obj,arg,v,nargout);
             else
-                [sz,ch,sr] = audiofileinfo(arg);
+                [sz,sr] = audiofileinfo(arg);
                 if isempty(sz)
                     w = [];
                 elseif isempty(obj.extract)
@@ -309,14 +309,12 @@ function [l,a] = folderinfo(path,s,l,sz,sr,a,folders,video)
 end
 
 
-function [sz,ch,sr] = audiofileinfo(file)
+function [sz,sr] = audiofileinfo(file)
     sz = [];
-    ch = [];
     sr = [];
     try
         info = audioinfo(file);
         sz = info.TotalSamples;
-        ch = info.NumChannels;
         sr = info.SampleRate;
     end
 end
