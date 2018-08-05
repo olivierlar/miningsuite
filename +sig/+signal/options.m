@@ -49,4 +49,9 @@ function options = options
         trimthreshold.type = 'Numeric';
         trimthreshold.default = .06;
     options.trimthreshold = trimthreshold;
+    
+        fwr.key = 'FWR';
+        fwr.type = 'Boolean';
+        fwr.default = 0;
+    options.fwr = fwr;
 end

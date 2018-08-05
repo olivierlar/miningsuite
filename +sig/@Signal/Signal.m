@@ -563,6 +563,9 @@ function out = after(obj,option)
     if option.sampling
         obj = obj.resample(option.sampling);
     end
+    if option.fwr
+        obj = obj.fwr();
+    end
     if ~isempty(option.extract)
         obj = obj.extract(option.extract,'sample','saxis','Ydata');
     end
