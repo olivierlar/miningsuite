@@ -105,7 +105,7 @@ function out = routine(data,start,segmented,param,sr)
     
     olddim = data.whichdim('sample');
     oldcontent = data.content;
-    if olddim > 2
+    if olddim > 3
         error('not implemented yet');
     end
     
@@ -136,13 +136,15 @@ function out = routine(data,start,segmented,param,sr)
                         end
                         data.dims{3} = 'frame';
                     end
-                else
+                elseif length(size(oldcontent)) == 3 
                     newcontent = zeros(l,size(oldcontent,2),size(oldcontent,3),nfr);
                     for i = 1:nfr % For each frame, ...
                         st = floor((i-1)*h+1) + offset;
                         newcontent(:,:,:,i) = oldcontent(st:st+l-1,:,:);
                     end
                     data.dims{4} = 'frame';
+                else
+                    error('not implemented yet');
                 end
             case 2
                 if length(size(oldcontent)) == 2 
@@ -161,11 +163,39 @@ function out = routine(data,start,segmented,param,sr)
                         end
                         data.dims{3} = 'frame';
                     end
-                else
+                elseif length(size(oldcontent)) == 3 
                     newcontent = zeros(size(oldcontent,1),l,size(oldcontent,3),nfr);
                     for i = 1:nfr % For each frame, ...
                         st = floor((i-1)*h+1) + offset;
                         newcontent(:,:,:,i) = oldcontent(:,st:st+l-1,:);
+                    end
+                    data.dims{4} = 'frame';
+                else
+                    error('not implemented yet');
+                end
+            case 3
+                if length(size(oldcontent)) > 3
+                    error('not implemented yet');
+                end
+                if size(oldcontent,1) == 1
+                    newcontent = zeros(nfr,size(oldcontent,2),l);
+                    for i = 1:nfr % For each frame, ...
+                        st = floor((i-1)*h+1) + offset;
+                        newcontent(i,:,:) = oldcontent(1,:,st:st+l-1);
+                    end
+                    data.dims{1} = 'frame';
+                elseif size(oldcontent,2) == 1
+                    newcontent = zeros(size(oldcontent,1),nfr,l);
+                    for i = 1:nfr % For each frame, ...
+                        st = floor((i-1)*h+1) + offset;
+                        newcontent(:,i,:) = oldcontent(:,1,st:st+l-1);
+                    end
+                    data.dims{2} = 'frame';
+                else
+                    newcontent = zeros(size(oldcontent,1),size(oldcontent,2),l,nfr);
+                    for i = 1:nfr % For each frame, ...
+                        st = floor((i-1)*h+1) + offset;
+                        newcontent(:,:,:,i) = oldcontent(:,:,st:st+l-1);
                     end
                     data.dims{4} = 'frame';
                 end
