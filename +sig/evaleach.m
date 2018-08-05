@@ -66,11 +66,14 @@ if isempty(design.main)
         if length(head) >= 4 && isequal(head(1:4)',[77 84 104 100])  % MIDI format
             y = mus.score(filename);
         else
+            w = warning;
+            warning('off','MATLAB:table:ModifiedAndSavedVarnames')
             try
                 T = readtable(filename);
             catch
                 T = [];
             end
+            warning(w)
             if ~isempty(T)
                 Tfields = T.Properties.VariableNames;
                 for i = 1:length(Tfields)
