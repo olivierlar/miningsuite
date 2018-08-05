@@ -576,6 +576,10 @@ function out = after(obj,option)
     %    order = round(option.median(1) * obj.sampling);
     %    obj = obj.median('sample',order,option.median(2));
     %end
+    if option.frame
+        obj = sig.frame(obj,'FrameSize',option.fsize.value,option.fsize.unit,...
+                            'FrameHop',option.fhop.value,option.fhop.unit);
+    end
     out = {obj};
 end
 
