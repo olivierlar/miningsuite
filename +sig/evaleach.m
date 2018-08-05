@@ -145,8 +145,10 @@ else
         else
             y = sig.evaleach(input,filename,window,sr,1,chunking);
         end
-        y = design.main(y,design.options);
-        y = design.after(y,design.options);
+        if ~isempty(y)
+            y = design.main(y,design.options);
+            y = design.after(y,design.options);
+        end
     elseif design.nochunk || strcmpi(design.combine,'no')
         if length(design.input) == 1
             input = design.input;
