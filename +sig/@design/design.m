@@ -66,13 +66,13 @@ classdef design
                 obj.extensive = extensive;
                 obj.nochunk = nochunk;
             end
+            if iscell(input)
+                input = input{1};
+            end
             if ischar(input)
                 obj.files = input;
             else
                 obj.files = input.files;
-            end
-            if iscell(input)
-                input = input{1};
             end
             if isa(input,'sig.design')
                 obj.files = input.files;
