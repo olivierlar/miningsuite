@@ -63,7 +63,7 @@ if isempty(design.main)
         end
         head = fread(fid,'uint8');
         fclose(fid);
-        if isequal(head(1:4)',[77 84 104 100])  % MIDI format
+        if length(head) >= 4 && isequal(head(1:4)',[77 84 104 100])  % MIDI format
             y = mus.score(filename);
         else
             try
