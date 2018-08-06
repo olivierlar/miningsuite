@@ -43,6 +43,9 @@ function out = main(x,frame)
     if iscell(x)
         x = x{1};
     end
+    x.peakindex = [];
+    x.peakprecisepos = [];
+    x.peakpreciseval = [];
     if x.Frate
         warning('Warning in sig.frame: Already frame-decomposed. Ignored.');
         out = {x};
