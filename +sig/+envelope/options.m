@@ -117,12 +117,6 @@ function options = options
         chwr.default = 0;
     options.chwr = chwr;
     
-        mu.key = 'Mu';
-        mu.type = 'Numeric';
-        mu.default = 0;
-        mu.keydefault = 100;
-    options.mu = mu;
-    
         oplog.key = 'Log';
         oplog.type = 'Boolean';
         oplog.default = 0;
