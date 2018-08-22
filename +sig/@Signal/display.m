@@ -150,6 +150,7 @@ function display(obj)
         set(gca,'YDir','normal');   
         title(obj.yname);
     else
+        fc = obj.fbchannels;
         for i = 1:nchans
             if nchans > 1
                 subplot(nchans,1,nchans-i+1,'align');
@@ -280,6 +281,18 @@ function display(obj)
                 set(gca,'YTickLabel',obj.label);
             end
             
+            if nchans > 1
+                if iscell(fc)
+                    ci = fc{i};
+                else
+                    ci = num2str(i);
+                end
+                pos = get(gca,'Position');
+                axes('Position',[pos(1)-.05 pos(2)+pos(4)/2 .01 .01],'Visible','off');
+                t = text(0,0,ci,'FontSize',12);
+                t.Rotation = 90;
+                t.HorizontalAlignment = 'center';
+            end
         end
         if isempty(obj.files)
             title(obj.yname)
