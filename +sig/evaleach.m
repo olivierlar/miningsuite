@@ -59,7 +59,6 @@ if isempty(design.main)
         fid = fopen(filename);
         if fid<0
             error('Unable to load the file');
-            return
         end
         head = fread(fid,'uint8');
         fclose(fid);
@@ -76,13 +75,21 @@ if isempty(design.main)
             warning(w)
             if ~isempty(T)
                 Tfields = T.Properties.VariableNames;
-                for i = 1:length(Tfields)
+                i = 1;
+                while i <= length(Tfields)
                     if ~isnumeric(T.(Tfields{i}))
                         T.(Tfields{i}) = [];
+                        Tfields(i) = [];
+                    else
+                        i = i + 1;
                     end
                 end
-                d = sig.data(table2array(T),{'sample','freqband'}); % 'dims'});
-                y = {sig.Signal(d,'Name','data','Ssize',height(T))};
+                d = sig.data(fliplr(table2array(T)),{'sample','freqband'}); % 'dims'});
+                s = sig.Signal(d,'Name','data','Ssize',height(T),'fbchannels',fliplr(Tfields));
+                if design.options.sampling
+                    s.Srate = design.options.sampling;
+                end
+                y = {s};
             else
                 y = [];
             end
@@ -146,6 +153,9 @@ else
                 design.options.fhop = input.options.fhop;
             end
         else
+            if isempty(input.main)
+                input.options.sampling = design.options.sampling;
+            end
             y = sig.evaleach(input,filename,window,sr,1,chunking);
         end
         if ~isempty(y)
