@@ -86,7 +86,7 @@ if isempty(design.main)
                 end
                 d = sig.data(fliplr(table2array(T)),{'sample','freqband'}); % 'dims'});
                 s = sig.Signal(d,'Name','data','Ssize',height(T),'fbchannels',fliplr(Tfields));
-                if design.options.sampling
+                if strcmp(design.name,'signal') && isfield(design.options,'sampling') && design.options.sampling
                     s.Srate = design.options.sampling;
                 end
                 y = {s};
@@ -153,7 +153,7 @@ else
                 design.options.fhop = input.options.fhop;
             end
         else
-            if isempty(input.main)
+            if isempty(input.main) && strcmp(design.name,'signal')
                 input.options.sampling = design.options.sampling;
             end
             y = sig.evaleach(input,filename,window,sr,1,chunking);
