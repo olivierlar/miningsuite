@@ -6,8 +6,7 @@
 % License: New BSD License. See full text of the license in LICENSE.txt in
 % the main folder of the MiningSuite distribution.
 
-function mov = display(obj)
-% SIMATRIX/DISPLAY display of simatrix
+function display(obj)
     sig.compute(@routine,obj.Ydata,obj.files);
 end
 
