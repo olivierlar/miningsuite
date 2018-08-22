@@ -91,7 +91,7 @@ function out = routine(in,sampling,option)
     if isstruct(option.min)
         mint = floor(option.min.value*sampling)+1;
         if mint > l
-            warning('WARNING IN MIRAUTOCOR: The specified range of delays exceeds the temporal length of the signal.');
+            warning('WARNING IN SIG.AUTOCOR: The specified range of delays exceeds the temporal length of the signal.');
             disp('Minimum delay set to zero.')
             mint = 1;  % lowest index of the lag range
         end
@@ -107,9 +107,9 @@ function out = routine(in,sampling,option)
     maxt = min(maxt,ceil(l/2));
     if maxt <= mint
         if in.size('frame') > 1
-            warning('WARNING IN MIRAUTOCOR: Frame length is too small.');    
+            warning('WARNING IN SIG.AUTOCOR: Frame length is too small.');    
         else
-            warning('WARNING IN MIRAUTOCOR: The audio sequence is too small.');    
+            warning('WARNING IN SIG.AUTOCOR: The audio sequence is too small.');    
         end
         display('The autocorrelation is not defined for this range of delays.');
     end
@@ -131,7 +131,7 @@ function out = routine(in,sampling,option)
                     disp('Signal Processing Toolbox does not seem to be installed. Recompute the hamming window manually.');
                     w = 0.54 - 0.46 * cos(2*pi*(0:l-1)'/(l-1));
                 else
-                    warning(['WARNING in MIRAUTOCOR: Unknown windowing function ',option.win,' (maybe Signal Processing Toolbox is not installed).']);
+                    warning(['WARNING in SIG.AUTOCOR: Unknown windowing function ',option.win,' (maybe Signal Processing Toolbox is not installed).']);
                     disp('No windowing performed.')
                     w = ones(l,1);
                 end
