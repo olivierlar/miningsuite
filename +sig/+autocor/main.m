@@ -144,7 +144,7 @@ function out = routine(in,sampling,option)
     end
     
     if option.gener == 2
-        if strcmpi(option.scaleopt,'coeff')
+        if strcmpi(option.scaleopt,'coeffXchannels')
             c = compute(x,mint,maxt,'none');
             if x.size('freqband') > 1
                 x = x.sum('freqband');

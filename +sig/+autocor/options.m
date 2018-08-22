@@ -11,7 +11,6 @@ function options = options
         min.key = 'Min';
         min.type = 'Unit';
         min.unit = {'s','Hz'};
-        %min.defaultunit = 's';
         min.default = [];
         min.opposite = 'max';
         min.when = 'Both';
@@ -20,14 +19,13 @@ function options = options
         max.key = 'Max';
         max.type = 'Unit';
         max.unit = {'s','Hz'};
-        %max.defaultunit = 's';
         max.default = [];
         max.opposite = 'min';
         max.when = 'Both';
     options.max = max;
         
         scaleopt.type = 'String';
-        scaleopt.choice = {'biased','unbiased','coeff','none'};
+        scaleopt.choice = {'biased','unbiased','coeff','none','coeffXchannels'};
         scaleopt.default = 'coeff';
     options.scaleopt = scaleopt;
             
