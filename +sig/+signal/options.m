@@ -24,6 +24,11 @@ function options = options
        channel.default = [];
     options.channel = channel;
     
+       freqband.key = {'FreqBand','FreqBands'};
+       freqband.type = 'Numeric';
+       freqband.default = [];
+    options.freqband = freqband;
+    
         sampling.key = 'Sampling';
         sampling.type = 'Numeric';
     options.sampling = sampling;

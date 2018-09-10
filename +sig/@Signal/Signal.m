@@ -553,6 +553,9 @@ function out = after(obj,option)
     if option.channel
         obj = obj.channel(option.channel);
     end
+    if option.freqband
+        obj = obj.channel(option.freqband,'freqband');
+    end
 %     if strcmpi(option.mix,'Post')
 %         obj = obj.sum('channel');
 %     end
