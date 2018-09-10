@@ -383,7 +383,7 @@ classdef Signal
         
         obj = resample(obj,sampling)
         obj = extract(obj,param,dim,finder,varargin)
-        obj = channel(obj,param)
+        obj = channel(obj,param,keyword)
         obj = trim(obj,trimwhere,trimthreshold)
         
         obj = selectfile(obj,index)
