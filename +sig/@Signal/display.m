@@ -290,7 +290,7 @@ function display(obj)
                 pos = get(gca,'Position');
                 axes('Position',[pos(1)-.05 pos(2)+pos(4)/2 .01 .01],'Visible','off');
                 t = text(0,0,ci,'FontSize',12);
-                t.Rotation = 90;
+%                 t.Rotation = 90;
                 t.HorizontalAlignment = 'center';
             end
         end
