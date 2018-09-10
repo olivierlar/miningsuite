@@ -383,7 +383,7 @@ classdef Signal
         
         obj = resample(obj,sampling)
         obj = extract(obj,param,dim,finder,varargin)
-        obj = channel(obj,param,keyword)
+        [obj,channels] = channel(obj,param,keyword,channels)
         obj = trim(obj,trimwhere,trimthreshold)
         
         obj = selectfile(obj,index)
@@ -554,7 +554,7 @@ function out = after(obj,option)
         obj = obj.channel(option.channel);
     end
     if option.freqband
-        obj = obj.channel(option.freqband,'freqband');
+        [obj,obj.fbchannels] = obj.channel(option.freqband,'freqband',obj.fbchannels);
     end
 %     if strcmpi(option.mix,'Post')
 %         obj = obj.sum('channel');
