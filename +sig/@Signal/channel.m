@@ -6,15 +6,21 @@
 % License: New BSD License. See full text of the license in LICENSE.txt in
 % the main folder of the MiningSuite distribution.
 
-function obj = channel(obj,param,keyword)
+function [obj,channels] = channel(obj,param,keyword,channels)
     if nargin < 3
         keyword = 'channel';
     end
-    obj.Ydata = sig.compute(@main,obj.Ydata,param,keyword);
+    if nargin < 4
+        channels = [];
+    end
+    [obj.Ydata,channels] = sig.compute(@main,obj.Ydata,param,keyword,channels);
 end
     
    
-function out = main(d,param,keyword)
+function out = main(d,param,keyword,channels)
     d = d.extract(keyword,param);
-    out = {d};
+    if ~isempty(channels)
+        channels = channels(param);
+    end
+    out = {d,channels};
 end
