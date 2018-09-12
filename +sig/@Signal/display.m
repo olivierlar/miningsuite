@@ -151,6 +151,7 @@ function display(obj)
         title(obj.yname);
     else
         fc = obj.fbchannels;
+        ylims = zeros(nchans,2);
         for i = 1:nchans
             if nchans > 1
                 subplot(nchans,1,nchans-i+1,'align');
@@ -191,6 +192,7 @@ function display(obj)
                     ydatai.apply(@drawpointseg,{obj.Sstart,obj.Send},{'sample'},1);
                 else
                     ydatai.apply(@draw,{obj.(abscissa),obj.Frate,'frame'},{dim,'channel'},2);
+                    ylims(i,:) = ylim;
                 end
             elseif iscell(ydatai.content)
                 ydatai.apply(@drawmatseg,{xdata,obj.Sstart,obj.Send,obj.Srate},{'sample','element'},2);
@@ -294,6 +296,17 @@ function display(obj)
                 t.HorizontalAlignment = 'center';
             end
         end
+        
+        if nchans > 1
+            dyl = diff(ylims,1,2);
+            mdyl = max(dyl);
+            for i = 1:nchans
+                subplot(nchans,1,nchans-i+1,'align');
+                ycen = mean(ylims(i,:));
+                ylim([ycen - mdyl / 2, ycen + mdyl / 2]);
+            end
+        end
+        
         if isempty(obj.files)
             title(obj.yname)
         else
