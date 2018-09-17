@@ -18,6 +18,7 @@ classdef sync
         audiodelay
         data
         datadelays
+        channel_ids
         nbplots
         plotdelays
     end
@@ -28,6 +29,7 @@ classdef sync
             audiodelay = 0;
             data = {};
             datadelays = [];
+            channel_ids = zeros(0,2);
             nbplots = 0;
             plotdelays = [];
             i = 1;
@@ -49,7 +51,9 @@ classdef sync
                     if iscell(nchans)
                         nchans = nchans{1};
                     end
+                    channel_ids(end+1,1) = nbplots + 1;
                     nbplots = nbplots + nchans;
+                    channel_ids(end,2) = nbplots;
                     if i < nargin && isnumeric(varargin{i+1})
                         i = i + 1;
                         datadelays(end+1) = varargin{i};
@@ -64,6 +68,7 @@ classdef sync
             s.audiodelay = audiodelay;
             s.data = data;
             s.datadelays = datadelays;
+            s.channel_ids = channel_ids;
             s.nbplots = nbplots;
             s.plotdelays = plotdelays;
         end
@@ -80,6 +85,8 @@ classdef sync
                 if iscell(nchans)
                     nchans = nchans{1};
                 end
+                ylims = zeros(nchans,2);
+                i0 = i;
                 for j = nchans:-1:1
                     i = i + 1;
                     subplot(nch,1,i)
@@ -91,6 +98,7 @@ classdef sync
                     end
                     if length(d.xdata) < 2
                         dj.apply(@draw,{d.sdata,d.Frate,'frame'},{'sample'},1);
+                        ylims(i,:) = ylim;
                     else
                         dj.apply(@drawmat,{d.sdata,d.xdata(:)},{'sample','element'},2);
                         set(gca,'YDir','normal');
@@ -107,6 +115,17 @@ classdef sync
                     t = text(0,0,cj,'FontSize',12);
 %                     t.Rotation = 90;
                     t.HorizontalAlignment = 'center';
+                end
+                if nchans > 1
+                    dyl = diff(ylims,1,2);
+                    mdyl = max(dyl);
+                    ii = i0+1;
+                    for j = nchans:-1:1
+                        subplot(nch,1,ii);
+                        ycen = mean(ylims(ii,:));
+                        ylim([ycen - mdyl / 2, ycen + mdyl / 2]);
+                        ii = ii + 1;
+                    end
                 end
             end
         end
