@@ -59,4 +59,10 @@ function options = options
         fwr.type = 'Boolean';
         fwr.default = 0;
     options.fwr = fwr;
+    
+        detrend.key = 'Detrend';
+        detrend.type = 'Numeric';
+        detrend.default = 0;
+        detrend.keydefault = 0.01;
+    options.detrend = detrend;
 end

@@ -385,6 +385,7 @@ classdef Signal
         obj = extract(obj,param,dim,finder,varargin)
         [obj,channels] = channel(obj,param,keyword,channels)
         obj = trim(obj,trimwhere,trimthreshold)
+        obj = detrend(obj,thr)
         
         obj = selectfile(obj,index)
         display(obj)
@@ -562,6 +563,9 @@ function out = after(obj,option)
 
     if option.center
         obj = obj.center('sample');
+    end
+    if option.detrend
+        obj = obj.detrend(option.detrend);
     end
     if option.sampling
         obj = obj.resample(option.sampling);
