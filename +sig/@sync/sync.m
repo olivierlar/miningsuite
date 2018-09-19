@@ -164,6 +164,33 @@ classdef sync
                 drawnow
             end
         end
+        
+        function record(obj)
+            display(obj);
+            set(gcf,'Position',[0,0,1600,800])
+            nch = obj.nbplots;
+            h = cell(nch,1);
+            rate = 1;
+            writerObj = VideoWriter('play.avi','Uncompressed AVI');
+            writerObj.FrameRate = rate;
+            open(writerObj);
+            t = 0;
+            while 1
+                for i = 1:nch
+                    if ~isempty(h{i})
+                        delete(h{i});
+                    end
+                    subplot(nch,1,i)
+                    hold on
+                    ti = t - obj.plotdelays(i);
+                    h{i} = plot([ti,ti],ylim,'r');
+                end
+                drawnow
+                frame = getframe(gcf);
+                writeVideo(writerObj,frame);
+                t = t + 1/rate;
+            end
+        end
     end
 end
 
