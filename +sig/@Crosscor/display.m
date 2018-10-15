@@ -7,11 +7,11 @@
 % the main folder of the MiningSuite distribution.
 
 function display(obj)
-    sig.compute(@routine,obj.Ydata,obj.sdata,obj.maxlag,obj.xdata,obj.files);
+    sig.compute(@routine,obj.Ydata,obj.sdata,obj.maxlag,obj.xdata,obj.files,obj.fbchannels);
 end
 
 
-function out = routine(in,t,maxlag,x,name)
+function out = routine(in,t,maxlag,x,name,fbchannels)
     fig = figure;
     d = in.content;
     N = size(d,2);
@@ -26,6 +26,14 @@ function out = routine(in,t,maxlag,x,name)
                     plot(x,d(:,i,j));
                 else
                     imagesc([t(1),t(end)],[-maxlag,maxlag],squeeze(d(:,i,j,:)),clims);
+                end
+                if i == 1
+                    title(fbchannels{N-j+1})
+                end
+                if i == j
+                    l = ylabel(fbchannels{N-j+1},'Rotation',0,'FontWeight','bold');
+                    p = get(l,'Position');
+                    set(l,'Position',p);
                 end
             end
         end
