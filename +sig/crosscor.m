@@ -67,7 +67,7 @@ function out = main(x,option)
     end
 
     [d,xstart,maxlag] = sig.compute(@routine,x.Ydata,x.Srate,option);
-    y = sig.Crosscor(d,'xsampling',1./x.Srate,'Deframe',x,'maxlag',maxlag);
+    y = sig.Crosscor(d,'xsampling',1./x.Srate,'Deframe',x,'maxlag',maxlag,'fbchannels',x.fbchannels);
     y.Xaxis.start = xstart;
 
     out = {y};
