@@ -92,7 +92,7 @@ options = sig.Signal.signaloptions();
         
         normal.key = 'Normalize';
         normal.type = 'String';
-        normal.choice = {'Local','Global'};
+        normal.choice = {'Local','Global','No',0};
         normal.default = 'Global';
     options.normal = normal;
 
@@ -217,8 +217,12 @@ function out = search(y,x,option,interpol)
     dy = diff(y);
 
     % Let's find the local maxima
-    p = find(y(2:end-1) >= max(option.cthr,option.thr) & ...     
-             dy(1:end-1) > 0 & dy(2:end) <= 0);
+    if isequal(option.normal, 0) || strcmpi(option.normal,'No')
+        lim = option.thr;
+    else
+        lim = max(option.cthr,option.thr);
+    end
+    p = find(y(2:end-1) >= lim & dy(1:end-1) > 0 & dy(2:end) <= 0);
     
     if isempty(p)
         out = {p pp pv};
