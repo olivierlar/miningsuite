@@ -191,6 +191,22 @@ classdef sync
                 t = t + 1/rate;
             end
         end
+        
+        function phaseplane(obj)
+            figure
+            d1 = obj.data{1}.Ydata.content;
+            d2 = obj.data{2}.Ydata.content;            
+            K = size(d1,2);
+            M = size(d1,3);
+            for k = 1:K
+                for m = 1:M
+                    subplot(K, M, M*(k-1)+m)
+                    plot(d1(:,k,m), d2(:,k,m))
+                    axis([-Inf Inf -Inf Inf])
+                    title(['Point ' num2str(k) ', dim.' num2str(m)])
+                end
+            end
+        end
     end
 end
 
