@@ -372,6 +372,15 @@ classdef data
             end
         end
         
+        function obj = squeeze(obj)
+            siz = size(obj.content);
+            f = find(siz == 1);
+            obj.dims(f) = [];
+            siz(siz==1) = []; % Remove singleton dimensions.
+            siz = [siz ones(1,2-length(siz))]; % Make sure siz is at least 2-D
+            obj.content = reshape(obj.content,siz);
+        end
+        
         [obj varargout] = apply(obj,func,argin,dimfunc,ndimfunc,varargin)
         obj = select(obj,pos,dim,type)
                 
