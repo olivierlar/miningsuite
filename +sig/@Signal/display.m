@@ -18,6 +18,9 @@ function display(obj)
     if isempty(obj.files)
         filemessage = '';
     else
+        if iscell(obj.files)
+            obj.design.files = obj.files{1};
+        end
         filemessage = [' related to file ' obj.files];
     end
     
@@ -89,6 +92,24 @@ function display(obj)
                     if ~isempty(obj.label)
                         set(gca,'YTick',1:length(obj.label));
                         set(gca,'YTickLabel',obj.label);
+                    end
+                    fig = gcf;
+                    if isa(fig,'matlab.ui.Figure')
+                        fig = fig.Number;
+                    end
+                    disp(['The ' obj.yname filemessage ' is displayed in Figure ',num2str(fig),'.']);
+                elseif isnumeric(ydata) && length(ydata) > 1 && size(squeeze(ydata),3) == 1
+                    d = obj.Ydata.squeeze;
+                    figure, hold on
+                    plot(d.content)
+                    xlabel(d.dims{1})
+                    l = size(d.content,2);
+                    if l > 1
+                        dn = cell(1,l);
+                        for i = 1:l
+                            dn{i} = [d.dims{2},num2str(i)];
+                        end
+                        legend(dn)
                     end
                     fig = gcf;
                     if isa(fig,'matlab.ui.Figure')
