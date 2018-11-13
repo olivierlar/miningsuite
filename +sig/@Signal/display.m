@@ -400,13 +400,13 @@ function draw(y,x,frate,index)
         elseif iscell(x)
             for i = 1:length(y)
                 if ~isempty(y{i})
-                    plot(x{i},y{i},'+');
+                    plot(x{i},y{i},'+k');
                 end
             end
         else
             for i = 1:length(y)
                 if ~isempty(y{i})
-                    plot(x(i),y{i},'+');
+                    plot(x(i),y{i},'+k');
                 end
             end
         end
