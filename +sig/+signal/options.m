@@ -65,4 +65,12 @@ function options = options
         detrend.default = 0;
         detrend.keydefault = 0.01;
     options.detrend = detrend;
+    
+        point.key = 'Point';
+        point.default = [];
+    options.point = point;
+    
+        dim.key = 'Dim';
+        dim.default = [];
+    options.dim = dim;
 end

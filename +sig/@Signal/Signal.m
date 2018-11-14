@@ -587,6 +587,16 @@ function out = after(obj,option)
         obj = sig.frame(obj,'FrameSize',option.fsize.value,option.fsize.unit,...
                             'FrameHop',option.fhop.value,option.fhop.unit);
     end
+    
+    if isfield(option,'point')
+        if option.point
+            obj.Ydata = obj.Ydata.extract('point',option.point);
+        end
+        if option.dim
+            obj.Ydata = obj.Ydata.extract('dim',option.dim);
+        end
+    end
+    
     out = {obj};
 end
 
