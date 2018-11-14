@@ -28,7 +28,7 @@ function options = options
     
         type.key = 'Type';
         type.type = 'String';
-        type.choice = {'channel','freqband'};
+        %type.choice = {'channel','freqband'};
         type.default = 'freqband';
     options.type = type;
     
