@@ -65,33 +65,39 @@ if isempty(design.main)
         if length(head) >= 4 && isequal(head(1:4)',[77 84 104 100])  % MIDI format
             y = mus.score(filename);
         else
-            w = warning;
-            warning('off','MATLAB:table:ModifiedAndSavedVarnames')
-            try
-                T = readtable(filename);
-            catch
-                T = [];
-            end
-            warning(w)
-            if ~isempty(T)
-                Tfields = T.Properties.VariableNames;
-                i = 1;
-                while i <= length(Tfields)
-                    if ~isnumeric(T.(Tfields{i}))
-                        T.(Tfields{i}) = [];
-                        Tfields(i) = [];
-                    else
-                        i = i + 1;
-                    end
-                end
-                d = sig.data(fliplr(table2array(T)),{'sample','freqband'}); % 'dims'});
-                s = sig.Signal(d,'Name','data','Ssize',height(T),'fbchannels',fliplr(Tfields));
-                if strcmp(design.name,'signal') && isfield(design.options,'sampling') && design.options.sampling
-                    s.Srate = design.options.sampling;
-                end
-                y = {s};
+            fid = fopen(filename);
+            s = fscanf(fid,'%s',1);
+            if strcmp(s,'NO_OF_FRAMES')
+                y = phy.point(filename);
             else
-                y = [];
+                w = warning;
+                warning('off','MATLAB:table:ModifiedAndSavedVarnames')
+                try
+                    T = readtable(filename);
+                catch
+                    T = [];
+                end
+                warning(w)
+                if ~isempty(T)
+                    Tfields = T.Properties.VariableNames;
+                    i = 1;
+                    while i <= length(Tfields)
+                        if ~isnumeric(T.(Tfields{i}))
+                            T.(Tfields{i}) = [];
+                            Tfields(i) = [];
+                        else
+                            i = i + 1;
+                        end
+                    end
+                    d = sig.data(fliplr(table2array(T)),{'sample','freqband'}); % 'dims'});   %% channel instead of freqband?? (to allow tempo analysis)
+                    s = sig.Signal(d,'Name','data','Ssize',height(T),'fbchannels',fliplr(Tfields));
+                    if strcmp(design.name,'signal') && isfield(design.options,'sampling') && design.options.sampling
+                        s.Srate = design.options.sampling;
+                    end
+                    y = {s};
+                else
+                    y = [];
+                end
             end
         end
     else
