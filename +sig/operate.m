@@ -41,6 +41,11 @@ if ~iscell(arg)
     arg = {arg};
 end
 
+if isa(arg{1},'sig.design') && strcmp(arg{1}.package,'phy')
+    arg{1} = arg{1}.eval;
+    arg{1} = arg{1}{1};
+end
+
 if isa(arg{1},'sig.design')
     if isempty(extract) && ~ischar(arg{1})
         extract = arg{1}.extract;
@@ -68,8 +73,17 @@ if isa(arg{1},'sig.design')
     
     design.overlap = arg{1}.overlap;
     design.evaluate = 1;
+%     if strcmp(pack,'phy')
+%         design.evaluated = 1;
+%     end
     out = {design};
-elseif isa(arg{1},'sig.Signal')
+elseif isa(arg{1},'phy.Point') && strcmp(pack,'sig')
+    a = arg{1};
+    s = sig.Signal(a.Ydata,'Srate',a.Srate,...
+                   'Point',options.point,'Dim',options.dim);
+    out = {s};
+    out = after(out,options);
+elseif isa(arg{1},'sig.Signal') || isa(arg{1},'sig.sync')
     if iscell(main)
         main = main{1};
     end
