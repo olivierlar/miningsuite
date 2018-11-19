@@ -103,7 +103,7 @@ classdef design
                 v = VideoReader(arg);
                 out = vid.evaleach(obj,arg,v,nargout);
             elseif strcmpi(obj.package,'phy')
-                d = mcread(arg);
+                d = phy.mcread(arg);
                 out = phy.evaleach(obj,arg,d,nargout);
             else
                 [sz,sr] = audiofileinfo(arg);
