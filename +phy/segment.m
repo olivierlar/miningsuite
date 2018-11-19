@@ -43,7 +43,7 @@ options.j2spar = j2spar;
 
     sgmindex.position = 3;
 %     sgmindex.key = 'SgmIndex';
-%     sgmindex.default = [];
+    sgmindex.default = [];
 options.sgmindex = sgmindex;
 
                         
