@@ -34,10 +34,10 @@ if isempty(design.main)
              disp(['Warning: Missing data for marker ',num2str(i),' for ',num2str(size(f,1)),' frames.'])
          end
          if isempty(missing)
-             missing.marker = i;
+             missing.point = i;
              missing.frames = f;
          else
-             missing(end+1).marker = i;
+             missing(end+1).point = i;
              missing(end).frames = f;
          end
      end
