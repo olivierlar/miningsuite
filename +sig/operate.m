@@ -79,8 +79,8 @@ if isa(arg{1},'sig.design')
     out = {design};
 elseif isa(arg{1},'phy.Point') && strcmp(pack,'sig')
     a = arg{1};
-    s = sig.Signal(a.Ydata,'Srate',a.Srate,...
-                   'Point',options.point,'Dim',options.dim);
+    s = sig.Signal(a.Ydata,'Srate',a.Srate); %,...
+%                   'Point',options.point,'Dim',options.dim);
     out = {s};
     out = after(out,options);
 elseif isa(arg{1},'sig.Signal') || isa(arg{1},'sig.sync')
