@@ -53,12 +53,12 @@ end
 
 %%
 function d = routine_crop(d,N)
-    d = d.apply(@crop,{N},{'element'},1);
+    d = d.apply(@crop,{N},{'element','sample'},2);
 end
 
 
 function d = crop(d,N)
-    d = d - max(d);
+    d = d - max(max(d));
     d = max(d,-N) + N;
 end
 
