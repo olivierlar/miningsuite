@@ -1,6 +1,6 @@
 % AUD.PITCH
 %
-% Copyright (C) 2014, 2017-2018 Olivier Lartillot
+% Copyright (C) 2014, 2017-2019 Olivier Lartillot
 %
 % All rights reserved.
 % License: New BSD License. See full text of the license in LICENSE.txt in
@@ -29,9 +29,4 @@ function d = main(d,option)
     if option.median
         warning('WARNING IN AUD.PITCH: ''Median'' not available yet.');
     end
-end
-
-
-function x = stable(x,option)
-    1
 end
