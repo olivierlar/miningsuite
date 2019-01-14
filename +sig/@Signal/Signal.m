@@ -3,7 +3,7 @@
 % settings), and providing standard post-processing operations, as well as
 % by sig.evaleach.
 %
-% Copyright (C) 2014, 2017-2018 Olivier Lartillot
+% Copyright (C) 2014, 2017-2019 Olivier Lartillot
 % All rights reserved.
 % License: New BSD License. See full text of the license in LICENSE.txt in
 % the main folder of the MiningSuite distribution.
@@ -619,6 +619,9 @@ end
 
 function d = peakroutine(d,v)
     d = d{1};
+    if iscell(d) % Check
+        d = d{1};
+    end
     row = isrow(d);
     d = v(d);
     d = d(:);
