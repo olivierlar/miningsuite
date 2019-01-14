@@ -1,6 +1,6 @@
 % SIG.DATA.APPLY
 %
-% Copyright (C) 2014, 2017-2018 Olivier Lartillot
+% Copyright (C) 2014, 2017-2019 Olivier Lartillot
 %
 % All rights reserved.
 % License: New BSD License. See full text of the license in LICENSE.txt in
@@ -44,6 +44,7 @@ function [obj,varargout] = apply(obj,func,argin,dimfunc,maxdimfunc,type)
     end
     dimdata = size(data);
     ndimdata = length(dimdata);
+%     obj.dims(ndimdata+1:end) = [];
     ordim = zeros(1,ndimdata);
     if isinf(maxdimfunc)
         maxdimfunc = min(maxdimfunc,ndimdata);
@@ -79,6 +80,7 @@ function [obj,varargout] = apply(obj,func,argin,dimfunc,maxdimfunc,type)
             obj.dims{i} = '';
         end
     end
+    
     
     objdims = obj.dims;
 
