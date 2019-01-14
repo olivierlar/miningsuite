@@ -20,12 +20,6 @@ function options = initoptions
         method.choice = {'Signal','Pattern'};
         method.default = 'Signal';
     options.method = method;
-    
-        reso.key = 'Resonance';
-        reso.type = 'String';
-        reso.choice = {'ToiviainenSnyder','vanNoorden',0,'off','no','New'};
-        reso.default = 'ToiviainenSnyder';
-    options.reso = reso;
 end
 
 
@@ -43,7 +37,7 @@ end
 function y = mus_autocor(x,option)
     y = mus.autocor(x,'Min',60/option.ma,'Max',60/option.mi,...
               'Enhanced',option.enh,...'NormalInput','coeff',...
-              'Resonance',option.reso,'NormalWindow',option.nw); %,...
+              'Resonance',option.r,'NormalWindow',option.nw); %,...
              % 'Phase',option.phase);
 end
 
@@ -51,7 +45,7 @@ end
 function y = mus_spectrum(x,option)
     y = mus.spectrum(x,'Min',option.mi/60,'Max',option.ma/60,...
                            'Prod',option.prod,...'NormalInput',...
-                           'Resonance',option.reso,'ZeroPad',option.zp);
+                           'Resonance',option.r,'ZeroPad',option.zp);
 end
 
 
