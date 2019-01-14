@@ -1,6 +1,6 @@
 % MUS.SCORE
 %
-% Copyright (C) 2014-2015, 2017-2018 Olivier Lartillot
+% Copyright (C) 2014-2015, 2017-2019 Olivier Lartillot
 % All rights reserved.
 % License: New BSD License. See full text of the license in LICENSE.txt in
 % the main folder of the MiningSuite distribution.
@@ -17,6 +17,11 @@ end
 
 if ischar(arg)
     out = reads(arg,options,concept);
+    return
+elseif isnumeric(arg)
+    notes = struct('chro',num2cell(arg),'ons',num2cell(arg),...
+                   'dur',.1,'chan',num2cell(arg));
+    out = process_notes(notes,mus.Sequence,'',options,concept,0);
     return
 end
 
