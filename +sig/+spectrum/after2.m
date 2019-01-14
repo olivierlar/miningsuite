@@ -1,6 +1,6 @@
 % SIG.SPECTRUM.AFTER2
 %
-% Copyright (C) 2017-2018 Olivier Lartillot
+% Copyright (C) 2017-2019 Olivier Lartillot
 % ? 2007-2009 Olivier Lartillot & University of Jyvaskyla
 %
 % All rights reserved.
