@@ -1,6 +1,6 @@
 % SIG.PEAKS
 %
-% Copyright (C) 2014, 2017-2018 Olivier Lartillot
+% Copyright (C) 2014, 2017-2019 Olivier Lartillot
 % Copyright (C) 2007-2009 Olivier Lartillot & University of Jyvaskyla
 %
 % All rights reserved.
@@ -57,17 +57,6 @@ options = sig.Signal.signaloptions();
         thr.type = 'Integer';
         thr.default = NaN;
     options.thr = thr;
-            
-        smthr.key = 'MatrixThreshold'; % to be documented in version 1.3
-        smthr.type = 'Integer';
-        smthr.default = NaN;
-    options.smthr = smthr;
-    
-        graph.key = 'Graph';
-        graph.type = 'Integer';
-        graph.default = 0;
-        graph.keydefault = .25;
-    options.graph = graph;
         
         interpol.key = 'Interpol';
         interpol.type = 'String';
@@ -95,7 +84,7 @@ options = sig.Signal.signaloptions();
         normal.choice = {'Local','Global','No',0};
         normal.default = 'Global';
     options.normal = normal;
-
+    
 %         extract.key = 'Extract';
 %         extract.type = 'Boolean';
 %         extract.default = 0;
@@ -105,27 +94,7 @@ options = sig.Signal.signaloptions();
         only.type = 'Boolean';
         only.default = 0;
     options.only = only;
-
-        delta.key = 'Track';
-        delta.type = 'Integer';
-        delta.default = 0;
-        delta.keydefault = Inf;
-    options.delta = delta;
     
-        mem.key = 'TrackMem';
-        mem.type = 'Integer';
-        mem.default = Inf;
-    options.mem = mem;
-
-        shorttrackthresh.key = 'CollapseTracks';
-        shorttrackthresh.type = 'Integer';
-        shorttrackthresh.default = 0;
-        shorttrackthresh.keydefault = 7;
-    options.shorttrackthresh = shorttrackthresh;
-
-        scan.key = 'ScanForward'; % specific to mironsets(..., 'Klapuri99')
-        scan.default = [];
-    options.scan = scan;
 end
 
 
