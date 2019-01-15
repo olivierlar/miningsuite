@@ -319,6 +319,14 @@ function options = initoptions
         presel.default = 0;
     options.presel = presel;
 
+%% options related to event detection curve generation from symbolic input
+
+        gauss.key = 'Gauss';
+        gauss.type = 'Numeric';
+        gauss.default = 0;
+        gauss.keydefault = .1;
+    options.gauss = gauss;  
+    
 end
 
 
@@ -968,6 +976,9 @@ function out = symbolic(x,option)
         for k=1:length(ind)
             g(ind(k)) = g(ind(k))+d(k);
         end
+        if option.gauss
+            g = conv(g,gauss(-option.gauss:dt:option.gauss,0,option.gauss));
+        end
     end
     %%
     d = sig.data(g,{'sample'});
@@ -977,4 +988,12 @@ function out = symbolic(x,option)
                         'FrameHop',option.fhop.value,option.fhop.unit);
     end
     out = {out};
+end
+
+
+function y = gauss(x, mu, var)
+% MU = center of gaussian
+% VAR = variance of gaussian
+
+    y=(1/(var*sqrt(2*pi)))*exp(-((x-mu).*(x-mu))/(2*var*var));
 end

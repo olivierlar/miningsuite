@@ -1,6 +1,6 @@
 % AUD.TEMPO.OPTIONS
 %
-% Copyright (C) 2014, 2017 Olivier Lartillot
+% Copyright (C) 2014, 2017, 2019 Olivier Lartillot
 %
 % All rights reserved.
 % License: New BSD License. See full text of the license in LICENSE.txt in
@@ -126,8 +126,15 @@ function options = options
             hw.key = 'Halfwave';
             hw.type = 'Boolean';
             hw.default = 1;
-        options.hw = hw;                
+        options.hw = hw;     
         
+    %% options related to symbolic input
+    
+        gauss.key = 'Gauss';
+        gauss.type = 'Numeric';
+        gauss.default = 0;
+        gauss.keydefault = .1;
+    options.gauss = gauss;  
         
 %% options related to mirautocor:    
 
