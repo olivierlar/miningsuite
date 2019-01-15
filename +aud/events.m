@@ -2,7 +2,7 @@
 % estimates a temporal curve where peaks relate to the temporal position of 
 % events, and estimates those event time positions.
 %
-% Copyright (C) 2017-2018 Olivier Lartillot
+% Copyright (C) 2017-2019 Olivier Lartillot
 % Code for envelope generation from MIDI file is taken from onsetacorr.m
 %   and duraccent.m, part of MIDI Toolbox. Copyright (C) 2004, University of 
 %   Jyvaskyla, Finland
@@ -948,8 +948,7 @@ end
 
 function out = symbolic(x,option)
     % Code adapted from onsetacorr.m and duraccent.m in MIDItoolbox
-    % NDIVS = divisions in Hz (default = 4);
-    ndivs = 10;
+    dt = .01;
     tau=0.5;
     accent_index=2;
     l = length(x.content);
@@ -963,16 +962,16 @@ function out = symbolic(x,option)
             dur(i) = x.content{i}.parameter.getfield('offset').value - on(i);
         end
         d = (1-exp(-dur/tau)).^accent_index; % duration accent by Parncutt (1994)
-        vlen = ndivs*(ceil(on(end))+1);
+        vlen = ceil(on(end)/dt)+1;
         g = zeros(vlen,1);
-        ind = mod(round(on*ndivs),vlen)+1;
+        ind = round(on/dt)+1;
         for k=1:length(ind)
             g(ind(k)) = g(ind(k))+d(k);
         end
     end
     %%
     d = sig.data(g,{'sample'});
-    out = sig.Envelope(d,'Srate',ndivs,'Sstart',0,'Ssize',length(g));
+    out = sig.Envelope(d,'Srate',1/dt,'Sstart',0,'Ssize',length(g));
     if option.frame
         out = sig.frame(out,'FrameSize',option.fsize.value,option.fsize.unit,...
                         'FrameHop',option.fhop.value,option.fhop.unit);
