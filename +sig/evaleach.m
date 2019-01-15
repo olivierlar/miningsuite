@@ -3,7 +3,7 @@
 % This is during that traversal that we check whether a chunk decomposition
 % needs to be performed or not, and carry out that chunk decomposition.
 %
-% Copyright (C) 2014, 2017-2018 Olivier Lartillot
+% Copyright (C) 2014, 2017-2019 Olivier Lartillot
 % All rights reserved.
 % License: New BSD License. See full text of the license in LICENSE.txt in
 % the main folder of the MiningSuite distribution.
@@ -149,7 +149,12 @@ else
             if isequal(head(1:4)',[77 84 104 100])  % MIDI format
                 y = mus.score(filename);
             else
-                T = readtable(filename);
+                try
+                    T = readtable(filename);
+                catch
+                    y = [];
+                    return
+                end
                 d = sig.data(table2array(T),{'sample','dims'});
                 y = {sig.Signal(d,'Name','data','Ssize',height(T))};
             end
