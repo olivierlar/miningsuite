@@ -62,7 +62,7 @@ function [obj,varargout] = apply(obj,func,argin,dimfunc,maxdimfunc,type)
     end
 
     [sortedim,bestdim] = sort(dimdata,'descend');
-    maxdims = max(ndimdata,length(obj.dims));
+    maxdims = max(ndimdata,max(length(obj.dims),maxdimfunc));
     notherdims = maxdims - length(dimfunc);
     if notherdims
         j = 1;
