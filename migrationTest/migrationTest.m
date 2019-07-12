@@ -1,5 +1,5 @@
 
-testfile = 'ragtime.wav' % Stereo file
+testfile = 'ragtime.wav'; % Stereo file
 
 
 %% testing migration: mirgetdata with obj.getdata
@@ -152,12 +152,6 @@ else
 end
 
 
-%%
-%
-%------------------------------------------------------------------------
-%
-%
-
 %% testing migration: mirframe with sig.frame in framesize and in seconds
 clearvars -except testfile ;
 
@@ -301,6 +295,17 @@ if tf == 1
 else
    disp('test fail!');
 end
+
+
+%%
+%
+%------------------------------------------------------------------------
+%
+%
+mirgetdata_vs_objgetdata
+%mirframe_vs_sigframe
+mirfilterbank_vs_sigfilterbank
+
 
 %% testing migration: mirspectrum with sig.spectrum
 clearvars -except testfile ;
