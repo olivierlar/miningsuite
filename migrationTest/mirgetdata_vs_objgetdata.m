@@ -1,7 +1,4 @@
 
-testfile = 'voice.wav'
-
-
 %% testing migration: mirgetdata with obj.getdata
 
 disp('testing migration: mirgetdata with obj.getdata'); 
@@ -141,36 +138,3 @@ else
    disp('test fail!');
 end
 clearvars -except testfile ;
-
-
-%%
-%
-%------------------------------------------------------------------------
-%
-%
-
-%% testing migration: mirframe with sig.frame
-disp('testing migration: mirframe with sig.frame'); 
-
-frameSize = 
-
-a = mirframe
-
-%% testing migration: mirspectrum with sig.spectrum
-
-disp('testing migration: mirspectrum with sig.spectrum'); 
-a = mirspectrum(testfile);
-b = sig.spectrum(testfile);
-tf = isequal(mirgetdata(a),b.getdata);
-
-if tf == 1
-   disp('test OK!'); 
-else
-   disp('test fail!');
-end
-clearvars -except testfile ;
-
-
-
-
-
