@@ -172,7 +172,7 @@ function out = routine(in,sampling,option)
 
         % FFT computation
         out = in.apply(@fft,{N},{dim});
-        out = out.extract(dim,[1,N/2]);
+        out = out.extract(dim,[1,N/2+1]);
         if ~option.alongbands
             out = out.deframe;
             if option.phase
