@@ -1,4 +1,8 @@
 
+testfile = 'ragtime.wav'
+
+
+
 %% testing migration: mirgetdata with obj.getdata
 
 disp('testing migration: mirgetdata with obj.getdata'); 
