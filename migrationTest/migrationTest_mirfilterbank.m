@@ -4,6 +4,8 @@ testfile = 'ragtime.wav'
 
 
 %% testing migration: mirfilterbank (..., 'Gammatone') -> aud.filterbank
+
+clearvars -except testfile ;
 disp('testing migration: mirfilterbank (..., ''Gammatone'') -> aud.filterbank'); 
 
 a = mirfilterbank(testfile, 'Gammatone');
@@ -16,11 +18,12 @@ if tf == 1
 else
    disp('test fail!');
 end
-clearvars -except testfile ;
 
 
 
 %% testing migration: mirfilterbank (..., '2Channels') -> aud.filterbank (...,'2Channels')
+
+clearvars -except testfile ;
 disp('testing migration: mirfilterbank (..., ''2Channels'') -> aud.filterbank (...,''2Channels'')'); 
 
 a = mirfilterbank(testfile, '2Channels');
@@ -33,10 +36,11 @@ if tf == 1
 else
    disp('test fail!');
 end
-clearvars -except testfile ;
 
 
 %% testing migration: mirfilterbank (..., 'Channel',c) -> sig.filterbank (...,'Channel', c)
+
+clearvars -except testfile ;
 disp('testing migration: mirfilterbank (..., ''Channel'', c) -> aud.filterbank (...,''Channel'',c)'); 
 
 c = 2;
@@ -51,10 +55,10 @@ if tf == 1
 else
    disp('test fail!');
 end
-clearvars -except testfile ;
 
 
 %% testing migration: mirfilterbank (..., 'Manual',f) -> sig.filterbank (...,'CutOff', f)
+% clearvars -except testfile ;
 % disp('testing migration: mirfilterbank (..., ''Manual'', f) -> aud.filterbank (...,''CutOff'',f)'); 
 % 
 % f = 200;
@@ -69,10 +73,11 @@ clearvars -except testfile ;
 % else
 %    disp('test fail!');
 % end
-% clearvars -except testfile ;
 
 
 %% testing migration: mirfilterbank (..., 'Order',o) -> sig.filterbank (...,'Order', o)
+
+clearvars -except testfile ;
 disp('testing migration: mirfilterbank (..., ''Order'', o) -> aud.filterbank (...,''Order'',o)'); 
 
 o = 4;
@@ -87,10 +92,11 @@ if tf == 1
 else
    disp('test fail!');
 end
-clearvars -except testfile ;
 
 
 %% testing migration: mirfilterbank (..., 'Hop',h) -> sig.filterbank (...,'Hop', h)
+
+clearvars -except testfile ;
 disp('testing migration: mirfilterbank (..., ''Hop'', h) -> aud.filterbank (...,''Hop'',h)'); 
 
 
@@ -122,7 +128,6 @@ else
    disp('test fail!');
 end
 
-clearvars -except testfile ;
 
 disp('the spectral hop factor between successive fiters is a thir of the whole frequency region');
 h = 3;
@@ -141,6 +146,7 @@ end
 
 
 %% testing migration: mirfilterbank (..., 'Mel') -> aud.filterbank (...,'Mel')
+% clearvars -except testfile ;
 % disp('testing migration: mirfilterbank (..., ''Mel'') -> aud.filterbank (...,''Mel'')'); 
 % 
 % a = mirfilterbank(testfile, 'Mel');
@@ -153,10 +159,11 @@ end
 % else
 %    disp('test fail!');
 % end
-% clearvars -except testfile ;
 
 
 %% testing migration: mirfilterbank (..., 'Bark') -> aud.filterbank (...,'Bark')
+
+clearvars -except testfile ;
 disp('testing migration: mirfilterbank (..., ''Bark'') -> aud.filterbank (...,''Bark'')'); 
 
 a = mirfilterbank(testfile, 'Bark');
@@ -169,10 +176,11 @@ if tf == 1
 else
    disp('test fail!');
 end
-clearvars -except testfile ;
 
 
 %% testing migration: mirfilterbank (..., 'Scheirer') -> aud.filterbank (...,'Scheirer')
+
+clearvars -except testfile ;
 disp('testing migration: mirfilterbank (..., ''Scheirer'') -> aud.filterbank (...,''Scheirer'')'); 
 
 a = mirfilterbank(testfile, 'Scheirer');
@@ -185,10 +193,11 @@ if tf == 1
 else
    disp('test fail!');
 end
-clearvars -except testfile ;
 
 
 %% testing migration: mirfilterbank (..., 'Klapuri') -> aud.filterbank (...,'Klapuri')
+
+clearvars -except testfile ;
 disp('testing migration: mirfilterbank (..., ''Klapuri'') -> aud.filterbank (...,''Klapuri'')'); 
 
 a = mirfilterbank(testfile, 'Klapuri');
@@ -201,4 +210,3 @@ if tf == 1
 else
    disp('test fail!');
 end
-clearvars -except testfile ;
