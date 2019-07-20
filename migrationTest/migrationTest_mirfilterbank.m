@@ -1,4 +1,4 @@
-
+    
 testfile = 'ragtime.wav'
 
 
@@ -11,7 +11,7 @@ disp('testing migration: mirfilterbank (..., ''Gammatone'') -> aud.filterbank');
 a = mirfilterbank(testfile, 'Gammatone');
 b = aud.filterbank(testfile, 'Mix');
 
-tf = isequal(mirgetdata(a),b.getdata);
+tf = isequal(squeeze(mirgetdata(a)),b.getdata);
 
 if tf == 1
    disp('test OK!'); 
@@ -29,7 +29,7 @@ disp('testing migration: mirfilterbank (..., ''2Channels'') -> aud.filterbank (.
 a = mirfilterbank(testfile, '2Channels');
 b = aud.filterbank(testfile, '2Channels', 'Mix');
 
-tf = isequal(mirgetdata(a),b.getdata);
+tf = isequal(squeeze(mirgetdata(a)),b.getdata);
 
 if tf == 1
    disp('test OK!'); 
@@ -38,17 +38,33 @@ else
 end
 
 
-%% testing migration: mirfilterbank (..., 'Channel',c) -> sig.filterbank (...,'Channel', c)
+%% testing migration: mirfilterbank (..., 'Gammatone', 'NbChannels') -> aud.filterbank
+
+clearvars -except testfile ;
+disp('testing migration: mirfilterbank (..., ''Gammatone'', ''NbChannels'') -> aud.filterbank'); 
+
+a = mirfilterbank(testfile, 'Gammatone', 'NbChannels', 20);
+b = aud.filterbank(testfile, 'Mix', 'NbChannels', 20);
+
+tf = isequal(squeeze(mirgetdata(a)),b.getdata);
+
+if tf == 1
+   disp('test OK!'); 
+else
+   disp('test fail!');
+end
+
+%% testing migration: mirfilterbank (..., 'Channel',c) -> aud.filterbank (...,'Channel', c)
 
 clearvars -except testfile ;
 disp('testing migration: mirfilterbank (..., ''Channel'', c) -> aud.filterbank (...,''Channel'',c)'); 
 
-c = 2;
+c = 2:5;
 
 a = mirfilterbank(testfile, 'Channel', c);
 b = aud.filterbank(testfile, 'Channel', c, 'Mix');
 
-tf = isequal(mirgetdata(a),b.getdata);
+tf = isequal(squeeze(mirgetdata(a)),b.getdata);
 
 if tf == 1
    disp('test OK!'); 
@@ -58,34 +74,15 @@ end
 
 
 %% testing migration: mirfilterbank (..., 'Manual',f) -> sig.filterbank (...,'CutOff', f)
-% clearvars -except testfile ;
-% disp('testing migration: mirfilterbank (..., ''Manual'', f) -> aud.filterbank (...,''CutOff'',f)'); 
-% 
-% f = 200;
-% 
-% a = mirfilterbank(testfile, 'Manual', f);
-% b = sig.filterbank(testfile, 'CutOff', f);
-% 
-% tf = isequal(mirgetdata(a),b.getdata);
-% 
-% if tf == 1
-%    disp('test OK!'); 
-% else
-%    disp('test fail!');
-% end
-
-
-%% testing migration: mirfilterbank (..., 'Order',o) -> sig.filterbank (...,'Order', o)
-
 clearvars -except testfile ;
-disp('testing migration: mirfilterbank (..., ''Order'', o) -> aud.filterbank (...,''Order'',o)'); 
+disp('testing migration: mirfilterbank (..., ''Manual'', f) -> sig.filterbank (...,''CutOff'',f)'); 
 
-o = 4;
+f = [-Inf,200,Inf];
 
-a = mirfilterbank(testfile, 'Order', o);
-b = aud.filterbank(testfile, 'Order', o, 'Mix');
+a = mirfilterbank(testfile, 'Manual', f);
+b = sig.filterbank(testfile, 'CutOff', f,'Mix');
 
-tf = isequal(mirgetdata(a),b.getdata);
+tf = isequal(squeeze(mirgetdata(a)),b.getdata);
 
 if tf == 1
    disp('test OK!'); 
@@ -94,19 +91,18 @@ else
 end
 
 
-%% testing migration: mirfilterbank (..., 'Hop',h) -> sig.filterbank (...,'Hop', h)
+%% testing migration: mirfilterbank (..., 'Manual', f, 'Order',o) -> sig.filterbank (...,'CutOff', f,'Order', o)
 
 clearvars -except testfile ;
-disp('testing migration: mirfilterbank (..., ''Hop'', h) -> aud.filterbank (...,''Hop'',h)'); 
+disp('testing migration: mirfilterbank (..., ''Manual'', f, ''Order'', o) -> sig.filterbank (...,''CutOff'',f,''Order'',o)'); 
 
+f = [-Inf,200,Inf];
+o = 3;
 
-disp('filters are non-overlapping');
-h = 1;
+a = mirfilterbank(testfile, 'Manual', f, 'Order', o);
+b = sig.filterbank(testfile, 'CutOff', f, 'Order', o, 'Mix');
 
-a = mirfilterbank(testfile, 'Hop', h);
-b = sig.filterbank(testfile, 'Hop', h, 'Mix');
-
-tf = isequal(mirgetdata(a),b.getdata);
+tf = isequal(squeeze(mirgetdata(a)),b.getdata);
 
 if tf == 1
    disp('test OK!'); 
@@ -114,13 +110,18 @@ else
    disp('test fail!');
 end
 
-disp('filters are half-overlapping');
+
+%% testing migration: mirfilterbank (..., 'Manual', f, 'Hop',2) -> sig.filterbank (...,'CutOff', f,'Hop', 2)
+
+clearvars -except testfile ;
+disp('testing migration: mirfilterbank (..., ''Manual'', f, ''Hop'', 2) -> sig.filterbank (...,''CutOff'',f,''Hop'',2)'); 
+f = [-Inf,200,400,Inf];
 h = 2;
 
-a = mirfilterbank(testfile, 'Hop', h);
-b = sig.filterbank(testfile, 'Hop', h, 'Mix');
+a = mirfilterbank(testfile, 'Manual', f, 'Hop', h);
+b = sig.filterbank(testfile, 'CutOff', f, 'Hop', h, 'Mix');
 
-tf = isequal(mirgetdata(a),b.getdata);
+tf = isequal(squeeze(mirgetdata(a)),b.getdata);
 
 if tf == 1
    disp('test OK!'); 
@@ -128,14 +129,17 @@ else
    disp('test fail!');
 end
 
+%% testing migration: mirfilterbank (..., 'Manual', f, 'Hop',3) -> sig.filterbank (...,'CutOff', f,'Hop', 3)
 
-disp('the spectral hop factor between successive fiters is a thir of the whole frequency region');
+clearvars -except testfile ;
+disp('testing migration: mirfilterbank (..., ''Manual'', f, ''Hop'', 3) -> sig.filterbank (...,''CutOff'',f,''Hop'',3)'); 
+f = [-Inf,200,400,600,Inf];
 h = 3;
 
-a = mirfilterbank(testfile, 'Hop', h);
-b = sig.filterbank(testfile, 'Hop', h, 'Mix');
+a = mirfilterbank(testfile, 'Manual', f, 'Hop', h);
+b = sig.filterbank(testfile, 'CutOff', f, 'Hop', h, 'Mix');
 
-tf = isequal(mirgetdata(a),b.getdata);
+tf = isequal(squeeze(mirgetdata(a)),b.getdata);
 
 if tf == 1
    disp('test OK!'); 
@@ -146,19 +150,19 @@ end
 
 
 %% testing migration: mirfilterbank (..., 'Mel') -> aud.filterbank (...,'Mel')
-% clearvars -except testfile ;
-% disp('testing migration: mirfilterbank (..., ''Mel'') -> aud.filterbank (...,''Mel'')'); 
-% 
-% a = mirfilterbank(testfile, 'Mel');
-% b = aud.filterbank(testfile, 'Mel');
-% 
-% tf = isequal(mirgetdata(a),b.getdata);
-% 
-% if tf == 1
-%    disp('test OK!'); 
-% else
-%    disp('test fail!');
-% end
+clearvars -except testfile ;
+disp('testing migration: mirfilterbank (..., ''Mel'') -> aud.filterbank (...,''Mel'')'); 
+
+a = mirfilterbank(testfile, 'Mel');
+b = aud.filterbank(testfile, 'Mel','Mix');
+
+tf = isequal(squeeze(mirgetdata(a)),b.getdata);
+
+if tf == 1
+   disp('test OK!'); 
+else
+   disp('test fail!');
+end
 
 
 %% testing migration: mirfilterbank (..., 'Bark') -> aud.filterbank (...,'Bark')
@@ -169,7 +173,7 @@ disp('testing migration: mirfilterbank (..., ''Bark'') -> aud.filterbank (...,''
 a = mirfilterbank(testfile, 'Bark');
 b = aud.filterbank(testfile, 'Bark', 'Mix');
 
-tf = isequal(mirgetdata(a),b.getdata);
+tf = isequal(squeeze(mirgetdata(a)),b.getdata);
 
 if tf == 1
    disp('test OK!'); 
@@ -186,7 +190,7 @@ disp('testing migration: mirfilterbank (..., ''Scheirer'') -> aud.filterbank (..
 a = mirfilterbank(testfile, 'Scheirer');
 b = aud.filterbank(testfile, 'Scheirer', 'Mix');
 
-tf = isequal(mirgetdata(a),b.getdata);
+tf = isequal(squeeze(mirgetdata(a)),b.getdata);
 
 if tf == 1
    disp('test OK!'); 
@@ -203,7 +207,7 @@ disp('testing migration: mirfilterbank (..., ''Klapuri'') -> aud.filterbank (...
 a = mirfilterbank(testfile, 'Klapuri');
 b = aud.filterbank(testfile, 'Klapuri', 'Mix');
 
-tf = isequal(mirgetdata(a),b.getdata);
+tf = isequal(squeeze(mirgetdata(a)),b.getdata);
 
 if tf == 1
    disp('test OK!'); 
