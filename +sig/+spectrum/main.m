@@ -1,6 +1,6 @@
 % SIG.SPECTRUM.MAIN
 %
-% Copyright (C) 2014, 2017-2018 Olivier Lartillot
+% Copyright (C) 2014, 2017-2019 Olivier Lartillot
 % Copyright (C) 2007-2009 Olivier Lartillot & University of Jyvaskyla
 %
 % All rights reserved.
@@ -172,7 +172,7 @@ function out = routine(in,sampling,option)
 
         % FFT computation
         out = in.apply(@fft,{N},{dim});
-        out = out.extract(dim,[1,N/2]);
+        out = out.extract(dim,[1,N/2+1]);
         if ~option.alongbands
             out = out.deframe;
             if option.phase

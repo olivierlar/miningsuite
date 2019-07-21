@@ -65,8 +65,7 @@ function x = main(x,option)
         option.freq(linearFilters+1:totalFilters+2) = ...
             option.freq(linearFilters) * logSpacing.^(1:logFilters+2);
 
-        option.overlap.value = 2;
-        option.overlap.unit = 'sp';
+        option.overlap = 2;
         option.filtertype = 'Manual';
     elseif strcmpi(option.presel,'Bark')
         option.freq = [10 20 30 40 51 63 77 92 108 127 148 172 200 232 ...
