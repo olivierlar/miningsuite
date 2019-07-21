@@ -2,7 +2,7 @@
 % performs a filterbank decomposition of an audio waveform following
 % auditory models
 %
-% Copyright (C) 2014, 2017-2018 Olivier Lartillot
+% Copyright (C) 2014, 2017-2019 Olivier Lartillot
 % Copyright (C) 1998 Malcolm Slaney, Interval Research Corporation
 %
 % All rights reserved.
