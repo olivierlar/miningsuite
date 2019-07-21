@@ -6,7 +6,7 @@ clearvars -except testfile ;
 
 disp('testing migration: mirspectrum with sig.spectrum'); 
 a = mirspectrum(testfile);
-b = sig.spectrum(testfile);
+b = sig.spectrum(testfile, 'Mix');
 tf = isequal(mirgetdata(a),b.getdata);
 
 if tf == 1
@@ -14,3 +14,346 @@ if tf == 1
 else
    disp('test fail!');
 end
+
+
+%% testing migration: mirspectrum with sig.spectrum with Frame
+clearvars -except testfile ;
+
+disp('testing migration: mirspectrum with sig.spectrum with Frame'); 
+a = mirspectrum(testfile, 'Frame');
+b = sig.spectrum(testfile, 'Frame', 'Mix');
+tf = isequal(mirgetdata(a),b.getdata);
+
+if tf == 1
+   disp('test OK!'); 
+else
+   disp('test fail!');
+end
+
+%% testing migration: mirspectrum with sig.spectrum with Min
+clearvars -except testfile ;
+
+mi = 100; %lowest frequency (default 0 Hz)
+
+disp('testing migration: mirspectrum with sig.spectrum with Min'); 
+a = mirspectrum(testfile, 'Min');
+b = sig.spectrum(testfile, 'Min', mi, 'Mix');
+tf = isequal(mirgetdata(a),b.getdata);
+
+if tf == 1
+   disp('test OK!'); 
+else
+   disp('test fail!');
+end
+
+
+%% testing migration: mirspectrum with sig.spectrum with Max
+clearvars -except testfile ;
+
+mi = 100; %lowest frequency (default 0 Hz)
+
+disp('testing migration: mirspectrum with sig.spectrum with Max'); 
+a = mirspectrum(testfile, 'Max');
+b = sig.spectrum(testfile, 'Max', mi, 'Mix');
+tf = isequal(mirgetdata(a),b.getdata);
+
+if tf == 1
+   disp('test OK!'); 
+else
+   disp('test fail!');
+end
+
+
+%% testing migration: mirspectrum with sig.spectrum with Window
+clearvars -except testfile ;
+disp('testing migration: mirspectrum with sig.spectrum with Window'); 
+
+w = 'hanning'; %windowing function (default = 'hanning')
+
+
+a = mirspectrum(testfile, 'Window');
+b = sig.spectrum(testfile, 'Window', w, 'Mix');
+tf = isequal(mirgetdata(a),b.getdata);
+
+if tf == 1
+   disp('test OK!'); 
+else
+   disp('test fail!');
+end
+
+
+%% testing migration: mirspectrum with sig.spectrum with Phase
+clearvars -except testfile ;
+disp('testing migration: mirspectrum with sig.spectrum with Phase'); 
+
+
+a = mirspectrum(testfile, 'Phase');
+b = sig.spectrum(testfile, 'Phase', 'No', 'Mix');
+tf = isequal(mirgetdata(a),b.getdata);
+
+if tf == 1
+   disp('test OK!'); 
+else
+   disp('test fail!');
+end
+
+
+%% testing migration: mirspectrum with sig.spectrum with MinRes
+clearvars -except testfile ;
+disp('testing migration: mirspectrum with sig.spectrum with MinRes'); 
+
+mr = 100; %minimal frequency resolution
+
+a = mirspectrum(testfile, 'MinRes');
+b = sig.spectrum(testfile, 'MinRes', mr, 'Mix');
+tf = isequal(mirgetdata(a),b.getdata);
+
+if tf == 1
+   disp('test OK!'); 
+else
+   disp('test fail!');
+end
+
+%% testing migration: mirspectrum with sig.spectrum with MinRes with OctaveRatio
+clearvars -except testfile ;
+disp('testing migration: mirspectrum with sig.spectrum with MinRes'); 
+
+r = 100; %minimal frequency resolution
+tol = 0.75;% constraining multiplicative factor (default = 0.75)
+
+a = mirspectrum(testfile, 'MinRes', r, 'OctaveRatio', tol);
+b = sig.spectrum(testfile, 'MinRes', r, 'OctaveRatio', tol,'Mix');
+tf = isequal(mirgetdata(a),b.getdata);
+
+if tf == 1
+   disp('test OK!'); 
+else
+   disp('test fail!');
+end
+
+
+%% testing migration: mirspectrum with sig.spectrum with Res
+clearvars -except testfile ;
+disp('testing migration: mirspectrum with sig.spectrum with Res'); 
+
+r = 100; %minimal frequency resolution
+
+a = mirspectrum(testfile, 'Res');
+b = sig.spectrum(testfile, 'Res', r, 'Mix');
+tf = isequal(mirgetdata(a),b.getdata);
+
+if tf == 1
+   disp('test OK!'); 
+else
+   disp('test fail!');
+end
+
+
+%% testing migration: mirspectrum with sig.spectrum with Length
+clearvars -except testfile ;
+disp('testing migration: mirspectrum with sig.spectrum with Length'); 
+
+l = 8; %if length is not a power of 2, the FFT routine will not be used
+
+a = mirspectrum(testfile, 'Length');
+b = sig.spectrum(testfile, 'Length', l, 'Mix');
+tf = isequal(mirgetdata(a),b.getdata);
+
+if tf == 1
+   disp('test OK!'); 
+else
+   disp('test fail!');
+end
+
+%% testing migration: mirspectrum with sig.spectrum with ZeroPad
+clearvars -except testfile ;
+disp('testing migration: mirspectrum with sig.spectrum with ZeroPad'); 
+
+s = 4;%zero padding of s samples
+
+a = mirspectrum(testfile, 'ZeroPad');
+b = sig.spectrum(testfile, 'ZeroPad', s, 'Mix');
+tf = isequal(mirgetdata(a),b.getdata);
+
+if tf == 1
+   disp('test OK!'); 
+else
+   disp('test fail!');
+end
+
+
+%% testing migration: mirspectrum with sig.spectrum with WarningRes
+clearvars -except testfile ;
+disp('testing migration: mirspectrum with sig.spectrum with WarningRes'); 
+
+mr = 500;%required frequency resolution in Hz
+
+a = mirspectrum(testfile, 'WarningRes');
+b = sig.spectrum(testfile, 'WarningRes', mr, 'Mix');
+tf = isequal(mirgetdata(a),b.getdata);
+
+if tf == 1
+   disp('test OK!'); 
+else
+   disp('test fail!');
+end
+
+
+
+%% testing migration: mirspectrum with sig.spectrum with ConstantQ
+clearvars -except testfile ;
+disp('testing migration: mirspectrum with sig.spectrum with ConstantQ'); 
+
+nb = 12; %default nb = 12 bins per octave
+
+a = mirspectrum(testfile, 'ConstantQ');
+b = sig.spectrum(testfile, 'ConstantQ', nb, 'Mix');
+tf = isequal(mirgetdata(a),b.getdata);
+
+if tf == 1
+   disp('test OK!'); 
+else
+   disp('test fail!');
+end
+
+%% testing migration: mirspectrum with sig.spectrum with Normal
+clearvars -except testfile ;
+disp('testing migration: mirspectrum with sig.spectrum with Normal'); 
+
+a = mirspectrum(testfile, 'Normal');
+b = sig.spectrum(testfile, 'Normal', 'Mix');
+tf = isequal(mirgetdata(a),b.getdata);
+
+if tf == 1
+   disp('test OK!'); 
+else
+   disp('test fail!');
+end
+
+
+%% testing migration: mirspectrum with sig.spectrum with NormalLength
+clearvars -except testfile ;
+disp('testing migration: mirspectrum with sig.spectrum with NormalLength'); 
+
+a = mirspectrum(testfile, 'NormalLength');
+b = sig.spectrum(testfile, 'NormalLength', 'Mix');
+tf = isequal(mirgetdata(a),b.getdata);
+
+if tf == 1
+   disp('test OK!'); 
+else
+   disp('test fail!');
+end
+
+
+%% testing migration: mirspectrum with sig.spectrum with Power
+clearvars -except testfile ;
+disp('testing migration: mirspectrum with sig.spectrum with Power'); 
+
+a = mirspectrum(testfile, 'Power');
+b = sig.spectrum(testfile, 'Power', 'Mix');
+tf = isequal(mirgetdata(a),b.getdata);
+
+if tf == 1
+   disp('test OK!'); 
+else
+   disp('test fail!');
+end
+
+%% testing migration: mirspectrum with sig.spectrum with dB
+clearvars -except testfile ;
+disp('testing migration: mirspectrum with sig.spectrum with dB'); 
+
+a = mirspectrum(testfile, 'dB');
+b = sig.spectrum(testfile, 'dB', 'Mix');
+tf = isequal(mirgetdata(a),b.getdata);
+
+if tf == 1
+   disp('test OK!'); 
+else
+   disp('test fail!');
+end
+
+
+%% testing migration: mirspectrum with sig.spectrum with Smooth
+clearvars -except testfile ;
+disp('testing migration: mirspectrum with sig.spectrum with Smooth'); 
+
+o = 10; %moving average order (default = 10)
+
+a = mirspectrum(testfile, 'Smooth', o);
+b = sig.spectrum(testfile, 'Smooth',o, 'Mix');
+tf = isequal(mirgetdata(a),b.getdata);
+
+if tf == 1
+   disp('test OK!'); 
+else
+   disp('test fail!');
+end
+
+%% testing migration: mirspectrum with sig.spectrum with Gauss
+clearvars -except testfile ;
+disp('testing migration: mirspectrum with sig.spectrum with Gauss'); 
+
+o = 10; %gaussian of SD (default = 10)
+
+a = mirspectrum(testfile, 'Gauss', o);
+b = sig.spectrum(testfile, 'Gauss',o, 'Mix');
+tf = isequal(mirgetdata(a),b.getdata);
+
+if tf == 1
+   disp('test OK!'); 
+else
+   disp('test fail!');
+end
+
+%% testing migration: mirspectrum with sig.spectrum with TimeSmooth
+clearvars -except testfile ;
+disp('testing migration: mirspectrum with sig.spectrum with TimeSmooth'); 
+
+o = 10; %moving average order (default = 10)
+
+a = mirspectrum(testfile, 'TimeSmooth', o);
+b = sig.spectrum(testfile, 'TimeSmooth',o, 'Mix');
+tf = isequal(mirgetdata(a),b.getdata);
+
+if tf == 1
+   disp('test OK!'); 
+else
+   disp('test fail!');
+end
+
+
+%% testing migration: mirspectrum with sig.spectrum with Prod
+clearvars -except testfile ;
+disp('testing migration: mirspectrum with sig.spectrum with Prod'); 
+
+m = 1:6; %list of factors (default m = 1:6)
+
+a = mirspectrum(testfile, 'Prod', m);
+b = sig.spectrum(testfile, 'Prod',m, 'Mix');
+tf = isequal(mirgetdata(a),b.getdata);
+
+if tf == 1
+   disp('test OK!'); 
+else
+   disp('test fail!');
+end
+
+%% testing migration: mirspectrum with sig.spectrum with Sum
+clearvars -except testfile ;
+disp('testing migration: mirspectrum with sig.spectrum with Sum'); 
+
+m = 1:6; %list of factors (default m = 1:6)
+
+a = mirspectrum(testfile, 'Sum', m);
+b = sig.spectrum(testfile, 'Sum',m, 'Mix');
+tf = isequal(mirgetdata(a),b.getdata);
+
+if tf == 1
+   disp('test OK!'); 
+else
+   disp('test fail!');
+end
+
+

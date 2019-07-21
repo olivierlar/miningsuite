@@ -371,24 +371,6 @@ else
 end
 
 
-%% testing migration: mirenvelope with sig.envelope with Mu
-
-clearvars -except testfile ;
-disp('testing migration: mirenvelope with sig.envelope with Mu');
-
-mu = -10; %need to confirm a reasonable value for test
-
-a = mirenvelope(testfile, 'Mu',mu);
-b = sig.envelope(testfile, 'Mu',mu, 'Mix');
-tf = isequal(mirgetdata(a),b.getdata);
-
-if tf == 1
-   disp('test OK!'); 
-else
-   disp('test fail!');
-end
-
-
 %% testing migration: mirenvelope with sig.envelope with Power
 
 clearvars -except testfile ;
