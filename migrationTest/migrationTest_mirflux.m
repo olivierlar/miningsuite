@@ -1,9 +1,9 @@
 testfile = 'ragtime.wav'
 
 
-%% testing migration: mirflux with sigflux on mirspectrum and sig.spectrum
+%% testing migration: mirflux(...) -> sig.flux(...)
 clearvars -except testfile ;
-disp('testing migration: mirflux with sigflux on mirspectrum and sig.spectrum'); 
+disp('testing migration: mirflux(...) -> sig.flux(...)'); 
 
 s1 = mirspectrum(testfile, 'Frame');
 s2 = sig.spectrum (testfile, 'Frame', 'Mix');
@@ -20,9 +20,9 @@ else
 end
 
 
-%% testing migration: mirflux with sigflux on mircepstrum and sig.cepstrum
-% clearvars -except testfile ;
-% disp('testing migration: mirflux with sigflux on mircepstrum and sig.cepstrum'); 
+%% testing migration: mirspectrum(..., 'Frame') -> sig.spectrum(..., 'Frame')
+%clearvars -except testfile ;
+%disp('testing migration: mirflux(..., ''Frame'') -> sig.spectrum(..., ''Frame'')'); 
 % 
 % s1 = mircepstrum(testfile, 'Frame');
 % s2 = sig.cepstrum (testfile, 'Frame', 'Mix');
@@ -39,9 +39,9 @@ end
 % end
 
 
-%% testing migration: mirflux with sigflux with Dist
+%% testing migration: mirflux(..., 'Dist') -> sig.flux(..., 'Dist')
 clearvars -except testfile ;
-disp('testing migration: mirflux with sigflux with Dist'); 
+disp('testing migration: mirflux(..., ''Dist'') -> sig.flux(..., ''Dist'')'); 
 
 s1 = mirspectrum(testfile, 'Frame');
 s2 = sig.spectrum (testfile, 'Frame', 'Mix');
@@ -58,9 +58,9 @@ else
    disp('test fail!');
 end
 
-%% testing migration: mirflux with sigflux with Inc
+%% testing migration: mirflux(..., 'Inc') -> sig.flux(..., 'Inc')
 clearvars -except testfile ;
-disp('testing migration: mirflux with sigflux with Inc'); 
+disp('testing migration: mirflux(..., ''Inc'') -> sig.flux(..., ''Inc'')'); 
 
 s1 = mirspectrum(testfile, 'Frame');
 s2 = sig.spectrum (testfile, 'Frame', 'Mix');
@@ -76,9 +76,9 @@ else
    disp('test fail!');
 end
 
-%% testing migration: mirflux with sigflux with Complex
+%% testing migration: mirflux(..., 'Complex') -> sig.flux(..., 'Complex')
 clearvars -except testfile ;
-disp('testing migration: mirflux with sigflux with Complex'); 
+disp('testing migration: mirflux(..., ''Complex'') -> sig.flux(..., ''Complex'')'); 
 
 s1 = mirspectrum(testfile, 'Frame');
 s2 = sig.spectrum (testfile, 'Frame', 'Mix');

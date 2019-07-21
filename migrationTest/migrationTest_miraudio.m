@@ -2,10 +2,10 @@
 testfile = 'ragtime.wav'
 
 
-%% testing migration: miraudio with sig.signal
+%% testing migration: miraudio(...) -> sig.signal(...)
 clearvars -except testfile ;
 
-disp('testing migration: miraudio with sig.signal'); 
+disp('testing migration: miraudio(...) -> sig.signal(...)'); 
 a = miraudio(testfile);
 b = sig.signal(testfile,'Mix');
 tf = isequal(mirgetdata(a),b.getdata);
@@ -18,10 +18,10 @@ else
 end
 
 
-%% testing migration: miraudio (Mono) with sig.signal (Mix)
+%% testing migration: miraudio (..., 'Mono') with sig.signal (...)
 clearvars -except testfile ;
 
-disp('testing migration: miraudio (Mono) with sig.signal (Mix)'); 
+disp('testing migration: miraudio (..., ''Mono'') with sig.signal (..., ''Mix'')'); 
 a = miraudio(testfile, 'Mono',0);
 b = sig.signal(testfile);
 da = squeeze(mirgetdata(a));
@@ -34,10 +34,10 @@ else
    disp('test fail!');
 end
 
-%% testing migration: miraudio (Center) with sig.signal (Center)
+%% testing migration: miraudio (..., 'Center') with sig.signal (..., 'Center')
 clearvars -except testfile ;
 
-disp('testing migration: miraudio (Center) with sig.signal (Center)'); 
+disp('testing migration: miraudio (..., ''Center'') with sig.signal (..., ''Center)'''); 
 a = miraudio(testfile, 'Center');
 b = sig.signal(testfile, 'Center','Mix');
 tf = isequal(mirgetdata(a),b.getdata);
@@ -48,10 +48,10 @@ else
    disp('test fail!');
 end
 
-%% testing migration: miraudio (Sampling) with sig.signal (Sampling)
+%% testing migration: miraudio (..., 'Sampling') with sig.signal (..., 'Sampling')
 clearvars -except testfile ;
 
-disp('testing migration: miraudio (Sampling) with sig.signal (Sampling)'); 
+disp('testing migration: miraudio (..., ''Sampling'') with sig.signal (..., ''Sampling'')'); 
 samplingRate = 10000;
 a = miraudio(testfile, 'Sampling', samplingRate);
 b = sig.signal(testfile, 'Sampling', samplingRate,'Mix');
@@ -64,10 +64,10 @@ else
 end
 
 
-%% testing migration: miraudio (FWR) with sig.signal (FWR)
+%% testing migration: miraudio (..., 'FWR') with sig.signal (..., 'FWR')
 clearvars -except testfile ;
 
-disp('testing migration: miraudio (FWR) with sig.signal (FWR)'); 
+disp('testing migration: miraudio (..., ''FWR'') with sig.signal (..., ''FWR'')'); 
 a = miraudio(testfile, 'FWR');
 b = sig.signal(testfile, 'FWR','Mix');
 tf = isequal(mirgetdata(a),b.getdata);
@@ -80,11 +80,11 @@ end
 
 
 
-%% testing migration: miraudio (Frame) with sig.signal (Frame)
+%% testing migration: miraudio (..., 'Frame'm ...) with sig.signal (..., 'Frame', ...)
 %seconds
 clearvars -except testfile ;
 
-disp('testing migration: miraudio (Frame) with sig.signal (Frame)'); 
+disp('testing migration: miraudio (..., ''Frame'',...) with sig.signal (..., ''Frame'',...)'); 
 
 w = 'FrameLength';
 wu = 2;
@@ -102,11 +102,11 @@ else
 end
 
 
-%% testing migration: miraudio (Extract) with sig.signal (Extract)by
+%% testing migration: miraudio (..., 'Extract',t1,t2,'sp') with sig.signal (..., 'Extract',t1,t2,'sp')
 %sampling index
 clearvars -except testfile ;
 
-disp('testing migration: miraudio (Extract) with sig.signal (Extract) by index'); 
+disp('testing migration: miraudio (..., ''Extract'',t1,t2,''sp'') with sig.signal (..., ''Extract'',t1,t2,''sp'')'); 
 t1 = 0;
 t2 = 88200;
 u = 'sp';
@@ -121,10 +121,10 @@ else
 end
 
 
-%% testing migration: miraudio (Trim) with sig.signal (Trim)
+%% testing migration: miraudio (..., 'Trim') with sig.signal (..., 'Trim')
 clearvars -except testfile ;
 
-disp('testing migration: miraudio (Trim) with sig.signal (Trim)'); 
+disp('testing migration: miraudio (..., ''Trim'') with sig.signal (..., ''Trim'')'); 
 a = miraudio(testfile, 'Trim');
 b = sig.signal(testfile, 'Trim','Mix');
 tf = isequal(mirgetdata(a),b.getdata);
@@ -135,10 +135,10 @@ else
    disp('test fail!');
 end
 
-%% testing migration: miraudio (TrimThreshold) with sig.signal (TrimThreshold)
+%% testing migration: miraudio (..., 'TrimThreshold') with sig.signal (..., 'TrimThreshold')
 clearvars -except testfile ;
 
-disp('testing migration: miraudio (TrimThreshold) with sig.signal (TrimThreshold)'); 
+disp('testing migration: miraudio (..., ''TrimThreshold'') with sig.signal (..., ''TrimThreshold'')'); 
 t = 0.03;
 a = miraudio(testfile, 'TrimThreshold', t);
 b = sig.signal(testfile, 'TrimThreshold', t,'Mix');

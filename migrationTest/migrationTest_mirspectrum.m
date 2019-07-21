@@ -36,7 +36,7 @@ clearvars -except testfile ;
 mi = 100; %lowest frequency (default 0 Hz)
 
 disp('testing migration: mirspectrum with sig.spectrum with Min'); 
-a = mirspectrum(testfile, 'Min');
+a = mirspectrum(testfile, 'Min', mi);
 b = sig.spectrum(testfile, 'Min', mi, 'Mix');
 tf = isequal(mirgetdata(a),b.getdata);
 
@@ -50,11 +50,11 @@ end
 %% testing migration: mirspectrum with sig.spectrum with Max
 clearvars -except testfile ;
 
-mi = 100; %lowest frequency (default 0 Hz)
+ma = 100; %lowest frequency (default 0 Hz)
 
 disp('testing migration: mirspectrum with sig.spectrum with Max'); 
-a = mirspectrum(testfile, 'Max');
-b = sig.spectrum(testfile, 'Max', mi, 'Mix');
+a = mirspectrum(testfile, 'Max', ma);
+b = sig.spectrum(testfile, 'Max', ma, 'Mix');
 tf = isequal(mirgetdata(a),b.getdata);
 
 if tf == 1
@@ -71,7 +71,7 @@ disp('testing migration: mirspectrum with sig.spectrum with Window');
 w = 'hanning'; %windowing function (default = 'hanning')
 
 
-a = mirspectrum(testfile, 'Window');
+a = mirspectrum(testfile, 'Window', w);
 b = sig.spectrum(testfile, 'Window', w, 'Mix');
 tf = isequal(mirgetdata(a),b.getdata);
 
@@ -104,7 +104,7 @@ disp('testing migration: mirspectrum with sig.spectrum with MinRes');
 
 mr = 100; %minimal frequency resolution
 
-a = mirspectrum(testfile, 'MinRes');
+a = mirspectrum(testfile, 'MinRes', mr);
 b = sig.spectrum(testfile, 'MinRes', mr, 'Mix');
 tf = isequal(mirgetdata(a),b.getdata);
 
@@ -116,7 +116,7 @@ end
 
 %% testing migration: mirspectrum with sig.spectrum with MinRes with OctaveRatio
 clearvars -except testfile ;
-disp('testing migration: mirspectrum with sig.spectrum with MinRes'); 
+disp('testing migration: mirspectrum with sig.spectrum with MinRes with OctaveRatio'); 
 
 r = 100; %minimal frequency resolution
 tol = 0.75;% constraining multiplicative factor (default = 0.75)
@@ -138,7 +138,7 @@ disp('testing migration: mirspectrum with sig.spectrum with Res');
 
 r = 100; %minimal frequency resolution
 
-a = mirspectrum(testfile, 'Res');
+a = mirspectrum(testfile, 'Res', r);
 b = sig.spectrum(testfile, 'Res', r, 'Mix');
 tf = isequal(mirgetdata(a),b.getdata);
 
@@ -155,7 +155,7 @@ disp('testing migration: mirspectrum with sig.spectrum with Length');
 
 l = 8; %if length is not a power of 2, the FFT routine will not be used
 
-a = mirspectrum(testfile, 'Length');
+a = mirspectrum(testfile, 'Length', l);
 b = sig.spectrum(testfile, 'Length', l, 'Mix');
 tf = isequal(mirgetdata(a),b.getdata);
 
@@ -171,7 +171,7 @@ disp('testing migration: mirspectrum with sig.spectrum with ZeroPad');
 
 s = 4;%zero padding of s samples
 
-a = mirspectrum(testfile, 'ZeroPad');
+a = mirspectrum(testfile, 'ZeroPad', s);
 b = sig.spectrum(testfile, 'ZeroPad', s, 'Mix');
 tf = isequal(mirgetdata(a),b.getdata);
 
@@ -188,7 +188,7 @@ disp('testing migration: mirspectrum with sig.spectrum with WarningRes');
 
 mr = 500;%required frequency resolution in Hz
 
-a = mirspectrum(testfile, 'WarningRes');
+a = mirspectrum(testfile, 'WarningRes', mr);
 b = sig.spectrum(testfile, 'WarningRes', mr, 'Mix');
 tf = isequal(mirgetdata(a),b.getdata);
 
@@ -206,7 +206,7 @@ disp('testing migration: mirspectrum with sig.spectrum with ConstantQ');
 
 nb = 12; %default nb = 12 bins per octave
 
-a = mirspectrum(testfile, 'ConstantQ');
+a = mirspectrum(testfile, 'ConstantQ', nb);
 b = sig.spectrum(testfile, 'ConstantQ', nb, 'Mix');
 tf = isequal(mirgetdata(a),b.getdata);
 

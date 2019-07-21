@@ -1,9 +1,9 @@
 
 testfile = 'ragtime.wav'
 
-%% testing migration: mirsum with sig.sum on summation of filterbank channels
+%% testing migration: mirsum(mirenvelope(mirfilterbank(...))) -> sig.sum(sig.envelope(sig.filterbank(...)))
 clearvars -except testfile ;
-disp('testing migration:  mirsum with sig.sum on filterbank channels'); 
+disp('testing migration: mirsum(mirenvelope(mirfilterbank(...))) -> sig.sum(sig.envelope(sig.filterbank(...)))'); 
 
 
 f1 = mirfilterbank(testfile);
@@ -24,9 +24,9 @@ end
 
 
 
-%% testing migration: mirsum with sig.sum on summation of filterbank channels with Mean 
+%% testing migration: mirsum(mirenvelope(mirfilterbank(...)), 'Mean') -> sig.sum(sig.envelope(sig.filterbank(...)), 'Mean')
 clearvars -except testfile ;
-disp('testing migration:  mirsum with sig.sum on filterbank channels with Mean'); 
+disp('testing migration: mirsum(mirenvelope(mirfilterbank(...)), ''Mean'') -> sig.sum(sig.envelope(sig.filterbank(...)), ''Mean'')'); 
 
 
 f1 = mirfilterbank(testfile);
@@ -46,9 +46,9 @@ else
 end
 
 
-%% testing migration: mirsum with sig.sum on Summary of filterbank channels
+%% testing migration: mirsum(mirenvelope(mirautocor(...)), 'Mean') -> sig.sum(sig.envelope(sig.autocor(...)), 'Mean')
 clearvars -except testfile ;
-disp('testing migration:  mirsum with sig.sum on filterbank channels with Mean'); 
+disp('testing migration: mirsum(mirenvelope(mirfilterbank(...)), ''Mean'') -> sig.sum(sig.envelope(sig.filterbank(...)), ''Mean'')'); 
 
 
 f1 = mirautocor(testfile);

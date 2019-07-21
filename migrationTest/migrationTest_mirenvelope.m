@@ -1,13 +1,10 @@
 
-testfile = 'voice.wav'
-%testfile = 'ragtime.wav'
+testfile = 'ragtime.wav'
 
-%% testing migration: mirenvelope with sig.envelope with Filter
-% TEST FAIL: for the file ragtime.wav,mirenvelope returns a 11517x1 double array wheras sig.envelope returns 11517x2 double array
-% The data when inspected are same for elements initially, but different down the index
+%% testing migration: mirenvelope(..., 'Filter') -> sig.envelope(..., 'Filter') 
 clearvars -except testfile ;
+disp('testing migration: mirenvelope(..., ''Filter'') -> sig.envelope(..., ''Filter'') '); 
 
-disp('testing migration: mirenvelope with sig.envelope with Filter'); 
 a = mirenvelope(testfile, 'Filter');
 b = sig.envelope(testfile, 'Filter', 'Mix');
 tf = isequal(mirgetdata(a),b.getdata);
@@ -20,10 +17,9 @@ end
 
 
 
-%% testing migration: mirenvelope with sig.envelope with Hilbert
+%% testing migration: mirenvelope(..., 'Hilbert') -> sig.envelope(..., 'Hilbert') 
 clearvars -except testfile ;
-
-disp('testing migration: mirenvelope with sig.envelope with Hilbert');
+disp('testing migration: mirenvelope(..., ''Hilbert'') -> sig.envelope(..., ''Hilbert'') '); 
 a = mirenvelope(testfile, 'Hilbert');
 b = sig.envelope(testfile, 'Hilbert', 'Mix');
 tf = isequal(mirgetdata(a),b.getdata);
@@ -35,9 +31,9 @@ else
 end
 
 
-%% testing migration: mirenvelope with sig.envelope with PreDecim
+%% testing migration: mirenvelope(..., 'PreDecim', n) -> sig.envelope(..., 'PreDecim', n) 
 clearvars -except testfile ;
-disp('testing migration: mirenvelope with sig.envelope with PreDecim');
+disp('testing migration: mirenvelope(..., ''PreDecim'', n) -> sig.envelope(..., ''PreDecim'', n) '); 
 
 n = 2;
 
@@ -52,10 +48,9 @@ else
 end
 
 
-%% testing migration: mirenvelope with sig.envelope with Filtertype: IIR
-
+%% testing migration: mirenvelope(..., 'Filtertype', 'IIR') -> sig.envelope(..., 'Filtertype', 'IIR') 
 clearvars -except testfile ;
-disp('testing migration: mirenvelope with sig.envelope with Filtertype: IIR');
+disp('testing migration: mirenvelope(..., ''Filtertype'', ''IIR'') -> sig.envelope(..., ''Filtertype'', ''IIR'') '); 
 
 
 a = mirenvelope(testfile, 'Filtertype', 'IIR');
@@ -69,10 +64,10 @@ else
 end
 
 
-%% testing migration: mirenvelope with sig.envelope with Tau
-
+%% testing migration: mirenvelope(..., 'Tau', t) -> sig.envelope(..., 'Tau', t) 
 clearvars -except testfile ;
-disp('testing migration: mirenvelope with sig.envelope with Tau');
+disp('testing migration: mirenvelope(..., ''Tau'', t) -> sig.envelope(..., ''Tau'', t) '); 
+
 
 t = 0.02;
 a = mirenvelope(testfile, 'Tau', t);
@@ -86,10 +81,10 @@ else
 end
 
 
-%% testing migration: mirenvelope with sig.envelope with Filtertype: HalfHann
-
+%% testing migration: mirenvelope(..., 'Filtertype', 'HalfHann') -> sig.envelope(..., 'Filtertype', 'HalfHann') 
 clearvars -except testfile ;
-disp('testing migration: mirenvelope with sig.envelope with Filtertype: HalfHann');
+disp('testing migration: mirenvelope(..., ''Filtertype'', ''HalfHann'') -> sig.envelope(..., ''Filtertype'', ''HalfHann'') '); 
+
 
 
 a = mirenvelope(testfile, 'Filtertype', 'HalfHann');
@@ -103,11 +98,9 @@ else
 end
 
 
-%% testing migration: mirenvelope with sig.envelope with Filtertype: Butter
-
+%% testing migration: mirenvelope(..., 'Filtertype', 'Butter') -> sig.envelope(..., 'Filtertype', 'Butter') 
 clearvars -except testfile ;
-disp('testing migration: mirenvelope with sig.envelope with Filtertype: Butter');
-
+disp('testing migration: mirenvelope(..., ''Filtertype'', ''Butter'') -> sig.envelope(..., ''Filtertype'', ''Butter'') '); 
 
 a = mirenvelope(testfile, 'Filtertype', 'Butter');
 b = sig.envelope(testfile, 'Filtertype', 'Butter', 'Mix');
@@ -120,10 +113,9 @@ else
 end
 
 
-%% testing migration: mirenvelope with sig.envelope with CutOff
-
+%% testing migration: mirenvelope(..., 'CutOff', c) -> sig.envelope(..., 'CutOff', c) 
 clearvars -except testfile ;
-disp('testing migration: mirenvelope with sig.envelope with Filtertype: CutOff');
+disp('testing migration: mirenvelope(..., ''CutOff'', c) -> sig.envelope(..., ''CutOff'', c) '); 
 
 c = 1500;
 
@@ -137,10 +129,10 @@ else
    disp('test fail!');
 end
 
-%% testing migration: mirenvelope with sig.envelope with PostDecim
-
+%% testing migration: mirenvelope(..., 'PostDecim',N) -> sig.envelope(..., 'PostDecim', N) 
 clearvars -except testfile ;
-disp('testing migration: mirenvelope with sig.envelope with PostDecim');
+disp('testing migration: mirenvelope(..., ''PostDecim'', N) -> sig.envelope(..., ''PostDecim'', N) '); 
+
 
 N = 16;
 
@@ -156,10 +148,9 @@ else
 end
 
 
-%% testing migration: mirenvelope with sig.envelope with Spectro
-
+%% testing migration: mirenvelope(..., 'Spectro') -> sig.envelope(..., 'Spectro') 
 clearvars -except testfile ;
-disp('testing migration: mirenvelope with sig.envelope with Spectro');
+disp('testing migration: mirenvelope(..., ''Spectro'') -> sig.envelope(..., ''Spectro'') '); 
 
 a = mirenvelope(testfile, 'Spectro');
 b = sig.envelope(testfile, 'Spectro', 'Mix');
@@ -189,7 +180,9 @@ end
 %    disp('test fail!');
 % end
 
-%% testing migration: mirenvelope with sig.envelope with Frame
+%% testing migration: mirenvelope(..., 'Frame') -> sig.envelope(..., 'Frame') 
+clearvars -except testfile ;
+disp('testing migration: mirenvelope(..., ''Frame'') -> sig.envelope(..., ''Frame'') '); 
 
 clearvars -except testfile ;
 disp('testing migration: mirenvelope with sig.envelope with Frame');
@@ -204,10 +197,9 @@ else
    disp('test fail!');
 end
 
-%% testing migration: mirenvelope with sig.envelope with UpSample
-
+%% testing migration: mirenvelope(..., 'UpSample', N) -> sig.envelope(..., 'UpSample', N) 
 clearvars -except testfile ;
-disp('testing migration: mirenvelope with sig.envelope with UpSample');
+disp('testing migration: mirenvelope(..., ''UpSample'', N) -> sig.envelope(..., ''UpSample'', N) '); 
 
 N = 2;
 
@@ -222,10 +214,9 @@ else
 end
 
 
-%% testing migration: mirenvelope with sig.envelope with Complex
-
+%% testing migration: mirenvelope(..., 'Complex') -> sig.envelope(..., 'Complex') 
 clearvars -except testfile ;
-disp('testing migration: mirenvelope with sig.envelope with Complex');
+disp('testing migration: mirenvelope(..., ''Complex'') -> sig.envelope(..., ''Complex'') '); 
 
 a = mirenvelope(testfile, 'Complex');
 b = sig.envelope(testfile, 'Complex', 'Mix');
@@ -237,10 +228,9 @@ else
    disp('test fail!');
 end
 
-%% testing migration: mirenvelope with sig.envelope with PowerSpectrum
-
+%% testing migration: mirenvelope(..., 'PowerSpectrum') -> sig.envelope(..., 'PowerSpectrum') 
 clearvars -except testfile ;
-disp('testing migration: mirenvelope with sig.envelope with PowerSpectrum');
+disp('testing migration: mirenvelope(..., ''PowerSpectrum'') -> sig.envelope(..., ''PowerSpectrum'') '); 
 
 a = mirenvelope(testfile, 'PowerSpectrum');
 b = sig.envelope(testfile, 'PowerSpectrum', 'Mix');
@@ -253,10 +243,9 @@ else
 end
 
 
-%% testing migration: mirenvelope with sig.envelope with TimeSmooth
-
+%% testing migration: mirenvelope(..., 'TimeSmooth', n) -> sig.envelope(..., 'TimeSmooth', n) 
 clearvars -except testfile ;
-disp('testing migration: mirenvelope with sig.envelope with TimeSmooth');
+disp('testing migration: mirenvelope(..., ''TimeSmooth'', n) -> sig.envelope(..., ''TimeSmooth'', n) '); 
 
 n = 0;
 
@@ -271,10 +260,10 @@ else
 end
 
 
-%% testing migration: mirenvelope with sig.envelope with Sampling
-
+%% testing migration: mirenvelope(..., 'Sampling', r) -> sig.envelope(..., 'Sampling', r) 
 clearvars -except testfile ;
-disp('testing migration: mirenvelope with sig.envelope with Sampling');
+disp('testing migration: mirenvelope(..., ''Sampling'', r) -> sig.envelope(..., ''Sampling'', r) '); 
+
 
 r = 2000; %rate in Hz
 
@@ -289,10 +278,9 @@ else
 end
 
 
-%% testing migration: mirenvelope with sig.envelope with Halfwave
-
+%% testing migration: mirenvelope(..., 'Halfwave') -> sig.envelope(..., 'Halfwave') 
 clearvars -except testfile ;
-disp('testing migration: mirenvelope with sig.envelope with Halfwave');
+disp('testing migration: mirenvelope(..., ''Halfwave'') -> sig.envelope(..., ''Halfwave'') '); 
 
 a = mirenvelope(testfile, 'Halfwave');
 b = sig.envelope(testfile, 'Halfwave', 'Mix');
@@ -305,10 +293,9 @@ else
 end
 
 
-%% testing migration: mirenvelope with sig.envelope with Center
-
+%% testing migration: mirenvelope(..., 'Center') -> sig.envelope(..., 'Center') 
 clearvars -except testfile ;
-disp('testing migration: mirenvelope with sig.envelope with Center');
+disp('testing migration: mirenvelope(..., ''Center'') -> sig.envelope(..., ''Center'') '); 
 
 a = mirenvelope(testfile, 'Center');
 b = sig.envelope(testfile, 'Center', 'Mix');
@@ -321,10 +308,9 @@ else
 end
 
 
-%% testing migration: mirenvelope with sig.envelope with HalfwaveCenter
-
+%% testing migration: mirenvelope(..., 'HalfwaveCenter') -> sig.envelope(..., 'HalfwaveCenter') 
 clearvars -except testfile ;
-disp('testing migration: mirenvelope with sig.envelope with HalfwaveCenter');
+disp('testing migration: mirenvelope(..., ''HalfwaveCenter'') -> sig.envelope(..., ''HalfwaveCenter'') '); 
 
 a = mirenvelope(testfile, 'HalfwaveCenter');
 b = sig.envelope(testfile, 'HalfwaveCenter', 'Mix');
@@ -337,10 +323,9 @@ else
 end
 
 
-%% testing migration: mirenvelope with sig.envelope with Log
-
+%% testing migration: mirenvelope(..., 'Log') -> sig.envelope(..., 'Log') 
 clearvars -except testfile ;
-disp('testing migration: mirenvelope with sig.envelope with Log');
+disp('testing migration: mirenvelope(..., ''Log'') -> sig.envelope(..., ''Log'') '); 
 
 a = mirenvelope(testfile, 'Log');
 b = sig.envelope(testfile, 'Log', 'Mix');
@@ -353,10 +338,9 @@ else
 end
 
 
-%% testing migration: mirenvelope with sig.envelope with MinLog
-
+%% testing migration: mirenvelope(..., 'MinLog', ml) -> sig.envelope(..., 'MinLog', ml) 
 clearvars -except testfile ;
-disp('testing migration: mirenvelope with sig.envelope with MinLog');
+disp('testing migration: mirenvelope(..., ''MinLog'', ml) -> sig.envelope(..., ''MinLog'', ml) '); 
 
 ml = -24; %dB
 
@@ -371,10 +355,9 @@ else
 end
 
 
-%% testing migration: mirenvelope with sig.envelope with Power
-
+%% testing migration: mirenvelope(..., 'Power') -> sig.envelope(..., 'Power') 
 clearvars -except testfile ;
-disp('testing migration: mirenvelope with sig.envelope with Power');
+disp('testing migration: mirenvelope(..., ''Power'') -> sig.envelope(..., ''Power'') '); 
 
 
 a = mirenvelope(testfile, 'Power');
@@ -387,10 +370,9 @@ else
    disp('test fail!');
 end
 
-%% testing migration: mirenvelope with sig.envelope with Diff
-
+%% testing migration: mirenvelope(..., 'Diff') -> sig.envelope(..., 'Diff') 
 clearvars -except testfile ;
-disp('testing migration: mirenvelope with sig.envelope with Diff');
+disp('testing migration: mirenvelope(..., ''Diff'') -> sig.envelope(..., ''Diff'') '); 
 
 
 a = mirenvelope(testfile, 'Diff');
@@ -404,10 +386,9 @@ else
 end
 
 
-%% testing migration: mirenvelope with sig.envelope with HalfwaveDiff
-
+%% testing migration: mirenvelope(..., 'HalfwaveDiff') -> sig.envelope(..., 'HalfwaveDiff') 
 clearvars -except testfile ;
-disp('testing migration: mirenvelope with sig.envelope with HalfwaveDiff');
+disp('testing migration: mirenvelope(..., ''HalfwaveDiff'') -> sig.envelope(..., ''HalfwaveDiff'') '); 
 
 
 a = mirenvelope(testfile, 'HalfwaveDiff');
@@ -421,10 +402,9 @@ else
 end
 
 
-%% testing migration: mirenvelope with sig.envelope with Normal
-
+%% testing migration: mirenvelope(..., 'Normal') -> sig.envelope(..., 'Normal') 
 clearvars -except testfile ;
-disp('testing migration: mirenvelope with sig.envelope with Normal');
+disp('testing migration: mirenvelope(..., ''Normal'') -> sig.envelope(..., ''Normal'') '); 
 
 
 a = mirenvelope(testfile, 'Normal');
@@ -438,10 +418,9 @@ else
 end
 
 
-%% testing migration: mirenvelope with sig.envelope with Normal, AcrossSegments
-
+%% testing migration: mirenvelope(..., 'Normal', 'AcrossSegments') -> sig.envelope(..., 'Normal', 'AcrossSegments') 
 clearvars -except testfile ;
-disp('testing migration: mirenvelope with sig.envelope with Normal, AcrossSegments');
+disp('testing migration: mirenvelope(..., ''Normal'', ''AcrossSegments'') -> sig.envelope(..., ''Normal'', ''AcrossSegments'') '); 
 
 
 a = mirenvelope(testfile, 'Normal' , 'AcrossSegments');
@@ -455,10 +434,9 @@ else
 end
 
 
-%% testing migration: mirenvelope with sig.envelope with Smooth
-
+%% testing migration: mirenvelope(..., 'Smooth', o) -> sig.envelope(..., 'Smooth', o) 
 clearvars -except testfile ;
-disp('testing migration: mirenvelope with sig.envelope with Smooth');
+disp('testing migration: mirenvelope(..., ''Smooth'', o) -> sig.envelope(..., ''Smooth'', o) '); 
 
 o = 30; %default is 30
 
@@ -473,10 +451,9 @@ else
 end
 
 
-%% testing migration: mirenvelope with sig.envelope with Gauss
-
+%% testing migration: mirenvelope(..., 'Gauss', o) -> sig.envelope(..., 'Gauss', o) 
 clearvars -except testfile ;
-disp('testing migration: mirenvelope with sig.envelope with Gauss');
+disp('testing migration: mirenvelope(..., ''Gauss'', o) -> sig.envelope(..., ''Gauss'', o) '); 
 
 o = 30; %default is 30
 

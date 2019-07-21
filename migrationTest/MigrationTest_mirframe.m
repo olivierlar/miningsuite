@@ -1,10 +1,10 @@
 
 testfile = 'ragtime.wav'
 
-%% testing migration: mirframe with sig.frame in framesize and in seconds
+%% testing migration: mirframe(..., 'Length', w, 's') -> sig.frame(..., 'FrameSize', w, 's')
 clearvars -except testfile ;
 
-disp('testing migration: mirframe with sig.frame in framesize and in seconds'); 
+disp('testing migration: mirframe(..., ''Length'', w, ''s'') -> sig.frame(..., ''FrameSize'', w, ''s'')'); 
 
 w = 0.05; %%length of the window in seconds (default 0.05 seconds)
 wu = 's';
@@ -22,30 +22,30 @@ end
 
 
 
-%% testing migration: mirframe with sig.frame in framesize and in no of samples
-% clearvars -except testfile ;
-%
-% disp('testing migration: mirframe with sig.frame in framesize and in no of samples'); 
-% 
-% w = 0.5; %%length of the window in seconds (default 0.05 seconds)
-% wu = 'sp';
-% 
-% a = mirframe(testfile, 'Length', w, wu);
-% b = sig.frame(testfile, 'FrameSize', w, wu,'Mix');
-% 
-% tf = isequal(mirgetdata(a),b.getdata);
-% 
-% if tf == 1
-%    disp('test OK!'); 
-% else
-%    disp('test fail!');
-% end
-
-
-%% testing migration: mirframe with sig.frame in Hop and in seconds
+%% testing migration: mirframe(..., 'Length', w, 'sp') -> sig.frame(..., 'FrameSize', w, 'sp')
 clearvars -except testfile ;
 
-disp('testing migration: mirframe with sig.frame in Hop and in seconds'); 
+disp('testing migration: mirframe(..., ''Length'', w, ''sp'') -> sig.frame(..., ''FrameSize'', w, ''sp'')'); 
+
+w = 0.05; %%length of the window in seconds (default 0.05 seconds)
+wu = 'sp';
+
+a = mirframe(testfile, 'Length', w, wu);
+b = sig.frame(testfile, 'FrameSize', w, wu,'Mix');
+
+tf = isequal(mirgetdata(a),b.getdata);
+
+if tf == 1
+   disp('test OK!'); 
+else
+   disp('test fail!');
+end
+
+
+%% testing migration: mirframe(...,'Hop;=', h, 's') -> sig.frame(..., 'FrameHop', h, 's')
+clearvars -except testfile ;
+
+disp('testing migration: mirframe(...,''Hop'', h, ''s'') -> sig.frame(..., ''FrameHop'', h, ''s'')'); 
 
 h = 0.05; %%length of the window in seconds (default 0.05 seconds)
 wu = 's';
@@ -64,12 +64,12 @@ end
 
 
 
-%% testing migration: mirframe with sig.frame in Hop and in no of samples
+%% testing migration: mirframe(...,'Hop', h, 'sp') -> sig.frame(..., 'FrameHop', h, 'sp')
 clearvars -except testfile ;
 
-disp('testing migration: mirframe with sig.frame in Hop and in no of hops'); 
+disp('testing migration: mirframe(...,''Hop'', h, ''sp'') -> sig.frame(..., ''FrameHop'', h, ''sp'')'); 
 
-h = ; %%length of the window in seconds (default 0.05 seconds)
+h = 0.05; %%length of the window in seconds (default 0.05 seconds)
 wu = 'sp';
 
 a = mirframe(testfile, 'Hop', h, wu);
@@ -85,10 +85,10 @@ end
 
 
 
-%% testing migration: mirframe with sig.frame in Hop and in percent
+%% testing migration:  mirframe(...,'Hop', h, '%') -> sig.frame(..., 'FrameHop', h, '%')
 clearvars -except testfile ;
 
-disp('testing migration: mirframe with sig.frame in Hop and in percent'); 
+disp('testing migration: mirframe(...,''Hop'', h, ''%'') -> sig.frame(..., ''FrameHop'', h, ''%'')');
 
 h = 0.05; %%length of the window in seconds (default 0.05 seconds)
 wu = '%';
@@ -106,10 +106,10 @@ end
 
 
 
-%% testing migration: mirframe with sig.frame in Hop and in Hz
+%% testing migration:  mirframe(...,'Hop', h, 'Hz') -> sig.frame(..., 'FrameHop', h, 'Hz')
 clearvars -except testfile ;
 
-disp('testing migration: mirframe with sig.frame in Hop and in Hz'); 
+disp('testing migration: mirframe(...,''Hop'', h, ''Hz'') -> sig.frame(..., ''FrameHop'', h, ''Hz'')');
 
 h = 0.05; %%length of the window in seconds (default 0.05 seconds)
 wu = 'Hz';
@@ -127,10 +127,10 @@ end
 
 
 
-%% testing migration: mirframe with sig.frame in Hop and in ratio
+%% testing migration:  mirframe(...,'Hop', h, '/1') -> sig.frame(..., 'FrameHop', h, '/1')
 clearvars -except testfile ;
 
-disp('testing migration: mirframe with sig.frame in Hop and in ratio'); 
+disp('testing migration: mirframe(...,''Hop'', h, ''/1'') -> sig.frame(..., ''FrameHop'', h, ''/1'')');
 
 h = 0.05; %%length of the window in seconds (default 0.05 seconds)
 wu = '/1';

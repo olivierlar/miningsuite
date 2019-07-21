@@ -9,11 +9,17 @@ a = mirautocor(testfile, 'Frame');
 b = sig.autocor(testfile, 'Frame', 'Mix');
 tf = isequal(mirgetdata(a),b.getdata);
 
+%x = mirgetdata(a);
+%y = b.getdata;
+
+
 if tf == 1
    disp('test OK!'); 
 else
    disp('test fail!');
 end
+
+%return
 
 %% testing migration: mirautocor with sig.autocor with Min
 clearvars -except testfile ;
