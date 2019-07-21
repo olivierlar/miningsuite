@@ -2,10 +2,10 @@
 testfile = 'ragtime.wav'
 
 
-%% testing migration: mirgetdata with obj.getdata
+%% testing migration: miraudio with sig.signal
 clearvars -except testfile ;
 
-disp('testing migration: mirgetdata with obj.getdata'); 
+disp('testing migration: miraudio with sig.signal'); 
 a = miraudio(testfile);
 b = sig.signal(testfile,'Mix');
 tf = isequal(mirgetdata(a),b.getdata);
@@ -18,10 +18,10 @@ else
 end
 
 
-%% testing migration: mirgetdata (Mono) with obj.getdata (Mix)
+%% testing migration: miraudio (Mono) with sig.signal (Mix)
 clearvars -except testfile ;
 
-disp('testing migration: mirgetdata (Mono) with obj.getdata (Mix)'); 
+disp('testing migration: miraudio (Mono) with sig.signal (Mix)'); 
 a = miraudio(testfile, 'Mono',0);
 b = sig.signal(testfile);
 da = squeeze(mirgetdata(a));
@@ -34,10 +34,10 @@ else
    disp('test fail!');
 end
 
-%% testing migration: mirgetdata (Center) with obj.getdata (Center)
+%% testing migration: miraudio (Center) with sig.signal (Center)
 clearvars -except testfile ;
 
-disp('testing migration: mirgetdata (Center) with obj.getdata (Center)'); 
+disp('testing migration: miraudio (Center) with sig.signal (Center)'); 
 a = miraudio(testfile, 'Center');
 b = sig.signal(testfile, 'Center','Mix');
 tf = isequal(mirgetdata(a),b.getdata);
@@ -48,25 +48,10 @@ else
    disp('test fail!');
 end
 
-%% testing migration: mirgetdata (Sampling) with obj.getdata (Sampling)
+%% testing migration: miraudio (Sampling) with sig.signal (Sampling)
 clearvars -except testfile ;
 
-disp('testing migration: mirgetdata (Sampling) with obj.getdata (Sampling)'); 
-samplingRate = 10000;
-a = miraudio(testfile, 'Sampling', samplingRate);
-b = sig.signal(testfile, 'Sampling', samplingRate,'Mix');
-tf = isequal(mirgetdata(a),b.getdata);
-
-if tf == 1
-   disp('test OK!'); 
-else
-   disp('test fail!');
-end
-
-%% testing migration: mirgetdata (Sampling) with obj.getdata (Sampling)
-clearvars -except testfile ;
-
-disp('testing migration: mirgetdata (Sampling) with obj.getdata (Sampling)'); 
+disp('testing migration: miraudio (Sampling) with sig.signal (Sampling)'); 
 samplingRate = 10000;
 a = miraudio(testfile, 'Sampling', samplingRate);
 b = sig.signal(testfile, 'Sampling', samplingRate,'Mix');
@@ -79,19 +64,34 @@ else
 end
 
 
+%% testing migration: miraudio (FWR) with sig.signal (FWR)
+clearvars -except testfile ;
 
-%% testing migration: mirgetdata (Extract) with obj.getdata (Frame)
+disp('testing migration: miraudio (FWR) with sig.signal (FWR)'); 
+a = miraudio(testfile, 'FWR');
+b = sig.signal(testfile, 'FWR','Mix');
+tf = isequal(mirgetdata(a),b.getdata);
+
+if tf == 1
+   disp('test OK!'); 
+else
+   disp('test fail!');
+end
+
+
+
+%% testing migration: miraudio (Frame) with sig.signal (Frame)
 %seconds
 clearvars -except testfile ;
 
-disp('testing migration: mirgetdata (center) with obj.getdata (Frame)'); 
+disp('testing migration: miraudio (Frame) with sig.signal (Frame)'); 
 
 w = 'FrameLength';
 wu = 2;
 h = 'FrameHop';
 hu = .5;
 
-a = miraudio(testfile, 'Frame');
+a = miraudio(testfile, 'Frame',wu,hu);
 b = sig.signal(testfile, 'Frame',w,wu,h,hu,'Mix');
 tf = isequal(mirgetdata(a),b.getdata);
 
@@ -102,11 +102,11 @@ else
 end
 
 
-%% testing migration: mirgetdata (Extract) with obj.getdata (Extract)by
+%% testing migration: miraudio (Extract) with sig.signal (Extract)by
 %sampling index
 clearvars -except testfile ;
 
-disp('testing migration: mirgetdata (Extract) with obj.getdata (Extract) by index'); 
+disp('testing migration: miraudio (Extract) with sig.signal (Extract) by index'); 
 t1 = 0;
 t2 = 88200;
 u = 'sp';
@@ -121,10 +121,10 @@ else
 end
 
 
-%% testing migration: mirgetdata (Trim) with obj.getdata (Trim)
+%% testing migration: miraudio (Trim) with sig.signal (Trim)
 clearvars -except testfile ;
 
-disp('testing migration: mirgetdata (Trim) with obj.getdata (Trim)'); 
+disp('testing migration: miraudio (Trim) with sig.signal (Trim)'); 
 a = miraudio(testfile, 'Trim');
 b = sig.signal(testfile, 'Trim','Mix');
 tf = isequal(mirgetdata(a),b.getdata);
@@ -135,10 +135,10 @@ else
    disp('test fail!');
 end
 
-%% testing migration: mirgetdata (TrimThreshold) with obj.getdata (TrimThreshold)
+%% testing migration: miraudio (TrimThreshold) with sig.signal (TrimThreshold)
 clearvars -except testfile ;
 
-disp('testing migration: mirgetdata (TrimThreshold) with obj.getdata (TrimThreshold)'); 
+disp('testing migration: miraudio (TrimThreshold) with sig.signal (TrimThreshold)'); 
 t = 0.03;
 a = miraudio(testfile, 'TrimThreshold', t);
 b = sig.signal(testfile, 'TrimThreshold', t,'Mix');
@@ -150,13 +150,10 @@ else
    disp('test fail!');
 end
 
-
-%% >>>> INCOMPLETE: need to find out if TrimStart in miraudio is same as JustStart in sig.signal
-% also, if the parameter 'Trim' is required before 'JustStart' in sig.signal
-%testing migration: mirgetdata (TrimThreshold) with obj.getdata (TrimThreshold)
+%% testing migration: miraudio (TrimThreshold) with sig.signal (TrimThreshold)
 clearvars -except testfile ;
 
-disp('testing migration: mirgetdata (TrimThreshold) with obj.getdata (TrimThreshold)'); 
+disp('testing migration: miraudio (TrimThreshold) with sig.signal (TrimThreshold)'); 
 t = 0.06;
 a = miraudio(testfile, 'TrimStart');
 b = sig.signal(testfile, 'Trim', 'JustStart','Mix');
