@@ -24,7 +24,7 @@ function obj = extract(obj,param,dim,axis,varargin)
             error('Not implemented yet');
     end
     if strcmp(dim,'sample')
-        obj.Sstart = (start-1) / obj.Srate;
+        obj.Sstart = obj.Sstart + (start-1) / obj.Srate;
     elseif strcmp(dim,'element')
         if iscell(start)
             for i = 1:length(start)
