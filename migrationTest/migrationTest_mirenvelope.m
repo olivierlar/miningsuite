@@ -113,14 +113,14 @@ else
 end
 
 
-%% testing migration: mirenvelope(..., 'CutOff', c) -> sig.envelope(..., 'CutOff', c) 
+%% testing migration: mirenvelope(..., 'Filtertype', 'Butter','CutOff', c) -> sig.envelope(..., 'Filtertype', 'Butter','CutOff', c) 
 clearvars -except testfile ;
-disp('<strong> testing migration: mirenvelope(..., ''CutOff'', c) -> sig.envelope(..., ''CutOff'', c) </strong> '); 
+disp('<strong> testing migration: mirenvelope(...,''Filtertype'', ''Butter'',''CutOff'', c) -> sig.envelope(..., ''Filtertype'', ''Butter'',''CutOff'', c) </strong> '); 
 
 c = 1500;
 
-a = mirenvelope(testfile, 'CutOff', c);
-b = sig.envelope(testfile, 'CutOff', c, 'Mix');
+a = mirenvelope(testfile, 'Filtertype', 'Butter','CutOff', c);
+b = sig.envelope(testfile, 'Filtertype', 'Butter','CutOff', c, 'Mix');
 tf = isequal(mirgetdata(a),b.getdata);
 
 if tf == 1
