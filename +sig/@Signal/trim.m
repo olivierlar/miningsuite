@@ -7,7 +7,8 @@
 % the main folder of the MiningSuite distribution.
 
 function obj = trim(obj,where,threshold)
-    [obj.Ydata obj.Sstart] = sig.compute(@main,obj.Ydata,obj.sdata,where,threshold);
+    [obj.Ydata start] = sig.compute(@main,obj.Ydata,obj.sdata,where,threshold);
+    obj.Sstart = obj.Sstart + (start-1) / obj.Srate;
 end
     
    
