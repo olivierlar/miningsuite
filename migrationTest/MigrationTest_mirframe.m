@@ -27,7 +27,7 @@ clearvars -except testfile ;
 
 disp('testing migration: mirframe(..., ''Length'', w, ''sp'') -> sig.frame(..., ''FrameSize'', w, ''sp'')'); 
 
-w = 0.05; %%length of the window in seconds (default 0.05 seconds)
+w = 1; %%length of the window in number of samples
 wu = 'sp';
 
 a = mirframe(testfile, 'Length', w, wu);
@@ -69,7 +69,7 @@ clearvars -except testfile ;
 
 disp('testing migration: mirframe(...,''Hop'', h, ''sp'') -> sig.frame(..., ''FrameHop'', h, ''sp'')'); 
 
-h = 0.05; %%length of the window in seconds (default 0.05 seconds)
+h = 1000; %%length of the window in number of samples
 wu = 'sp';
 
 a = mirframe(testfile, 'Hop', h, wu);
@@ -84,34 +84,33 @@ else
 end
 
 
-
 %% testing migration:  mirframe(...,'Hop', h, '%') -> sig.frame(..., 'FrameHop', h, '%')
-clearvars -except testfile ;
-
-disp('testing migration: mirframe(...,''Hop'', h, ''%'') -> sig.frame(..., ''FrameHop'', h, ''%'')');
-
-h = 0.05; %%length of the window in seconds (default 0.05 seconds)
-wu = '%';
-
-a = mirframe(testfile, 'Hop', h, wu);
-b = sig.frame(testfile, 'FrameHop', h, wu,'Mix');
-
-tf = isequal(mirgetdata(a),b.getdata);
-
-if tf == 1
-   disp('test OK!'); 
-else
-   disp('test fail!');
-end
-
-
-
+% clearvars -except testfile ;
+% 
+% disp('testing migration: mirframe(...,''Hop'', h, ''%'') -> sig.frame(..., ''FrameHop'', h, ''%'')');
+% 
+% h = 25; %%length of the window in seconds (default 0.05 seconds)
+% wu = '%';
+% 
+% a = mirframe(testfile, 'Hop', h, wu);
+% b = sig.frame(testfile, 'FrameHop', h, wu,'Mix');
+% 
+% tf = isequal(mirgetdata(a),b.getdata);
+% 
+% if tf == 1
+%    disp('test OK!'); 
+% else
+%    disp('test fail!');
+% end
+% 
+% 
+% 
 %% testing migration:  mirframe(...,'Hop', h, 'Hz') -> sig.frame(..., 'FrameHop', h, 'Hz')
 clearvars -except testfile ;
 
 disp('testing migration: mirframe(...,''Hop'', h, ''Hz'') -> sig.frame(..., ''FrameHop'', h, ''Hz'')');
 
-h = 0.05; %%length of the window in seconds (default 0.05 seconds)
+h = 100; %%length of the window in seconds (default 0.05 seconds)
 wu = 'Hz';
 
 a = mirframe(testfile, 'Hop', h, wu);
@@ -124,15 +123,15 @@ if tf == 1
 else
    disp('test fail!');
 end
-
-
-
+% 
+% 
+% 
 %% testing migration:  mirframe(...,'Hop', h, '/1') -> sig.frame(..., 'FrameHop', h, '/1')
 clearvars -except testfile ;
 
 disp('testing migration: mirframe(...,''Hop'', h, ''/1'') -> sig.frame(..., ''FrameHop'', h, ''/1'')');
 
-h = 0.05; %%length of the window in seconds (default 0.05 seconds)
+h = 0.1; %%length of the window in seconds (default 0.05 seconds)
 wu = '/1';
 
 a = mirframe(testfile, 'Hop', h, wu);
