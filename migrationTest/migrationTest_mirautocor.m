@@ -10,12 +10,28 @@ b = sig.autocor(testfile, 'Frame', 'Mix');
 tf = isequal(mirgetdata(a),b.getdata);
 
 
+
+%x = (mirgetdata(a));
+%y = (b.getdata);
+
+
+
 if tf == 1
    disp('test OK!'); 
 else
    disp('test fail!');
-end
 
+   sizeTest = migrationTestUtility_dimensionTest(mirgetdata(a),b.getdata);
+   
+   if  sizeTest == 1
+       disp('dimension OK');
+   else
+       disp('dimension fail');
+   end
+   
+
+   
+end
 
 
 %% testing migration: mirautocor with sig.autocor with Min

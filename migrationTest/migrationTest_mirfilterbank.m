@@ -2,6 +2,26 @@
 testfile = 'ragtime.wav'
 
 
+%% testing migration: mirfilterbank (...) -> aud.filterbank(...)
+
+clearvars -except testfile ;
+disp('testing migration: mirfilterbank (...) -> aud.filterbank(...)'); 
+
+a = mirfilterbank(testfile);
+b = aud.filterbank(testfile, 'Mix');
+
+tf = isequal(squeeze(mirgetdata(a)),b.getdata);
+
+if tf == 1
+   disp('test OK!'); 
+else
+   disp('test fail!');
+end
+
+
+
+
+
 
 %% testing migration: mirfilterbank (..., 'Gammatone') -> aud.filterbank(..., 'Gammatone')
 
