@@ -527,7 +527,7 @@ function options = initframes(size,hop,when)
         fsize.unit = {'s','sp'};
     options.fsize = fsize;
 
-        fhop.key = {'FrameHop','Hop'};
+        fhop.key = {'FrameHop'};
         fhop.type = 'Unit';
         fhop.default.unit = '/1';
         fhop.default.value = hop;

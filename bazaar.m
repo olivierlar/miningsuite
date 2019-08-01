@@ -74,7 +74,7 @@ sig.spectrum('test.wav','Min',10,'Max',1000)
 
 %The analysis of a whole temporal signal leads to a global description of the average value of the feature under study. In order to take into account the dynamic evolution of the feature, the analysis has to be carried out on a short-term window that moves chronologically along the temporal signal. Each position of the window is called a frame. For instance:
 
-f = sig.frame('test.wav','FrameSize',1,'Hop',0.5)
+f = sig.frame('test.wav','FrameSize',1,'FrameHop',0.5)
 
 %Then we can perform any computation on each of the successive frame easily. For instance, the computation of the spectrum for each successive frame, can be written as:
 
@@ -88,7 +88,7 @@ sig.spectrum('test.wav','Max',1000,'Frame')
 
 %Here the frame size was chosen by default. You can of course specify the frame size yourself:
 
-sig.spectrum('test.wav','Max',1000,'Frame','FrameSize',1,'Hop',0.5)
+sig.spectrum('test.wav','Max',1000,'Frame','FrameSize',1,'FrameHop',0.5)
 
 %For more information about sig.frame, click on the link.
 
@@ -434,7 +434,7 @@ s = sig.spectrum('test.wav','Frame')
 sig.simatrix(s)
 m = aud.mfcc('george.wav','Frame')
 sig.simatrix(m)
-m = aud.mfcc('george.wav','Frame','FrameLength',1,'Hop',.5)
+m = aud.mfcc('george.wav','Frame','FrameLength',1,'FrameHop',.5)
 sig.simatrix(m)
 
 %%sig.novelty
