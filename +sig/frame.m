@@ -1,6 +1,6 @@
 % SIG.FRAME
 %
-% Copyright (C) 2014, 2017-2018 Olivier Lartillot
+% Copyright (C) 2014, 2017-2019 Olivier Lartillot
 %
 % All rights reserved.
 % License: New BSD License. See full text of the license in LICENSE.txt in
@@ -26,7 +26,7 @@ function options = options
         fhop.type = 'Unit';
         fhop.default.unit = '/1';
         fhop.default.value = .5;
-        fhop.unit = {'/1','s','sp','Hz'};
+        fhop.unit = {'/1','s','sp','Hz','%'};
     options.fhop = fhop;
 end
 
