@@ -214,20 +214,20 @@ else
 end
 
 
-% %% testing migration: mirfilterbank (..., 'Mel') -> aud.filterbank (...,'Mel')
-% clearvars -except testfile ;
-% disp('testing migration: mirfilterbank (..., ''Mel'') -> aud.filterbank (...,''Mel'')'); 
-% 
-% a = mirfilterbank(testfile, 'Mel');
-% b = aud.filterbank(testfile, 'Mel','Mix');
-% 
-% tf = isequal(squeeze(mirgetdata(a)),b.getdata);
-% 
-% if tf == 1
-%    disp('test OK!'); 
-% else
-%    disp('test fail!');
-% end
+%% testing migration: mirfilterbank (..., 'Mel') -> aud.filterbank (...,'Mel')
+clearvars -except testfile ;
+disp('testing migration: mirfilterbank (..., ''Mel'') -> aud.filterbank (...,''Mel'')'); 
+
+a = mirfilterbank(testfile, 'Mel');
+b = aud.filterbank(testfile, 'Mel','Mix');
+
+tf = isequal(squeeze(mirgetdata(a)),b.getdata);
+
+if tf == 1
+   disp('test OK!'); 
+else
+   disp('test fail!');
+end
 
 
 %% testing migration: mirfilterbank (..., 'Bark') -> aud.filterbank (...,'Bark')
