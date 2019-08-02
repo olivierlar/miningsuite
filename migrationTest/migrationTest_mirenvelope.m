@@ -154,7 +154,7 @@ disp('<strong> testing migration: mirenvelope(..., ''Spectro'') -> sig.envelope(
 
 a = mirenvelope(testfile, 'Spectro');
 b = sig.envelope(testfile, 'Spectro', 'Mix');
-tf = isequal(mirgetdata(a),b.getdata);
+tf = isequal(squeeze(mirgetdata(a)),b.getdata');
 
 if tf == 1
    disp('test OK!'); 
