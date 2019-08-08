@@ -18,7 +18,7 @@ function d = main(d,postoption)
     if postoption.complex
         error('Option not available yet.')
     else
-        d = d.apply(@zdiff,{},{'sample'});
+        d = d.apply(@diff,{},{'sample'});
     end
     if postoption.diffhwr
         d = d.hwr;
@@ -26,7 +26,7 @@ function d = main(d,postoption)
 end
 
 
-function y = zdiff(x)
-    y = [zeros(1,size(x,2),size(x,3)); diff(x)];
-end
-    
+% function y = zdiff(x)
+%     y = [zeros(1,size(x,2),size(x,3)); diff(x)];
+% end
+%     
