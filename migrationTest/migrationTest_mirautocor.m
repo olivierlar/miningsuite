@@ -19,7 +19,7 @@ tf = isequal(mirgetdata(a),b.getdata);
 if tf == 1
    disp('test OK!'); 
 else
-   disp('test fail!');
+   fprintf(2,'test fail!\n');
 
    sizeTest = migrationTestUtility_dimensionTest(mirgetdata(a),b.getdata);
    
@@ -47,7 +47,7 @@ tf = isequal(mirgetdata(a),b.getdata);
 if tf == 1
    disp('test OK!'); 
 else
-   disp('test fail!');
+   fprintf(2,'test fail!\n');
 end
 
 %% testing migration: mirautocor with sig.autocor with Min 's'
@@ -63,7 +63,7 @@ tf = isequal(mirgetdata(a),b.getdata);
 if tf == 1
    disp('test OK!'); 
 else
-   disp('test fail!');
+   fprintf(2,'test fail!\n');
 end
 
 
@@ -80,7 +80,7 @@ tf = isequal(mirgetdata(a),b.getdata);
 if tf == 1
    disp('test OK!'); 
 else
-   disp('test fail!');
+   fprintf(2,'test fail!\n');
 end
 
 %% testing migration: mirautocor with sig.autocor with Max
@@ -96,7 +96,7 @@ tf = isequal(mirgetdata(a),b.getdata);
 if tf == 1
    disp('test OK!'); 
 else
-   disp('test fail!');
+   fprintf(2,'test fail!\n');
 end
 
 
@@ -114,7 +114,7 @@ tf = isequal(mirgetdata(a),b.getdata);
 if tf == 1
    disp('test OK!'); 
 else
-   disp('test fail!');
+   fprintf(2,'test fail!\n');
 end
 
 
@@ -132,7 +132,7 @@ tf = isequal(mirgetdata(a),b.getdata);
 if tf == 1
    disp('test OK!'); 
 else
-   disp('test fail!');
+   fprintf(2,'test fail!\n');
 end
 
 
@@ -149,7 +149,7 @@ tf = isequal(mirgetdata(a),b.getdata);
 if tf == 1
    disp('test OK!'); 
 else
-   disp('test fail!');
+   fprintf(2,'test fail!\n');
 end
 
 %% testing migration: mirautocor with sig.autocor with Normal none
@@ -165,7 +165,7 @@ tf = isequal(mirgetdata(a),b.getdata);
 if tf == 1
    disp('test OK!'); 
 else
-   disp('test fail!');
+   fprintf(2,'test fail!\n');
 end
 
 
@@ -181,7 +181,7 @@ tf = isequal(mirgetdata(a),b.getdata);
 if tf == 1
    disp('test OK!'); 
 else
-   disp('test fail!');
+   fprintf(2,'test fail!\n');
 end
 
 
@@ -198,7 +198,7 @@ tf = isequal(mirgetdata(a),b.getdata);
 if tf == 1
    disp('test OK!'); 
 else
-   disp('test fail!');
+   fprintf(2,'test fail!\n');
 end
 
 %% testing migration: mirautocor with sig.autocor with NormalWindow off
@@ -214,7 +214,7 @@ tf = isequal(mirgetdata(a),b.getdata);
 if tf == 1
    disp('test OK!'); 
 else
-   disp('test fail!');
+   fprintf(2,'test fail!\n');
 end
 
 
@@ -229,7 +229,7 @@ tf = isequal(mirgetdata(a),b.getdata);
 if tf == 1
    disp('test OK!'); 
 else
-   disp('test fail!');
+   fprintf(2,'test fail!\n');
 end
 
 
@@ -246,7 +246,7 @@ tf = isequal(mirgetdata(a),b.getdata);
 if tf == 1
    disp('test OK!'); 
 else
-   disp('test fail!');
+   fprintf(2,'test fail!\n');
 end
 
 %% testing migration: mirautocor with sig.autocor with Enhanced
@@ -262,7 +262,7 @@ end
 % if tf == 1
 %    disp('test OK!'); 
 % else
-%    disp('test fail!');
+%    fprintf(2,'test fail!\n');
 % end
 % 
 

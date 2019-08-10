@@ -12,7 +12,7 @@ tf = isequal(mirgetdata(a),b.getdata);
 if tf == 1
    disp('test OK!'); 
 else
-   disp('test fail!');
+   fprintf(2,'test fail!\n');
 end
 
 
@@ -27,7 +27,7 @@ tf = isequal(mirgetdata(a),b.getdata);
 if tf == 1
    disp('test OK!'); 
 else
-   disp('test fail!');
+   fprintf(2,'test fail!\n');
 end
 
 %% testing migration: mirspectrum with sig.spectrum with Min
@@ -43,7 +43,7 @@ tf = isequal(mirgetdata(a),b.getdata);
 if tf == 1
    disp('test OK!'); 
 else
-   disp('test fail!');
+   fprintf(2,'test fail!\n');
 end
 
 
@@ -60,7 +60,7 @@ tf = isequal(mirgetdata(a),b.getdata);
 if tf == 1
    disp('test OK!'); 
 else
-   disp('test fail!');
+   fprintf(2,'test fail!\n');
 end
 
 
@@ -78,7 +78,7 @@ tf = isequal(mirgetdata(a),b.getdata);
 if tf == 1
    disp('test OK!'); 
 else
-   disp('test fail!');
+   fprintf(2,'test fail!\n');
 end
 
 
@@ -94,7 +94,7 @@ tf = isequal(mirgetdata(a),b.getdata);
 if tf == 1
    disp('test OK!'); 
 else
-   disp('test fail!');
+   fprintf(2,'test fail!\n');
 end
 
 
@@ -111,7 +111,7 @@ tf = isequal(mirgetdata(a),b.getdata);
 if tf == 1
    disp('test OK!'); 
 else
-   disp('test fail!');
+   fprintf(2,'test fail!\n');
 end
 
 %% testing migration: mirspectrum with sig.spectrum with MinRes with OctaveRatio
@@ -128,7 +128,7 @@ tf = isequal(mirgetdata(a),b.getdata);
 if tf == 1
    disp('test OK!'); 
 else
-   disp('test fail!');
+   fprintf(2,'test fail!\n');
 end
 
 
@@ -145,7 +145,7 @@ tf = isequal(mirgetdata(a),b.getdata);
 if tf == 1
    disp('test OK!'); 
 else
-   disp('test fail!');
+   fprintf(2,'test fail!\n');
 end
 
 
@@ -162,7 +162,7 @@ tf = isequal(mirgetdata(a),b.getdata);
 if tf == 1
    disp('test OK!'); 
 else
-   disp('test fail!');
+   fprintf(2,'test fail!\n');
 end
 
 %% testing migration: mirspectrum with sig.spectrum with ZeroPad
@@ -178,7 +178,7 @@ tf = isequal(mirgetdata(a),b.getdata);
 if tf == 1
    disp('test OK!'); 
 else
-   disp('test fail!');
+   fprintf(2,'test fail!\n');
 end
 
 
@@ -195,7 +195,7 @@ tf = isequal(mirgetdata(a),b.getdata);
 if tf == 1
    disp('test OK!'); 
 else
-   disp('test fail!');
+   fprintf(2,'test fail!\n');
 end
 
 
@@ -213,7 +213,7 @@ tf = isequal(mirgetdata(a),b.getdata);
 if tf == 1
    disp('test OK!'); 
 else
-   disp('test fail!');
+   fprintf(2,'test fail!\n');
 end
 
 %% testing migration: mirspectrum with sig.spectrum with Normal
@@ -227,7 +227,7 @@ tf = isequal(mirgetdata(a),b.getdata);
 if tf == 1
    disp('test OK!'); 
 else
-   disp('test fail!');
+   fprintf(2,'test fail!\n');
 end
 
 
@@ -242,7 +242,7 @@ tf = isequal(mirgetdata(a),b.getdata);
 if tf == 1
    disp('test OK!'); 
 else
-   disp('test fail!');
+   fprintf(2,'test fail!\n');
 end
 
 
@@ -257,7 +257,7 @@ tf = isequal(mirgetdata(a),b.getdata);
 if tf == 1
    disp('test OK!'); 
 else
-   disp('test fail!');
+   fprintf(2,'test fail!\n');
 end
 
 %% testing migration: mirspectrum with sig.spectrum with dB
@@ -271,7 +271,7 @@ tf = isequal(mirgetdata(a),b.getdata);
 if tf == 1
    disp('test OK!'); 
 else
-   disp('test fail!');
+   fprintf(2,'test fail!\n');
 end
 
 
@@ -288,7 +288,7 @@ tf = isequal(mirgetdata(a),b.getdata);
 if tf == 1
    disp('test OK!'); 
 else
-   disp('test fail!');
+   fprintf(2,'test fail!\n');
 end
 
 %% testing migration: mirspectrum with sig.spectrum with Gauss
@@ -304,7 +304,7 @@ tf = isequal(mirgetdata(a),b.getdata);
 if tf == 1
    disp('test OK!'); 
 else
-   disp('test fail!');
+   fprintf(2,'test fail!\n');
 end
 
 %% testing migration: mirspectrum with sig.spectrum with TimeSmooth
@@ -320,7 +320,7 @@ tf = isequal(mirgetdata(a),b.getdata);
 if tf == 1
    disp('test OK!'); 
 else
-   disp('test fail!');
+   fprintf(2,'test fail!\n');
 end
 
 
@@ -337,7 +337,7 @@ tf = isequal(mirgetdata(a),b.getdata);
 if tf == 1
    disp('test OK!'); 
 else
-   disp('test fail!');
+   fprintf(2,'test fail!\n');
 end
 
 %% testing migration: mirspectrum with sig.spectrum with Sum
@@ -353,7 +353,7 @@ tf = isequal(mirgetdata(a),b.getdata);
 if tf == 1
    disp('test OK!'); 
 else
-   disp('test fail!');
+   fprintf(2,'test fail!\n');
 end
 
 

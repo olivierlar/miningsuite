@@ -12,9 +12,8 @@ tf = isequal(mirgetdata(a),b.getdata);
 if tf == 1
    disp('test OK!'); 
 else
-   disp('test fail!');
+   fprintf(2,'test fail!\n');
 end
-
 
 
 %% testing migration: mirenvelope(..., 'Hilbert') -> sig.envelope(..., 'Hilbert') 
@@ -27,7 +26,7 @@ tf = isequal(mirgetdata(a),b.getdata);
 if tf == 1
    disp('test OK!'); 
 else
-   disp('test fail!');
+   fprintf(2,'test fail!\n');
 end
 
 
@@ -44,7 +43,7 @@ tf = isequal(mirgetdata(a),b.getdata);
 if tf == 1
    disp('test OK!'); 
 else
-   disp('test fail!');
+   fprintf(2,'test fail!\n');
 end
 
 
@@ -60,7 +59,7 @@ tf = isequal(mirgetdata(a),b.getdata);
 if tf == 1
    disp('test OK!'); 
 else
-   disp('test fail!');
+   fprintf(2,'test fail!\n');
 end
 
 
@@ -77,7 +76,7 @@ tf = isequal(mirgetdata(a),b.getdata);
 if tf == 1
    disp('test OK!'); 
 else
-   disp('test fail!');
+   fprintf(2,'test fail!\n');
 end
 
 
@@ -94,7 +93,7 @@ tf = isequal(mirgetdata(a),b.getdata);
 if tf == 1
    disp('test OK!'); 
 else
-   disp('test fail!');
+   fprintf(2,'test fail!\n');
 end
 
 
@@ -109,7 +108,7 @@ tf = isequal(mirgetdata(a),b.getdata);
 if tf == 1
    disp('test OK!'); 
 else
-   disp('test fail!');
+   fprintf(2,'test fail!\n');
 end
 
 
@@ -126,7 +125,7 @@ tf = isequal(mirgetdata(a),b.getdata);
 if tf == 1
    disp('test OK!'); 
 else
-   disp('test fail!');
+   fprintf(2,'test fail!\n');
 end
 
 %% testing migration: mirenvelope(..., 'PostDecim',N) -> sig.envelope(..., 'PostDecim', N) 
@@ -144,7 +143,7 @@ tf = isequal(mirgetdata(a),b.getdata);
 if tf == 1
    disp('test OK!'); 
 else
-   disp('test fail!');
+   fprintf(2,'test fail!\n');
 end
 
 
@@ -159,7 +158,7 @@ tf = isequal(squeeze(mirgetdata(a)),b.getdata');
 if tf == 1
    disp('test OK!'); 
 else
-   disp('test fail!');
+   fprintf(2,'test fail!\n');
 end
 
 
@@ -177,7 +176,7 @@ end
 % if tf == 1
 %    disp('test OK!'); 
 % else
-%    disp('test fail!');
+%    fprintf(2,'test fail!\n');
 % end
 
 %% testing migration: mirenvelope(..., 'Frame') -> sig.envelope(..., 'Frame') 
@@ -194,7 +193,7 @@ tf = isequal(mirgetdata(a),b.getdata);
 if tf == 1
    disp('test OK!'); 
 else
-   disp('test fail!');
+   fprintf(2,'test fail!\n');
 end
 
 %% testing migration: mirenvelope(..., 'UpSample', N) -> sig.envelope(..., 'UpSample', N) 
@@ -210,7 +209,7 @@ tf = isequal(mirgetdata(a),b.getdata);
 if tf == 1
    disp('test OK!'); 
 else
-   disp('test fail!');
+   fprintf(2,'test fail!\n');
 end
 
 
@@ -225,7 +224,7 @@ tf = isequal(mirgetdata(a),b.getdata);
 if tf == 1
    disp('test OK!'); 
 else
-   disp('test fail!');
+   fprintf(2,'test fail!\n');
 end
 
 %% testing migration: mirenvelope(..., 'PowerSpectrum') -> sig.envelope(..., 'PowerSpectrum') 
@@ -239,7 +238,7 @@ tf = isequal(mirgetdata(a),b.getdata);
 if tf == 1
    disp('test OK!'); 
 else
-   disp('test fail!');
+   fprintf(2,'test fail!\n');
 end
 
 
@@ -256,7 +255,7 @@ tf = isequal(mirgetdata(a),b.getdata);
 if tf == 1
    disp('test OK!'); 
 else
-   disp('test fail!');
+   fprintf(2,'test fail!\n');
 end
 
 
@@ -274,7 +273,7 @@ tf = isequal(mirgetdata(a),b.getdata);
 if tf == 1
    disp('test OK!'); 
 else
-   disp('test fail!');
+   fprintf(2,'test fail!\n');
 end
 
 
@@ -289,7 +288,7 @@ tf = isequal(mirgetdata(a),b.getdata);
 if tf == 1
    disp('test OK!'); 
 else
-   disp('test fail!');
+   fprintf(2,'test fail!\n');
 end
 
 
@@ -304,7 +303,7 @@ tf = isequal(mirgetdata(a),b.getdata);
 if tf == 1
    disp('test OK!'); 
 else
-   disp('test fail!');
+   fprintf(2,'test fail!\n');
 end
 
 
@@ -319,7 +318,7 @@ tf = isequal(mirgetdata(a),b.getdata);
 if tf == 1
    disp('test OK!'); 
 else
-   disp('test fail!');
+   fprintf(2,'test fail!\n');
 end
 
 
@@ -334,7 +333,7 @@ tf = isequal(mirgetdata(a),b.getdata);
 if tf == 1
    disp('test OK!'); 
 else
-   disp('test fail!');
+   fprintf(2,'test fail!\n');
 end
 
 
@@ -351,7 +350,7 @@ tf = isequal(mirgetdata(a),b.getdata);
 if tf == 1
    disp('test OK!'); 
 else
-   disp('test fail!');
+   fprintf(2,'test fail!\n');
 end
 
 
@@ -367,7 +366,7 @@ tf = isequal(mirgetdata(a),b.getdata);
 if tf == 1
    disp('test OK!'); 
 else
-   disp('test fail!');
+   fprintf(2,'test fail!\n');
 end
 
 %% testing migration: mirenvelope(..., 'Diff') -> sig.envelope(..., 'Diff') 
@@ -382,7 +381,7 @@ tf = isequal(mirgetdata(a),b.getdata);
 if tf == 1
    disp('test OK!'); 
 else
-   disp('test fail!');
+   fprintf(2,'test fail!\n');
 end
 
 
@@ -398,7 +397,7 @@ tf = isequal(mirgetdata(a),b.getdata);
 if tf == 1
    disp('test OK!'); 
 else
-   disp('test fail!');
+   fprintf(2,'test fail!\n');
 end
 
 
@@ -414,7 +413,7 @@ tf = isequal(mirgetdata(a),b.getdata);
 if tf == 1
    disp('test OK!'); 
 else
-   disp('test fail!');
+   fprintf(2,'test fail!\n');
 end
 
 
@@ -430,7 +429,7 @@ tf = isequal(mirgetdata(a),b.getdata);
 if tf == 1
    disp('test OK!'); 
 else
-   disp('test fail!');
+   fprintf(2,'test fail!\n');
 end
 
 
@@ -447,7 +446,7 @@ tf = isequal(mirgetdata(a),b.getdata);
 if tf == 1
    disp('test OK!'); 
 else
-   disp('test fail!');
+   fprintf(2,'test fail!\n');
 end
 
 
@@ -464,7 +463,7 @@ tf = isequal(mirgetdata(a),b.getdata);
 if tf == 1
    disp('test OK!'); 
 else
-   disp('test fail!');
+   fprintf(2,'test fail!\n');
 end
 
 

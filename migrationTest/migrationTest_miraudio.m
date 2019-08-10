@@ -14,7 +14,7 @@ if tf == 1
    disp('test OK!'); 
 
 else
-   disp('test fail!');
+   fprintf(2,'test fail!\n');
 end
 
 
@@ -31,7 +31,7 @@ tf = isequal(da,db);
 if tf == 1
    disp('test OK!'); 
 else
-   disp('test fail!');
+   fprintf(2,'test fail!\n');
 end
 
 %% testing migration: miraudio (..., 'Center') with sig.signal (..., 'Center')
@@ -45,7 +45,7 @@ tf = isequal(mirgetdata(a),b.getdata);
 if tf == 1
    disp('test OK!'); 
 else
-   disp('test fail!');
+   fprintf(2,'test fail!\n');
 end
 
 %% testing migration: miraudio (..., 'Sampling', r) with sig.signal (..., 'Sampling', r)
@@ -60,7 +60,7 @@ tf = isequal(mirgetdata(a),b.getdata);
 if tf == 1
    disp('test OK!'); 
 else
-   disp('test fail!');
+   fprintf(2,'test fail!\n');
 end
 
 
@@ -75,7 +75,7 @@ tf = isequal(mirgetdata(a),b.getdata);
 if tf == 1
    disp('test OK!'); 
 else
-   disp('test fail!');
+   fprintf(2,'test fail!\n');
 end
 
 
@@ -98,7 +98,7 @@ tf = isequal(mirgetdata(a),b.getdata);
 if tf == 1
    disp('test OK!'); 
 else
-   disp('test fail!');
+   fprintf(2,'test fail!\n');
 end
 
 
@@ -117,7 +117,7 @@ tf = isequal(mirgetdata(a),b.getdata);
 if tf == 1
    disp('test OK!'); 
 else
-   disp('test fail!');
+   fprintf(2,'test fail!\n');
 end
 
 
@@ -137,7 +137,7 @@ tf = isequal(mirgetdata(a),b.getdata);
 if tf == 1
    disp('test OK!'); 
 else
-   disp('test fail!');
+   fprintf(2,'test fail!\n');
 end
 
 
@@ -152,7 +152,7 @@ tf = isequal(mirgetdata(a),b.getdata);
 if tf == 1
    disp('test OK!'); 
 else
-   disp('test fail!');
+   fprintf(2,'test fail!\n');
 end
 
 %% testing migration: miraudio (..., 'Trim','TrimThreshold', t) with sig.signal (...,'Trim', 'TrimThreshold',t )
@@ -167,7 +167,7 @@ tf = isequal(mirgetdata(a),b.getdata);
 if tf == 1
    disp('test OK!'); 
 else
-   disp('test fail!');
+   fprintf(2,'test fail!\n');
 end
 
 %% testing migration: miraudio (..., 'Trim', 'TrimStart') -> sig.signal (..., 'Trim', 'JustStart')
@@ -182,7 +182,7 @@ tf = isequal(mirgetdata(a),b.getdata);
 if tf == 1
    disp('test OK!'); 
 else
-   disp('test fail!');
+   fprintf(2,'test fail!\n');
 end
 
 
@@ -198,7 +198,7 @@ tf = isequal(mirgetdata(a),b.getdata);
 if tf == 1
    disp('test OK!'); 
 else
-   disp('test fail!');
+   fprintf(2,'test fail!\n');
 end
 
 
@@ -217,6 +217,6 @@ tf = isequal(mirgetdata(a),b.getdata);
 if tf == 1
    disp('test OK!'); 
 else
-   disp('test fail!');
+   fprintf(2,'test fail!\n');
 end
 

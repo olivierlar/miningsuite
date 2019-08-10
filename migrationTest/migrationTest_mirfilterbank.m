@@ -15,7 +15,7 @@ tf = isequal(squeeze(mirgetdata(a)),b.getdata);
 if tf == 1
    disp('test OK!'); 
 else
-   disp('test fail!');
+   fprintf(2,'test fail!\n');
 end
 
 
@@ -36,7 +36,7 @@ tf = isequal(squeeze(mirgetdata(a)),b.getdata);
 if tf == 1
    disp('test OK!'); 
 else
-   disp('test fail!');
+   fprintf(2,'test fail!\n');
 end
 
 
@@ -55,7 +55,7 @@ tf = isequal(squeeze(mirgetdata(a)),b.getdata);
 if tf == 1
    disp('test OK!'); 
 else
-   disp('test fail!');
+   fprintf(2,'test fail!\n');
 end
 
 
@@ -74,7 +74,7 @@ tf = isequal(squeeze(mirgetdata(a)),b.getdata);
 if tf == 1
    disp('test OK!'); 
 else
-   disp('test fail!');
+   fprintf(2,'test fail!\n');
 end
 
 %% testing migration: mirfilterbank (..., 'Gammatone', 'NbChannels', N) -> aud.filterbank (..., 'Gammatone', 'NbChannels', N)
@@ -93,7 +93,7 @@ tf = isequal(squeeze(mirgetdata(a)),b.getdata);
 if tf == 1
    disp('test OK!'); 
 else
-   disp('test fail!');
+   fprintf(2,'test fail!\n');
 end
 
 
@@ -113,7 +113,7 @@ tf = isequal(squeeze(mirgetdata(a)),b.getdata);
 if tf == 1
    disp('test OK!'); 
 else
-   disp('test fail!');
+   fprintf(2,'test fail!\n');
 end
 
 
@@ -133,7 +133,7 @@ tf = isequal(squeeze(mirgetdata(a)),b.getdata);
 if tf == 1
    disp('test OK!'); 
 else
-   disp('test fail!');
+   fprintf(2,'test fail!\n');
 end
 
 
@@ -153,7 +153,7 @@ tf = isequal(squeeze(mirgetdata(a)),b.getdata);
 if tf == 1
    disp('test OK!'); 
 else
-   disp('test fail!');
+   fprintf(2,'test fail!\n');
 end
 
 
@@ -173,7 +173,7 @@ tf = isequal(squeeze(mirgetdata(a)),b.getdata);
 if tf == 1
    disp('test OK!'); 
 else
-   disp('test fail!');
+   fprintf(2,'test fail!\n');
 end
 
 
@@ -192,7 +192,7 @@ tf = isequal(squeeze(mirgetdata(a)),b.getdata);
 if tf == 1
    disp('test OK!'); 
 else
-   disp('test fail!');
+   fprintf(2,'test fail!\n');
 end
 
 %% testing migration: mirfilterbank (..., 'Manual', f, 'Hop',3) -> sig.filterbank (...,'CutOff', f,'Hop', 3)
@@ -210,7 +210,7 @@ tf = isequal(squeeze(mirgetdata(a)),b.getdata);
 if tf == 1
    disp('test OK!'); 
 else
-   disp('test fail!');
+   fprintf(2,'test fail!\n');
 end
 
 
@@ -226,7 +226,7 @@ tf = isequal(squeeze(mirgetdata(a)),b.getdata);
 if tf == 1
    disp('test OK!'); 
 else
-   disp('test fail!');
+   fprintf(2,'test fail!\n');
 end
 
 
@@ -243,7 +243,7 @@ tf = isequal(squeeze(mirgetdata(a)),b.getdata);
 if tf == 1
    disp('test OK!'); 
 else
-   disp('test fail!');
+   fprintf(2,'test fail!\n');
 end
 
 
@@ -260,7 +260,7 @@ tf = isequal(squeeze(mirgetdata(a)),b.getdata);
 if tf == 1
    disp('test OK!'); 
 else
-   disp('test fail!');
+   fprintf(2,'test fail!\n');
 end
 
 
@@ -277,5 +277,5 @@ tf = isequal(squeeze(mirgetdata(a)),b.getdata);
 if tf == 1
    disp('test OK!'); 
 else
-   disp('test fail!');
+   fprintf(2,'test fail!\n');
 end

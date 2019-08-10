@@ -22,7 +22,7 @@ tf = isequal(mirgetdata(a),b.getdata);
 if tf == 1
    disp('test OK!'); 
 else
-   disp('test fail!');
+   fprintf(2,'test fail!\n');
 end
 
 %return;
@@ -38,7 +38,7 @@ tf = isequal(mirgetdata(a),b.getdata);
 if tf == 1
    disp('test OK!'); 
 else
-   disp('test fail!');
+   fprintf(2,'test fail!\n');
 end
 
 
@@ -58,7 +58,7 @@ tf = isequal(mirgetdata(a),b.getdata);
 if tf == 1
    disp('test OK!'); 
 else
-   disp('test fail!');
+   fprintf(2,'test fail!\n');
 end
 
 
@@ -75,7 +75,7 @@ tf = isequal(mirgetdata(a),b.getdata);
 if tf == 1
    disp('test OK!'); 
 else
-   disp('test fail!');
+   fprintf(2,'test fail!\n');
 end
 
 %% testing migration: mircepstrum (..., 'Complex') -> sig.cepstrum(..., 'Complex')
@@ -90,6 +90,6 @@ tf = isequal(mirgetdata(a),b.getdata);
 if tf == 1
    disp('test OK!'); 
 else
-   disp('test fail!');
+   fprintf(2,'test fail!\n');
 end
 
