@@ -162,22 +162,21 @@ else
 end
 
 
-%% testing migration: mirenvelope with sig.envelope with Frame, b='Freq'
+%% testing migration: mirenvelope(..., 'Spectro', 'Mel') -> sig.envelope(..., 'Spectro', 'Mel') 
 
-% clearvars -except testfile ;
-% disp('testing migration: mirenvelope with sig.envelope with Frame, b=''Freq''');
-% 
-% b = 'Freq';
-% 
-% a = mirenvelope(testfile, 'Frame', .1, 's', .1, '/1','Window','hanning',b);
-% b = sig.envelope(testfile, 'Frame', 1, 's', 1, '/1','Window','hanning',b, 'Power');
-% tf = isequal(mirgetdata(a),b.getdata);
-% 
-% if tf == 1
-%    disp('test OK!'); 
-% else
-%    fprintf(2,'test fail!\n');
-% end
+clearvars -except testfile ;
+disp('<strong> testing migration: mirenvelope(..., ''Spectro'', ''Mel'') -> sig.envelope(..., ''Spectro'', ''Mel'') </strong> '); 
+
+a = mirenvelope(testfile, 'Spectro', 'Mel');
+b = sig.envelope(testfile, 'Spectro', 'Mel','Mix');
+tf = isequal(squeeze(mirgetdata(a)),b.getdata');
+
+if tf == 1
+   disp('test OK!'); 
+else
+   fprintf(2,'test fail!\n');
+end
+
 
 %% testing migration: mirenvelope(..., 'Frame') -> sig.envelope(..., 'Frame') 
 clearvars -except testfile ;
