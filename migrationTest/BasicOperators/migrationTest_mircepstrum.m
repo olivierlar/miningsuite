@@ -2,7 +2,7 @@ testfile = 'ragtime.wav'
 
 %% testing migration: mircepstrum (..., 'Frame') -> sig.cepstrum(..., 'Frame')
 clearvars -except testfile ;
-disp('</strong> testing migration: mircepstrum (..., ''Frame'') -> sig.cepstrum(..., ''Frame'')'); 
+disp('<strong> testing migration: mircepstrum (..., ''Frame'') -> sig.cepstrum(..., ''Frame'')</strong>'); 
 
 a = mircepstrum(testfile, 'Frame');
 b = sig.cepstrum(testfile, 'Frame', 'Mix');
