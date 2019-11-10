@@ -394,9 +394,7 @@ a = mirenvelope(testfile, 'Diff');
 b = sig.envelope(testfile, 'Diff', 'Mix');
 tf = isequal(mirgetdata(a),b.getdata);
 
-x = mirgetdata(a);
-y = b.getdata;
-z = [x,y,abs(x-y)];
+x = 
 
 if tf == 1
    cprintf('*green', 'test SUCCESS!\n'); 
@@ -420,7 +418,6 @@ if tf == 1
    cprintf('*green', 'test SUCCESS!\n'); 
 else
    cprintf('*red', 'test FAIL!\n');
-   debugFail(a,b);
 end
 
 
@@ -453,7 +450,6 @@ if tf == 1
    cprintf('*green', 'test SUCCESS!\n'); 
 else
    cprintf('*red', 'test FAIL!\n');
-   debugFail(a,b);
 end
 
 %% testing migration: mirenvelope(..., 'Lambda', o) -> sig.envelope(..., 'Lambda', o) 
@@ -484,14 +480,10 @@ a = mirenvelope(testfile, 'Smooth' , o);
 b = sig.envelope(testfile, 'Smooth', o, 'Mix');
 tf = isequal(mirgetdata(a),b.getdata);
 
-x = mirgetdata(a);
-y = b.getdata;
-
 if tf == 1
    cprintf('*green', 'test SUCCESS!\n'); 
 else
    cprintf('*red', 'test FAIL!\n');
-   debugFail(a,b);
 end
 
 
@@ -509,7 +501,6 @@ if tf == 1
    cprintf('*green', 'test SUCCESS!\n'); 
 else
    cprintf('*red', 'test FAIL!\n');
-   debugFail(a,b);
 end
 
 
