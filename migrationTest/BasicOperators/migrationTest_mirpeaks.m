@@ -20,8 +20,8 @@ if tf == 1
    cprintf('*green', 'test SUCCESS!\n'); 
 else
    cprintf('*red', 'test FAIL!\n'); 
-   debugFail(a,b);
-   debugFail(a,b);
+   
+   
 end
 
 
@@ -46,7 +46,7 @@ if tf == 1
    cprintf('*green', 'test SUCCESS!\n'); 
 else
    cprintf('*red', 'test FAIL!\n'); 
-   debugFail(a,b);
+ 
 end
 
 %% testing migration: mirpeaks(..., 'Total', m, 'NoBegin') -> sig.peaks(..., 'Total', m, 'NoBegin')
@@ -70,7 +70,6 @@ if tf == 1
    cprintf('*green', 'test SUCCESS!\n'); 
 else
    cprintf('*red', 'test FAIL!\n'); 
-   debugFail(a,b);
    
 end
 
@@ -95,7 +94,6 @@ if tf == 1
    cprintf('*green', 'test SUCCESS!\n'); 
 else
    cprintf('*red', 'test FAIL!\n'); 
-   debugFail(a,b);
 end
 
 
@@ -120,7 +118,6 @@ if tf == 1
    cprintf('*green', 'test SUCCESS!\n'); 
 else
    cprintf('*red', 'test FAIL!\n'); 
-   debugFail(a,b);
 end
 
 %% testing migration: mirpeaks(..., 'Order', 'Abscissa') -> sig.peaks(..., 'Order', 'Abscissa')
@@ -144,7 +141,6 @@ if tf == 1
    cprintf('*green', 'test SUCCESS!\n'); 
 else
    cprintf('*red', 'test FAIL!\n'); 
-   debugFail(a,b);
 end
 
 %% testing migration: mirpeaks(..., 'Valleys') -> sig.peaks(..., 'Valleys')
@@ -166,7 +162,6 @@ if tf == 1
    cprintf('*green', 'test SUCCESS!\n'); 
 else
    cprintf('*red', 'test FAIL!\n'); 
-   debugFail(a,b);
 end
 
 %% testing migration: mirpeaks(..., 'Contrast', cthr) -> sig.peaks(..., 'Contrast', cthr)
@@ -190,7 +185,6 @@ if tf == 1
    cprintf('*green', 'test SUCCESS!\n'); 
 else
    cprintf('*red', 'test FAIL!\n'); 
-   debugFail(a,b);
 end
 
 %% testing migration: mirpeaks(..., 'SelectFirst', fthr) -> sig.peaks(..., 'SelectFirst', fthr)
@@ -214,7 +208,6 @@ if tf == 1
    cprintf('*green', 'test SUCCESS!\n'); 
 else
    cprintf('*red', 'test FAIL!\n'); 
-   debugFail(a,b);
 end
 
 
@@ -241,7 +234,6 @@ if tf == 1
    cprintf('*green', 'test SUCCESS!\n'); 
 else
    cprintf('*red', 'test FAIL!\n'); 
-   debugFail(a,b);
 end
 
 
@@ -266,7 +258,6 @@ if tf == 1
    cprintf('*green', 'test SUCCESS!\n'); 
 else
    cprintf('*red', 'test FAIL!\n'); 
-   debugFail(a,b);
 end
 
 
@@ -291,7 +282,6 @@ if tf == 1
    cprintf('*green', 'test SUCCESS!\n'); 
 else
    cprintf('*red', 'test FAIL!\n'); 
-   debugFail(a,b);
 end
 
 
@@ -316,7 +306,6 @@ if tf == 1
    cprintf('*green', 'test SUCCESS!\n'); 
 else
    cprintf('*red', 'test FAIL!\n'); 
-   debugFail(a,b);
 end
 
 %% testing migration: mirpeaks(..., 'Interpol', 'Quadratic') -> sig.peaks(..., 'Interpol', 'Quadratic')
@@ -340,7 +329,6 @@ if tf == 1
    cprintf('*green', 'test SUCCESS!\n'); 
 else
    cprintf('*red', 'test FAIL!\n'); 
-   debugFail(a,b);
 end
 
 %% testing migration: mirpeaks(..., 'Reso', r ) -> sig.peaks(..., 'Reso',r)
@@ -364,7 +352,6 @@ if tf == 1
    cprintf('*green', 'test SUCCESS!\n'); 
 else
    cprintf('*red', 'test FAIL!\n'); 
-   debugFail(a,b);
 end
 
 
@@ -389,7 +376,6 @@ if tf == 1
    cprintf('*green', 'test SUCCESS!\n'); 
 else
    cprintf('*red', 'test FAIL!\n'); 
-   debugFail(a,b);
 end
 
 
@@ -415,7 +401,6 @@ if tf == 1
    cprintf('*green', 'test SUCCESS!\n'); 
 else
    cprintf('*red', 'test FAIL!\n'); 
-   debugFail(a,b);
 end
 
 
@@ -440,5 +425,4 @@ if tf == 1
    cprintf('*green', 'test SUCCESS!\n'); 
 else
    cprintf('*red', 'test FAIL!\n'); 
-   debugFail(a,b);
 end

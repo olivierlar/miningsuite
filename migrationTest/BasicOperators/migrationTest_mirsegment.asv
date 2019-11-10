@@ -54,23 +54,16 @@ tf = isequal(x,y);
 x = (mirgetdata(a));
 y = squeeze(b.getdata);
 
-
-
 col = (size(x));
 col = col(1);
 row = size(x);
 row = row(2);
+
 z = [];
 for i = 1:row
-    firstNaN = find(isnan( (x(:,i) )));
-
-    if(isempty(firstNaN) == 1 )
-       z{i} = x(1:col,i);
-    else
-        size = firstNaN(1)-1;
-        z{i} = x(1:size-1,i);
-    end
-
+    firstNaN = find(isnan( (x(:,1) )));
+    
+    z{i} = x(1:1166,i);
 end
 
 if tf == 1

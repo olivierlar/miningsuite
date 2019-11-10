@@ -8,20 +8,21 @@ disp('<strong> testing migration: mirautocor with sig.autocor </strong>');
 a = (mirautocor(testfile, 'Frame'));
 b = sig.autocor(testfile, 'Frame', 'Mix');
 
-%tf = isequal(a_round,b_round);
-tf = isequal(mirgetdata(a),b.getdata);
+x = mirgetdata(a);
+y = b.getdata;
 
-x = (mirgetdata(a));
-y = (b.getdata);
+%tf = isequal(a_round,b_round);
+tf = isequal(x,y);
 
 if tf == 1
    cprintf('*green', 'test SUCCESS!\n'); 
 else
    cprintf('*red', 'test FAIL!\n');
 
-   debugFail(a,b);
+   debugFail(x,y);
 
 end
+
 
 %% testing migration: mirautocor with sig.autocor with Min
 clearvars -except testfile ;
@@ -31,13 +32,18 @@ mi = 0.01;
 
 a = mirautocor(testfile, 'Min', mi);
 b = sig.autocor(testfile, 'Min', mi, 'Mix');
-tf = isequal(mirgetdata(a),b.getdata);
+
+x = mirgetdata(a);
+y = b.getdata;
+
+%tf = isequal(a_round,b_round);
+tf = isequal(x,y);
 
 if tf == 1
    cprintf('*green', 'test SUCCESS!\n'); 
 else
    cprintf('*red', 'test FAIL!\n');
-  debugFail(a,b);
+  debugFail(x,y);
 end
 
 %% testing migration: mirautocor with sig.autocor with Min 's'
@@ -48,13 +54,17 @@ mi = 0.01;
 
 a = mirautocor(testfile, 'Min', mi, 's');
 b = sig.autocor(testfile, 'Min', mi, 's', 'Mix');
-tf = isequal(mirgetdata(a),b.getdata);
+x = mirgetdata(a);
+y = b.getdata;
+
+%tf = isequal(a_round,b_round);
+tf = isequal(x,y);
 
 if tf == 1
    cprintf('*green', 'test SUCCESS!\n'); 
 else
    cprintf('*red', 'test FAIL!\n');
-   debugFail(a,b);
+   debugFail(x,y);
 end
 
 
@@ -66,13 +76,16 @@ mi = 0.00;
 
 a = mirautocor(testfile, 'Min', mi, 'Hz');
 b = sig.autocor(testfile, 'Min', mi, 'Hz', 'Mix');
-tf = isequal(mirgetdata(a),b.getdata);
+x = mirgetdata(a);
+y = b.getdata;
 
+%tf = isequal(a_round,b_round);
+tf = isequal(x,y);
 if tf == 1
    cprintf('*green', 'test SUCCESS!\n'); 
 else
    cprintf('*red', 'test FAIL!\n');
-   debugFail(a,b);
+   debugFail(x,y);
 end
 
 %% testing migration: mirautocor with sig.autocor with Max
@@ -83,13 +96,17 @@ ma = 0.05; %default ma = 0.05 corresponding to 20 Hz
 
 a = mirautocor(testfile, 'Max', ma);
 b = sig.autocor(testfile, 'Max', ma, 'Mix');
-tf = isequal(mirgetdata(a),b.getdata);
+x = mirgetdata(a);
+y = b.getdata;
+
+%tf = isequal(a_round,b_round);
+tf = isequal(x,y);
 
 if tf == 1
    cprintf('*green', 'test SUCCESS!\n'); 
 else
    cprintf('*red', 'test FAIL!\n');
-   debugFail(a,b);
+   debugFail(x,y);
 end
 
 
@@ -102,13 +119,17 @@ n = 'biased';
 
 a = mirautocor(testfile, n);
 b = sig.autocor(testfile, n, 'Mix');
-tf = isequal(mirgetdata(a),b.getdata);
+x = mirgetdata(a);
+y = b.getdata;
+
+%tf = isequal(a_round,b_round);
+tf = isequal(x,y);
 
 if tf == 1
    cprintf('*green', 'test SUCCESS!\n'); 
 else
    cprintf('*red', 'test FAIL!\n');
-   debugFail(a,b);
+   debugFail(x,y);
 end
 
 
@@ -121,13 +142,16 @@ n = 'unbiased';
 
 a = mirautocor(testfile, n);
 b = sig.autocor(testfile, n, 'Mix');
-tf = isequal(mirgetdata(a),b.getdata);
+x = mirgetdata(a);
+y = b.getdata;
 
+%tf = isequal(a_round,b_round);
+tf = isequal(x,y);
 if tf == 1
    cprintf('*green', 'test SUCCESS!\n'); 
 else
    cprintf('*red', 'test FAIL!\n');
-   debugFail(a,b);
+   debugFail(x,y);
 end
 
 
@@ -139,13 +163,16 @@ n = 'coeff';
 
 a = mirautocor(testfile, n);
 b = sig.autocor(testfile, n, 'Mix');
-tf = isequal(mirgetdata(a),b.getdata);
+x = mirgetdata(a);
+y = b.getdata;
 
+%tf = isequal(a_round,b_round);
+tf = isequal(x,y);
 if tf == 1
    cprintf('*green', 'test SUCCESS!\n'); 
 else
    cprintf('*red', 'test FAIL!\n');
-   debugFail(a,b);
+   debugFail(x,y);
 end
 
 %% testing migration: mirautocor with sig.autocor with Normal none
@@ -156,13 +183,16 @@ n = 'none';
 
 a = mirautocor(testfile, n);
 b = sig.autocor(testfile, n, 'Mix');
-tf = isequal(mirgetdata(a),b.getdata);
+x = mirgetdata(a);
+y = b.getdata;
 
+%tf = isequal(a_round,b_round);
+tf = isequal(x,y);
 if tf == 1
    cprintf('*green', 'test SUCCESS!\n'); 
 else
    cprintf('*red', 'test FAIL!\n');
-   debugFail(a,b);
+   debugFail(x,y);
 end
 
 
@@ -173,13 +203,16 @@ disp('testing migration: mirautocor with sig.autocor with Normal Freq');
 
 a = mirautocor(testfile, 'Freq');
 b = sig.autocor(testfile, 'Freq', 'Mix');
-tf = isequal(mirgetdata(a),b.getdata);
+x = mirgetdata(a);
+y = b.getdata;
 
+%tf = isequal(a_round,b_round);
+tf = isequal(x,y);
 if tf == 1
    cprintf('*green', 'test SUCCESS!\n'); 
 else
    cprintf('*red', 'test FAIL!\n');
-   debugFail(a,b);
+   debugFail(x,y);
 end
 
 
@@ -191,13 +224,16 @@ w = 'hanning';
 
 a = mirautocor(testfile, 'NormalWindow', w );
 b = sig.autocor(testfile, 'NormalWindow', w, 'Mix');
-tf = isequal(mirgetdata(a),b.getdata);
+x = mirgetdata(a);
+y = b.getdata;
 
+%tf = isequal(a_round,b_round);
+tf = isequal(x,y);
 if tf == 1
    cprintf('*green', 'test SUCCESS!\n'); 
 else
    cprintf('*red', 'test FAIL!\n');
-   debugFail(a,b);
+   debugFail(x,y);
 end
 
 %% testing migration: mirautocor with sig.autocor with NormalWindow off
@@ -208,13 +244,16 @@ w = 'off';
 
 a = mirautocor(testfile, 'NormalWindow', w );
 b = sig.autocor(testfile, 'NormalWindow', w, 'Mix');
-tf = isequal(mirgetdata(a),b.getdata);
+x = mirgetdata(a);
+y = b.getdata;
 
+%tf = isequal(a_round,b_round);
+tf = isequal(x,y);
 if tf == 1
    cprintf('*green', 'test SUCCESS!\n'); 
 else
    cprintf('*red', 'test FAIL!\n');
-   debugFail(a,b);
+   debugFail(x,y);
 end
 
 
@@ -224,13 +263,16 @@ disp('testing migration: mirautocor with sig.autocor with Halfwave');
 
 a = mirautocor(testfile, 'Halfwave');
 b = sig.autocor(testfile, 'Halfwave', 'Mix');
-tf = isequal(mirgetdata(a),b.getdata);
+x = mirgetdata(a);
+y = b.getdata;
 
+%tf = isequal(a_round,b_round);
+tf = isequal(x,y);
 if tf == 1
    cprintf('*green', 'test SUCCESS!\n'); 
 else
    cprintf('*red', 'test FAIL!\n');
-   debugFail(a,b);
+   debugFail(x,y);
 end
 
 
@@ -242,13 +284,16 @@ k = 0.67;
 
 a = mirautocor(testfile, 'Compres', k);
 b = sig.autocor(testfile, 'Compres', k,  'Mix');
-tf = isequal(mirgetdata(a),b.getdata);
+x = mirgetdata(a);
+y = b.getdata;
 
+%tf = isequal(a_round,b_round);
+tf = isequal(x,y);
 if tf == 1
    cprintf('*green', 'test SUCCESS!\n'); 
 else
    cprintf('*red', 'test FAIL!\n');
-   debugFail(a,b);
+   debugFail(x,y);
 end
 
 %% testing migration: mirautocor with sig.autocor with Enhanced
@@ -259,7 +304,11 @@ end
 % 
 % a = mirautocor(testfile, 'Enhanced', a);
 % b = sig.autocor(testfile, 'Enhanced', a,  'Mix');
-% tf = isequal(mirgetdata(a),b.getdata);
+% x = mirgetdata(a);
+% y = b.getdata;
+
+% tf = isequal(a_round,b_round);
+% tf = isequal(x,y);
 % 
 % if tf == 1
 %    cprintf('*green', 'test SUCCESS!\n'); 

@@ -6,27 +6,19 @@ disp('<strong> testing migration: mircepstrum (..., ''Frame'') -> sig.cepstrum(.
 
 a = mircepstrum(testfile, 'Frame');
 b = sig.cepstrum(testfile, 'Frame', 'Mix');
-tf = isequal(mirgetdata(a),b.getdata);
+x = mirgetdata(a);
+y = b.getdata;
 
-%x = mirgetdata(a);
-% y = b.getdata;
-% z = [1:338474];
-% 
-% zSize = 2039 * 166
-% 
-% for i = 1:338474
-%    z(i) = x(i)-y(i);
-% end
-
+%tf = isequal(a_round,b_round);
+tf = isequal(x,y);
 
 if tf == 1
    cprintf('*green', 'test SUCCESS!\n'); 
 else
    cprintf('*red', 'test FAIL!\n');
-   debugFail(a,b);
+   debugFail(x,y);
 end
 
-%return;
 
 %% testing migration: mircepstrum (..., 'Freq') -> sig.cepstrum(..., 'Freq')
 clearvars -except testfile ;
@@ -34,13 +26,16 @@ disp('<strong>testing migration: mircepstrum (..., ''Freq'') -> sig.cepstrum(...
 
 a = mircepstrum(testfile, 'Freq');
 b = sig.cepstrum(testfile, 'Freq', 'Mix');
-tf = isequal(mirgetdata(a),b.getdata);
+x = mirgetdata(a);
+y = b.getdata;
 
+%tf = isequal(a_round,b_round);
+tf = isequal(x,y);
 if tf == 1
    cprintf('*green', 'test SUCCESS!\n'); 
 else
    cprintf('*red', 'test FAIL!\n');
-   debugFail(a,b);
+   debugFail(x,y);
 end
 
 
@@ -55,13 +50,16 @@ min = 100; %minimum frequency
 
 a = mircepstrum(testfile, 'Min', min);
 b = sig.cepstrum(testfile, 'Min', min, 'Mix');
-tf = isequal(mirgetdata(a),b.getdata);
+x = mirgetdata(a);
+y = b.getdata;
 
+%tf = isequal(a_round,b_round);
+tf = isequal(x,y);
 if tf == 1
    cprintf('*green', 'test SUCCESS!\n'); 
 else
    cprintf('*red', 'test FAIL!\n');
-   debugFail(a,b);
+   debugFail(x,y);
 end
 
 
@@ -73,13 +71,16 @@ max = 1000; %maximum frequency
 
 a = mircepstrum(testfile, 'Max', max);
 b = sig.cepstrum(testfile, 'Max', max, 'Mix');
-tf = isequal(mirgetdata(a),b.getdata);
+x = mirgetdata(a);
+y = b.getdata;
 
+%tf = isequal(a_round,b_round);
+tf = isequal(x,y);
 if tf == 1
    cprintf('*green', 'test SUCCESS!\n'); 
 else
    cprintf('*red', 'test FAIL!\n');
-   debugFail(a,b);
+   debugFail(x,y);
 end
 
 %% testing migration: mircepstrum (..., 'Complex') -> sig.cepstrum(..., 'Complex')
@@ -89,12 +90,15 @@ disp('<strong>testing migration: mircepstrum (..., ''Complex'') -> sig.cepstrum(
 
 a = mircepstrum(testfile, 'Complex');
 b = sig.cepstrum(testfile, 'Complex', 'Mix');
-tf = isequal(mirgetdata(a),b.getdata);
+x = mirgetdata(a);
+y = b.getdata;
 
+%tf = isequal(a_round,b_round);
+tf = isequal(x,y);
 if tf == 1
    cprintf('*green', 'test SUCCESS!\n'); 
 else
    cprintf('*red', 'test FAIL!\n');
-   debugFail(a,b);
+   debugFail(x,y);
 end
 

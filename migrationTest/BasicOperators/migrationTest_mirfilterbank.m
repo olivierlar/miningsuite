@@ -13,11 +13,10 @@ b = aud.filterbank(testfile, 'Mix');
 tf = isequal(squeeze(mirgetdata(a)),b.getdata);
 
 if tf == 1
-   %cprintf('*green', 'test SUCCESS!\n'); 
-   cprintf('*green', 'test OK!');
+
+   cprintf('*green', 'test SUCCESS!\n');
 else
-   cprintf('*red', 'test FAIL!');
-   %cprintf('*red', 'test FAIL!\n');
+   cprintf('*red', 'test FAIL!\n');
 end
 
 

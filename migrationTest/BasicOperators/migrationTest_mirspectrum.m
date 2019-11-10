@@ -7,13 +7,17 @@ clearvars -except testfile ;
 disp('testing migration: mirspectrum with sig.spectrum'); 
 a = mirspectrum(testfile);
 b = sig.spectrum(testfile, 'Mix');
-tf = isequal(mirgetdata(a),b.getdata);
+
+x = mirgetdata(a);
+y = b.getdata;
+
+tf = isequal(x,y);
 
 if tf == 1
    cprintf('*green', 'test SUCCESS!\n'); 
 else
-   cprintf('*red', 'test FAIL!\n'); debugFail(a,b);
-   debugFail(a,b);
+   cprintf('*red', 'test FAIL!\n'); debugFail(x,y);
+   debugFail(x,y);
 end
 
 
@@ -23,13 +27,15 @@ clearvars -except testfile ;
 disp('testing migration: mirspectrum with sig.spectrum with Frame'); 
 a = mirspectrum(testfile, 'Frame');
 b = sig.spectrum(testfile, 'Frame', 'Mix');
-tf = isequal(mirgetdata(a),b.getdata);
+x = mirgetdata(a); 
+y = b.getdata; 
+tf = isequal(x,y);
 
 if tf == 1
    cprintf('*green', 'test SUCCESS!\n'); 
 else
    cprintf('*red', 'test FAIL!\n'); 
-   debugFail(a,b);
+   debugFail(x,y);
 end
 
 %% testing migration: mirspectrum with sig.spectrum with Min
@@ -40,13 +46,15 @@ mi = 100; %lowest frequency (default 0 Hz)
 disp('testing migration: mirspectrum with sig.spectrum with Min'); 
 a = mirspectrum(testfile, 'Min', mi);
 b = sig.spectrum(testfile, 'Min', mi, 'Mix');
-tf = isequal(mirgetdata(a),b.getdata);
+x = mirgetdata(a); 
+y = b.getdata; 
+tf = isequal(x,y);
 
 if tf == 1
    cprintf('*green', 'test SUCCESS!\n'); 
 else
    cprintf('*red', 'test FAIL!\n'); 
-   debugFail(a,b);
+   debugFail(x,y);
 end
 
 
@@ -58,13 +66,15 @@ ma = 100; %lowest frequency (default 0 Hz)
 disp('testing migration: mirspectrum with sig.spectrum with Max'); 
 a = mirspectrum(testfile, 'Max', ma);
 b = sig.spectrum(testfile, 'Max', ma, 'Mix');
-tf = isequal(mirgetdata(a),b.getdata);
+x = mirgetdata(a); 
+y = b.getdata; 
+tf = isequal(x,y);
 
 if tf == 1
    cprintf('*green', 'test SUCCESS!\n'); 
 else
    cprintf('*red', 'test FAIL!\n'); 
-   debugFail(a,b);
+   debugFail(x,y);
 end
 
 
@@ -77,13 +87,15 @@ w = 'hanning'; %windowing function (default = 'hanning')
 
 a = mirspectrum(testfile, 'Window', w);
 b = sig.spectrum(testfile, 'Window', w, 'Mix');
-tf = isequal(mirgetdata(a),b.getdata);
+x = mirgetdata(a); 
+y = b.getdata; 
+tf = isequal(x,y);
 
 if tf == 1
    cprintf('*green', 'test SUCCESS!\n'); 
 else
    cprintf('*red', 'test FAIL!\n'); 
-   debugFail(a,b);
+   debugFail(x,y);
 end
 
 
@@ -94,13 +106,15 @@ disp('testing migration: mirspectrum with sig.spectrum with Phase');
 
 a = mirspectrum(testfile, 'Phase');
 b = sig.spectrum(testfile, 'Phase', 'No', 'Mix');
-tf = isequal(mirgetdata(a),b.getdata);
+x = mirgetdata(a); 
+y = b.getdata; 
+tf = isequal(x,y);
 
 if tf == 1
    cprintf('*green', 'test SUCCESS!\n'); 
 else
    cprintf('*red', 'test FAIL!\n'); 
-   debugFail(a,b);
+   debugFail(x,y);
 end
 
 
@@ -112,13 +126,15 @@ mr = 100; %minimal frequency resolution
 
 a = mirspectrum(testfile, 'MinRes', mr);
 b = sig.spectrum(testfile, 'MinRes', mr, 'Mix');
-tf = isequal(mirgetdata(a),b.getdata);
+x = mirgetdata(a); 
+y = b.getdata; 
+tf = isequal(x,y);
 
 if tf == 1
    cprintf('*green', 'test SUCCESS!\n'); 
 else
    cprintf('*red', 'test FAIL!\n'); 
-   debugFail(a,b);
+   debugFail(x,y);
 end
 
 %% testing migration: mirspectrum with sig.spectrum with MinRes with OctaveRatio
@@ -130,7 +146,9 @@ tol = 0.75;% constraining multiplicative factor (default = 0.75)
 
 a = mirspectrum(testfile, 'MinRes', r, 'OctaveRatio', tol);
 b = sig.spectrum(testfile, 'MinRes', r, 'OctaveRatio', tol,'Mix');
-tf = isequal(mirgetdata(a),b.getdata);
+x = mirgetdata(a); 
+y = b.getdata; 
+tf = isequal(x,y);
 
 x = mirgetdata(a);
 y = b.getdata;
@@ -139,7 +157,7 @@ if tf == 1
    cprintf('*green', 'test SUCCESS!\n'); 
 else
    cprintf('*red', 'test FAIL!\n'); 
-   debugFail(a,b);
+   debugFail(x,y);
 end
 
 
@@ -151,13 +169,15 @@ r = 100; %minimal frequency resolution
 
 a = mirspectrum(testfile, 'Res', r);
 b = sig.spectrum(testfile, 'Res', r, 'Mix');
-tf = isequal(mirgetdata(a),b.getdata);
+x = mirgetdata(a); 
+y = b.getdata; 
+tf = isequal(x,y);
 
 if tf == 1
    cprintf('*green', 'test SUCCESS!\n'); 
 else
    cprintf('*red', 'test FAIL!\n'); 
-   debugFail(a,b);
+   debugFail(x,y);
 end
 
 
@@ -169,13 +189,15 @@ l = 8; %if length is not a power of 2, the FFT routine will not be used
 
 a = mirspectrum(testfile, 'Length', l);
 b = sig.spectrum(testfile, 'Length', l, 'Mix');
-tf = isequal(mirgetdata(a),b.getdata);
+x = mirgetdata(a); 
+y = b.getdata; 
+tf = isequal(x,y);
 
 if tf == 1
    cprintf('*green', 'test SUCCESS!\n'); 
 else
    cprintf('*red', 'test FAIL!\n'); 
-   debugFail(a,b);
+   debugFail(x,y);
 end
 
 %% testing migration: mirspectrum with sig.spectrum with ZeroPad
@@ -186,13 +208,15 @@ s = 4;%zero padding of s samples
 
 a = mirspectrum(testfile, 'ZeroPad', s);
 b = sig.spectrum(testfile, 'ZeroPad', s, 'Mix');
-tf = isequal(mirgetdata(a),b.getdata);
+x = mirgetdata(a); 
+y = b.getdata; 
+tf = isequal(x,y);
 
 if tf == 1
    cprintf('*green', 'test SUCCESS!\n'); 
 else
    cprintf('*red', 'test FAIL!\n'); 
-   debugFail(a,b);
+   debugFail(x,y);
 end
 
 
@@ -204,13 +228,15 @@ mr = 500;%required frequency resolution in Hz
 
 a = mirspectrum(testfile, 'WarningRes', mr);
 b = sig.spectrum(testfile, 'WarningRes', mr, 'Mix');
-tf = isequal(mirgetdata(a),b.getdata);
+x = mirgetdata(a); 
+y = b.getdata; 
+tf = isequal(x,y);
 
 if tf == 1
    cprintf('*green', 'test SUCCESS!\n'); 
 else
    cprintf('*red', 'test FAIL!\n'); 
-   debugFail(a,b);
+   debugFail(x,y);
 end
 
 
@@ -223,13 +249,15 @@ nb = 12; %default nb = 12 bins per octave
 
 a = mirspectrum(testfile, 'ConstantQ', nb);
 b = sig.spectrum(testfile, 'ConstantQ', nb, 'Mix');
-tf = isequal(mirgetdata(a),b.getdata);
+x = mirgetdata(a); 
+y = b.getdata; 
+tf = isequal(x,y);
 
 if tf == 1
    cprintf('*green', 'test SUCCESS!\n'); 
 else
    cprintf('*red', 'test FAIL!\n'); 
-   debugFail(a,b);
+   debugFail(x,y);
 end
 
 %% testing migration: mirspectrum with sig.spectrum with Normal
@@ -238,13 +266,15 @@ disp('testing migration: mirspectrum with sig.spectrum with Normal');
 
 a = mirspectrum(testfile, 'Normal');
 b = sig.spectrum(testfile, 'Normal', 'Mix');
-tf = isequal(mirgetdata(a),b.getdata);
+x = mirgetdata(a); 
+y = b.getdata; 
+tf = isequal(x,y);
 
 if tf == 1
    cprintf('*green', 'test SUCCESS!\n'); 
 else
    cprintf('*red', 'test FAIL!\n'); 
-   debugFail(a,b);
+   debugFail(x,y);
 end
 
 
@@ -254,13 +284,15 @@ disp('testing migration: mirspectrum with sig.spectrum with NormalLength');
 
 a = mirspectrum(testfile, 'NormalLength');
 b = sig.spectrum(testfile, 'NormalLength', 'Mix');
-tf = isequal(mirgetdata(a),b.getdata);
+x = mirgetdata(a); 
+y = b.getdata; 
+tf = isequal(x,y);
 
 if tf == 1
    cprintf('*green', 'test SUCCESS!\n'); 
 else
    cprintf('*red', 'test FAIL!\n'); 
-   debugFail(a,b);
+   debugFail(x,y);
 end
 
 
@@ -270,13 +302,15 @@ disp('testing migration: mirspectrum with sig.spectrum with Power');
 
 a = mirspectrum(testfile, 'Power');
 b = sig.spectrum(testfile, 'Power', 'Mix');
-tf = isequal(mirgetdata(a),b.getdata);
+x = mirgetdata(a); 
+y = b.getdata; 
+tf = isequal(x,y);
 
 if tf == 1
    cprintf('*green', 'test SUCCESS!\n'); 
 else
    cprintf('*red', 'test FAIL!\n'); 
-   debugFail(a,b);
+   debugFail(x,y);
 end
 
 %% testing migration: mirspectrum with sig.spectrum with dB
@@ -285,13 +319,15 @@ disp('testing migration: mirspectrum with sig.spectrum with dB');
 
 a = mirspectrum(testfile, 'dB');
 b = sig.spectrum(testfile, 'dB', 'Mix');
-tf = isequal(mirgetdata(a),b.getdata);
+x = mirgetdata(a); 
+y = b.getdata; 
+tf = isequal(x,y);
 
 if tf == 1
    cprintf('*green', 'test SUCCESS!\n'); 
 else
    cprintf('*red', 'test FAIL!\n'); 
-   debugFail(a,b);
+   debugFail(x,y);
 end
 
 
@@ -303,14 +339,16 @@ o = 10; %moving average order (default = 10)
 
 a = mirspectrum(testfile, 'Smooth', o);
 b = sig.spectrum(testfile, 'Smooth',o, 'Mix');
-tf = isequal(mirgetdata(a),b.getdata/10);
+x = mirgetdata(a); 
+y = b.getdata; 
+tf = isequal(x,y);
 
 
 if tf == 1
    cprintf('*green', 'test SUCCESS!\n'); 
 else
    cprintf('*red', 'test FAIL!\n'); 
-   debugFail(a,b);
+   debugFail(x,y);
 end
 
 %% testing migration: mirspectrum with sig.spectrum with Gauss
@@ -321,13 +359,15 @@ o = 10; %gaussian of SD (default = 10)
 
 a = mirspectrum(testfile, 'Gauss', o);
 b = sig.spectrum(testfile, 'Gauss',o, 'Mix');
-tf = isequal(mirgetdata(a),b.getdata);
+x = mirgetdata(a); 
+y = b.getdata; 
+tf = isequal(x,y);
 
 if tf == 1
    cprintf('*green', 'test SUCCESS!\n'); 
 else
    cprintf('*red', 'test FAIL!\n'); 
-   debugFail(a,b);
+   debugFail(x,y);
 end
 
 %% testing migration: mirspectrum with sig.spectrum with TimeSmooth
@@ -338,7 +378,9 @@ o = 10; %moving average order (default = 10)
 
 a = mirspectrum(testfile, 'TimeSmooth', o);
 b = sig.spectrum(testfile, 'TimeSmooth',o, 'Mix');
-tf = isequal(mirgetdata(a),b.getdata);
+x = mirgetdata(a); 
+y = b.getdata; 
+tf = isequal(x,y);
 
 x = mirgetdata(a);
 y = b.getdata;
@@ -349,7 +391,7 @@ if tf == 1
    cprintf('*green', 'test SUCCESS!\n'); 
 else
    cprintf('*red', 'test FAIL!\n'); 
-   debugFail(a,b);
+   debugFail(x,y);
 end
 
 
@@ -361,13 +403,15 @@ m = 1:6; %list of factors (default m = 1:6)
 
 a = mirspectrum(testfile, 'Prod', m);
 b = sig.spectrum(testfile, 'Prod',m, 'Mix');
-tf = isequal(mirgetdata(a),b.getdata);
+x = mirgetdata(a); 
+y = b.getdata; 
+tf = isequal(x,y);
 
 if tf == 1
    cprintf('*green', 'test SUCCESS!\n'); 
 else
    cprintf('*red', 'test FAIL!\n'); 
-   debugFail(a,b);
+   debugFail(x,y);
 end
 
 %% testing migration: mirspectrum with sig.spectrum with Sum
@@ -378,13 +422,15 @@ m = 1:6; %list of factors (default m = 1:6)
 
 a = mirspectrum(testfile, 'Sum', m);
 b = sig.spectrum(testfile, 'Sum',m, 'Mix');
-tf = isequal(mirgetdata(a),b.getdata);
+x = mirgetdata(a); 
+y = b.getdata; 
+tf = isequal(x,y);
 
 if tf == 1
    cprintf('*green', 'test SUCCESS!\n'); 
 else
    cprintf('*red', 'test FAIL!\n'); 
-   debugFail(a,b);
+   debugFail(x,y);
 end
 
 

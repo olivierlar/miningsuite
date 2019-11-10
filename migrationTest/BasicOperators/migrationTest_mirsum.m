@@ -63,18 +63,17 @@ a = mirsum(e1, 'Mean');
 b = sig.sum(e2, 'Mean');
 
 
-tempX = mirgetdata(a);
-tempY = b.getdata;
+x = mirgetdata(a);
+y = b.getdata;
 
 
-tf = isequal(mirgetdata(a),b.getdata);
-
-
+tf = isequal(x,y);
 
 
 if tf == 1
    cprintf('*green', 'test SUCCESS!\n'); 
 else
    cprintf('*red', 'test FAIL!\n');
+   debugFail(x,y);
 end
 

@@ -169,12 +169,17 @@ disp('<strong> testing migration: mirenvelope(..., ''Spectro'', ''Mel'') -> sig.
 
 a = mirenvelope(testfile, 'Spectro', 'Mel');
 b = sig.envelope(testfile, 'Spectro', 'Mel','Mix');
-tf = isequal(squeeze(mirgetdata(a)),b.getdata');
+x = mirgetdata(a);
+y = b.getdata;
+
+%tf = isequal(a_round,b_round);
+tf = isequal(x,y);
 
 if tf == 1
    cprintf('*green', 'test SUCCESS!\n'); 
 else
    cprintf('*red', 'test FAIL!\n');
+   debugFail(x,y);
 end
 
 
