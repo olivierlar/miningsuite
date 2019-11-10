@@ -11,10 +11,10 @@ b = sig.signal(testfile,'Mix');
 tf = isequal(mirgetdata(a),b.getdata);
 
 if tf == 1
-   disp('test OK!'); 
+   cprintf('*green', 'test SUCCESS!\n'); 
 
 else
-   fprintf(2,'test fail!\n');
+   cprintf('*red', 'test FAIL!\n');
 end
 
 
@@ -29,9 +29,9 @@ db = b.getdata;
 tf = isequal(da,db);
 
 if tf == 1
-   disp('test OK!'); 
+   cprintf('*green', 'test SUCCESS!\n'); 
 else
-   fprintf(2,'test fail!\n');
+   cprintf('*red', 'test FAIL!\n');
 end
 
 %% testing migration: miraudio (..., 'Center') with sig.signal (..., 'Center')
@@ -43,9 +43,9 @@ b = sig.signal(testfile, 'Center','Mix');
 tf = isequal(mirgetdata(a),b.getdata);
 
 if tf == 1
-   disp('test OK!'); 
+   cprintf('*green', 'test SUCCESS!\n'); 
 else
-   fprintf(2,'test fail!\n');
+   cprintf('*red', 'test FAIL!\n');
 end
 
 %% testing migration: miraudio (..., 'Sampling', r) with sig.signal (..., 'Sampling', r)
@@ -58,9 +58,9 @@ b = sig.signal(testfile, 'Sampling', samplingRate,'Mix');
 tf = isequal(mirgetdata(a),b.getdata);
 
 if tf == 1
-   disp('test OK!'); 
+   cprintf('*green', 'test SUCCESS!\n'); 
 else
-   fprintf(2,'test fail!\n');
+   cprintf('*red', 'test FAIL!\n');
 end
 
 
@@ -73,9 +73,9 @@ b = sig.signal(testfile, 'FWR','Mix');
 tf = isequal(mirgetdata(a),b.getdata);
 
 if tf == 1
-   disp('test OK!'); 
+   cprintf('*green', 'test SUCCESS!\n'); 
 else
-   fprintf(2,'test fail!\n');
+   cprintf('*red', 'test FAIL!\n');
 end
 
 
@@ -96,9 +96,9 @@ b = sig.signal(testfile, 'Frame',w,wu,h,hu,'Mix');
 tf = isequal(mirgetdata(a),b.getdata);
 
 if tf == 1
-   disp('test OK!'); 
+   cprintf('*green', 'test SUCCESS!\n'); 
 else
-   fprintf(2,'test fail!\n');
+   cprintf('*red', 'test FAIL!\n');
 end
 
 
@@ -115,9 +115,9 @@ b = sig.signal(testfile, 'Extract',  t1,t2,u,'Mix');
 tf = isequal(mirgetdata(a),b.getdata);
 
 if tf == 1
-   disp('test OK!'); 
+   cprintf('*green', 'test SUCCESS!\n'); 
 else
-   fprintf(2,'test fail!\n');
+   cprintf('*red', 'test FAIL!\n');
 end
 
 
@@ -135,9 +135,9 @@ b = sig.signal(testfile, 'Extract',  t1,t2,u,'Mix');
 tf = isequal(mirgetdata(a),b.getdata);
 
 if tf == 1
-   disp('test OK!'); 
+   cprintf('*green', 'test SUCCESS!\n'); 
 else
-   fprintf(2,'test fail!\n');
+   cprintf('*red', 'test FAIL!\n');
 end
 
 
@@ -150,9 +150,9 @@ b = sig.signal(testfile, 'Trim','Mix');
 tf = isequal(mirgetdata(a),b.getdata);
 
 if tf == 1
-   disp('test OK!'); 
+   cprintf('*green', 'test SUCCESS!\n'); 
 else
-   fprintf(2,'test fail!\n');
+   cprintf('*red', 'test FAIL!\n');
 end
 
 %% testing migration: miraudio (..., 'Trim','TrimThreshold', t) with sig.signal (...,'Trim', 'TrimThreshold',t )
@@ -165,9 +165,9 @@ b = sig.signal(testfile,'Trim', 'TrimThreshold', t,'Mix');
 tf = isequal(mirgetdata(a),b.getdata);
 
 if tf == 1
-   disp('test OK!'); 
+   cprintf('*green', 'test SUCCESS!\n'); 
 else
-   fprintf(2,'test fail!\n');
+   cprintf('*red', 'test FAIL!\n');
 end
 
 %% testing migration: miraudio (..., 'Trim', 'TrimStart') -> sig.signal (..., 'Trim', 'JustStart')
@@ -180,9 +180,9 @@ b = sig.signal(testfile, 'Trim', 'JustStart','Mix');
 tf = isequal(mirgetdata(a),b.getdata);
 
 if tf == 1
-   disp('test OK!'); 
+   cprintf('*green', 'test SUCCESS!\n'); 
 else
-   fprintf(2,'test fail!\n');
+   cprintf('*red', 'test FAIL!\n');
 end
 
 
@@ -196,9 +196,9 @@ b = sig.signal(testfile, 'Trim', 'JustEnd','Mix');
 tf = isequal(mirgetdata(a),b.getdata);
 
 if tf == 1
-   disp('test OK!'); 
+   cprintf('*green', 'test SUCCESS!\n'); 
 else
-   fprintf(2,'test fail!\n');
+   cprintf('*red', 'test FAIL!\n');
 end
 
 
@@ -215,8 +215,8 @@ b = sig.signal(testfile, 'Channel',c,'Mix');
 tf = isequal(mirgetdata(a),b.getdata);
 
 if tf == 1
-   disp('test OK!'); 
+   cprintf('*green', 'test SUCCESS!\n'); 
 else
-   fprintf(2,'test fail!\n');
+   cprintf('*red', 'test FAIL!\n');
 end
 

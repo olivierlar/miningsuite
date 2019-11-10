@@ -13,9 +13,11 @@ b = aud.filterbank(testfile, 'Mix');
 tf = isequal(squeeze(mirgetdata(a)),b.getdata);
 
 if tf == 1
-   disp('test OK!'); 
+   %cprintf('*green', 'test SUCCESS!\n'); 
+   cprintf('*green', 'test OK!');
 else
-   fprintf(2,'test fail!\n');
+   cprintf('*red', 'test FAIL!');
+   %cprintf('*red', 'test FAIL!\n');
 end
 
 
@@ -34,9 +36,9 @@ b = aud.filterbank(testfile, 'Mix');
 tf = isequal(squeeze(mirgetdata(a)),b.getdata);
 
 if tf == 1
-   disp('test OK!'); 
+   cprintf('*green', 'test SUCCESS!\n'); 
 else
-   fprintf(2,'test fail!\n');
+   cprintf('*red', 'test FAIL!\n');
 end
 
 
@@ -53,9 +55,9 @@ b = aud.filterbank(testfile, 'Gammatone','Lowest', f, 'Mix');
 tf = isequal(squeeze(mirgetdata(a)),b.getdata);
 
 if tf == 1
-   disp('test OK!'); 
+   cprintf('*green', 'test SUCCESS!\n'); 
 else
-   fprintf(2,'test fail!\n');
+   cprintf('*red', 'test FAIL!\n');
 end
 
 
@@ -72,9 +74,9 @@ b = aud.filterbank(testfile, '2Channels', 'Mix');
 tf = isequal(squeeze(mirgetdata(a)),b.getdata);
 
 if tf == 1
-   disp('test OK!'); 
+   cprintf('*green', 'test SUCCESS!\n'); 
 else
-   fprintf(2,'test fail!\n');
+   cprintf('*red', 'test FAIL!\n');
 end
 
 %% testing migration: mirfilterbank (..., 'Gammatone', 'NbChannels', N) -> aud.filterbank (..., 'Gammatone', 'NbChannels', N)
@@ -91,9 +93,9 @@ b = aud.filterbank(testfile, 'Mix', 'NbChannels', N);
 tf = isequal(squeeze(mirgetdata(a)),b.getdata);
 
 if tf == 1
-   disp('test OK!'); 
+   cprintf('*green', 'test SUCCESS!\n'); 
 else
-   fprintf(2,'test fail!\n');
+   cprintf('*red', 'test FAIL!\n');
 end
 
 
@@ -111,9 +113,9 @@ b = aud.filterbank(testfile, 'Channel', c, 'Mix');
 tf = isequal(squeeze(mirgetdata(a)),b.getdata);
 
 if tf == 1
-   disp('test OK!'); 
+   cprintf('*green', 'test SUCCESS!\n'); 
 else
-   fprintf(2,'test fail!\n');
+   cprintf('*red', 'test FAIL!\n');
 end
 
 
@@ -131,9 +133,9 @@ b = sig.filterbank(testfile, 'CutOff', f,'Mix');
 tf = isequal(squeeze(mirgetdata(a)),b.getdata);
 
 if tf == 1
-   disp('test OK!'); 
+   cprintf('*green', 'test SUCCESS!\n'); 
 else
-   fprintf(2,'test fail!\n');
+   cprintf('*red', 'test FAIL!\n');
 end
 
 
@@ -151,9 +153,9 @@ b = sig.filterbank(testfile, 'CutOff', f, 'Order', o, 'Mix');
 tf = isequal(squeeze(mirgetdata(a)),b.getdata);
 
 if tf == 1
-   disp('test OK!'); 
+   cprintf('*green', 'test SUCCESS!\n'); 
 else
-   fprintf(2,'test fail!\n');
+   cprintf('*red', 'test FAIL!\n');
 end
 
 
@@ -171,9 +173,9 @@ b = sig.filterbank(testfile, 'CutOff', f, 'Hop', h, 'Mix');
 tf = isequal(squeeze(mirgetdata(a)),b.getdata);
 
 if tf == 1
-   disp('test OK!'); 
+   cprintf('*green', 'test SUCCESS!\n'); 
 else
-   fprintf(2,'test fail!\n');
+   cprintf('*red', 'test FAIL!\n');
 end
 
 
@@ -190,9 +192,9 @@ b = sig.filterbank(testfile, 'CutOff', f, 'Hop', h, 'Mix');
 tf = isequal(squeeze(mirgetdata(a)),b.getdata);
 
 if tf == 1
-   disp('test OK!'); 
+   cprintf('*green', 'test SUCCESS!\n'); 
 else
-   fprintf(2,'test fail!\n');
+   cprintf('*red', 'test FAIL!\n');
 end
 
 %% testing migration: mirfilterbank (..., 'Manual', f, 'Hop',3) -> sig.filterbank (...,'CutOff', f,'Hop', 3)
@@ -208,9 +210,9 @@ b = sig.filterbank(testfile, 'CutOff', f, 'Hop', h, 'Mix');
 tf = isequal(squeeze(mirgetdata(a)),b.getdata);
 
 if tf == 1
-   disp('test OK!'); 
+   cprintf('*green', 'test SUCCESS!\n'); 
 else
-   fprintf(2,'test fail!\n');
+   cprintf('*red', 'test FAIL!\n');
 end
 
 
@@ -224,9 +226,9 @@ b = aud.filterbank(testfile, 'Mel','Mix');
 tf = isequal(squeeze(mirgetdata(a)),b.getdata);
 
 if tf == 1
-   disp('test OK!'); 
+   cprintf('*green', 'test SUCCESS!\n'); 
 else
-   fprintf(2,'test fail!\n');
+   cprintf('*red', 'test FAIL!\n');
 end
 
 
@@ -241,9 +243,9 @@ b = aud.filterbank(testfile, 'Bark', 'Mix');
 tf = isequal(squeeze(mirgetdata(a)),b.getdata);
 
 if tf == 1
-   disp('test OK!'); 
+   cprintf('*green', 'test SUCCESS!\n'); 
 else
-   fprintf(2,'test fail!\n');
+   cprintf('*red', 'test FAIL!\n');
 end
 
 
@@ -258,9 +260,9 @@ b = aud.filterbank(testfile, 'Scheirer', 'Mix');
 tf = isequal(squeeze(mirgetdata(a)),b.getdata);
 
 if tf == 1
-   disp('test OK!'); 
+   cprintf('*green', 'test SUCCESS!\n'); 
 else
-   fprintf(2,'test fail!\n');
+   cprintf('*red', 'test FAIL!\n');
 end
 
 
@@ -275,7 +277,7 @@ b = aud.filterbank(testfile, 'Klapuri', 'Mix');
 tf = isequal(squeeze(mirgetdata(a)),b.getdata);
 
 if tf == 1
-   disp('test OK!'); 
+   cprintf('*green', 'test SUCCESS!\n'); 
 else
-   fprintf(2,'test fail!\n');
+   cprintf('*red', 'test FAIL!\n');
 end

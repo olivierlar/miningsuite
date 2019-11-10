@@ -11,7 +11,7 @@ b = sig.signal(testfile,'Mix');
 tf = isequal(mirgetdata(a),b.getdata);
 
 if tf == 1
-   disp('test OK!'); 
+   cprintf('*green', 'test SUCCESS!\n'); 
 
 else
    disp('test fail!');
@@ -29,7 +29,7 @@ db = b.getdata;
 tf = isequal(da,db);
 
 if tf == 1
-   disp('test OK!'); 
+   cprintf('*green', 'test SUCCESS!\n'); 
 else
    disp('test fail!');
 end
@@ -43,7 +43,7 @@ b = sig.signal(testfile, 'Center','Mix');
 tf = isequal(mirgetdata(a),b.getdata);
 
 if tf == 1
-   disp('test OK!'); 
+   cprintf('*green', 'test SUCCESS!\n'); 
 else
    disp('test fail!');
 end
@@ -59,7 +59,7 @@ b = sig.signal(testfile, 'Sampling', samplingRate,'Mix');
 tf = isequal(mirgetdata(a),b.getdata);
 
 if tf == 1
-   disp('test OK!'); 
+   cprintf('*green', 'test SUCCESS!\n'); 
 else
    disp('test fail!');
 end
@@ -78,7 +78,7 @@ b = sig.signal(testfile, 'Extract',  t1,t2,u,'Mix');
 tf = isequal(mirgetdata(a),b.getdata);
 
 if tf == 1
-   disp('test OK!'); 
+   cprintf('*green', 'test SUCCESS!\n'); 
 else
    disp('test fail!');
 end
@@ -97,7 +97,7 @@ b = sig.signal(testfile, 'Extract',  t1,t2,u,'Mix');
 tf = isequal(mirgetdata(a),b.getdata);
 
 if tf == 1
-   disp('test OK!'); 
+   cprintf('*green', 'test SUCCESS!\n'); 
 else
    disp('test fail!');
 end
@@ -112,7 +112,7 @@ b = sig.signal(testfile, 'Trim','Mix');
 tf = isequal(mirgetdata(a),b.getdata);
 
 if tf == 1
-   disp('test OK!'); 
+   cprintf('*green', 'test SUCCESS!\n'); 
 else
    disp('test fail!');
 end
@@ -128,7 +128,7 @@ b = sig.signal(testfile, 'TrimThreshold', t,'Mix');
 tf = isequal(mirgetdata(a),b.getdata);
 
 if tf == 1
-   disp('test OK!'); 
+   cprintf('*green', 'test SUCCESS!\n'); 
 else
    disp('test fail!');
 end
@@ -146,7 +146,7 @@ b = sig.signal(testfile, 'Trim', 'JustStart','Mix');
 tf = isequal(mirgetdata(a),b.getdata);
 
 if tf == 1
-   disp('test OK!'); 
+   cprintf('*green', 'test SUCCESS!\n'); 
 else
    disp('test fail!');
 end
@@ -166,7 +166,7 @@ b = sig.frame(testfile, 'FrameSize', w, wu,'Mix');
 tf = isequal(mirgetdata(a),b.getdata);
 
 if tf == 1
-   disp('test OK!'); 
+   cprintf('*green', 'test SUCCESS!\n'); 
 else
    disp('test fail!');
 end
@@ -187,7 +187,7 @@ end
 % tf = isequal(mirgetdata(a),b.getdata);
 % 
 % if tf == 1
-%    disp('test OK!'); 
+%    cprintf('*green', 'test SUCCESS!\n'); 
 % else
 %    disp('test fail!');
 % end
@@ -207,7 +207,7 @@ b = sig.frame(testfile, 'FrameHop', h, wu,'Mix');
 tf = isequal(mirgetdata(a),b.getdata);
 
 if tf == 1
-   disp('test OK!'); 
+   cprintf('*green', 'test SUCCESS!\n'); 
 else
    disp('test fail!');
 end
@@ -228,7 +228,7 @@ b = sig.frame(testfile, 'FrameHop', h, wu,'Mix');
 tf = isequal(mirgetdata(a),b.getdata);
 
 if tf == 1
-   disp('test OK!'); 
+   cprintf('*green', 'test SUCCESS!\n'); 
 else
    disp('test fail!');
 end
@@ -248,7 +248,7 @@ b = sig.frame(testfile, 'FrameHop', h, wu,'Mix');
 tf = isequal(mirgetdata(a),b.getdata);
 
 if tf == 1
-   disp('test OK!'); 
+   cprintf('*green', 'test SUCCESS!\n'); 
 else
    disp('test fail!');
 end
@@ -270,7 +270,7 @@ b = sig.frame(testfile, 'FrameHop', h, wu,'Mix');
 tf = isequal(mirgetdata(a),b.getdata);
 
 if tf == 1
-   disp('test OK!'); 
+   cprintf('*green', 'test SUCCESS!\n'); 
 else
    disp('test fail!');
 end
@@ -291,7 +291,7 @@ b = sig.frame(testfile, 'FrameHop', h, wu,'Mix');
 tf = isequal(mirgetdata(a),b.getdata);
 
 if tf == 1
-   disp('test OK!'); 
+   cprintf('*green', 'test SUCCESS!\n'); 
 else
    disp('test fail!');
 end

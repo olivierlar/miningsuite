@@ -3,7 +3,7 @@ testfile = 'ragtime.wav'
 
 %% testing migration: mirpeaks(...) -> sig.peaks(...)
 clearvars -except testfile ;
-disp('testing migration: mirpeaks(...) -> sig.peaks(...)'); 
+disp('<strong>testing migration: mirpeaks(...) -> sig.peaks(...)</strong>'); 
 
 a = mirpeaks(testfile);
 b = sig.peaks (testfile, 'Mix');
@@ -17,15 +17,17 @@ y = n.content{1,1};
 tf = isequal(x,y);
 
 if tf == 1
-   disp('test OK!'); 
+   cprintf('*green', 'test SUCCESS!\n'); 
 else
-   fprintf(2,'test fail!\n');
+   cprintf('*red', 'test FAIL!\n'); 
+   debugFail(a,b);
+   debugFail(a,b);
 end
 
 
 %% testing migration: mirpeaks(..., 'Total', m) -> sig.peaks(..., 'Total', m)
 clearvars -except testfile ;
-disp('testing migration: mirpeaks(..., ''Total'', m) -> sig.peaks(..., ''Total'', m)'); 
+disp('<strong>testing migration: mirpeaks(..., ''Total'', m) -> sig.peaks(..., ''Total'', m)</strong>'); 
 
 m = 100; %total number of peaks (default is infinite)
 
@@ -41,14 +43,15 @@ y = n.content{1,1};
 tf = isequal(x,y);
 
 if tf == 1
-   disp('test OK!'); 
+   cprintf('*green', 'test SUCCESS!\n'); 
 else
-   fprintf(2,'test fail!\n');
+   cprintf('*red', 'test FAIL!\n'); 
+   debugFail(a,b);
 end
 
 %% testing migration: mirpeaks(..., 'Total', m, 'NoBegin') -> sig.peaks(..., 'Total', m, 'NoBegin')
 clearvars -except testfile ;
-disp('testing migration: mirpeaks(..., ''Total'', m, ''NoBegin'') -> sig.peaks(..., ''Total'', m, ''NoBegin'')'); 
+disp('<strong>testing migration: mirpeaks(..., ''Total'', m, ''NoBegin'') -> sig.peaks(..., ''Total'', m, ''NoBegin'')</strong>'); 
 
 m = 100; %total number of peaks (default is infinite)
 
@@ -64,14 +67,16 @@ y = n.content{1,1};
 tf = isequal(x,y);
 
 if tf == 1
-   disp('test OK!'); 
+   cprintf('*green', 'test SUCCESS!\n'); 
 else
-   fprintf(2,'test fail!\n');
+   cprintf('*red', 'test FAIL!\n'); 
+   debugFail(a,b);
+   
 end
 
 %% testing migration: mirpeaks(..., 'Total', m, 'NoEnd') -> sig.peaks(..., 'Total', m, 'NoEnd')
 clearvars -except testfile ;
-disp('testing migration: mirpeaks(..., ''Total'', m, ''NoEnd'') -> sig.peaks(..., ''Total'', m, ''NoEnd'')'); 
+disp('<strong>testing migration: mirpeaks(..., ''Total'', m, ''NoEnd'') -> sig.peaks(..., ''Total'', m, ''NoEnd'')</strong>'); 
 
 m = 100; %total number of peaks (default is infinite)
 
@@ -87,15 +92,16 @@ y = n.content{1,1};
 tf = isequal(x,y);
 
 if tf == 1
-   disp('test OK!'); 
+   cprintf('*green', 'test SUCCESS!\n'); 
 else
-   fprintf(2,'test fail!\n');
+   cprintf('*red', 'test FAIL!\n'); 
+   debugFail(a,b);
 end
 
 
 %% testing migration: mirpeaks(..., 'Order', 'Amplitude') -> sig.peaks(..., 'Order', 'Amplitude')
 clearvars -except testfile ;
-disp('testing migration: mirpeaks(..., ''Order'', ''Amplitude'') -> sig.peaks(..., ''Order'', ''Amplitude'')'); 
+disp('<strong>testing migration: mirpeaks(..., ''Order'', ''Amplitude'') -> sig.peaks(..., ''Order'', ''Amplitude'')</strong>'); 
 
 o = 'Amplitude';
 
@@ -111,14 +117,15 @@ y = n.content{1,1};
 tf = isequal(x,y);
 
 if tf == 1
-   disp('test OK!'); 
+   cprintf('*green', 'test SUCCESS!\n'); 
 else
-   fprintf(2,'test fail!\n');
+   cprintf('*red', 'test FAIL!\n'); 
+   debugFail(a,b);
 end
 
 %% testing migration: mirpeaks(..., 'Order', 'Abscissa') -> sig.peaks(..., 'Order', 'Abscissa')
 clearvars -except testfile ;
-disp('testing migration: mirpeaks(..., ''Order'', ''Abscissa'') -> sig.peaks(..., ''Order'', ''Abscissa'')'); 
+disp('<strong>testing migration: mirpeaks(..., ''Order'', ''Abscissa'') -> sig.peaks(..., ''Order'', ''Abscissa'')</strong>'); 
 
 o = 'Abscissa';
 
@@ -134,14 +141,15 @@ y = n.content{1,1};
 tf = isequal(x,y);
 
 if tf == 1
-   disp('test OK!'); 
+   cprintf('*green', 'test SUCCESS!\n'); 
 else
-   fprintf(2,'test fail!\n');
+   cprintf('*red', 'test FAIL!\n'); 
+   debugFail(a,b);
 end
 
 %% testing migration: mirpeaks(..., 'Valleys') -> sig.peaks(..., 'Valleys')
 clearvars -except testfile ;
-disp('testing migration: mirpeaks(..., ''Valleys'') -> sig.peaks(..., ''Valleys'')'); 
+disp('<strong>testing migration: mirpeaks(..., ''Valleys'') -> sig.peaks(..., ''Valleys'')</strong>'); 
 
 a = mirpeaks(testfile, 'Valleys');
 b = sig.peaks (testfile, 'Valleys', 'Mix');
@@ -155,14 +163,15 @@ y = n.content{1,1};
 tf = isequal(x,y);
 
 if tf == 1
-   disp('test OK!'); 
+   cprintf('*green', 'test SUCCESS!\n'); 
 else
-   fprintf(2,'test fail!\n');
+   cprintf('*red', 'test FAIL!\n'); 
+   debugFail(a,b);
 end
 
 %% testing migration: mirpeaks(..., 'Contrast', cthr) -> sig.peaks(..., 'Contrast', cthr)
 clearvars -except testfile ;
-disp('testing migration: mirpeaks(..., ''Contrast'', cthr) -> sig.peaks(..., ''Contrast'', cthr)'); 
+disp('<strong>testing migration: mirpeaks(..., ''Contrast'', cthr) -> sig.peaks(..., ''Contrast'', cthr)</strong>'); 
 
 cthr = 0.1; %(default cthr = 0.1)
 
@@ -178,14 +187,15 @@ y = n.content{1,1};
 tf = isequal(x,y);
 
 if tf == 1
-   disp('test OK!'); 
+   cprintf('*green', 'test SUCCESS!\n'); 
 else
-   fprintf(2,'test fail!\n');
+   cprintf('*red', 'test FAIL!\n'); 
+   debugFail(a,b);
 end
 
 %% testing migration: mirpeaks(..., 'SelectFirst', fthr) -> sig.peaks(..., 'SelectFirst', fthr)
 clearvars -except testfile ;
-disp('testing migration: mirpeaks(..., ''SelectFirst'', fthr) -> sig.peaks(..., ''SelectFirst'', fthr)'); 
+disp('<strong>testing migration: mirpeaks(..., ''SelectFirst'', fthr) -> sig.peaks(..., ''SelectFirst'', fthr)</strong>'); 
 
 fthr = 0.1/2; %(default fthr = cthr/2)
 
@@ -201,16 +211,17 @@ y = n.content{1,1};
 tf = isequal(x,y);
 
 if tf == 1
-   disp('test OK!'); 
+   cprintf('*green', 'test SUCCESS!\n'); 
 else
-   fprintf(2,'test fail!\n');
+   cprintf('*red', 'test FAIL!\n'); 
+   debugFail(a,b);
 end
 
 
 
 %% testing migration: mirpeaks(..., 'Contrast', cthr, 'SelectFirst', fthr) -> sig.peaks(..., 'Contrast', cthr, 'SelectFirst', fthr)
 clearvars -except testfile ;
-disp('testing migration: mirpeaks(..., ''Contrast'', cthr,''SelectFirst'', fthr) -> sig.peaks(..., ''Contrast'', cthr, ''SelectFirst'', fthr)'); 
+disp('<strong>testing migration: mirpeaks(..., ''Contrast'', cthr,''SelectFirst'', fthr) -> sig.peaks(..., ''Contrast'', cthr, ''SelectFirst'', fthr)</strong>'); 
 
 cthr = 0.1; %(default cthr = 0.1)
 fthr = cthr/2; %(default fthr = cthr/2)
@@ -227,15 +238,16 @@ y = n.content{1,1};
 tf = isequal(x,y);
 
 if tf == 1
-   disp('test OK!'); 
+   cprintf('*green', 'test SUCCESS!\n'); 
 else
-   fprintf(2,'test fail!\n');
+   cprintf('*red', 'test FAIL!\n'); 
+   debugFail(a,b);
 end
 
 
 %% testing migration: mirpeaks(..., 'Threshold', thr) -> sig.peaks(..., 'Threshold', thr)
 clearvars -except testfile ;
-disp('testing migration: mirpeaks(..., ''Threshold'', thr) -> sig.peaks(..., ''Threshold'', thr)'); 
+disp('<strong>testing migration: mirpeaks(..., ''Threshold'', thr) -> sig.peaks(..., ''Threshold'', thr)</strong>'); 
 
 thr = 0; %(default = 0 for peaks and 1 for valleys)
 
@@ -251,15 +263,16 @@ y = n.content{1,1};
 tf = isequal(x,y);
 
 if tf == 1
-   disp('test OK!'); 
+   cprintf('*green', 'test SUCCESS!\n'); 
 else
-   fprintf(2,'test fail!\n');
+   cprintf('*red', 'test FAIL!\n'); 
+   debugFail(a,b);
 end
 
 
 %% testing migration: mirpeaks(..., 'Valleys'. 'Threshold', thr) -> sig.peaks(...,'Valleys', 'Threshold', thr)
 clearvars -except testfile ;
-disp('testing migration: mirpeaks(..., ''Valleys'',''Threshold'', thr) -> sig.peaks(..., ''Valleys'',''Threshold'', thr)'); 
+disp('<strong>testing migration: mirpeaks(..., ''Valleys'',''Threshold'', thr) -> sig.peaks(..., ''Valleys'',''Threshold'', thr)</strong>'); 
 
 thr = 1; %(default = 0 for peaks and 1 for valleys)
 
@@ -275,15 +288,16 @@ y = n.content{1,1};
 tf = isequal(x,y);
 
 if tf == 1
-   disp('test OK!'); 
+   cprintf('*green', 'test SUCCESS!\n'); 
 else
-   fprintf(2,'test fail!\n');
+   cprintf('*red', 'test FAIL!\n'); 
+   debugFail(a,b);
 end
 
 
 %% testing migration: mirpeaks(..., 'Interpol', 'no') -> sig.peaks(..., 'Interpol', 'no')
 clearvars -except testfile ;
-disp('testing migration: mirpeaks(..., ''Interpol'',''no'') -> sig.peaks(..., ''Interpol'', ''no'')'); 
+disp('<strong>testing migration: mirpeaks(..., ''Interpol'',''no'') -> sig.peaks(..., ''Interpol'', ''no'')</strong>'); 
 
 i= 'no';
 
@@ -299,14 +313,15 @@ y = n.content{1,1};
 tf = isequal(x,y);
 
 if tf == 1
-   disp('test OK!'); 
+   cprintf('*green', 'test SUCCESS!\n'); 
 else
-   fprintf(2,'test fail!\n');
+   cprintf('*red', 'test FAIL!\n'); 
+   debugFail(a,b);
 end
 
 %% testing migration: mirpeaks(..., 'Interpol', 'Quadratic') -> sig.peaks(..., 'Interpol', 'Quadratic')
 clearvars -except testfile ;
-disp('testing migration: mirpeaks(..., ''Interpol'',''Quadratic'') -> sig.peaks(..., ''Interpol'', ''Quadratic'')'); 
+disp('<strong>testing migration: mirpeaks(..., ''Interpol'',''Quadratic'') -> sig.peaks(..., ''Interpol'', ''Quadratic'')</strong>'); 
 
 i= 'Quadratic';
 
@@ -322,14 +337,15 @@ y = n.content{1,1};
 tf = isequal(x,y);
 
 if tf == 1
-   disp('test OK!'); 
+   cprintf('*green', 'test SUCCESS!\n'); 
 else
-   fprintf(2,'test fail!\n');
+   cprintf('*red', 'test FAIL!\n'); 
+   debugFail(a,b);
 end
 
 %% testing migration: mirpeaks(..., 'Reso', r ) -> sig.peaks(..., 'Reso',r)
 clearvars -except testfile ;
-disp('testing migration: mirpeaks(..., ''Reso'',r) -> sig.peaks(..., ''Reso'',r)'); 
+disp('<strong>testing migration: mirpeaks(..., ''Reso'',r) -> sig.peaks(..., ''Reso'',r)</strong>'); 
 
 r= 1;
 
@@ -345,15 +361,16 @@ y = n.content{1,1};
 tf = isequal(x,y);
 
 if tf == 1
-   disp('test OK!'); 
+   cprintf('*green', 'test SUCCESS!\n'); 
 else
-   fprintf(2,'test fail!\n');
+   cprintf('*red', 'test FAIL!\n'); 
+   debugFail(a,b);
 end
 
 
 %% testing migration: mirpeaks(..., 'Reso', r, 'First') -> sig.peaks(..., 'Reso',r,'First')
 clearvars -except testfile ;
-disp('testing migration: mirpeaks(..., ''Reso'',r, ''First'') -> sig.peaks(..., ''Reso'',r, ''First'')'); 
+disp('<strong>testing migration: mirpeaks(..., ''Reso'',r, ''First'') -> sig.peaks(..., ''Reso'',r, ''First'')</strong>'); 
 
 r= 1;
 
@@ -369,15 +386,16 @@ y = n.content{1,1};
 tf = isequal(x,y);
 
 if tf == 1
-   disp('test OK!'); 
+   cprintf('*green', 'test SUCCESS!\n'); 
 else
-   fprintf(2,'test fail!\n');
+   cprintf('*red', 'test FAIL!\n'); 
+   debugFail(a,b);
 end
 
 
 %% testing migration: mirpeaks(..., 'Normalize', 'Global' ) -> sig.peaks(..., 'Normalize','Global')
 clearvars -except testfile ;
-disp('testing migration: mirpeaks(..., ''Normalize'',''Global'') -> sig.peaks(..., ''Normalize'', ''Global'')'); 
+disp('<strong>testing migration: mirpeaks(..., ''Normalize'',''Global'') -> sig.peaks(..., ''Normalize'', ''Global'')</strong>'); 
 
 n= 'Global';
 
@@ -394,15 +412,16 @@ y = n.content{1,1};
 tf = isequal(x,y);
 
 if tf == 1
-   disp('test OK!'); 
+   cprintf('*green', 'test SUCCESS!\n'); 
 else
-   fprintf(2,'test fail!\n');
+   cprintf('*red', 'test FAIL!\n'); 
+   debugFail(a,b);
 end
 
 
 %% testing migration: mirpeaks(..., 'Normalize', 'Local' ) -> sig.peaks(..., 'Normalize','Local')
 clearvars -except testfile ;
-disp('testing migration: mirpeaks(..., ''Normalize'',''Local'') -> sig.peaks(..., ''Normalize'', ''Local'')'); 
+disp('<strong>testing migration: mirpeaks(..., ''Normalize'',''Local'') -> sig.peaks(..., ''Normalize'', ''Local'')</strong>'); 
 
 n= 'Local';
 
@@ -418,7 +437,8 @@ y = n.content{1,1};
 tf = isequal(x,y);
 
 if tf == 1
-   disp('test OK!'); 
+   cprintf('*green', 'test SUCCESS!\n'); 
 else
-   fprintf(2,'test fail!\n');
+   cprintf('*red', 'test FAIL!\n'); 
+   debugFail(a,b);
 end

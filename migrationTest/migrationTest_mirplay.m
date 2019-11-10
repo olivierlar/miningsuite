@@ -7,18 +7,24 @@ clearvars -except testfile ;
 disp('testing migration: mirplay(miraudio(...)) -> sig.play(sig.signal(...))'); 
 
 
+
+
 a = miraudio(testfile);
-b = sig.signal(testfile,'Mix');
+b = sig.signal(testfile, 'Mix');
 
 m = mirplay(a);
 n = sig.play(b);
 
+x = mirgetdata(m);
+y = n.getdata;
+
+
 tf = isequal(mirgetdata(m),n.getdata);
 
 if tf == 1
-   disp('test OK!'); 
+   cprintf('*green', 'test SUCCESS!\n'); 
 else
-   fprintf(2,'test fail!\n');
+   cprintf('*red', 'test FAIL!\n');
 end
 
 

@@ -14,9 +14,9 @@ b = sig.flux(s2);
 tf = isequal(mirgetdata(a),b.getdata);
 
 if tf == 1
-   disp('test OK!'); 
+   cprintf('*green', 'test SUCCESS!\n'); 
 else
-   fprintf(2,'test fail!\n');
+   cprintf('*red', 'test FAIL!\n');
 end
 
 
@@ -33,9 +33,9 @@ end
 % tf = isequal(mirgetdata(a),b.getdata);
 % 
 % if tf == 1
-%    disp('test OK!'); 
+%    cprintf('*green', 'test SUCCESS!\n'); 
 % else
-%    fprintf(2,'test fail!\n');
+%    cprintf('*red', 'test FAIL!\n');
 % end
 
 
@@ -53,9 +53,9 @@ b = sig.flux(s2, 'Dist', d);
 tf = isequal(mirgetdata(a),b.getdata);
 
 if tf == 1
-   disp('test OK!'); 
+   cprintf('*green', 'test SUCCESS!\n'); 
 else
-   fprintf(2,'test fail!\n');
+   cprintf('*red', 'test FAIL!\n');
 end
 
 %% testing migration: mirflux(..., 'Inc') -> sig.flux(..., 'Inc')
@@ -71,9 +71,9 @@ b = sig.flux(s2, 'Inc');
 tf = isequal(mirgetdata(a),b.getdata);
 
 if tf == 1
-   disp('test OK!'); 
+   cprintf('*green', 'test SUCCESS!\n'); 
 else
-   fprintf(2,'test fail!\n');
+   cprintf('*red', 'test FAIL!\n');
 end
 
 %% testing migration: mirflux(..., 'Complex') -> sig.flux(..., 'Complex')
@@ -89,9 +89,9 @@ b = sig.flux(s2, 'Complex');
 tf = isequal(mirgetdata(a),b.getdata);
 
 if tf == 1
-   disp('test OK!'); 
+   cprintf('*green', 'test SUCCESS!\n'); 
 else
-   fprintf(2,'test fail!\n');
+   cprintf('*red', 'test FAIL!\n');
 end
 
 

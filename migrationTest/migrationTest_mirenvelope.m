@@ -10,9 +10,9 @@ b = sig.envelope(testfile, 'Filter', 'Mix');
 tf = isequal(mirgetdata(a),b.getdata);
 
 if tf == 1
-   disp('test OK!'); 
+   cprintf('*green', 'test SUCCESS!\n'); 
 else
-   fprintf(2,'test fail!\n');
+   cprintf('*red', 'test FAIL!\n');
 end
 
 
@@ -24,9 +24,9 @@ b = sig.envelope(testfile, 'Hilbert', 'Mix');
 tf = isequal(mirgetdata(a),b.getdata);
 
 if tf == 1
-   disp('test OK!'); 
+   cprintf('*green', 'test SUCCESS!\n'); 
 else
-   fprintf(2,'test fail!\n');
+   cprintf('*red', 'test FAIL!\n');
 end
 
 
@@ -41,9 +41,9 @@ b = sig.envelope(testfile, 'PreDecim', n, 'Mix');
 tf = isequal(mirgetdata(a),b.getdata);
 
 if tf == 1
-   disp('test OK!'); 
+   cprintf('*green', 'test SUCCESS!\n'); 
 else
-   fprintf(2,'test fail!\n');
+   cprintf('*red', 'test FAIL!\n');
 end
 
 
@@ -57,9 +57,9 @@ b = sig.envelope(testfile, 'Filtertype', 'IIR', 'Mix');
 tf = isequal(mirgetdata(a),b.getdata);
 
 if tf == 1
-   disp('test OK!'); 
+   cprintf('*green', 'test SUCCESS!\n'); 
 else
-   fprintf(2,'test fail!\n');
+   cprintf('*red', 'test FAIL!\n');
 end
 
 
@@ -74,9 +74,9 @@ b = sig.envelope(testfile, 'Tau', t, 'Mix');
 tf = isequal(mirgetdata(a),b.getdata);
 
 if tf == 1
-   disp('test OK!'); 
+   cprintf('*green', 'test SUCCESS!\n'); 
 else
-   fprintf(2,'test fail!\n');
+   cprintf('*red', 'test FAIL!\n');
 end
 
 
@@ -91,9 +91,9 @@ b = sig.envelope(testfile, 'Filtertype', 'HalfHann', 'Mix');
 tf = isequal(mirgetdata(a),b.getdata);
 
 if tf == 1
-   disp('test OK!'); 
+   cprintf('*green', 'test SUCCESS!\n'); 
 else
-   fprintf(2,'test fail!\n');
+   cprintf('*red', 'test FAIL!\n');
 end
 
 
@@ -106,9 +106,9 @@ b = sig.envelope(testfile, 'Filtertype', 'Butter', 'Mix');
 tf = isequal(mirgetdata(a),b.getdata);
 
 if tf == 1
-   disp('test OK!'); 
+   cprintf('*green', 'test SUCCESS!\n'); 
 else
-   fprintf(2,'test fail!\n');
+   cprintf('*red', 'test FAIL!\n');
 end
 
 
@@ -123,9 +123,9 @@ b = sig.envelope(testfile, 'Filtertype', 'Butter','CutOff', c, 'Mix');
 tf = isequal(mirgetdata(a),b.getdata);
 
 if tf == 1
-   disp('test OK!'); 
+   cprintf('*green', 'test SUCCESS!\n'); 
 else
-   fprintf(2,'test fail!\n');
+   cprintf('*red', 'test FAIL!\n');
 end
 
 %% testing migration: mirenvelope(..., 'PostDecim',N) -> sig.envelope(..., 'PostDecim', N) 
@@ -141,9 +141,9 @@ tf = isequal(mirgetdata(a),b.getdata);
 
 
 if tf == 1
-   disp('test OK!'); 
+   cprintf('*green', 'test SUCCESS!\n'); 
 else
-   fprintf(2,'test fail!\n');
+   cprintf('*red', 'test FAIL!\n');
 end
 
 
@@ -156,9 +156,9 @@ b = sig.envelope(testfile, 'Spectro', 'Mix');
 tf = isequal(squeeze(mirgetdata(a)),b.getdata');
 
 if tf == 1
-   disp('test OK!'); 
+   cprintf('*green', 'test SUCCESS!\n'); 
 else
-   fprintf(2,'test fail!\n');
+   cprintf('*red', 'test FAIL!\n');
 end
 
 
@@ -172,9 +172,9 @@ b = sig.envelope(testfile, 'Spectro', 'Mel','Mix');
 tf = isequal(squeeze(mirgetdata(a)),b.getdata');
 
 if tf == 1
-   disp('test OK!'); 
+   cprintf('*green', 'test SUCCESS!\n'); 
 else
-   fprintf(2,'test fail!\n');
+   cprintf('*red', 'test FAIL!\n');
 end
 
 
@@ -186,13 +186,13 @@ clearvars -except testfile ;
 disp('testing migration: mirenvelope with sig.envelope with Frame');
 
 a = mirenvelope(testfile, 'Frame');
-b = sig.envelope(testfile, 'Frame', 'Mix');
+b = aud.envelope(testfile, 'Frame', 'Mix');
 tf = isequal(mirgetdata(a),b.getdata);
 
 if tf == 1
-   disp('test OK!'); 
+   cprintf('*green', 'test SUCCESS!\n'); 
 else
-   fprintf(2,'test fail!\n');
+   cprintf('*red', 'test FAIL!\n');
 end
 
 %% testing migration: mirenvelope(..., 'UpSample', N) -> sig.envelope(..., 'UpSample', N) 
@@ -206,9 +206,9 @@ b = sig.envelope(testfile, 'UpSample',N, 'Mix');
 tf = isequal(mirgetdata(a),b.getdata);
 
 if tf == 1
-   disp('test OK!'); 
+   cprintf('*green', 'test SUCCESS!\n'); 
 else
-   fprintf(2,'test fail!\n');
+   cprintf('*red', 'test FAIL!\n');
 end
 
 
@@ -221,9 +221,9 @@ b = sig.envelope(testfile, 'Complex', 'Mix');
 tf = isequal(mirgetdata(a),b.getdata);
 
 if tf == 1
-   disp('test OK!'); 
+   cprintf('*green', 'test SUCCESS!\n'); 
 else
-   fprintf(2,'test fail!\n');
+   cprintf('*red', 'test FAIL!\n');
 end
 
 %% testing migration: mirenvelope(..., 'PowerSpectrum') -> sig.envelope(..., 'PowerSpectrum') 
@@ -235,9 +235,9 @@ b = sig.envelope(testfile, 'PowerSpectrum', 'Mix');
 tf = isequal(mirgetdata(a),b.getdata);
 
 if tf == 1
-   disp('test OK!'); 
+   cprintf('*green', 'test SUCCESS!\n'); 
 else
-   fprintf(2,'test fail!\n');
+   cprintf('*red', 'test FAIL!\n');
 end
 
 
@@ -252,9 +252,9 @@ b = sig.envelope(testfile, 'TimeSmooth', n, 'Mix');
 tf = isequal(mirgetdata(a),b.getdata);
 
 if tf == 1
-   disp('test OK!'); 
+   cprintf('*green', 'test SUCCESS!\n'); 
 else
-   fprintf(2,'test fail!\n');
+   cprintf('*red', 'test FAIL!\n');
 end
 
 
@@ -270,9 +270,9 @@ b = sig.envelope(testfile, 'Sampling', r, 'Mix');
 tf = isequal(mirgetdata(a),b.getdata);
 
 if tf == 1
-   disp('test OK!'); 
+   cprintf('*green', 'test SUCCESS!\n'); 
 else
-   fprintf(2,'test fail!\n');
+   cprintf('*red', 'test FAIL!\n');
 end
 
 
@@ -285,9 +285,9 @@ b = sig.envelope(testfile, 'Halfwave', 'Mix');
 tf = isequal(mirgetdata(a),b.getdata);
 
 if tf == 1
-   disp('test OK!'); 
+   cprintf('*green', 'test SUCCESS!\n'); 
 else
-   fprintf(2,'test fail!\n');
+   cprintf('*red', 'test FAIL!\n');
 end
 
 
@@ -300,9 +300,9 @@ b = sig.envelope(testfile, 'Center', 'Mix');
 tf = isequal(mirgetdata(a),b.getdata);
 
 if tf == 1
-   disp('test OK!'); 
+   cprintf('*green', 'test SUCCESS!\n'); 
 else
-   fprintf(2,'test fail!\n');
+   cprintf('*red', 'test FAIL!\n');
 end
 
 
@@ -315,9 +315,9 @@ b = sig.envelope(testfile, 'HalfwaveCenter', 'Mix');
 tf = isequal(mirgetdata(a),b.getdata);
 
 if tf == 1
-   disp('test OK!'); 
+   cprintf('*green', 'test SUCCESS!\n'); 
 else
-   fprintf(2,'test fail!\n');
+   cprintf('*red', 'test FAIL!\n');
 end
 
 
@@ -330,9 +330,9 @@ b = sig.envelope(testfile, 'Log', 'Mix');
 tf = isequal(mirgetdata(a),b.getdata);
 
 if tf == 1
-   disp('test OK!'); 
+   cprintf('*green', 'test SUCCESS!\n'); 
 else
-   fprintf(2,'test fail!\n');
+   cprintf('*red', 'test FAIL!\n');
 end
 
 
@@ -347,9 +347,26 @@ b = sig.envelope(testfile, 'MinLog', ml, 'Mix');
 tf = isequal(mirgetdata(a),b.getdata);
 
 if tf == 1
-   disp('test OK!'); 
+   cprintf('*green', 'test SUCCESS!\n'); 
 else
-   fprintf(2,'test fail!\n');
+   cprintf('*red', 'test FAIL!\n');
+end
+
+
+%% testing migration: mirenvelope(..., 'Mu', mu) -> sig.envelope(..., 'Mu', mu) 
+clearvars -except testfile ;
+disp('<strong> testing migration: mirenvelope(..., ''Mu'', mu) -> sig.envelope(..., ''Mu'', mu) </strong> '); 
+
+mu = 100; %default = 100
+
+a = mirenvelope(testfile, 'Mu', mu);
+b = aud.envelope(testfile, 'Mu', mu, 'Mix');
+tf = isequal(mirgetdata(a),b.getdata);
+
+if tf == 1
+   cprintf('*green', 'test SUCCESS!\n'); 
+else
+   cprintf('*red', 'test FAIL!\n');
 end
 
 
@@ -363,9 +380,9 @@ b = sig.envelope(testfile, 'Power', 'Mix');
 tf = isequal(mirgetdata(a),b.getdata);
 
 if tf == 1
-   disp('test OK!'); 
+   cprintf('*green', 'test SUCCESS!\n'); 
 else
-   fprintf(2,'test fail!\n');
+   cprintf('*red', 'test FAIL!\n');
 end
 
 %% testing migration: mirenvelope(..., 'Diff') -> sig.envelope(..., 'Diff') 
@@ -378,9 +395,9 @@ b = sig.envelope(testfile, 'Diff', 'Mix');
 tf = isequal(mirgetdata(a),b.getdata);
 
 if tf == 1
-   disp('test OK!'); 
+   cprintf('*green', 'test SUCCESS!\n'); 
 else
-   fprintf(2,'test fail!\n');
+   cprintf('*red', 'test FAIL!\n');
 end
 
 
@@ -394,9 +411,9 @@ b = sig.envelope(testfile, 'HalfwaveDiff', 'Mix');
 tf = isequal(mirgetdata(a),b.getdata);
 
 if tf == 1
-   disp('test OK!'); 
+   cprintf('*green', 'test SUCCESS!\n'); 
 else
-   fprintf(2,'test fail!\n');
+   cprintf('*red', 'test FAIL!\n');
 end
 
 
@@ -410,9 +427,9 @@ b = sig.envelope(testfile, 'Normal', 'Mix');
 tf = isequal(mirgetdata(a),b.getdata);
 
 if tf == 1
-   disp('test OK!'); 
+   cprintf('*green', 'test SUCCESS!\n'); 
 else
-   fprintf(2,'test fail!\n');
+   cprintf('*red', 'test FAIL!\n');
 end
 
 
@@ -426,10 +443,27 @@ b = sig.envelope(testfile, 'Normal', 'AcrossSegments', 'Mix');
 tf = isequal(mirgetdata(a),b.getdata);
 
 if tf == 1
-   disp('test OK!'); 
+   cprintf('*green', 'test SUCCESS!\n'); 
 else
-   fprintf(2,'test fail!\n');
+   cprintf('*red', 'test FAIL!\n');
 end
+
+%% testing migration: mirenvelope(..., 'Lambda', o) -> sig.envelope(..., 'Lambda', o) 
+clearvars -except testfile ;
+disp('<strong> testing migration: mirenvelope(..., ''Lambda'', l) -> sig.envelope(..., ''Lambda'', l) </strong> '); 
+
+l = 0.2 ; % 0 < l < 1
+
+a = mirenvelope(testfile, 'Lambda', l );
+b = aud.envelope(testfile,  'Lambda', l ,  'Mix');
+tf = isequal(mirgetdata(a),b.getdata);
+
+if tf == 1
+   cprintf('*green', 'test SUCCESS!\n'); 
+else
+   cprintf('*red', 'test FAIL!\n');
+end
+
 
 
 %% testing migration: mirenvelope(..., 'Smooth', o) -> sig.envelope(..., 'Smooth', o) 
@@ -443,9 +477,9 @@ b = sig.envelope(testfile, 'Smooth', o, 'Mix');
 tf = isequal(mirgetdata(a),b.getdata);
 
 if tf == 1
-   disp('test OK!'); 
+   cprintf('*green', 'test SUCCESS!\n'); 
 else
-   fprintf(2,'test fail!\n');
+   cprintf('*red', 'test FAIL!\n');
 end
 
 
@@ -460,9 +494,24 @@ b = sig.envelope(testfile, 'Gauss', o, 'Mix');
 tf = isequal(mirgetdata(a),b.getdata);
 
 if tf == 1
-   disp('test OK!'); 
+   cprintf('*green', 'test SUCCESS!\n'); 
 else
-   fprintf(2,'test fail!\n');
+   cprintf('*red', 'test FAIL!\n');
 end
 
+
+%% testing migration: mirenvelope(..., 'Klapuri06') -> sig.envelope(..., 'Klapuri06') 
+% clearvars -except testfile ;
+% disp('<strong> testing migration: mirenvelope(..., ''Klapuri06'') -> sig.envelope(..., ''Klapuri06'') </strong> '); 
+% 
+% 
+% a = mirenvelope(testfile, 'Spectro',  'Klapuri06' );
+% b = aud.envelope(testfile, 'Spectro','Klapuri06', 'Mix');
+% tf = isequal(mirgetdata(a),b.getdata);
+% 
+% if tf == 1
+%    cprintf('*green', 'test SUCCESS!\n'); 
+% else
+%    cprintf('*red', 'test FAIL!\n');
+% end
 

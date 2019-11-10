@@ -51,7 +51,7 @@ clearvars -except testfile ;
 disp('<strong>testing migration: mircepstrum (..., ''Min'', min) -> sig.cepstrum(..., ''Min'', min)</strong>'); 
 
 
-min = 100; %minimum frequency 
+min = 1000; %minimum frequency 
 
 a = mircepstrum(testfile, 'Min', min);
 b = sig.cepstrum(testfile, 'Min', min, 'Mix');
@@ -62,8 +62,31 @@ if tf == 1
 else
    cprintf('*red', 'test FAIL!\n');
    debugFail(a,b);
+   
+       sizeTest = migrationTestUtility_dimensionTest(mirgetdata(a),b.getdata);
+   
+   if  sizeTest == 1
+       disp('dimension OK');
+       
+        x = (mirgetdata(a));
+        y = (b.getdata);
+        x = x(:);
+        y = y(:);
+        %res = [x, y,abs(x - y) ];
+        maxDiff = (max(abs(x - y)));
+        cprintf('*Yellow',['absolute maximum data difference: ', num2str(maxDiff), '\n']);
+   else
+       disp('dimension fail');   
+       x = (mirgetdata(a));
+        y = (b.getdata);
+       disp(size(mirgetdata(a)));
+       disp(size(b.getdata));
+   end
+   
+   
 end
 
+return
 
 %% testing migration: mircepstrum (..., 'Max', max) -> sig.cepstrum(..., 'Max', max)
 clearvars -except testfile ;

@@ -303,7 +303,9 @@ o = 10; %moving average order (default = 10)
 
 a = mirspectrum(testfile, 'Smooth', o);
 b = sig.spectrum(testfile, 'Smooth',o, 'Mix');
-tf = isequal(mirgetdata(a),b.getdata/10);
+tf = isequal(mirgetdata(a),b.getdata);
+
+x = mirgetdata
 
 
 if tf == 1
@@ -339,11 +341,6 @@ o = 10; %moving average order (default = 10)
 a = mirspectrum(testfile, 'TimeSmooth', o);
 b = sig.spectrum(testfile, 'TimeSmooth',o, 'Mix');
 tf = isequal(mirgetdata(a),b.getdata);
-
-x = mirgetdata(a);
-y = b.getdata;
-z = [x,y,abs(x-y)];
-
 
 if tf == 1
    cprintf('*green', 'test SUCCESS!\n'); 

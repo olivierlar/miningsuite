@@ -20,9 +20,9 @@ b = sig.sum(e2);
 tf = isequal(mirgetdata(a),b.getdata);
 
 if tf == 1
-   disp('test OK!'); 
+   cprintf('*green', 'test SUCCESS!\n'); 
 else
-   fprintf(2,'test fail!\n');
+   cprintf('*red', 'test FAIL!\n');
 end
 
 
@@ -42,9 +42,9 @@ b = sig.sum(e2, 'Mean');
 tf = isequal(mirgetdata(a),b.getdata);
 
 if tf == 1
-   disp('test OK!'); 
+   cprintf('*green', 'test SUCCESS!\n'); 
 else
-   fprintf(2,'test fail!\n');
+   cprintf('*red', 'test FAIL!\n');
 end
 
 
@@ -63,11 +63,18 @@ a = mirsum(e1, 'Mean');
 b = sig.sum(e2, 'Mean');
 
 
+tempX = mirgetdata(a);
+tempY = b.getdata;
+
+
 tf = isequal(mirgetdata(a),b.getdata);
 
+
+
+
 if tf == 1
-   disp('test OK!'); 
+   cprintf('*green', 'test SUCCESS!\n'); 
 else
-   fprintf(2,'test fail!\n');
+   cprintf('*red', 'test FAIL!\n');
 end
 
