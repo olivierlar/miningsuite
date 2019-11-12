@@ -182,7 +182,10 @@ classdef data
             end
         end
         %%
-        function obj = sum(obj,field,adjacent)
+        function obj = sum(obj,field,adjacent,keep)
+            if nargin<4
+                keep = false;
+            end
             if nargin<3
                 adjacent = 1;
             end
@@ -212,7 +215,7 @@ classdef data
                     obj = res;
                 end
             end
-            if adjacent < 2
+            if adjacent < 2 && ~keep
                 obj.dims(dim) = [];
                 order = 1:length(size(obj.content));
                 if length(order) >= dim
