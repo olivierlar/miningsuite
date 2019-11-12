@@ -205,7 +205,7 @@ classdef data
 %                     res = zeros(size(dh{i},1),size(dh{i},2),nc2);
                     for j = 1:nc2
                         d = obj.extract(field,[(j-1)*adjacent+1,min(j*adjacent,nc1)]);
-                        d = d.sum(field);
+                        d = d.sum(field,1,true);
                         if j == 1
                             res = d;
                         else
