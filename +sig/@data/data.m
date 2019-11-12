@@ -182,7 +182,10 @@ classdef data
             end
         end
         %%
-        function obj = sum(obj,field,adjacent)
+        function obj = sum(obj,field,adjacent,keep)
+            if nargin<4
+                keep = false;
+            end
             if nargin<3
                 adjacent = 1;
             end
@@ -202,7 +205,7 @@ classdef data
 %                     res = zeros(size(dh{i},1),size(dh{i},2),nc2);
                     for j = 1:nc2
                         d = obj.extract(field,[(j-1)*adjacent+1,min(j*adjacent,nc1)]);
-                        d = d.sum(field);
+                        d = d.sum(field,1,true);
                         if j == 1
                             res = d;
                         else
@@ -212,7 +215,7 @@ classdef data
                     obj = res;
                 end
             end
-            if adjacent < 2
+            if adjacent < 2 && ~keep
                 obj.dims(dim) = [];
                 order = 1:length(size(obj.content));
                 if length(order) >= dim

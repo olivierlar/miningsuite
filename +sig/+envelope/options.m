@@ -57,10 +57,10 @@ function options = options
 
 %% Options related to 'Spectro':
 
-        band.type = 'String';
-        band.choice = {'Freq','Mel','Bark','Cents'};
-        band.default = 'Freq';
-    options.band = band;
+%         band.type = 'String';
+%         band.choice = {'Freq','Mel','Bark','Cents'};
+%         band.default = 'Freq';
+%     options.band = band;
 
         up.key = {'UpSample'};
         up.type = 'Numeric';
@@ -84,10 +84,10 @@ function options = options
         timesmooth.keydefault = 10;
     options.timesmooth = timesmooth;
     
-        terhardt.key = 'Terhardt';
-        terhardt.type = 'Boolean';
-        terhardt.default = 0;
-    options.terhardt = terhardt;
+%         terhardt.key = 'Terhardt';
+%         terhardt.type = 'Boolean';
+%         terhardt.default = 0;
+%     options.terhardt = terhardt;
 
         spectroframe.key = 'SpectroFrame';
         spectroframe.type = 'Numeric';
