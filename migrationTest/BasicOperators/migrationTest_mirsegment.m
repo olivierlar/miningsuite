@@ -55,7 +55,6 @@ x = (mirgetdata(a));
 y = squeeze(b.getdata);
 
 
-
 col = (size(x));
 col = col(1);
 row = size(x);
