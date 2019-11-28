@@ -1,6 +1,6 @@
 % SIG.ENVELOPE.AFTER
 %
-% Copyright (C) 2014, 2017-2018 Olivier Lartillot
+% Copyright (C) 2014, 2017-2019 Olivier Lartillot
 % All rights reserved.
 % License: New BSD License. See full text of the license in LICENSE.txt in
 % the main folder of the MiningSuite distribution.
@@ -72,11 +72,12 @@ end
 
 function x = smooth(x,n)
     x = filter(ones(1,n),1,[x;zeros(n,1)]);
-    x = x(1+ceil(n/2):end-floor(x/2));
+    x = x(1+ceil(n/2):end-floor(n/2));
 end
 
 
-function x = gausssmooth(x,sigma,gauss)
-    x = filter(gauss,1,[x;zeros(4*sigma,1)]);
-    x = x(4*sigma:end);
+function y = gausssmooth(x,sigma,gauss)
+    y = filter(gauss,1,[x;zeros(4*sigma,1)]);
+    y = y(4*sigma:end);
+    y = y(1:length(x));
 end
