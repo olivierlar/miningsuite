@@ -72,7 +72,7 @@ end
 
 function x = smooth(x,n)
     x = filter(ones(1,n),1,[x;zeros(n,1)]);
-    x = x(1+ceil(n/2):end-floor(x/2));
+    x = x(1+ceil(n/2):end-floor(n/2));
 end
 
 
