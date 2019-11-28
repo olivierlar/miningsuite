@@ -1,7 +1,7 @@
 % SIG.SPECTRUM.AFTER2
 %
 % Copyright (C) 2017-2019 Olivier Lartillot
-% ? 2007-2009 Olivier Lartillot & University of Jyvaskyla
+% Copyright (C) 2007-2009 Olivier Lartillot & University of Jyvaskyla
 %
 % All rights reserved.
 % License: New BSD License. See full text of the license in LICENSE.txt in
@@ -80,7 +80,8 @@ function d = routine_gausssmooth(d,sigma,gauss)
 end
 
 
-function x = gausssmooth(x,sigma,gauss)
-    x = filter(gauss,1,[x;zeros(4*sigma,1)]);
-    x = x(4*sigma:end);
+function y = gausssmooth(x,sigma,gauss)
+    y = filter(gauss,1,[x;zeros(4*sigma,1)]);
+    y = y(4*sigma:end);
+    y = y(1:length(x));
 end
