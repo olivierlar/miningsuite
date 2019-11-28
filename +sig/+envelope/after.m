@@ -76,7 +76,8 @@ function x = smooth(x,n)
 end
 
 
-function x = gausssmooth(x,sigma,gauss)
-    x = filter(gauss,1,[x;zeros(4*sigma,1)]);
-    x = x(4*sigma:end);
+function y = gausssmooth(x,sigma,gauss)
+    y = filter(gauss,1,[x;zeros(4*sigma,1)]);
+    y = y(4*sigma:end);
+    y = y(1:length(x));
 end
