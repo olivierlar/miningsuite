@@ -41,15 +41,13 @@ classdef design
         overlap = struct('value',0,'unit','sp');
         files
         symbolicinput = 0;
+        variable_options = 0
     end
 %%
     methods
-        function obj = design(pack,name,input,type,main,after,options,...frame,
-                              combine,argin,extract,extensive,nochunk)
-            if nargin<11
-                extract = 0;
-            end
-            
+        function obj = design(pack,name,input,type,main,after,options,...
+                              combine,argin,extract,extensive,nochunk,...
+                              variable_options)
             obj.package = pack;
             obj.name = name;
             obj.input = input;
@@ -65,6 +63,7 @@ classdef design
                 obj.ver = 0; %ver;
                 obj.extensive = extensive;
                 obj.nochunk = nochunk;
+                obj.variable_options = variable_options;
             end
             if iscell(input)
                 input = input{1};

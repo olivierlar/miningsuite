@@ -15,7 +15,7 @@
 % + pattern mining + ...", AES 53RD INTERNATIONAL CONFERENCE, London, UK,
 % 2014
 
-function out = operate(pack,name,options,init,main,after,argin,combine,extensive)
+function out = operate(pack,name,options,init,main,after,argin,combine,extensive,variable_options)
 arg = argin{1};
 if iscell(arg)
     arg = arg{1};
@@ -27,6 +27,11 @@ if nargin<9
     extensive = 0;
 else
     extensive = strcmpi(extensive,'extensive');
+end
+if nargin<10
+    variable_options = 0;
+else
+    variable_options = strcmpi(variable_options,'variable_options');
 end
 
 [options,extract] = sig.options(options,argin,[pack,'.',name]);
@@ -63,7 +68,8 @@ if isa(arg{1},'sig.design')
         argin1 = arg;
     end
     design = sig.design(pack,name,argin1,type,main,after,options,...
-                        combine,argin(2:end),extract,extensive,nochunk);
+                        combine,argin(2:end),extract,extensive,nochunk,...
+                        variable_options);
     
     %if ischar(arg)
     %    filename = arg;
