@@ -7,7 +7,7 @@
 % License: New BSD License. See full text of the license in LICENSE.txt in
 % the main folder of the MiningSuite distribution.
 
-function out = main(x,option)
+function [out,option] = main(x,option)
     if iscell(x)
         x = x{1};
     end
@@ -22,7 +22,7 @@ function out = main(x,option)
             || option.aver || option.gauss)
         option.phase = 0;
     end
-    [d,ph,constq] = sig.compute(@routine,x.Ydata,x.Srate,option);
+    [d,ph,constq,option] = sig.compute(@routine,x.Ydata,x.Srate,option);
     if iscell(constq)
         constq = constq{1};
     end
@@ -189,5 +189,5 @@ function out = routine(in,sampling,option)
         end
         param = [];
     end
-    out = {out phase param};
+    out = {out phase param option};
 end
