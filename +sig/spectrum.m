@@ -10,7 +10,7 @@
 function varargout = spectrum(varargin)
     varargout = sig.operate('sig','spectrum',sig.spectrum.options,...
                             @sig.spectrum.init,@sig.spectrum.main,...
-                            @after,varargin,'plus');
+                            @after,varargin,'plus',0,'variable_options');
 end
 
 

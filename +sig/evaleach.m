@@ -129,7 +129,11 @@ else
         if iscell(main)
             main = main{1};
         end
-        y = main(y,design.options);
+        if design.variable_options
+            [y,design.options] = main(y,design.options);
+        else
+            y = main(y,design.options);
+        end
         if chunking == 1 && ~isempty(y{1})
             y = design.after(y,design.options);
         end
@@ -170,7 +174,11 @@ else
             y = sig.evaleach(input,filename,window,sr,1,chunking);
         end
         if ~isempty(y)
-            y = design.main(y,design.options);
+            if design.variable_options
+                [y,design.options] = design.main(y,design.options);
+            else
+                y = design.main(y,design.options);
+            end
             y = design.after(y,design.options);
         end
     elseif design.nochunk || strcmpi(design.combine,'no')
@@ -188,7 +196,11 @@ else
         if iscell(main)
             main = main{1};
         end
-        y = main(y,design.options);
+        if design.variable_options
+            [y,design.options] = main(y,design.options);
+        else
+            y = main(y,design.options);
+        end
         y = design.after(y,design.options);
     else
         if nbsamples > sig.chunklim
@@ -261,7 +273,12 @@ else
                 if iscell(main)
                     main = main{1};
                 end
-                ss = main(ss,options);
+                options = design.options;
+                if design.variable_options
+                    [ss,options] = main(ss,options);
+                else
+                    ss = main(ss,options);
+                end
                 
                 if isempty(ss{1})
                     break
@@ -308,7 +325,11 @@ else
             if iscell(main)
                 main = main{1};
             end
-            y = main(y,design.options);
+            if design.variable_options
+                [y,design.options] = main(y,design.options);
+            else
+                y = main(y,design.options);
+            end
             y = design.after(y,design.options);
             if 0 %isa(d,'mirstruct') && isfield(d.frame,'dontchunk')
                 y = evalbranches(d,y);
