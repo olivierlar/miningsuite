@@ -70,7 +70,7 @@ end
 
 
 function d = smooth(d,N)
-    d = filter(ones(1,N),1,d);
+    d = filter(ones(1,N)/N,1,d);
 end
 
 
