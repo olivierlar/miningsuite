@@ -68,7 +68,7 @@ end
 
 %%
 function out = routine_timesmooth(d,N,tmp)
-    [d, tmp] = d.apply(@timesmooth,{N,tmp},{'element','channel'});
+    [d, tmp] = d.apply(@timesmooth,{N,tmp},{'element','sample'});
     out = {d,tmp};
 end
 
