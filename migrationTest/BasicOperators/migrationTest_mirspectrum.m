@@ -378,8 +378,8 @@ disp('testing migration: mirspectrum with sig.spectrum with TimeSmooth');
 
 o = 10; %moving average order (default = 10)
 
-a = mirspectrum(testfile, 'TimeSmooth', o);
-b = sig.spectrum(testfile, 'TimeSmooth',o, 'Mix');
+a = mirspectrum(testfile, 'Frame', 'TimeSmooth', o);
+b = sig.spectrum(testfile, 'Frame', 'TimeSmooth', o, 'Mix');
 x = mirgetdata(a); 
 y = b.getdata; 
 tf = isequal(x,y);
