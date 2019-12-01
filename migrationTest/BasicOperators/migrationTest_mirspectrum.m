@@ -82,7 +82,7 @@ end
 clearvars -except testfile ;
 disp('testing migration: mirspectrum with sig.spectrum with Window'); 
 
-w = 'hanning'; %windowing function (default = 'hanning')
+w = 0; %windowing function (default = 'hanning')
 
 
 a = mirspectrum(testfile, 'Window', w);
@@ -104,10 +104,12 @@ clearvars -except testfile ;
 disp('testing migration: mirspectrum with sig.spectrum with Phase'); 
 
 
-a = mirspectrum(testfile, 'Phase');
-b = sig.spectrum(testfile, 'Phase', 'No', 'Mix');
-x = mirgetdata(a); 
-y = b.getdata; 
+a = mirspectrum(testfile); %, 'Phase', 'No');
+b = sig.spectrum(testfile,'Mix'); %, 'Phase', 'No', 
+x = get(a,'Phase'); 
+x = x{1}{1};
+y = get(b,'Phase'); 
+y = y.content;
 tf = isequal(x,y);
 
 if tf == 1
@@ -141,7 +143,7 @@ end
 clearvars -except testfile ;
 disp('testing migration: mirspectrum with sig.spectrum with MinRes with OctaveRatio'); 
 
-r = 100; %minimal frequency resolution
+r = 2; %minimal frequency resolution
 tol = 0.75;% constraining multiplicative factor (default = 0.75)
 
 a = mirspectrum(testfile, 'MinRes', r, 'OctaveRatio', tol);
@@ -165,7 +167,7 @@ end
 clearvars -except testfile ;
 disp('testing migration: mirspectrum with sig.spectrum with Res'); 
 
-r = 100; %minimal frequency resolution
+r = 2; % frequency resolution
 
 a = mirspectrum(testfile, 'Res', r);
 b = sig.spectrum(testfile, 'Res', r, 'Mix');
@@ -185,7 +187,7 @@ end
 clearvars -except testfile ;
 disp('testing migration: mirspectrum with sig.spectrum with Length'); 
 
-l = 8; %if length is not a power of 2, the FFT routine will not be used
+l = 2000; %if length is not a power of 2, the FFT routine will not be used
 
 a = mirspectrum(testfile, 'Length', l);
 b = sig.spectrum(testfile, 'Length', l, 'Mix');
@@ -204,7 +206,7 @@ end
 clearvars -except testfile ;
 disp('testing migration: mirspectrum with sig.spectrum with ZeroPad'); 
 
-s = 4;%zero padding of s samples
+s = 100;%zero padding of s samples
 
 a = mirspectrum(testfile, 'ZeroPad', s);
 b = sig.spectrum(testfile, 'ZeroPad', s, 'Mix');
@@ -224,7 +226,7 @@ end
 clearvars -except testfile ;
 disp('testing migration: mirspectrum with sig.spectrum with WarningRes'); 
 
-mr = 500;%required frequency resolution in Hz
+mr = .1;%required frequency resolution in Hz
 
 a = mirspectrum(testfile, 'WarningRes', mr);
 b = sig.spectrum(testfile, 'WarningRes', mr, 'Mix');
