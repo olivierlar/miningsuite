@@ -1,6 +1,6 @@
 % SIG.SPECTRUM.AFTER1
 %
-% Copyright (C) 2017-2018 Olivier Lartillot
+% Copyright (C) 2017-2019 Olivier Lartillot
 % Copyright (C) 2007-2009 Olivier Lartillot & University of Jyvaskyla
 %
 % All rights reserved.
@@ -68,14 +68,14 @@ end
 
 %%
 function out = routine_timesmooth(d,N,tmp)
-    [d, tmp] = d.apply(@timesmooth,{N,tmp},{'sample'});
+    [d, tmp] = d.apply(@timesmooth,{N,tmp},{'element','channel'});
     out = {d,tmp};
 end
 
 
 function [d, tmp] = timesmooth(d,N,tmp)
     B = ones(1,N)/N;
-    [d, tmp] = filter(B,1,d,tmp);
+    [d, tmp] = filter(B,1,d,tmp,2);
 end
 
 
