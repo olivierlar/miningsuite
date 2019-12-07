@@ -15,11 +15,13 @@ a = mirsegment(a);
 b = sig.segment(b);
 
 x = mirgetdata(a);
+%x = get(a, 'Data');
 y = b.getdata;
 
 tf = isequal(x,y);
 
 x = (mirgetdata(a));
+x2 = get(a,'Data');
 y = squeeze(b.getdata);
 
 
@@ -28,11 +30,10 @@ if tf == 1
    cprintf('*green', 'test SUCCESS!\n'); 
 
 else
-   cprintf('*red', 'test FAIL!\n');
    debugFail(x,y);
 end
 
-
+return
 %% testing mirsegment: mirsegment(... , p) -> sig.segment(... , p)
 clearvars -except testfile ;
 
@@ -76,11 +77,9 @@ if tf == 1
    cprintf('*green', 'test SUCCESS!\n'); 
 
 else
-   cprintf('*red', 'test FAIL!\n');
    debugFail(x,y);
 end
 
-return;
 
 %% testing mirsegment: mirsegment(... , v) -> sig.segment(... , v)
 clearvars -except testfile ;
@@ -106,7 +105,7 @@ if tf == 1
    cprintf('*green', 'test SUCCESS!\n'); 
 
 else
-   cprintf('*red', 'test FAIL!\n');
+   debugFail(x,y);
 end
 
 %% testing mirsegment: mirsegment(... , 'Novelty') -> sig.segment(... , 'Novelty')
@@ -131,7 +130,7 @@ if tf == 1
    cprintf('*green', 'test SUCCESS!\n'); 
 
 else
-   cprintf('*red', 'test FAIL!\n');
+   debugFail(x,y);
 end
 
 % %% testing mirsegment: mirsegment(... , 'HCDF') -> sig.segment(... , 'HCDF')
@@ -153,7 +152,7 @@ end
 % if tf == 1
 %    cprintf('*green', 'test SUCCESS!\n'); 
 % else
-%    cprintf('*red', 'test FAIL!\n');
+%    debugFail(x,y);
 % end
 
 
@@ -176,5 +175,5 @@ y = b.getdata;
 if tf == 1
    cprintf('*green', 'test SUCCESS!\n'); 
 else
-   cprintf('*red', 'test FAIL!\n');
+   debugFail(x,y);
 end

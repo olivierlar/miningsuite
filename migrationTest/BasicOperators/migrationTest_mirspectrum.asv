@@ -425,40 +425,6 @@ else
    debugFail(x,y);
 end
 
-%% testing migration: mirspectrum with aud.spectrum with Cents
-clearvars -except testfile ;
-disp('testing migration: mirspectrum with aud.spectrum with Cents'); 
-
-a = mirspectrum(testfile, 'Cents');
-b = mus.spectrum(testfile, 'Cents', 'Mix');
-x = squeeze(mirgetdata(a)); 
-y = b.getdata; 
-tf = isequal(x,y);
-
-if tf == 1
-   cprintf('*green', 'test SUCCESS!\n'); 
-else
-   debugFail(x,y);
-end
-
-%% testing migration: mirspectrum with aud.spectrum with Collapsed
-clearvars -except testfile ;
-disp('testing migration: mirspectrum with aud.spectrum with Collapsed'); 
-
-a = mirspectrum(testfile, 'Collapsed');
-b = mus.spectrum(testfile, 'Collapsed', 'Mix');
-x = squeeze(mirgetdata(a)); 
-y = b.getdata; 
-tf = isequal(x,y);
-
-if tf == 1
-   cprintf('*green', 'test SUCCESS!\n'); 
-else
-   debugFail(x,y);
-end
-
-
-
 
 %% testing migration: mirspectrum with aud.spectrum with Mel
 clearvars -except testfile ;

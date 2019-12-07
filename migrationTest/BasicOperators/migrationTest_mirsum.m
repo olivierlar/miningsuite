@@ -22,7 +22,7 @@ tf = isequal(mirgetdata(a),b.getdata);
 if tf == 1
    cprintf('*green', 'test SUCCESS!\n'); 
 else
-   cprintf('*red', 'test FAIL!\n');
+   debugFail(x,y);
 end
 
 
@@ -44,7 +44,7 @@ tf = isequal(mirgetdata(a),b.getdata);
 if tf == 1
    cprintf('*green', 'test SUCCESS!\n'); 
 else
-   cprintf('*red', 'test FAIL!\n');
+   debugFail(x,y);
 end
 
 
@@ -73,7 +73,6 @@ tf = isequal(x,y);
 if tf == 1
    cprintf('*green', 'test SUCCESS!\n'); 
 else
-   cprintf('*red', 'test FAIL!\n');
    debugFail(x,y);
 end
 
