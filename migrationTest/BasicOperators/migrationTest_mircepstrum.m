@@ -27,6 +27,7 @@ a = mircepstrum(testfile, 'Freq');
 b = sig.cepstrum(testfile, 'Freq', 'Mix');
 x = mirgetdata(a);
 y = b.getdata;
+y = y(end:-1:1);
 
 %tf = isequal(a_round,b_round);
 tf = isequal(x,y);
