@@ -1,7 +1,7 @@
 % MiningSuite
 % Version 0.10.github After-8-February-2018
 %
-% Copyright (C) 2014-2015, 2017-2019 Olivier Lartillot and the MiningSuite
+% Copyright (C) 2014-2015, 2017-2020 Olivier Lartillot and the MiningSuite
 % contributors
 % All rights reserved
 % License: New BSD License. See full text of the license in LICENSE.txt in
