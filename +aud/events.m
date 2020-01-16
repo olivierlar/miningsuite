@@ -2,7 +2,7 @@
 % estimates a temporal curve where peaks relate to the temporal position of 
 % events, and estimates those event time positions.
 %
-% Copyright (C) 2017-2019 Olivier Lartillot
+% Copyright (C) 2017-2020 Olivier Lartillot
 % Code for envelope generation from MIDI file is taken from onsetacorr.m
 %   and duraccent.m, part of MIDI Toolbox. Copyright (C) 2004, University of 
 %   Jyvaskyla, Finland
@@ -108,11 +108,6 @@ function options = initoptions
             timesmooth.default = 0;
             timesmooth.keydefault = 10;
         options.timesmooth = timesmooth;        
-
-            terhardt.key = 'Terhardt';
-            terhardt.type = 'Boolean';
-            terhardt.default = 0;
-        options.terhardt = terhardt;
 
         sum.key = 'Sum';
         sum.type = 'Boolean';
@@ -415,8 +410,7 @@ function [y,type] = init(x,option)
                 y = aud.envelope(x,'Spectro',...
                     'SpectroFrame',option.specframe,...
                     'PowerSpectrum',option.powerspectrum,...
-                    'TimeSmooth',option.timesmooth,...
-                    'Terhardt',option.terhardt);...,...
+                    'TimeSmooth',option.timesmooth);...,...
                     %'PreSilence',option.presilence,...
                     %'PostSilence',option.postsilence);
             end
