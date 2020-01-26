@@ -22,15 +22,14 @@ function [out,option] = main(x,option)
             || option.aver || option.gauss)
         option.phase = 0;
     end
-    [d,ph,constq,option] = sig.compute(@routine,x.Ydata,x.Srate,option);
+    [d,ph,constq,option,N] = sig.compute(@routine,x.Ydata,x.Srate,option);
     if iscell(constq)
         constq = constq{1};
     end
 
-    dsize = d.size('element');
     if option.constq
-        if iscell(dsize)
-            xrate = zeros(1,length(dsize));
+        if iscell(N)
+            xrate = zeros(1,length(N));
             for i = 1:length(xrate)
                 xrate(i) = 1;
             end
@@ -38,13 +37,13 @@ function [out,option] = main(x,option)
             xrate = 1;
         end 
     else
-        if iscell(dsize)
-            xrate = zeros(1,length(dsize));
+        if iscell(N)
+            xrate = zeros(1,length(N));
             for i = 1:length(xrate)
-                xrate(i) = x.Srate/2/dsize{i};
+                xrate(i) = x.Srate/N{i};
             end
         else
-            xrate = x.Srate/2/dsize;
+            xrate = x.Srate/N;
         end
     end
     
@@ -189,5 +188,5 @@ function out = routine(in,sampling,option)
         end
         param = [];
     end
-    out = {out phase param option};
+    out = {out phase param option N};
 end
