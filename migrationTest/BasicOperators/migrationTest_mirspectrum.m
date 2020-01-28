@@ -250,24 +250,6 @@ else
 end
 
 
-%% testing migration: mirspectrum with sig.spectrum with ConstantQ
-clearvars -except testfile ;
-disp('testing migration: mirspectrum with sig.spectrum with ConstantQ'); 
-
-nb = 12; %default nb = 12 bins per octave
-
-a = mirspectrum(testfile, 'ConstantQ', nb);
-b = sig.spectrum(testfile, 'ConstantQ', nb, 'Mix');
-x = mirgetdata(a); 
-y = b.getdata; 
-tf = isequal(x,y);
-
-if tf == 1
-   cprintf('*green', 'test SUCCESS!\n'); 
-else
-   debugFail(x,y);
-end
-
 %% testing migration: mirspectrum with aud.spectrum with Terhardt
 clearvars -except testfile ;
 disp('testing migration: mirspectrum with aud.spectrum with Terhardt'); 
@@ -338,8 +320,10 @@ end
 clearvars -except testfile ;
 disp('testing migration: mirspectrum with mus.spectrum with ToiviainenSnyder'); 
 
-a = mirspectrum(testfile, 'Resonance', 'ToiviainenSnyder');
-b = mus.spectrum(testfile, 'Resonance', 'ToiviainenSnyder', 'Mix');
+sa = mirenvelope(testfile);
+a = mirspectrum(sa, 'Resonance', 'ToiviainenSnyder');
+sb = sig.envelope(testfile, 'Mix');
+b = mus.spectrum(sb, 'Resonance', 'ToiviainenSnyder');
 x = squeeze(mirgetdata(a)); 
 y = b.getdata; 
 tf = isequal(x,y);
@@ -354,8 +338,10 @@ end
 clearvars -except testfile ;
 disp('testing migration: mirspectrum with mus.spectrum with Fluctuation'); 
 
-a = mirspectrum(testfile, 'Resonance', 'Fluctuation');
-b = mus.spectrum(testfile, 'Resonance', 'Fluctuation', 'Mix');
+sa = mirenvelope(testfile);
+a = mirspectrum(sa, 'Resonance', 'Fluctuation');
+sb = sig.envelope(testfile, 'Mix');
+b = mus.spectrum(sb, 'Resonance', 'Fluctuation');
 x = squeeze(mirgetdata(a)); 
 y = b.getdata; 
 tf = isequal(x,y);
