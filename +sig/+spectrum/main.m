@@ -1,6 +1,6 @@
 % SIG.SPECTRUM.MAIN
 %
-% Copyright (C) 2014, 2017-2019 Olivier Lartillot
+% Copyright (C) 2014, 2017-2020 Olivier Lartillot
 % Copyright (C) 2007-2009 Olivier Lartillot & University of Jyvaskyla
 %
 % All rights reserved.
