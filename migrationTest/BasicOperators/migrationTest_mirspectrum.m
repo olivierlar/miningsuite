@@ -99,8 +99,8 @@ clearvars -except testfile ;
 disp('testing migration: mirspectrum with sig.spectrum with Phase'); 
 
 
-a = mirspectrum(testfile); %, 'Phase', 'No');
-b = sig.spectrum(testfile,'Mix'); %, 'Phase', 'No', 
+a = mirspectrum(testfile);
+b = sig.spectrum(testfile,'Mix','Phase'); 
 x = get(a,'Phase'); 
 x = x{1}{1};
 y = get(b,'Phase'); 
@@ -474,6 +474,26 @@ a = mirspectrum(testfile, 'Bands',b);
 b = aud.spectrum(testfile, 'Bands', b, 'Mix');
 x = squeeze(mirgetdata(a)); 
 y = b.getdata; 
+tf = isequal(x,y);
+
+if tf == 1
+   cprintf('*green', 'test SUCCESS!\n'); 
+else
+   debugFail(x,y);
+end
+
+
+%% testing migration: mirspectrum with aud.spectrum with Mel and AlongBands
+clearvars -except testfile ;
+disp('testing migration: mirspectrum with aud.spectrum with Mel and AlongBands'); 
+
+sa = mirspectrum(testfile, 'Mel', 'Frame');
+a = mirspectrum(sa, 'AlongBands');
+sb = aud.spectrum(testfile, 'Mel', 'Frame', 'Mix');
+b = aud.spectrum(sb, 'AlongBands');
+x = squeeze(mirgetdata(a)); 
+y = b.getdata;
+y = y';
 tf = isequal(x,y);
 
 if tf == 1
