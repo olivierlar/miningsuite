@@ -1,6 +1,6 @@
 % SIG.SPECTRUM.OPTIONS
 %
-% Copyright (C) 2014, 2017-2018 Olivier Lartillot
+% Copyright (C) 2014, 2017-2018, 2020 Olivier Lartillot
 %
 % All rights reserved.
 % License: New BSD License. See full text of the license in LICENSE.txt in
@@ -155,6 +155,6 @@ function options = options
 
         phase.key = 'Phase';
         phase.type = 'Boolean';
-        phase.default = 1;
+        phase.default = 0;
     options.phase = phase;
 end
