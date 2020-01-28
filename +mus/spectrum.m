@@ -1,7 +1,7 @@
 % MUS.SPECTRUM
 % music-theoretical representation of spectrum decomposition
 %
-% Copyright (C) 2014, 2017-2018 Olivier Lartillot
+% Copyright (C) 2014, 2017-2018, 2020 Olivier Lartillot
 % Copyright (C) 2007-2012 Olivier Lartillot & University of Jyvaskyla
 %
 % All rights reserved.
@@ -57,7 +57,7 @@ function out = after(x,option)
         [x.Ydata,origin] = sig.compute(@cents,x.Ydata,x.xdata);
         x.Xaxis.name = 'Pitch';
         x.Xaxis.unit.name = 'cents';
-        x.Xaxis.start = 0;
+        x.Xaxis.start = 1;
         x.Xaxis.unit.origin = origin;
         x.Xaxis.unit.rate = 1;
         x.yname = 'cent-Spectrum';
