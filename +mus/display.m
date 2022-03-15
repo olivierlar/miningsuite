@@ -1,6 +1,6 @@
 % MUS.DISPLAY
 %
-% Copyright (C) 2014-2015, 2017 Olivier Lartillot
+% Copyright (C) 2014-2015, 2017, 2022 Olivier Lartillot
 %
 % All rights reserved.
 % License: New BSD License. See full text of the license in LICENSE.txt in
@@ -25,8 +25,8 @@ if ~isempty(concept)
     mode = concept.modes;
 end
 
-nn = length(notes);
-if ~nn
+numberNotes = length(notes);
+if ~numberNotes
     warning('Warning in MUS.SCORE: The score is empty.')
     return
 end
@@ -43,14 +43,14 @@ range.let = [];
 range.acc = [];
 range.oct = [];
 
-chr = NaN(1,nn);
-f = zeros(1,nn);
-t = zeros(2,nn);
+chr = NaN(1,numberNotes);
+f = zeros(1,numberNotes);
+t = zeros(2,numberNotes);
 %for i = 1:length(scal.list)
 %    sdd{i} = [];
 %    sdf{i} = [];
 %end
-for i = 1:nn
+for i = 1:numberNotes
     chr(i) = notes{i}.parameter.getfield('chro').value;
     
     if ~ismember(chr(i),range.chr)
@@ -96,7 +96,7 @@ end
 if 0 %~isempty(concept)
     ds = diff( [zeros(1,size(pitch.timescores,2)) ; pitch.timescores] );
     for i = 1:length(pitch.heights)
-        tr = [find(ds(:,i)); nn];
+        tr = [find(ds(:,i)); numberNotes];
         for j = 1:length(tr)-1
             plot(t(1,[tr(j),tr(j+1)]),[pitch.heights(i),pitch.heights(i)],...
                  'Color',ones(3,1)*(1-pitch.timescores(tr(j),i)))
@@ -104,7 +104,7 @@ if 0 %~isempty(concept)
     end
 end
 
-for i = 1:nn
+for i = 1:numberNotes
     for j = 1:length(notes{i}.to)
         if ~isempty(notes{i}.to(j).passing)
             lw = 2;
@@ -200,7 +200,7 @@ if 0 %~isempty(concept)
     end
 end
 
-for i = 1:nn
+for i = 1:numberNotes
     if ~isempty(notes{i}.passing)
         col = [.5 .5 .5];
     else
@@ -314,14 +314,14 @@ if ~isempty(range.oct)
     end
 end
 
-%%
+%% Display of motivic patterns
 option.scheaf = 1;
-option.minlength = 3;
+option.minlength = 6;
 
 pool = {};
 t2s = [];
 y = range.chr(1)-1;
-for i = 1:nn
+for i = 1:numberNotes
     for j = 1:length(notes{i}.occurrences)
         if isempty(notes{i}.occurrences(j).extensions) && ...
                 notes{i}.occurrences(j).pattern.length > option.minlength...
@@ -341,6 +341,8 @@ for i = 1:nn
                     s = scheaf(patt,option.minlength);
                 else
                     s.branches = patt;
+                    s.length = patt.length;
+                    s.closedbranches = []; %patt.closedbranches;
                 end
                 if s.length > option.minlength
                     coord = zeros(0,2);
@@ -349,9 +351,9 @@ for i = 1:nn
                     f = length(pool);
                     fprintf(['== ',num2str(f),'\n']);
                     if f > 1
-                        y = y - .5;
-                        line([0 10],[y y],'Color','k','LineWidth',2);
-                        y = y - .5;
+                        y = y - .3;
+%                         line([0 10],[y y],'Color','k','LineWidth',2);
+%                         y = y - .5;
                     end
                     text(0,y+.3,num2str(f),'Color','k','VerticalAlignment','Top');
                 
@@ -360,7 +362,9 @@ for i = 1:nn
 %                         if p.length < 4
 %                             continue
 %                         end
-                        y = y-.4;
+                        if h > 1
+                            y = y-.3;
+                        end
                         desc = p.display; %(0);
                         %fprintf([desc,'\n']);
                         
@@ -474,7 +478,7 @@ for i = 1:nn
                                 break
                             end
 
-                            col = 'r';
+                            col = num2col(f); %'r';
                             if occs(k) == p.revelation
                                 lw = 2;
                             else
