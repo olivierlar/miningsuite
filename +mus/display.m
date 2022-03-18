@@ -31,7 +31,7 @@ if ~numberNotes
     return
 end
 
-if nargin < 3 || isempty(h)
+if nargin < 3 || ~isa(h,'matlab.graphics.axis.Axes')
     figure
 else
     axes(h);
