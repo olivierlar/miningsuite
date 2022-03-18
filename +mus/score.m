@@ -15,13 +15,13 @@ else
     concept = [];
 end
 
-if ischar(arg)
+if ischar(arg) || iscell(arg)
     out = reads(arg,options,concept);
     return
 elseif isnumeric(arg)
     notes = struct('chro',num2cell(arg),'ons',num2cell(arg),...
                    'dur',.1,'chan',num2cell(arg));
-    out = process_notes(notes,mus.Sequence,'',options,concept,0);
+    out = process_notes(notes,mus.Sequence,'',options,concept,0,[]);
     return
 end
 
@@ -114,15 +114,21 @@ out = mus.Sequence;
 if strcmpi(arg,'Folder')
     d = dir;
     dn = {d.name};
+    pattern = [];
     for i = 1:length(dn)
-        out = read(out,dn{i},options,concept,1);
+        [out, pattern] = read(out,dn{i},options,concept,1,pattern);
+    end
+elseif iscell(arg)
+    pattern = [];
+    for i = 1:length(arg)
+        [out, pattern] = read(out,arg{i},options,concept,1,pattern);
     end
 else
-    out = read(out,arg,options,concept,0);
+    out = read(out,arg,options,concept,0,[]);
 end
 
 
-function out = read(out,name,options,concept,folder)
+function [out, pattern] = read(out,name,options,concept,folder,pattern)
 try
     audioinfo(name);
     
@@ -186,7 +192,7 @@ else
         nmat = mus.midi2nmat(name);
         notes = struct('chro',num2cell(nmat(:,4)),'ons',num2cell(nmat(:,6)),...
                        'dur',num2cell(nmat(:,7)),'chan',num2cell(nmat(:,3)));
-        out = process_notes(notes,out,name,options,concept,folder);
+        [out, pattern] = process_notes(notes,out,name,options,concept,folder,pattern);
     elseif 1
         fid = fopen(name,'rt');
         if 0 % mathieu
@@ -230,7 +236,7 @@ else
                            'chan',0,...num2cell(C{5}),...
                            'dia',num2cell(C{3}));
         end
-        out = process_notes(notes,out,name,options,concept,folder);
+        [out, pattern] = process_notes(notes,out,name,options,concept,folder,pattern);
     end
 end
 
@@ -247,7 +253,7 @@ for i = 1:size(x,1);
 end
 
         
-function out = process_notes(notes,out,name,options,concept,folder)
+function [out, pattern] = process_notes(notes,out,name,options,concept,folder,pattern)
 if options.t1
     notes([notes.ons] < options.t1) = [];
 end
@@ -271,10 +277,8 @@ if folder
 else
     out.files = name;
 end
-if options.metre || options.motif || options.passing
+if isempty(pattern) && (options.metre || options.motif || options.passing)
     pattern = initpattern(options);
-else
-    pattern = [];
 end
 if options.mode
     mode = mus.scale([]);
@@ -430,11 +434,11 @@ elseif options.spell
 end
 
 if options.metre
-    pos = round(note.parameter.getfield('onset').value/.15152);
+    pos = round(note.parameter.getfield('onset').value/    (3/14)    ) %.15152)
     metre = note.parameter.getfield('metre');
-    barpos = pos/6+1;
+    barpos = pos/8+1;
     metre.value.bar = round(barpos);
-    metre.value.inbar = round(rem(barpos,1)*6);
+    metre.value.inbar = round(rem(barpos,1)*8);
     note.parameter = note.parameter.setfield('metre',metre);
 end
 
