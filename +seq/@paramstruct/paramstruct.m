@@ -272,8 +272,9 @@ classdef paramstruct < seq.param
         function test = isdefined(obj,patt)
             test = false;
             intertest = false;
-            interdefine = nargin > 1 && ~isempty(patt.parent);
-            for i = 1:length(obj.fields)-1
+            interdefine = nargin > 1 && ~isempty(patt.parent) ...
+                && strcmp(patt.parameter.name, 'music');
+            for i = 1:length(obj.fields)%-1
                 if iscell(obj.fields)
                     field = obj.fields{i};
                 else
