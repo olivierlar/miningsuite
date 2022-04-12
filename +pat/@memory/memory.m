@@ -1,6 +1,6 @@
 % PAT.MEMORY
 %
-% Copyright (C) 2014, 2017 Olivier Lartillot
+% Copyright (C) 2014, 2017, 2022 Olivier Lartillot
 % All rights reserved.
 % License: New BSD License. See full text of the license in LICENSE.txt in
 % the main folder of the MiningSuite distribution.
@@ -39,10 +39,7 @@ classdef memory < hgsetget
             paramemo = [];
             for i = 1:length(obj.(field))
                 if strcmp(field,'fields') && ...
-                        (i < 2 || i > 4 || ...
-                         (i == 2 && ~options.chro) || ...
-                         (i == 3 && ~options.dia) || ...
-                         (i == 4 && ~options.onset))
+                        ~param.validfield(i,options)
                     continue
                 end
                 specifieldi = [];

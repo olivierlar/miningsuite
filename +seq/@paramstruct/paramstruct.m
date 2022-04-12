@@ -3,9 +3,10 @@ classdef paramstruct < seq.param
         fields
         names
         iscell
+        validfield
     end
 	methods
-        function obj = paramstruct(title,names,iscell)
+        function obj = paramstruct(title,names,iscell,validfield)
             if nargin < 1
                 title = '';
             end
@@ -15,9 +16,13 @@ classdef paramstruct < seq.param
             if nargin < 3
                 iscell = 0;
             end
+            if nargin < 4
+                validfield = @(i,options) true;
+            end
             obj = obj@seq.param(title);
             obj.names = names;
             obj.iscell = iscell;
+            obj.validfield = validfield;
         end
         function obj = type2val(obj)
             if obj.iscell
@@ -124,9 +129,7 @@ classdef paramstruct < seq.param
             %f{3} = common(obj1.fields{3},obj2.fields{3});
             %f{4} = common(obj1.fields{4},obj2.fields{4});
             for i = 1:length(obj1.fields)
-                if i < 2 || i > 4 || (i == 2 && ~options.chro) || ...
-                        (i == 3 && ~options.dia) || ...
-                        (i == 4 && ~options.onset)
+                if ~obj1.validfield(i,options)
                     f{i} = [];
                     continue
                 end
