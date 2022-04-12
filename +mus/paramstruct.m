@@ -11,7 +11,7 @@ function p = paramstruct(options)
 p = seq.paramstruct('music',...
             {'freq','chro','dia','onset','offset'...
              %,'metre','channel','harmony','group'...
-             },1);
+             },1,@validfield);
 
 %p = p.setfield('pitch',seq.paramstruct('pitch',{'freq','chro','dia'},0));
 
@@ -130,3 +130,10 @@ end
 
 function y = inbar(x)
 y = x.inbar;
+
+
+function y = validfield(i,options)
+y = ~(i < 2 || i > 4 || ...
+    (i == 2 && ~options.chro) || ...
+    (i == 3 && ~options.dia) || ...
+    (i == 4 && ~options.onset));
