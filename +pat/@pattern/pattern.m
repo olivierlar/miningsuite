@@ -508,7 +508,7 @@ classdef pattern < hgsetget
                     obj2 = [];
                     return
                 end
-                if isequal(memo{i}{1},pref)
+                if isequal(memo{i}{1},pref) && pref.length > 0
                     obj2 = [];
                     return
                 end
@@ -520,13 +520,15 @@ classdef pattern < hgsetget
                     end
                     continue
                 end
-                if ~isempty(memo{i}{1}.suffix) && ...
-                        ~isempty(pref.suffix) && ...
-                        memo{i}{1}.suffix.parameter.fields{4}.value > ...
-                            pref.suffix.parameter.fields{4}.value
-                    obj2 = [];
-                    return
-                end
+
+                %%% Toggled off because it should be into MusMinr
+%                 if ~isempty(memo{i}{1}.suffix) && ...
+%                         ~isempty(pref.suffix) && ...
+%                         memo{i}{1}.suffix.parameter.fields{4}.value > ...
+%                             pref.suffix.parameter.fields{4}.value
+%                     obj2 = [];
+%                     return
+%                 end
                 i = i+1;
             end
 
@@ -543,8 +545,8 @@ classdef pattern < hgsetget
             %    return
             %end
             
-            % Forbidding overlap
-            if ~isempty(pref.first.suffix) && ...
+            % Forbidding overlap                 %%% Toggled off because it should be into MusMinr
+            if 0 && ~isempty(pref.first.suffix) && ...
                     memo{1}{2}.parameter.getfield('onset').value > ...
                     pref.first.suffix.parameter.getfield('onset').value && ...
                     (isempty(memo{1}{2}.parameter.getfield('channel')) || ...
@@ -565,7 +567,7 @@ classdef pattern < hgsetget
             end
 
             if ~param.isdefined(obj1)
-                obj2 = [];
+               obj2 = [];
                 return
             end
             
@@ -1128,8 +1130,9 @@ function test = closuretest(pref,suff,param,parent,nboccs)
             prefi = note.occurrences(i).implies(param,suff);
             if ~isempty(prefi) && ...
                     prefi.pattern.implies(parent,prefi,pref) && ...
+                    (nargin < 5 || ... %%%% What to do in this case?????
                     length(note.occurrences(i).pattern.occurrences) ...
-                        >= nboccs
+                    >= nboccs)
                     % It is necessary to compare number of occurrences,
                     % because of phenomenon of the type ABCDabcdCD
                 test = 0;
