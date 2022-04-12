@@ -19,6 +19,8 @@ classdef memory < hgsetget
                 obj.fields = param.fields;
             end
         end
+
+        %% Core part of the pattern discovery mechanism
         function obj = combine(obj,field,param,occ,succ,parent,specif,...
                                cyclic,root,options,detect)
             if nargin < 8
@@ -37,6 +39,8 @@ classdef memory < hgsetget
                 return
             end
             paramemo = [];
+
+            %% For each dimension
             for i = 1:length(obj.(field))
                 if strcmp(field,'fields') && ...
                         ~param.validfield(i,options)
@@ -63,6 +67,8 @@ classdef memory < hgsetget
                 %        isa(param.fields{9},'seq.paramval')
                 %    paramfieldi = [paramfieldi param.fields{9}];
                 %end
+
+                %% Calling pat.memoparam.learn
                 if iscell(obj.(field))
                     if ~isempty(obj.(field){i})
                         [obj.(field){i} paramemo] = ...

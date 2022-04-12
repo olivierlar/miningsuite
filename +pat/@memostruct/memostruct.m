@@ -1,4 +1,4 @@
-% Copyright (C) 2014, Olivier Lartillot
+% Copyright (C) 2014, 2022 Olivier Lartillot
 % All rights reserved.
 % License: New BSD License. See full text of the license in LICENSE.txt in
 % the main folder of the MiningSuite distribution.
@@ -27,6 +27,8 @@ classdef memostruct < pat.memory
                 obj.fields = f;
             end
         end
+
+        %% Core part of the pattern discovery mechanism
         function obj = learn(obj,param,occ,succ,parent,specif,cyclic,...
                              root,options,detect)
             if 1 %isempty(parent.parent) || ...
@@ -41,6 +43,7 @@ classdef memostruct < pat.memory
                     end
                 end
                                 
+                % What it does is basically calling pat.memory.combine
                 obj = obj.combine('fields',param,occ,succ,parent,...
                                   specifmemo,cyclic,root,options,detect);
             end

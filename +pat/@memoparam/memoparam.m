@@ -1,4 +1,4 @@
-% Copyright (C) 2014, Olivier Lartillot
+% Copyright (C) 2014, 2022 Olivier Lartillot
 % All rights reserved.
 % License: New BSD License. See full text of the license in LICENSE.txt in
 % the main folder of the MiningSuite distribution.
@@ -30,6 +30,9 @@ classdef memoparam < pat.memory
                 end
             end
         end
+
+        %% Checking if the parameter param already exists as a continuation
+        % of the pattern
         function [idx, memo, value] = find(obj,param,specif)
             % Output:
             %   memo: the content in the retrieved memory
@@ -80,6 +83,12 @@ classdef memoparam < pat.memory
                 end
             end
         end
+
+        %% Core part of the pattern discovery mechanism
+        % Now we are considering the continuation of a given pattern
+        % occurrence and check whether one particular parametrical
+        % description of the extension has been already memorised before or
+        % not
         function [obj, paramemo] = learn(obj,param,occ,succ,parent,...
                                          specif,cyclic,root,options,detect)
             paramemo = param;
@@ -87,6 +96,7 @@ classdef memoparam < pat.memory
                 return
             end
             
+            %% 
             [idx, memo, value] = obj.find(param,specif);
             if ~isempty(value)
                 if ~isempty(memo)
@@ -97,8 +107,11 @@ classdef memoparam < pat.memory
                                 (isa(memo{1}{2},'pat.event') && ...
                                 ~isequal(succ,memo{1}{2}))
                             if detect
+                                %% If we find a new parametric repetition,
+                                % we can check pattern closure
                                 parent.link(memo,occ,succ,cyclic,root,...
                                             options);
+                                % by calling pat.pattern.link
                             end
                             if 1 %isempty(newpat) %% Should we turn back to previous version?
                                 if isempty(idx)

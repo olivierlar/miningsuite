@@ -1,4 +1,4 @@
-% Copyright (C) 2014, Olivier Lartillot
+% Copyright (C) 2014, 2022 Olivier Lartillot
 % All rights reserved.
 % License: New BSD License. See full text of the license in LICENSE.txt in
 % the main folder of the MiningSuite distribution.
@@ -14,12 +14,16 @@ classdef syntagm < seq.syntagm
                 return
             end
             
+            % The previous event
             event1 = obj.from;
+
+            % All the pattern occurrences ending at this previous event
             occ = event1.occurrences;
             if isempty(occ)
                 return
             end
             
+            % Tracking cyclic patterns...
             cyc = [];
             nocyc = [];
             for i = 1:length(occ)
@@ -36,7 +40,7 @@ classdef syntagm < seq.syntagm
                 end
             end
             
-            %occ = nocyc;
+            % Creating a pool of all more general pattern occurrences
             genpool{length(occ)} = [];
             if length(occ) > 1
                 genpool{length(occ)-1} = [occ(end).pattern ...
@@ -47,8 +51,12 @@ classdef syntagm < seq.syntagm
                                           occ(i).pattern.general]);
                 end
             end
+
+            % For each pattern occurrence ending at the previous event
             for i = 1:length(occ)
+                % Memorise the extension of the pattern with this new event
                 occ(i).memorize(obj,root,options,genpool{i},1);
+                % By calling pat.occurrence.memorize
             end
         end
         function val = overlaps(obj1,obj2)

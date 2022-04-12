@@ -1,4 +1,4 @@
-% Copyright (C) 2014, Olivier Lartillot
+% Copyright (C) 2014, 2022 Olivier Lartillot
 % All rights reserved.
 % License: New BSD License. See full text of the license in LICENSE.txt in
 % the main folder of the MiningSuite distribution.
@@ -384,6 +384,10 @@ classdef occurrence < hgsetget
                 display(occ2);
             end
         end
+
+        %% The most important mechanism: memorizing all extensions of 
+        % pattern occurrences, leading to pattern recognition and pattern
+        % discovery
         function occ = memorize(obj,succ,root,options,occs,detect)
             if nargin < 5
                 occs = [];
@@ -391,21 +395,27 @@ classdef occurrence < hgsetget
             cyclic = 0;
             objpat = obj.pattern;
             
-            if isa(succ,'pat.syntagm')
-                for i = 1:length(succ.to.occurrences)
-                    if ~isempty(succ.to.occurrences(i).prefix) && ...
-                            ismember(objpat,...
-                                succ.to.occurrences(i).prefix.pattern.general)...
-                            && succ.parameter.implies(...
-                                 succ.to.occurrences(i).pattern.parameter)
-                        % We should only accept parameter more specific than succ.to.occurrences(i).pattern.parameter 
-                        %occ = [];
-                        %return
-                    end
-                end
-            end
+%             if isa(succ,'pat.syntagm')
+%                 for i = 1:length(succ.to.occurrences)
+%                     if ~isempty(succ.to.occurrences(i).prefix) && ...
+%                             ismember(objpat,...
+%                                 succ.to.occurrences(i).prefix.pattern.general)...
+%                             && succ.parameter.implies(...
+%                                  succ.to.occurrences(i).pattern.parameter)
+%                         % We should only accept parameter more specific than succ.to.occurrences(i).pattern.parameter 
+%                         %occ = [];
+%                         %return
+%                     end
+%                 end
+%             end
             
+            %% Pattern recognition 
+            % Can the pattern occurrence 'obj' be extended into an
+            % occurrence of a known child of the pattern?
             occ = objpat.remember(obj,succ,[],cyclic,root,options);
+
+            % Trying also with more specific patterns (not explicitly
+            % represented, but need to be implicitly checked)
             for i = 1:length(objpat.specificmodel)
                 %if ~(   (~isa(obj.pattern.parameter.fields{2},'seq.paramval') || ...
                 %         isempty(obj.pattern.parameter.fields{2}.value) || ...
@@ -420,6 +430,7 @@ classdef occurrence < hgsetget
                 %end
             end
                 
+            % Trying also with more general patterns
             for i = 1:length(objpat.general)
                 if ismember(objpat.general(i),occs) || ...
                         obj.incompatible(objpat.general(i))
@@ -468,10 +479,15 @@ classdef occurrence < hgsetget
                 return
             end
             
+            %% Pattern discovery
+            % Can the pattern occurrence 'obj' be extended into an
+            % occurrence of a new child of the pattern?
             objpat.memory.learn(succ.parameter,obj,succ,objpat,...
                                 objpat.specific,cyclic,root,options,...
                                 detect);
+            % by calling pat.memostruct.learn
         
+            % Trying also with more general patterns
             for i = 1:length(objpat.general)
                 %% WARNING: Redundant info in objpat.general!!
                 if ismember(objpat.general(i),occs) || ...
