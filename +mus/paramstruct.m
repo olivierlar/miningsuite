@@ -1,6 +1,6 @@
 % MUS.PARAMSTRUCT
 %
-% Copyright (C) 2014 Olivier Lartillot
+% Copyright (C) 2014, 2022 Olivier Lartillot
 %
 % All rights reserved.
 % License: New BSD License. See full text of the license in LICENSE.txt in
