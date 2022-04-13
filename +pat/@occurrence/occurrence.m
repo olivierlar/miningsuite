@@ -607,7 +607,7 @@ classdef occurrence < hgsetget
             end
         end
         function pre1 = implies(obj,par2,suff)
-            if isa(suff,'pat.event') || ...
+            if ...isa(suff,'pat.event') || ... %%% WHY???
                     (isempty(obj.cycle) && ...
                      isempty(obj.pattern.parent.parent))
                 pre1 = [];
@@ -615,7 +615,7 @@ classdef occurrence < hgsetget
             end
             par1 = obj.parameter;
             pre1 = obj.prefix;
-            if ~isempty(pre1) %?
+            if ~isempty(pre1) && strcmp(pre1.suffix.parameter.name,'music')    %?
                 while pre1.suffix.parameter.fields{4}.value > ...
                         suff.from.parameter.fields{4}.value
                     par1 = par1.add(pre1.parameter);
