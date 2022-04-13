@@ -74,22 +74,22 @@ classdef pattern < hgsetget
                 
                 obj = obj.connect2general(root);
                 obj = obj.connect2specific(root);
-                for i = 1:length(parent.children)
-                    completed = 0;
-                    while ~completed
-                        for j = i+1:length(parent.children)
-                            if ismember(parent.children{j},...
-                                        parent.children{i}.specific)
-                                child = parent.children{j};
-                                parent.children{j} = parent.children{i};
-                                parent.children{i} = child;
-                                completed = -1;
-                                break
-                            end
-                        end
-                        completed = completed+1;
-                    end
-                end
+%                 for i = 1:length(parent.children)
+%                     completed = 0;
+%                     while ~completed
+%                         for j = i+1:length(parent.children)
+%                             if ismember(parent.children{j},...
+%                                         parent.children{i}.specific)
+%                                 child = parent.children{j};
+%                                 parent.children{j} = parent.children{i};
+%                                 parent.children{i} = child;
+%                                 completed = -1;
+%                                 break
+%                             end
+%                         end
+%                         completed = completed+1;
+%                     end
+%                 end
             end
         end
         function f = get.freq(obj)
@@ -403,7 +403,7 @@ classdef pattern < hgsetget
                             pat.pattern(root,general.general(j),param)
                         end
                     end
-                elseif ~isequal(param,child.parameter,options)
+                elseif nargin > 6 && ~isequal(param,child.parameter,options)
                     [newchild found] = child.generalize(param,root,0,...
                                                         options);
                     if isempty(newchild)
@@ -989,7 +989,7 @@ classdef pattern < hgsetget
                     t = true;
                     return
                 end
-                if ~isempty(pre1)
+                if ~isempty(pre1) && strcmp(pre1.suffix.parameter.name,'music')
                     while pre1.suffix.parameter.fields{4}.value > ...
                             pre2.suffix.parameter.fields{4}.value
                         par1 = par1.add(pre1.parameter);
