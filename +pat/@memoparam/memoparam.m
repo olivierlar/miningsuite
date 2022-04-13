@@ -96,7 +96,8 @@ classdef memoparam < pat.memory
                 return
             end
             
-            %% 
+            % Calling pat.memoparam.find to check if the parameter param 
+            % has been already memorised before or not
             [idx, memo, value] = obj.find(param,specif);
             if ~isempty(value)
                 if ~isempty(memo)
