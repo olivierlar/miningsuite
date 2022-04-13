@@ -6,6 +6,7 @@
 function analyze(inputSequence)
 
 options.fuserepeat = false;
+options.exhaustive = true;
 
 % Definition of the parametrical space. Here just one dimension.
 ps = seq.paramstruct('mystruct',{'dimension'},1);
@@ -23,9 +24,9 @@ occ0 = root.occurrence([],[]);
 currentSequence = seq.Sequence;
 
 previous = [];
-for s = inputSequence
+for i = 1:length(inputSequence)
     % Each event successively considered in the sequence
-    s
+    s = inputSequence(i)
 
     % The parametrical description of the new event
     p = ps.type2val; % Defined from the parametrical space ps
@@ -35,6 +36,7 @@ for s = inputSequence
 
     % The event is then instantiated as a pat.event object
     event = pat.event(currentSequence,p);
+    event.address = i;
 
     % ... integrated into the sequence under creation.
     currentSequence = currentSequence.integrate(event);
