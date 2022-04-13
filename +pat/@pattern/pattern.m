@@ -1056,12 +1056,13 @@ classdef pattern < hgsetget
             end
             txt = '';
             if ~isempty(obj.parent) && ~isempty(obj.parent.parent)
-                txt = [display(obj.parent),'; '];
+%                 txt = [display(obj.parent),'; '];
+                  txt = [simpledisplay(obj.parent),'; '];
             end
             if ~isempty(obj.parameter)
                 txt = [txt simpledisplay(obj.parameter)];
             end
-            disp(txt);
+            %disp(txt);
         end
         function tree(obj,indent)
             if nargin < 2
