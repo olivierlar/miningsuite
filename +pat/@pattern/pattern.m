@@ -131,6 +131,10 @@ classdef pattern < hgsetget
                 obj.parent.closed = 0;
             end
         end
+
+        %% Pattern recognition
+        % Can the pattern occurrence 'obj' be extended into an
+        % occurrence of a known child of the pattern?
         function occ2 = remember(obj,occ,succ,general,cycle,root,options)
             if isempty(obj.parent)
                 addr = 0;
@@ -486,7 +490,8 @@ classdef pattern < hgsetget
             %    end
             %end
         end
-        %%
+
+        %% Closure test
         function obj2 = link(obj1,memo,pref,suff,cyclic,root,options)
             if isa(suff,'pat.syntagm') && isa(memo{1}{2},'pat.event')
                 suff = suff.to;
@@ -717,7 +722,8 @@ classdef pattern < hgsetget
             %    obj1.closed = 0;
             %end
             
-            obj2 = pat.pattern(root,obj1,param,obj1.memory);
+            %% Success! New pattern created as an extension of the parent
+            obj2 = pat.pattern(root,obj1,param,obj1.memory)
                        
             if 1 %toggled off for ismir paper!
                 for i = 1:length(obj1.general)
@@ -734,6 +740,8 @@ classdef pattern < hgsetget
                 end
             end
                         
+            %% Memorising all possible continuations of extended pattern 
+            % occurrences
             for i = 1:length(memo)
                 old = obj2.occurrence(memo{i}{1},memo{i}{2},1);
                 for j = 1:length(last1{i}.from)
