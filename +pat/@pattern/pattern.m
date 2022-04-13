@@ -151,17 +151,18 @@ classdef pattern < hgsetget
                 succ.processed(end+1) = addr;
             end
             occ2 = [];
-            if isempty(occ.suffix)
-            %if ~isempty(occ) && isempty(occ.cycle) && ...
-            %       ~isequal(occ.pattern,obj)
-                return
-            end
+%             if isempty(occ.suffix)
+%             %if ~isempty(occ) && isempty(occ.cycle) && ...
+%             %       ~isequal(occ.pattern,obj)
+%                 return
+%             end
             
             %if justcontour(obj,occ)
             %    occ2 = [];
             %    return
             %end
             
+            %% We look at each child
             for i = 1:length(obj.children)
                 child = obj.children{i};
                 param = child.parameter;
@@ -180,8 +181,13 @@ classdef pattern < hgsetget
                 generalized = false;
                                                         
                 % Generalizing if necessary.
-                [test common] = succ.parameter.implies(param,...
-                                                    occ.suffix.parameter);
+                if isempty(occ.suffix)
+                    param0 = [];
+                else
+                    param0 = occ.suffix.parameter;
+                end
+                [test common] = succ.parameter.implies(param,param0);
+
                 if ~test
                     if ~common.isdefined(obj)
                         continue
@@ -422,7 +428,7 @@ classdef pattern < hgsetget
                     continue
                 end
                 
-                occ2 = child.occurrence(occ,succ);
+                occ2 = child.occurrence(occ,succ)
                 if isempty(newchild) && child.closed == 1
                     %child.closed = 2;
                 end

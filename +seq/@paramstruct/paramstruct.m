@@ -209,7 +209,7 @@ classdef paramstruct < seq.param
                 if isempty(obj2.fields{i})
                     continue
                 end
-                if nargin>2
+                if nargin>2 && ~isempty(context)
                     [testi param.fields{i}] = implies(obj1.fields{i},...
                                                       obj2.fields{i},...
                                                       context.fields{i});
