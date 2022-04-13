@@ -245,10 +245,7 @@ classdef paramstruct < seq.param
             
             test = true;
             for i = 1:length(obj1.fields)
-                if i < 2 || i > 4 || (i == 2 && ~options.chro) || ...
-                        (i == 3 && ~options.dia) || ...
-                        (i == 4 && ~options.onset)
-                    f{i} = [];
+                if ~obj1.validfield(i,options)
                     continue
                 end
                 if iscell(obj1.fields)
