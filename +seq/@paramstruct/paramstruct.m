@@ -245,7 +245,7 @@ classdef paramstruct < seq.param
             
             test = true;
             for i = 1:length(obj1.fields)
-                if ~obj1.validfield(i,options)
+                if nargin > 2 && ~obj1.validfield(i,options)
                     continue
                 end
                 if iscell(obj1.fields)
