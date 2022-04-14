@@ -431,6 +431,10 @@ classdef pattern < hgsetget
                 end
                 
                 occ2 = child.occurrence(occ,succ);
+                if pat.verbose
+                    display(occ2);
+                end
+
                 if isempty(newchild) && child.closed == 1
                     %child.closed = 2;
                 end
@@ -484,9 +488,6 @@ classdef pattern < hgsetget
                     end
                 end
                 
-                if pat.verbose
-                    display(occ2);
-                end
             end
             
             %obj.memory.learn(succ.parameter,occ,succ,obj);

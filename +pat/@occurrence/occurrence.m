@@ -568,7 +568,7 @@ classdef occurrence < hgsetget
                 txt = [display(obj.prefix,0) '; '];
             end
             if ~isempty(obj.parameter)
-                txt = [txt display(obj.parameter)];%.fields{2},1)];
+                txt = [txt simpledisplay(obj.parameter)];%.fields{2},1)];
             end
             if nargin < 2 && ~isempty(txt) && pat.verbose
                 if isempty(obj.cycle)
