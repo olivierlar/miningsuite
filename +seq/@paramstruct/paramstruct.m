@@ -360,7 +360,7 @@ classdef paramstruct < seq.param
                         end
                     end
                 end
-                disp(txt)
+                %disp(txt)
             end
         end
         function txt = simpledisplay(obj)

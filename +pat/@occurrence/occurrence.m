@@ -565,7 +565,7 @@ classdef occurrence < hgsetget
             if isempty(obj.prefix)
                 txt = '';
             else
-                txt = [display(obj.prefix) '; '];
+                txt = [display(obj.prefix,0) '; '];
             end
             if ~isempty(obj.parameter)
                 txt = [txt display(obj.parameter)];%.fields{2},1)];

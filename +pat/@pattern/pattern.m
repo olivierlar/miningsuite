@@ -428,7 +428,7 @@ classdef pattern < hgsetget
                     continue
                 end
                 
-                occ2 = child.occurrence(occ,succ)
+                occ2 = child.occurrence(occ,succ);
                 if isempty(newchild) && child.closed == 1
                     %child.closed = 2;
                 end
