@@ -291,21 +291,23 @@ classdef pattern < hgsetget
                     if found
                         continue
                     end
-                    for k = 1:length(occ.specific)
-                        % occ.specific: still existing?
-                        for j = 1:length(occ.specific(k).extensions)
-                            if occ.specific(k).extensions(j).parameter...
-                                    .implies(param)
-                                found = 1;
+                    if ~isfield(options,'explicit') || ~options.explicit
+                        for k = 1:length(occ.specific)
+                            % occ.specific: still existing?
+                            for j = 1:length(occ.specific(k).extensions)
+                                if occ.specific(k).extensions(j).parameter...
+                                        .implies(param)
+                                    found = 1;
+                                    break
+                                end
+                            end
+                            if found
                                 break
                             end
                         end
                         if found
-                            break
+                            continue
                         end
-                    end
-                    if found
-                        continue
                     end
                     
                     
