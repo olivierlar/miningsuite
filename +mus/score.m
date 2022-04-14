@@ -277,8 +277,9 @@ if folder
 else
     out.files = name;
 end
+ps = mus.paramstruct(options);
 if isempty(pattern) && (options.metre || options.motif || options.passing)
-    pattern = initpattern(options);
+    pattern = initpattern(ps,options);
 end
 if options.mode
     mode = mus.scale([]);
@@ -286,7 +287,6 @@ else
     mode = [];
 end
 memo = [];
-ps = mus.paramstruct(options);
 for j = 1:length(notes)
     %j
     if isfield(notes,'dia')
@@ -531,8 +531,7 @@ end
 %note.parameter = note.parameter.setfield('channel',channel);
 
 
-function p = initpattern(options)
-ps = mus.paramstruct(options);
+function p = initpattern(ps,options)
 p.root = pat.pattern([],[],[],ps);
 p.occ0 = p.root.occurrence([],[]);%,[]);
 
