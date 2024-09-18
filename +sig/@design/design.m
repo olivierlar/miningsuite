@@ -48,6 +48,9 @@ classdef design
         function obj = design(pack,name,input,type,main,after,options,...
                               combine,argin,extract,extensive,nochunk,...
                               variable_options)
+            if nargin < 13
+                variable_options = [];
+            end
             obj.package = pack;
             obj.name = name;
             obj.input = input;
@@ -169,7 +172,7 @@ classdef design
             if iscell(out) && length(out) == 1
                 out = out{1};
             end
-            sig.ans(out);
+            sig.recent(out);
         end
         function d = getdata(obj)
             v = obj.eval;
