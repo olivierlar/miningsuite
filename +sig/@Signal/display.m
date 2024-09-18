@@ -318,7 +318,7 @@ function display(obj)
             end
         end
         
-        if nchans > 1
+        if nchans > 1 && iscurve
             dyl = diff(ylims,1,2);
             mdyl = max(dyl);
             for i = 1:nchans
