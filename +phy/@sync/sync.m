@@ -97,6 +97,7 @@ classdef sync
                     axis(ax(h,:))
 %                     set(gca, 'color', 'k');
                     hold on
+                    view([-37.5 -30])
                     w = obj.data{h}.Ydata.content;
                     for i = 1:size(w,2)
                         plot3(w(k,i,1),w(k,i,2),w(k,i,3),'ok','MarkerSize',2);

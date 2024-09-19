@@ -51,6 +51,7 @@ function out = routine(obj,name,sdata,label,diffed,filename,connect)
         clf
         axis(ax)
         hold on
+        view([-37.5 -30])
         for i = 1:size(w,2)
             plot3(w(k,i,1),w(k,i,2),w(k,i,3),'ok','MarkerSize',2);
             if pref.displayIndex
