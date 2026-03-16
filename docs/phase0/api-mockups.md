@@ -7,16 +7,16 @@
 
 ## Mockup A: one-liner
 ```python
-import ms
-result = ms.audio("song.wav").spectrum().centroid().compute()
+import orpheon as op
+result = op.audio("song.wav").spectrum().centroid().compute()
 ```
 
 ## Mockup B: declarative pipeline
 ```python
-import ms
+import orpheon as op
 
 pipe = (
-    ms.pipeline("song.wav")
+    op.pipeline("song.wav")
       .frame(size=0.05, hop=0.01)
       .spectrum(scale="mel")
       .flux()
@@ -28,9 +28,9 @@ out = pipe.compute()
 ## Mockup C: corpus mode
 ```python
 job = (
-    ms.batch("/data/corpus/**/*.wav")
+    op.batch("/data/corpus/**/*.wav")
       .pipeline(lambda x: x.spectrum().mfcc().pitch())
-      .cache(".ms_cache")
+      .cache(".op_cache")
       .workers(16)
 )
 summary = job.run(resume=True)
@@ -38,6 +38,6 @@ summary = job.run(resume=True)
 
 ## Mockup D: modality adapters
 ```python
-score = ms.midi("piece.mid").pianoroll().key().compute()
-motion = ms.mocap("gesture.c3d").velocity().events().compute()
+score = op.midi("piece.mid").pianoroll().key().compute()
+motion = op.mocap("gesture.c3d").velocity().events().compute()
 ```

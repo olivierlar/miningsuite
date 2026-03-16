@@ -4,7 +4,7 @@
 - **Date:** 2026-03-05
 
 ## Context
-Users from MIRtoolbox should onboard quickly, but legacy compatibility must not degrade architecture quality.
+MiningSuite users should onboard quickly, but legacy compatibility must not degrade architecture quality.
 
 ## Decision
 - Adopt guided familiarity: recognizable concepts and names where useful.

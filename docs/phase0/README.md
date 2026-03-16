@@ -7,7 +7,7 @@ This folder starts the 1–2 week architecture sprint proposed in `docs/python-p
 - `api-mockups.md`: first-pass high-level API shape.
 - `operator-plugin-skeletons.py`: minimal protocol/skeleton examples for operators and plugins.
 - `batch-execution-prototype-spec.md`: first executable-thinking spec for large batch workflows.
-- `mirtoolbox-migration-examples.md`: starter migration mappings for common MIRtoolbox-style tasks.
+- `miningsuite-migration-examples.md`: starter migration mappings for common MiningSuite-style tasks.
 - `project-naming-options.md`: Python-ecosystem-inspired naming shortlist and recommendation for the new GitHub project.
 - `orpheon-validation-checklist.md`: practical validation checks for the selected `Orpheon` name (with environment constraints noted).
 

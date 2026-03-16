@@ -7,7 +7,7 @@
 A robust data model is required for reproducibility, multimodality, and cross-operator composability.
 
 ## Decision
-- Introduce typed containers (`Signal`, `Feature`, `Sequence`, `Collection`).
+- Introduce typed containers (`Signal`, `Sequence`).
 - Require explicit axes, units, labels, and provenance metadata.
 - Ensure outputs include operation lineage (operator, params, version, timestamp/hash).
 

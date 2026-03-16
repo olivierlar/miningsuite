@@ -4,7 +4,7 @@
 This should be a **new Python-native framework**, not a strict compatibility clone.
 
 - Do **not** target MATLAB/MiningSuite/toolbox compatibility as a hard requirement.
-- Do preserve a **low-friction path for MIRtoolbox users** where it does not compromise architecture quality.
+- Do preserve a **low-friction path for MiningSuite users** where it does not compromise architecture quality.
 - Keep the core user promise: **simple commands can build simple or complex analyses**.
 - Optimize for **throughput and scalability** (especially large batch processing), not real-time constraints.
 - Design the project as a true open-source platform where contributors can add modules easily.
@@ -27,7 +27,7 @@ This should be a **new Python-native framework**, not a strict compatibility clo
 
 ### 3) User migration principle
 Adopt **guided familiarity**, not strict compatibility:
-- Keep recognizable operator naming patterns where useful to MIRtoolbox users.
+- Keep recognizable operator naming patterns where useful to MiningSuite users.
 - Provide concise migration docs and command mapping examples.
 - Prefer better API design over legacy quirks when they conflict.
 
@@ -39,7 +39,7 @@ Adopt **guided familiarity**, not strict compatibility:
 - Ensure every result embeds enough metadata/provenance for reproducibility.
 
 ### B. Layered architecture
-1. **Core data layer:** typed containers (`Signal`, `Feature`, `Sequence`, etc.) with units, axes, provenance.
+1. **Core data layer:** typed containers (`Signal`, `Sequence`, etc.) with units, axes, provenance.
 2. **Operator layer:** pure transforms with explicit input/output contracts.
 3. **Execution layer:** graph planner + scheduler for single file, batch, and distributed execution.
 4. **Interface layer:** simple user API + CLI + notebook-friendly display.
@@ -73,9 +73,9 @@ Adopt **guided familiarity**, not strict compatibility:
 - `ADR-005`: Plugin system and extension points.
 - `ADR-006`: Batch execution and caching strategy.
 - `ADR-007`: API stability and deprecation policy.
-- Initial "MIRtoolbox user migration guide" skeleton.
+- Initial "MiningSuite user migration guide" skeleton.
 
-## Should we follow the previous migration plan?
+## Recommended implementation sequencing
 **Yes, with this adjustment:**
 - Keep the staged migration structure.
 - But gate implementation behind the Phase 0 charter above.
@@ -94,7 +94,7 @@ Run a short architecture sprint (1–2 weeks) to finalize ADR-001..007 and produ
 - minimal API mockups,
 - operator/plugin skeletons,
 - batch execution prototype spec,
-- migration examples for 5–10 common MIRtoolbox-style tasks.
+- migration examples for 5–10 common MiningSuite-style tasks.
 
 
 ## Phase 0 starter artifacts
