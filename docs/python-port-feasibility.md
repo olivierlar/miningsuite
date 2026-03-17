@@ -3,13 +3,15 @@
 ## Decision summary
 This should be a **new Python-native framework**, not a strict compatibility clone.
 
+Working name for the software and package ecosystem: **Orpheon**.
+
 - Do **not** target MATLAB/MiningSuite/toolbox compatibility as a hard requirement.
 - Do preserve a **low-friction path for MiningSuite users** where it does not compromise architecture quality.
 - Keep the core user promise: **simple commands can build simple or complex analyses**.
 - Optimize for **throughput and scalability** (especially large batch processing), not real-time constraints.
 - Design the project as a true open-source platform where contributors can add modules easily.
 - Commit to **API stability** after the initial core maturation window.
-- Treat multimodality as a first-class direction (audio, symbolic, motion capture, and future signals such as biosignals).
+- Treat multimodality as a first-class direction (audio, symbolic, motion capture, biosignals, and other modalities).
 
 ## Phase 0 goals (finalized)
 
@@ -35,14 +37,14 @@ Adopt **guided familiarity**, not strict compatibility:
 
 ### A. "Simple command" experience as a design constraint
 - Build a high-level front API that supports concise calls (single function / fluent pipeline / config recipe).
-- Make defaults musically meaningful and safe.
+- Make defaults meaningful and safe*.
 - Ensure every result embeds enough metadata/provenance for reproducibility.
 
 ### B. Layered architecture
 1. **Core data layer:** typed containers (`Signal`, `Sequence`, etc.) with units, axes, provenance.
 2. **Operator layer:** pure transforms with explicit input/output contracts.
 3. **Execution layer:** graph planner + scheduler for single file, batch, and distributed execution.
-4. **Interface layer:** simple user API + CLI + notebook-friendly display.
+4. **Interface layer:** simple user API + CLI* + notebook-friendly display.
 5. **Plugin layer:** registration and discovery for community operators.
 
 ### C. Performance model (non-real-time)
@@ -51,10 +53,10 @@ Adopt **guided familiarity**, not strict compatibility:
   - parallel batch execution,
   - caching/intermediate reuse,
   - resumable failed runs,
-  - deterministic outputs.
+  - deterministic outputs*.
 
 ### D. Modality-first extensibility
-- Define a modality abstraction early (audio, symbolic/MIDI, MoCap, video, biosignal).
+- Define a modality abstraction early (audio, symbolic/MIDI, MoCap, video, biosignals).
 - Enforce a common operator contract while allowing modality-specific adapters.
 - Ensure cross-modality fusion is possible via shared time/index alignment primitives.
 
@@ -63,7 +65,7 @@ Adopt **guided familiarity**, not strict compatibility:
 2. **Plugin policy:** what can live out-of-tree vs in core.
 3. **Review standards:** API review checklist + performance checklist + reproducibility checklist.
 4. **Versioning policy:** semantic versioning and explicit deprecation windows.
-5. **RFC/ADR process:** architecture changes require lightweight recorded decisions.
+5. **RFC*/ADR* process:** architecture changes require lightweight recorded decisions.
 
 ## Concrete Phase 0 deliverables
 - `ADR-001`: Scope and non-goals.
@@ -83,11 +85,6 @@ Adopt **guided familiarity**, not strict compatibility:
 5. **Phase 4 (package rollout)**
 6. **Phase 5 (hardening and API stabilization)**
 
-### Clarifications of terms used in this document
-- **Gate implementation** means: do not begin broad implementation work until the core ADRs are reviewed and accepted.
-- **Operator/plugin skeletons** means: lightweight prototype code stubs that validate API shape and extension points before production implementation.
-- **Migration examples** means: practical examples (documentation and optional small prototype snippets) showing how existing MiningSuite analyses map to the new Orpheon API.
-
 ## Recommended immediate next step
 Run a short architecture sprint (1–2 weeks) to finalize ADR-001..007 and produce:
 - minimal API mockups,
@@ -98,3 +95,14 @@ Run a short architecture sprint (1–2 weeks) to finalize ADR-001..007 and produ
 
 ## Phase 0 starter artifacts
 The initial sprint artifacts are now scaffolded under `docs/phase0/` for review and iteration before implementation-heavy coding.
+
+
+## Glossary
+- **gate implementation**: do not begin broad implementation work until the core ADRs are reviewed and accepted.
+- **operator/plugin skeletons**: lightweight prototype code stubs that validate API shape and extension points before production implementation.
+- **migration examples**: practical examples (documentation and optional small prototype snippets) showing how existing MiningSuite analyses map to the new Orpheon API.
+- **safe***: defaults that avoid surprising/destructive behavior, prevent silent failures, and favor robust results (for example explicit warnings, sane parameter bounds, and reproducible settings).
+- **CLI***: Command-Line Interface, i.e., running Orpheon from a terminal with commands and flags.
+- **RFC***: Request for Comments, a lightweight design proposal document used to discuss significant changes before implementation.
+- **ADR***: Architecture Decision Record, a short document that captures an architectural decision, context, and consequences.
+- **deterministic outputs***: same inputs + same code/version + same parameters should produce the same outputs, enabling reproducibility and easier debugging/validation; this complements (but does not replace) correctness and accuracy validation.
