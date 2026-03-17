@@ -85,12 +85,68 @@ Adopt **guided familiarity**, not strict compatibility:
 5. **Phase 4 (package rollout)**
 6. **Phase 5 (hardening and API stabilization)**
 
+
+## Phase 0 cross-cutting design questions (recommended decisions)
+
+### 1) Interface focus: notebook-first, script-first, or both?
+Recommendation: support both from day one, with a stable Python API as the source of truth.
+- Keep the **core API environment-agnostic** (usable from scripts, notebooks, and CLI).
+- Provide notebook-friendly display helpers, but avoid notebook-only design decisions in core layers.
+- Treat CLI as an adapter over the same underlying API.
+
+### 2) Dependency strategy and version management
+Recommendation: keep the core dependency set minimal and explicit, and enforce reproducible environments.
+- Define two dependency tiers:
+  - **Core runtime** (strictly required),
+  - **Optional extras** (audio I/O, plotting, acceleration, etc.).
+- Use tested version ranges and CI matrix checks across supported Python/library versions.
+- Pin lockfiles for development/CI reproducibility, while keeping install metadata range-based for users.
+- Using **uv** is a strong option for fast, reproducible environment and lock management; it can simplify contributor onboarding and CI speed.
+
+### 3) Execution strategy: chunking, intermediate files, and existing Python tools
+Recommendation: expand this discussion during Phase 0 and turn it into explicit ADRs.
+- Compare in-memory pipelines vs chunk decomposition vs file-backed intermediates on real workloads.
+- Define when to use chunking (large files / bounded memory), and when to materialize intermediates to disk.
+- Evaluate existing Python tooling pragmatically (task orchestration, caching, columnar storage, memory mapping) before custom implementation.
+- Add benchmark-driven acceptance criteria (throughput, memory ceiling, reproducibility, failure recovery).
+
+
+### ADR implications for Phase 0
+Yes, this recommendation should be reflected in the ADR set.
+
+- **Update existing ADR-006** to explicitly include tradeoffs among in-memory, chunked, and file-backed execution paths.
+- **Add ADR-008**: interface surface policy (API-first, CLI/notebook adapters).
+- **Add ADR-009**: dependency and version policy (core vs extras, CI matrix, lock strategy, `uv` preference).
+- **Add ADR-010**: execution materialization strategy (chunking/memory/disk rules + benchmarking criteria).
+
+
+### 4) Scope fit: MIRtoolbox Python port vs broader Orpheon scope
+Recommendation: adopt a **two-speed roadmap** so the project is not overkill for initial delivery.
+- **Core Track (immediate objective):** prioritize a "MiningSuite-like MIR core" in Python, covering the highest-value MIR operators and workflows first.
+- **Platform Track (progressive objective):** keep Orpheon architecture extensible for multimodality and broader analysis domains, but defer non-essential breadth until after the core release.
+- This preserves strategic flexibility without delaying a practical first usable version.
+
+### 5) Delivery acceleration with Codex
+Recommendation: use Codex aggressively for repetitive and scaffold-heavy work, with human review on architecture and scientific validity.
+- Good Codex automation candidates:
+  - migration skeleton generation,
+  - operator wrapper boilerplate,
+  - documentation migration and consistency passes,
+  - test fixture harness scaffolding,
+  - CI/workflow templates.
+- Human-led checkpoints remain essential for:
+  - algorithmic correctness/parity,
+  - scientific validity,
+  - API ergonomics and long-term maintainability decisions.
+- Practical Phase 0 target: automate as much scaffolding as possible, then concentrate expert effort on validation and design decisions.
+
 ## Recommended immediate next step
-Run a short architecture sprint (1–2 weeks) to finalize ADR-001..007 and produce:
+Run a short architecture sprint (1–2 weeks) to finalize ADR-001..010 and produce:
 - minimal API mockups,
 - operator/plugin skeleton prototypes,
 - batch execution prototype spec,
-- migration examples for 5–10 common MiningSuite-style tasks (documentation with optional code snippets).
+- migration examples for 5–10 common MiningSuite-style tasks (documentation with optional code snippets),
+- a ranked "Core Track" backlog for minimal-effort first release (MIR-priority operators).
 
 
 ## Phase 0 starter artifacts
@@ -101,8 +157,8 @@ The initial sprint artifacts are now scaffolded under `docs/phase0/` for review 
 - **gate implementation**: do not begin broad implementation work until the core ADRs are reviewed and accepted.
 - **operator/plugin skeletons**: lightweight prototype code stubs that validate API shape and extension points before production implementation.
 - **migration examples**: practical examples (documentation and optional small prototype snippets) showing how existing MiningSuite analyses map to the new Orpheon API.
-- **safe***: defaults that avoid surprising/destructive behavior, prevent silent failures, and favor robust results (for example explicit warnings, sane parameter bounds, and reproducible settings).
-- **CLI***: Command-Line Interface, i.e., running Orpheon from a terminal with commands and flags.
-- **RFC***: Request for Comments, a lightweight design proposal document used to discuss significant changes before implementation.
-- **ADR***: Architecture Decision Record, a short document that captures an architectural decision, context, and consequences.
-- **deterministic outputs***: same inputs + same code/version + same parameters should produce the same outputs, enabling reproducibility and easier debugging/validation; this complements (but does not replace) correctness and accuracy validation.
+- **safe**: defaults that avoid surprising/destructive behavior, prevent silent failures, and favor robust results (for example explicit warnings, sane parameter bounds, and reproducible settings).
+- **CLI**: Command-Line Interface, i.e., running Orpheon from a terminal with commands and flags.
+- **RFC**: Request for Comments, a lightweight design proposal document used to discuss significant changes before implementation.
+- **ADR**: Architecture Decision Record, a short document that captures an architectural decision, context, and consequences.
+- **deterministic outputs**: same inputs + same code/version + same parameters should produce the same outputs, enabling reproducibility and easier debugging/validation; this complements (but does not replace) correctness and accuracy validation.

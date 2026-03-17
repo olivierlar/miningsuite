@@ -3,7 +3,7 @@
 This folder starts the 1–2 week architecture sprint proposed in `docs/python-port-feasibility.md`.
 
 ## Included artifacts
-- `adr/ADR-001`..`ADR-007`: initial decision drafts to review and ratify.
+- `adr/ADR-001`..`ADR-010`: initial decision drafts to review and ratify.
 - `api-mockups.md`: first-pass high-level API shape.
 - `operator-plugin-skeletons.py`: minimal protocol/skeleton examples for operators and plugins.
 - `batch-execution-prototype-spec.md`: first executable-thinking spec for large batch workflows.
@@ -15,7 +15,7 @@ This folder starts the 1–2 week architecture sprint proposed in `docs/python-p
 - `orpheon-bootstrap/`: copy-ready placeholder package, GitHub Action, and local bootstrap helper script for first PyPI release.
 
 ## How to use this pack
-1. Review ADRs in order (001 → 007).
+1. Review ADRs in order (001 → 010).
 2. Edit unresolved items and decision options during architecture meetings.
 3. Approve ADRs before implementation-heavy coding begins.
 4. Use mockups/specs as constraints for first prototype implementation.
