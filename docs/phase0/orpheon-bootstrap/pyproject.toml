@@ -1,0 +1,33 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "orpheon"
+version = "0.0.1"
+description = "Placeholder package to reserve the Orpheon name on PyPI."
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "BSD-3-Clause" }
+authors = [
+  { name = "Olivier Lartillot" }
+]
+classifiers = [
+  "Development Status :: 1 - Planning",
+  "Intended Audience :: Science/Research",
+  "License :: OSI Approved :: BSD License",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3 :: Only",
+  "Topic :: Multimedia :: Sound/Audio :: Analysis",
+]
+
+[project.urls]
+Homepage = "https://github.com/olivierlar/orpheon"
+Repository = "https://github.com/olivierlar/orpheon"
+Issues = "https://github.com/olivierlar/orpheon/issues"
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+
+[tool.setuptools.packages.find]
+where = ["src"]
