@@ -1,6 +1,6 @@
 # MiningSuite Python Redesign — Phase 0 Product & Architecture Charter
 
-## Decision summary (based on your priorities)
+## Decision summary
 This should be a **new Python-native framework**, not a strict compatibility clone.
 
 - Do **not** target MATLAB/MiningSuite/toolbox compatibility as a hard requirement.
@@ -76,25 +76,24 @@ Adopt **guided familiarity**, not strict compatibility:
 - Initial "MiningSuite user migration guide" skeleton.
 
 ## Recommended implementation sequencing
-**Yes, with this adjustment:**
-- Keep the staged migration structure.
-- But gate implementation behind the Phase 0 charter above.
-- Start coding only after ADR-001..007 are accepted.
+1. **Phase 0 (charter + ADR approval)**
+2. **Phase 1 (core contracts)**
+3. **Phase 2 (compatibility/migration aids)**
+4. **Phase 3 (vertical slice)**
+5. **Phase 4 (package rollout)**
+6. **Phase 5 (hardening and API stabilization)**
 
-So the plan becomes:
-1. **Phase 0 (this charter + ADRs)**
-2. Phase 1 core contracts
-3. Phase 2 compatibility/migration aids
-4. Phase 3 vertical slice
-5. Phase 4 package rollout
-6. Phase 5 hardening/stability
+### Clarifications of terms used in this document
+- **Gate implementation** means: do not begin broad implementation work until the core ADRs are reviewed and accepted.
+- **Operator/plugin skeletons** means: lightweight prototype code stubs that validate API shape and extension points before production implementation.
+- **Migration examples** means: practical examples (documentation and optional small prototype snippets) showing how existing MiningSuite analyses map to the new Orpheon API.
 
 ## Recommended immediate next step
 Run a short architecture sprint (1–2 weeks) to finalize ADR-001..007 and produce:
 - minimal API mockups,
-- operator/plugin skeletons,
+- operator/plugin skeleton prototypes,
 - batch execution prototype spec,
-- migration examples for 5–10 common MiningSuite-style tasks.
+- migration examples for 5–10 common MiningSuite-style tasks (documentation with optional code snippets).
 
 
 ## Phase 0 starter artifacts
