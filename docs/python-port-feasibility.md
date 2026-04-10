@@ -73,8 +73,11 @@ Adopt **guided familiarity**, not strict compatibility:
 - `ADR-003`: Core data model and provenance requirements.
 - `ADR-004`: Operator contract and execution graph semantics.
 - `ADR-005`: Plugin system and extension points.
-- `ADR-006`: Batch execution and caching strategy.
+- `ADR-006`: Batch execution and caching strategy (including in-memory vs chunked vs file-backed tradeoffs).
 - `ADR-007`: API stability and deprecation policy.
+- `ADR-008`: Interface surface policy (API-first, CLI/notebook adapters).
+- `ADR-009`: Dependency and version management policy.
+- `ADR-010`: Execution materialization strategy (chunking/memory/disk rules + benchmarking criteria).
 - Initial "MiningSuite user migration guide" skeleton.
 
 ## Recommended implementation sequencing
@@ -104,49 +107,26 @@ Recommendation: keep the core dependency set minimal and explicit, and enforce r
 - Using **uv** is a strong option for fast, reproducible environment and lock management; it can simplify contributor onboarding and CI speed.
 
 ### 3) Execution strategy: chunking, intermediate files, and existing Python tools
-Recommendation: expand this discussion during Phase 0 and turn it into explicit ADRs.
+Recommendation: this discussion is captured in ADR-006 and ADR-010 and should be finalized with benchmark-backed thresholds during Phase 0.
 - Compare in-memory pipelines vs chunk decomposition vs file-backed intermediates on real workloads.
 - Define when to use chunking (large files / bounded memory), and when to materialize intermediates to disk.
 - Evaluate existing Python tooling pragmatically (task orchestration, caching, columnar storage, memory mapping) before custom implementation.
 - Add benchmark-driven acceptance criteria (throughput, memory ceiling, reproducibility, failure recovery).
 
 
-### ADR implications for Phase 0
-Yes, this recommendation should be reflected in the ADR set.
+## Execution schedule (April 10–14, 2026)
+Planned sequence for the next 4 days:
+- **Day 1 (April 10, 2026):** finalize decisions for high-priority ADRs and freeze Core Track scope.
+- **Day 2 (April 11, 2026):** implement core data/runtime scaffolding and first operator path.
+- **Day 3 (April 12, 2026):** implement additional core operators and initial batch/chunk flow.
+- **Day 4 (April 13, 2026):** integrate CLI/notebook adapters, basic tests, and documentation updates.
+- **Day 5 (April 14, 2026):** stabilize proof-of-concept, run validation checks, and prepare review snapshot.
 
-- **Update existing ADR-006** to explicitly include tradeoffs among in-memory, chunked, and file-backed execution paths.
-- **Add ADR-008**: interface surface policy (API-first, CLI/notebook adapters).
-- **Add ADR-009**: dependency and version policy (core vs extras, CI matrix, lock strategy, `uv` preference).
-- **Add ADR-010**: execution materialization strategy (chunking/memory/disk rules + benchmarking criteria).
-
-
-### 4) Scope fit: MIRtoolbox Python port vs broader Orpheon scope
-Recommendation: adopt a **two-speed roadmap** so the project is not overkill for initial delivery.
-- **Core Track (immediate objective):** prioritize a "MiningSuite-like MIR core" in Python, covering the highest-value MIR operators and workflows first.
-- **Platform Track (progressive objective):** keep Orpheon architecture extensible for multimodality and broader analysis domains, but defer non-essential breadth until after the core release.
-- This preserves strategic flexibility without delaying a practical first usable version.
-
-### 5) Delivery acceleration with Codex
-Recommendation: use Codex aggressively for repetitive and scaffold-heavy work, with human review on architecture and scientific validity.
-- Good Codex automation candidates:
-  - migration skeleton generation,
-  - operator wrapper boilerplate,
-  - documentation migration and consistency passes,
-  - test fixture harness scaffolding,
-  - CI/workflow templates.
-- Human-led checkpoints remain essential for:
-  - algorithmic correctness/parity,
-  - scientific validity,
-  - API ergonomics and long-term maintainability decisions.
-- Practical Phase 0 target: automate as much scaffolding as possible, then concentrate expert effort on validation and design decisions.
-
-## Recommended immediate next step
-Run a short architecture sprint (1–2 weeks) to finalize ADR-001..010 and produce:
-- minimal API mockups,
-- operator/plugin skeleton prototypes,
-- batch execution prototype spec,
-- migration examples for 5–10 common MiningSuite-style tasks (documentation with optional code snippets),
-- a ranked "Core Track" backlog for minimal-effort first release (MIR-priority operators).
+Expected proof-of-concept outcome by April 14, 2026:
+- runnable core package prototype,
+- minimal but usable Core Track API surface,
+- initial reproducibility and performance sanity checks,
+- updated ADR status notes where decisions were finalized.
 
 
 ## Phase 0 starter artifacts
