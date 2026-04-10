@@ -29,7 +29,7 @@ This shortlist is therefore built from naming patterns frequently seen in Python
 ### 3) **Asteria**
 - **Inspiration:** astronomy/mythology style common in Python project names.
 - **Pros:** modern, broad, scalable brand for new modalities.
-- **Cons:** less explicit about audio analysis without tagline.
+- **Cons:** less explicit about audio/MIR without tagline.
 
 ### 4) **Sonopy**
 - **Inspiration:** Pythonic suffix pattern (`-py`) + sound root.
