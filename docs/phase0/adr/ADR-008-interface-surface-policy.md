@@ -1,6 +1,6 @@
 # ADR-008: Interface Surface Policy (API, CLI, Notebook)
 
-- **Status:** Proposed
+- **Status:** Validated (Phase 0)
 - **Date:** 2026-03-17
 
 ## Context

@@ -1,6 +1,6 @@
 # ADR-004: Operator Contract and Graph Semantics
 
-- **Status:** Proposed
+- **Status:** Validated (Phase 0)
 - **Date:** 2026-03-05
 
 ## Context

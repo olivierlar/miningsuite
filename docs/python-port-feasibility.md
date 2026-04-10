@@ -37,14 +37,14 @@ Adopt **guided familiarity**, not strict compatibility:
 
 ### A. "Simple command" experience as a design constraint
 - Build a high-level front API that supports concise calls (single function / fluent pipeline / config recipe).
-- Make defaults meaningful and safe*.
+- Make defaults meaningful and safe.
 - Ensure every result embeds enough metadata/provenance for reproducibility.
 
 ### B. Layered architecture
 1. **Core data layer:** typed containers (`Signal`, `Sequence`, etc.) with units, axes, provenance.
 2. **Operator layer:** pure transforms with explicit input/output contracts.
 3. **Execution layer:** graph planner + scheduler for single file, batch, and distributed execution.
-4. **Interface layer:** simple user API + CLI* + notebook-friendly display.
+4. **Interface layer:** simple user API + CLI + notebook-friendly display.
 5. **Plugin layer:** registration and discovery for community operators.
 
 ### C. Performance model (non-real-time)
@@ -53,7 +53,7 @@ Adopt **guided familiarity**, not strict compatibility:
   - parallel batch execution,
   - caching/intermediate reuse,
   - resumable failed runs,
-  - deterministic outputs*.
+  - deterministic outputs.
 
 ### D. Modality-first extensibility
 - Define a modality abstraction early (audio, symbolic/MIDI, MoCap, video, biosignals).
@@ -65,9 +65,10 @@ Adopt **guided familiarity**, not strict compatibility:
 2. **Plugin policy:** what can live out-of-tree vs in core.
 3. **Review standards:** API review checklist + performance checklist + reproducibility checklist.
 4. **Versioning policy:** semantic versioning and explicit deprecation windows.
-5. **RFC*/ADR* process:** architecture changes require lightweight recorded decisions.
+5. **RFC/ADR process:** architecture changes require lightweight recorded decisions.
 
 ## Concrete Phase 0 deliverables
+Current ADR set for Phase 0:
 - `ADR-001`: Scope and non-goals.
 - `ADR-002`: API philosophy (guided familiarity vs strict compatibility).
 - `ADR-003`: Core data model and provenance requirements.

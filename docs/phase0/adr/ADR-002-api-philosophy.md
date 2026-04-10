@@ -1,6 +1,6 @@
 # ADR-002: API Philosophy (Guided Familiarity)
 
-- **Status:** Proposed
+- **Status:** Validated (Phase 0)
 - **Date:** 2026-03-05
 
 ## Context

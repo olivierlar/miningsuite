@@ -1,6 +1,6 @@
 # ADR-010: Execution Materialization Strategy (Chunking, Memory, Disk)
 
-- **Status:** Proposed
+- **Status:** Validated (Phase 0)
 - **Date:** 2026-03-17
 
 ## Context

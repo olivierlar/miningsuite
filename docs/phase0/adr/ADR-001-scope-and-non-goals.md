@@ -1,6 +1,6 @@
 # ADR-001: Scope and Non-goals
 
-- **Status:** Proposed
+- **Status:** Validated (Phase 0)
 - **Date:** 2026-03-05
 
 ## Context

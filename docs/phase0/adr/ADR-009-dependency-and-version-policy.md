@@ -1,6 +1,6 @@
 # ADR-009: Dependency and Version Management Policy
 
-- **Status:** Proposed
+- **Status:** Validated (Phase 0)
 - **Date:** 2026-03-17
 
 ## Context

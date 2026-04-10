@@ -1,6 +1,6 @@
 # ADR-005: Plugin System and Extension Points
 
-- **Status:** Proposed
+- **Status:** Validated (Phase 0)
 - **Date:** 2026-03-05
 
 ## Context

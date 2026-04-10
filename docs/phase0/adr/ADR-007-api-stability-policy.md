@@ -1,6 +1,6 @@
 # ADR-007: API Stability and Deprecation Policy
 
-- **Status:** Proposed
+- **Status:** Validated (Phase 0)
 - **Date:** 2026-03-05
 
 ## Context
